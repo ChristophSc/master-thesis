@@ -1,34 +1,63 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-This is the documentation of the \ac{template}.
-In this chapter, you find everything you need to know to get started with your
-thesis --- or at least the \LaTeX{} side of it. 
-The other chapters of this document provide you with further details of the
-template.
-Besides a full documentation of the document class file that \ac{template}
-uses and the auxiliary files \ac{template} supplies, we also provide you with
-a short guide on certain aspects of \LaTeX{}, and particularly the \LaTeX{}
-packages that \ac{template} loads by default.
-However, it is assumed that you know some \LaTeX{} already.
-If you are unfamiliar with \LaTeX{} you should consult a proper introduction
-first, for example the \LaTeX{} guide by Oetiker \etal{} \cite{LatexGuide}.
+%This is the documentation of the \ac{template}.
+%In this chapter, you find everything you need to know to get started with your
+%thesis --- or at least the \LaTeX{} side of it. 
+%The other chapters of this document provide you with further details of the
+%template.
+%Besides a full documentation of the document class file that \ac{template}
+%uses and the auxiliary files \ac{template} supplies, we also provide you with
+%a short guide on certain aspects of \LaTeX{}, and particularly the \LaTeX{}
+%packages that \ac{template} loads by default.
+%However, it is assumed that you know some \LaTeX{} already.
+%If you are unfamiliar with \LaTeX{} you should consult a proper introduction
+%first, for example the \LaTeX{} guide by Oetiker \etal{} \cite{LatexGuide}.
 
 
-\paragraph{Organization}
-In the remainder of this chapter, we discuss how to
-\hyperref[sec:introduction:start]{get started} with the \ac{template} template,
-and what \hyperref[sec:introduction:folders]{directory structure} the template
-provides and assumes.
+%\paragraph{Organization}
+%In the remainder of this chapter, we discuss how to
+%\hyperref[sec:introduction:start]{get started} with the \ac{template} template,
+%and what \hyperref[sec:introduction:folders]{directory structure} the template
+%provides and assumes.
 
-In Chapter~\ref{ch:class_file}, we provide a documentation of the
-\emph{upb\_cs\_thesis} document class provided by the \ac{template} template.
-The template loads a number of \LaTeX{} packages by default.
-Chapter~\ref{ch:packages} provides an overview.
+%In Chapter~\ref{ch:class_file}, we provide a documentation of the
+%\emph{upb\_cs\_thesis} document class provided by the \ac{template} template.
+%The template loads a number of \LaTeX{} packages by default.
+%Chapter~\ref{ch:packages} provides an overview.
 
-Chapter~\ref{ch:guide} provides a guide to both beginners and experts on
-aspects of packages that \ac{template} loads by default for you to use.
-Particularly, the chapter discusses some style aspects of good writing,
-references, including bibliographic references, graphics, and tables.
-Finally, in Chapter~\ref{ch:makefiles}, we provide a documentation of and
-troubleshooting guide for the \emph{Makefiles} that come with this template.
+%Chapter~\ref{ch:guide} provides a guide to both beginners and experts on
+%aspects of packages that \ac{template} loads by default for you to use.
+%Particularly, the chapter discusses some style aspects of good writing,
+%references, including bibliographic references, graphics, and tables.
+%Finally, in Chapter~\ref{ch:makefiles}, we provide a documentation of and
+%troubleshooting guide for the \emph{Makefiles} that come with this template.
+
+
+% Data Science
+% old: relational databases
+% new: Knowledge Graph
+- 
+- applications 
+    - question answering, dialogue agents, recommendation systems
+- required knowledge is usually stored in KG
+- Knowledge Graph
+- different databases
+- to optimize the applications
+- different research areas for \acp{KB} emerged, 
+such as  construction, querying and maintenance.
+- area maintenance
+- contain only positive statements
+- inability to deal with negative information
+- to create these, a problem arises: 
+- only be inferred with the major assumption that the KB is complete
+- like in reality, this would result in a \ac{CWA}
+-> we assume that missing statements represent their falseness.
+- not realistic to assume for KG
+- we do not know, if the information is false or just unknown
+- in KG \ac{OWA} represented statements in KG are true
+-> statements that are not represented in \ac{KG} are just considered as unknown.
+- not possible to formally distinguish if a statement is false or unknown
+
+
+
