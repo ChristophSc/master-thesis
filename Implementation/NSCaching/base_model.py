@@ -26,8 +26,6 @@ class BaseModel(object):
         else:
             raise NotImplementedError
 
-        self.model.cuda()
-
         self.n_ent = n_ent
         self.weight_decay = args.lamb * args.n_batch / args.n_train
         self.time_tot = 0
@@ -38,7 +36,7 @@ class BaseModel(object):
         torch.save(self.model.state_dict(), filename)
 
     def load(self, filename):
-        self.model.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage.cuda()))
+        self.model.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))   #storage.cuda()
 
 
     def remove_positive(self, remove=True):
@@ -91,8 +89,8 @@ class BaseModel(object):
         t_cache = self.tail_cache[tail_idx]
         h_cand = np.concatenate([h_cache, np.random.choice(self.n_ent, (len(head_idx), self.args.N_2))], 1)
         t_cand = np.concatenate([t_cache, np.random.choice(self.n_ent, (len(tail_idx), self.args.N_2))], 1)
-        h_cand = torch.from_numpy(h_cand).type(torch.LongTensor).cuda()
-        t_cand = torch.from_numpy(t_cand).type(torch.LongTensor).cuda()
+        h_cand = torch.from_numpy(h_cand).type(torch.LongTensor)#.cuda()
+        t_cand = torch.from_numpy(t_cand).type(torch.LongTensor)#.cuda()
 
         # expand for computing scores/probs
         rela_h = rela_h.unsqueeze(1).expand(-1, self.args.N_1 + self.args.N_2)
@@ -135,8 +133,8 @@ class BaseModel(object):
 
         elif sample == 'IS':        # NSCaching + IS
             n = head.size(0)
-            h_cand = torch.from_numpy(self.head_cache[head_idx]).type(torch.LongTensor).cuda()
-            t_cand = torch.from_numpy(self.tail_cache[tail_idx]).type(torch.LongTensor).cuda()
+            h_cand = torch.from_numpy(self.head_cache[head_idx]).type(torch.LongTensor)#.cuda()
+            t_cand = torch.from_numpy(self.tail_cache[tail_idx]).type(torch.LongTensor)#.cuda()
 
             head = head.unsqueeze(1).expand_as(h_cand)
             tail = tail.unsqueeze(1).expand_as(h_cand)
@@ -153,8 +151,8 @@ class BaseModel(object):
 
         elif sample == 'top':       # NSCaching + top
             n = head.size(0)
-            h_cand = torch.from_numpy(self.head_cache[head_idx]).type(torch.LongTensor).cuda()
-            t_cand = torch.from_numpy(self.tail_cache[tail_idx]).type(torch.LongTensor).cuda()
+            h_cand = torch.from_numpy(self.head_cache[head_idx]).type(torch.LongTensor)#.cuda()
+            t_cand = torch.from_numpy(self.tail_cache[tail_idx]).type(torch.LongTensor)#.cuda()
 
             head = head.unsqueeze(1).expand_as(h_cand)
             tail = tail.unsqueeze(1).expand_as(h_cand)
@@ -169,8 +167,8 @@ class BaseModel(object):
             h_idx = h_cand[row_idx, h_new].cpu().numpy()
             t_idx = t_cand[row_idx, t_new].cpu().numpy()
 
-        h_rand = torch.LongTensor(h_idx).cuda()
-        t_rand = torch.LongTensor(t_idx).cuda()
+        h_rand = torch.LongTensor(h_idx)#.cuda()
+        t_rand = torch.LongTensor(t_idx)#.cuda()
         return h_rand, t_rand
 
 
@@ -196,9 +194,9 @@ class BaseModel(object):
 
             self.epoch = epoch
             rand_idx = torch.randperm(n_train)
-            head = head[rand_idx].cuda()
-            tail = tail[rand_idx].cuda()
-            rela = rela[rand_idx].cuda()
+            head = head[rand_idx]# .cuda()
+            tail = tail[rand_idx]#.cuda()
+            rela = rela[rand_idx]#.cuda()
             head_idx = head_idx[rand_idx.numpy()]
             tail_idx = tail_idx[rand_idx.numpy()]
             epoch_loss = 0
@@ -214,9 +212,9 @@ class BaseModel(object):
                 # Bernoulli sampling to select (h', r, t) and (h, r, t')
                 prob = corrupter.bern_prob[r]
                 selection = torch.bernoulli(prob).type(torch.ByteTensor)
-                n_h = torch.LongTensor(h.cpu().numpy()).cuda()
-                n_t = torch.LongTensor(t.cpu().numpy()).cuda()
-                n_r = torch.LongTensor(r.cpu().numpy()).cuda()
+                n_h = torch.LongTensor(h.cpu().numpy())#.cuda()
+                n_t = torch.LongTensor(t.cpu().numpy())#.cuda()
+                n_r = torch.LongTensor(r.cpu().numpy())#.cuda()
                 if n_h.size() != h_rand.size():
                     n_h = n_h.unsqueeze(1).expand_as(h_rand)
                     n_t = n_t.unsqueeze(1).expand_as(h_rand)
@@ -276,10 +274,10 @@ class BaseModel(object):
         count = 0
         for batch_h, batch_t, batch_r in batch_by_size(self.args.test_batch_size, *test_data):
             batch_size = batch_h.size(0)
-            head_val = Variable(batch_h.unsqueeze(1).expand(batch_size, n_ent).cuda())
-            tail_val = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent).cuda())
-            rela_val = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent).cuda())
-            all_val = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent).type(torch.LongTensor).cuda())
+            head_val = Variable(batch_h.unsqueeze(1).expand(batch_size, n_ent)) #.cuda())
+            tail_val = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent)) #.cuda())
+            rela_val = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent)) #.cuda())
+            all_val = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent).type(torch.LongTensor)) #.cuda())
             batch_head_scores = self.model.score(all_val, tail_val, rela_val).data
             batch_tail_scores = self.model.score(head_val, all_val, rela_val).data
             # for each positive, compute its head scores and tail scores
@@ -292,12 +290,12 @@ class BaseModel(object):
                         tmp = tail_score[t_idx].data.cpu().numpy()
                         idx = tails[(h_idx, r_idx)]._indices()
                         tail_score[idx] = 1e20
-                        tail_score[t_idx] = torch.from_numpy(tmp).cuda()
+                        tail_score[t_idx] = torch.from_numpy(tmp)#.cuda()
                     if heads[(t_idx, r_idx)]._nnz() > 1:
                         tmp = head_score[h_idx].data.cpu().numpy()
                         idx = heads[(t_idx, r_idx)]._indices()
                         head_score[idx] = 1e20
-                        head_score[h_idx] = torch.from_numpy(tmp).cuda()
+                        head_score[h_idx] = torch.from_numpy(tmp)#.cuda()
                 mrr, mr, hit = mrr_mr_hitk(tail_score, t_idx)
                 mrr_tot += mrr
                 mr_tot += mr
