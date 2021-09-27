@@ -34,7 +34,7 @@
 \geometry{a4paper, twoside, left=30mm, right=20mm, top=30mm, bottom=30mm}
 
 \pagestyle{empty}
-\pagenumbering{roman}
+\pagenumbering{arabic}
 
 
 \newcommand{\@upbchaptername}{}

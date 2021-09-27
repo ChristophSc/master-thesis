@@ -1,0 +1,167 @@
+\chapter{Related Work}
+\label{ch:relatedwork}
+
+\paragraph{Knowledge Graph Embeddings} 
+are low-dimensional representations of the entities and relations in a \ac{KG}. 
+Numerous methods have been developed in the last few years, all of them define a different score function to measure the distance between entities relative to their relation.
+Depending on the dimensionality of the embedding space and which types of relations should be embedded, a different embedding can be chosen.
+While some of them support only symmetric relations, others support antisymmetric ones as well. 
+Besides this, the types of relations in a \ac{KG} differ from each other.
+We can differentiate between 1-to-1, 1-to-N, N-to-1, and N-to-N relations.
+Overall, all the embedding methods can be separated by three different aspects \cite{electronics9050750}:
+\begin{enumerate}
+    \item how they represent entities and relations
+    \item how they define the scoring function
+    \item how they optimize the ranking criterion
+\end{enumerate}
+On the basis of this, two different categories are derived:
+\textit{Triplet Fact-Based Representation Learning Models} and \textit{Description-Based Representation Learning Mode} \cite{electronics9050750}.
+
+\textit{Triplet Fact-Based Representation Learning Models} are separated into three groups:
+\begin{enumerate}
+    \item 
+    \textit{Translation-Based Models}  which are based on word embedding algorithms. 
+    Example models are e.g. TransE, TransH, TransR, and TransD.
+    
+    \item 
+    \textit{Tensor Factorization-Based Models}
+    RESCAL, DistMult, HolE, ComplEx, SimplE, RotatE,  QuatE  
+    
+    \item 
+    \textit{Neural Network-Based Models}
+    SME, NTN, SLM, MLP, NAM, RMNN, ...
+\end{enumerate}
+
+
+\textit{Description-Based Representation Learning Models} again can be structured into three different groups
+\begin{enumerate}
+    \item 
+    \textit{Textual Description-Based Models}
+    TKRL, TEKE, 
+    
+    \item 
+    \textit{Relation Path-Based Models}
+    PtransE
+    
+    \item 
+    \textit{Other Models}
+    
+\end{enumerate}
+
+
+%RESCAL is a bilinear model that captures various types of relations but %is limited to its scalability while DistMult performs well on %symmetric, but poorly on antisymmetric relations \cite{ConEx}. 
+
+%TransE [ADNS] - ???
+%DistMult [ADNS] – performs well on symmetric, but poorly on antisymmetric relations
+%ComplEx – extends DistMuilt by complex vector space, possibility to infer symmetric and antisymmetric relations. 
+% Leveraging linear space and time complexity.
+%TuckEr – Tucker decomposition enables multi-task learning through parameter sharing
+%RotateE – rotational model taking predicates as rotations from subjects to objects.
+%QuatE – extends complex-valued space into hypercomplex by a quaternion
+%ConvE – 
+%ConvKB – 
+%HypER - 
+%ConEx [ConEx] -
+
+
+\paragraph{Negative sampling methods}  
+(IN INTRODUCTION JUST A SHORT, GENERAL DESCRIPTION AND MOVE DETAILED DESCRIPTION HERE TO RELATED WORK?)
+Most of these graph representation learning methods can be unified within a \ac{SampledNCE} framework
+comprising an encoder that generates node embeddings by learning to distinguish positives and negatives pairs \cite{MCNS}.
+Groups of Negative sampling methods are:
+\begin{itemize}
+    \item 
+    \textbf{Degree-based Negative Sampling}
+    \textit{Power of Degree} \cite{MikolovSCCD13}
+    k negative samples for each positive sample
+
+    \textit{RNS} \cite{Dupre2018Word2vec}
+    sampling negative nodes at uniform random
+    
+    \textit{WRMF} 
+    adapts a weight to reduce the impact of unobserved interactions and utilizes an altering least-squares optimization process \cite{MCNS}
+    
+    \item 
+    \textbf{Hard-samples Negative Sampling}
+    \textit{WARP} 
+    Wsabie: Scaling up to large vocabulary image annotation.
+    
+     \textit{PinSAGE}
+     Graph convolutional neural networks for web-scale recommender systems - (PageRank)
+     
+    \textit{DNS/sampling-max} 
+    Optimizing Top-N Collaborative Filtering via Dynamic Negative Item Sampling
+    
+    Also 
+    \textit{Nearest Neighbor sampling} which uses a pre-trained embedding model for generating negative samples \cite{kotnis2017analysis} and
+    Near miss sampling - nearest neighbor sampler generates negatives that are similar to positives in vector space. \cite{kotnis2017analysis}
+    can be assigned to this group.
+    
+    \item 
+    \textbf{GAN-based Negative Sampling}
+    -> Adversarial training
+    \textit{KBGAN} \cite{cai2017kbgan}, \textit{IRGAN} and \textit{NSCaching} \cite{zhang2019nscaching}
+    
+    \item 
+    MUST STILL BE ASSIGNED TO GROUPS:
+    \cite{alam2020affinity}: 
+    1) Typed Sampling
+    2) Relational Sampling
+    3) Distributional Negative Sampling
+    --> \ac{ADNS}
+    4) \ac{MCNS}
+    
+\end{itemize}
+
+%\textbf{Similarity functions}
+%\begin{itemize}
+%    \item Cosine similarity
+%\end{itemize}
+
+\textbf{Standard evaluations for knowledge graph embedding models:}
+To evaluate the \ac{KGE} models, different metrics are available.
+Some most commonly used are the following metrices:
+\begin{itemize}
+    \item 
+    Mean rank (MR):
+
+    \item 
+    Mean reciprocal rank (MRR):
+    
+    \item 
+    Hit@n: Hit@1, Hit@3, Hit@5, Hit@10:
+\end{itemize}
+
+%\paragraph{Ranking metrics} ?
+%\begin{itemize}
+%    \item 
+%    \ac{PEER}
+%    
+%    \item 
+%    \ac{POP}
+%    
+%    \item 
+%    \ac{FRQ}
+%    
+%    \item 
+%    \ac{PIVO}
+%\end{itemize}
+
+%\paragraph{Ranking features}
+%\begin{itemize}
+%    \item 
+%    \ac{VOL}
+
+%    \item 
+%    \ac{PEER}
+%\end{itemize}
+
+
+
+
+
+
+
+
+
+

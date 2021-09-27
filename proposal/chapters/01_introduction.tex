@@ -1,63 +1,58 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-%This is the documentation of the \ac{template}.
-%In this chapter, you find everything you need to know to get started with your
-%thesis --- or at least the \LaTeX{} side of it. 
-%The other chapters of this document provide you with further details of the
-%template.
-%Besides a full documentation of the document class file that \ac{template}
-%uses and the auxiliary files \ac{template} supplies, we also provide you with
-%a short guide on certain aspects of \LaTeX{}, and particularly the \LaTeX{}
-%packages that \ac{template} loads by default.
-%However, it is assumed that you know some \LaTeX{} already.
-%If you are unfamiliar with \LaTeX{} you should consult a proper introduction
-%first, for example the \LaTeX{} guide by Oetiker \etal{} \cite{LatexGuide}.
+\acp{KG} are a network of nodes and edges which represent information of the real world. 
+Especially the benefit of combining different data sources and different types of data in meaningful ways leads to many applications in the area of machine learning.
+Some of them are question answering, structured search \cite{zhang2019nscaching} and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
+To store all the different information needed for these different applications, many different \ac{KG} datasets were created e.g. FB15K, WN18, YAGO \cite{ConEx} and WikiData \cite{arnaoutwikinegata}.
+Within the \ac{KG} entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
+Facts from the reality are represented as a triplet in the form of (head entity, relation, tail entity), denoted as (h,r,t) and indicating that the head entity h (subject) is connected with the tail entity t (object) by a specific relation r (predicate) \cite{zhang2019nscaching, Alam2020AffinityDN}.
+One of the main challenges for \acp{KG} is the lack of capability of accessing the similarities among different entities in relations \cite{cai2017kbgan}. 
+A renowned area of research in recent years was the transformation of \acp{KG} into a vector space using embedding models, known as \acp{KGE} \cite{Alam2020AffinityDN}.
+These approaches aim for creating a good scoring function that can model the complex interactions between entities and relations better \cite{zhang2019nscaching}.
+The more precisely the similarities of entities and relations are embedded in a vector space the better following algorithms running on these embeddings will perform.
+To learn them, machine learning techniques can be used to learn the continuous representation of the \ac{KG} in the latent space \cite{cai2017kbgan}. 
+Most of the \acp{KG} encode only the available information with true information of the reality.
+However, vector-based embedding learning models require negative sampling that contrasts with the already available data and to learn efficiently \cite{Alam2020AffinityDN}. 
+The problem of negative sampling results from the fact that it is not realistic to follow the \ac{CWA} for \acp{KG}. 
+This would mean, that we assume that the \ac{KG} is complete and therefore, every triple which is not represented in the \ac{KG} would have to be considered to be false. 
+Instead, since major \acp{KG} are only pragmatic and incomplete collections of positive statements \cite{arnaout2020enriching} this is not realistic to assume. 
+Therefore, it is better to follow the \ac{OWA} which states that asserted statements are true, while the missing ones are just unknown \cite{arnaout2020enriching}.
 
+Accordingly, in the literature, several negative sample generation methods have been proposed which aim for finding hard negative examples which are useful for embedding learning.
+One of the easiest and straightforward approaches is Random sampling which replaces either the head or the tail entity in a given positive triplet (h,r,t) by any other entity of the KG, which remains in the new negative triplet (h’,r,t) or (h,r,t’). Probably, the new triplet is a negative example, but usually, it does not make any sense such that it is not very useful for embedding learning.
+Other approaches tried to find more useful and informative negative examples.
+All proposed methods in the literature for the generation of negative examples can be divided into three different groups:
 
-%\paragraph{Organization}
-%In the remainder of this chapter, we discuss how to
-%\hyperref[sec:introduction:start]{get started} with the \ac{template} template,
-%and what \hyperref[sec:introduction:folders]{directory structure} the template
-%provides and assumes.
+\begin{itemize}
+    \item 
+    \textbf{Degree-based negative sampling} methods like Power of Degree \cite{MikolovSCCD13}, \ac{RNS}\cite{Dupre2018Word2vec} and \ac{WRMF} \cite{Hu2008Collaborative} depend the degree of each node on the graph because it determines the probability to be sampled and transferred in a negative sample.
+    They are static and inconsiderate to the personalization of nodes \cite{MCNS} and the quality of randomly generated negative examples is often poor \cite{cai2017kbgan}.
+    
+    \item 
+    \textbf{Hard-samples Negative Sampling} methods try to find negative examples with high positive probabilities by analyzing the graph structure \cite{MCNS}. 
+    Approaches like PinSAGE \cite{PinSAGE}, \ac{DNS} \cite{DNS} and \ac{WARP} \cite{WARP} belong to this group.
+    
+    \item 
+    \textbf{\ac{GAN}-based Negative Sampling} consist of a generator and a discriminator. 
+    While the generator adaptively generates hard negative samples according to the reward from the discriminator, the discriminator itself learns to embed the \ac{KG} using the negative triplets from the generator \cite{wang2018incorporating}.
+    In this approach, the generator just replaces the head or tail entity from a positive triplet received from the \ac{KG}, which is highly inefficient.
+    During the training, no similarities between entities are found nor there is any evidence to find interesting positive triplets which lead to useful negative ones.
+\end{itemize}
 
-%In Chapter~\ref{ch:class_file}, we provide a documentation of the
-%\emph{upb\_cs\_thesis} document class provided by the \ac{template} template.
-%The template loads a number of \LaTeX{} packages by default.
-%Chapter~\ref{ch:packages} provides an overview.
-
-%Chapter~\ref{ch:guide} provides a guide to both beginners and experts on
-%aspects of packages that \ac{template} loads by default for you to use.
-%Particularly, the chapter discusses some style aspects of good writing,
-%references, including bibliographic references, graphics, and tables.
-%Finally, in Chapter~\ref{ch:makefiles}, we provide a documentation of and
-%troubleshooting guide for the \emph{Makefiles} that come with this template.
-
-
-% Data Science
-% old: relational databases
-% new: Knowledge Graph
-- 
-- applications 
-    - question answering, dialogue agents, recommendation systems
-- required knowledge is usually stored in KG
-- Knowledge Graph
-- different databases
-- to optimize the applications
-- different research areas for \acp{KB} emerged, 
-such as  construction, querying and maintenance.
-- area maintenance
-- contain only positive statements
-- inability to deal with negative information
-- to create these, a problem arises: 
-- only be inferred with the major assumption that the KB is complete
-- like in reality, this would result in a \ac{CWA}
--> we assume that missing statements represent their falseness.
-- not realistic to assume for KG
-- we do not know, if the information is false or just unknown
-- in KG \ac{OWA} represented statements in KG are true
--> statements that are not represented in \ac{KG} are just considered as unknown.
-- not possible to formally distinguish if a statement is false or unknown
-
-
+Our approach is based on Hard-samples Negative sampling which aims for finding negative examples close to positive ones such that they have a high probability to be positive ones.
+In contrast to the already existing approaches we propose a method that contains two components:
+The negative sampler and an oracle giving feedback to the sampler.
+Our sampler component gets two inputs:
+At first, interesting positive triplets from the \ac{KG} and secondly, it receives feedback from the oracle for the quality of the negative example generated before.
+Consequently, our sampler represents an Active Learner which iteratively improves the training.
+The oracle in turn just receives generated negative examples from the sampler. 
+The evaluation of the quality of the negative sample depends on two factors:
+At first, it measures the probability of the negative example to be a positive one, 
+which indicates the closeness to the positive triple. 
+Secondly, it measures the uncertainty of the \ac{KGE} in this area of the \ac{KG}. 
+For example, if the \ac{KG} is very incomplete or there is less information about this area, the \ac{KGE} is probably uncertain on how to embed these triples and differentiate between positives and negatives.
+Depending on the overall score for the generated negative example, the oracle gives feedback to the sampler.
+Either the sample was not good and has to be retrained, or a new positive sample can be retrieved from the \ac{KG} for new training.
+As a result, the sampler alternates between re-training and selecting new examples in each iteration.
 
