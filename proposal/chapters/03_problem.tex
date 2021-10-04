@@ -13,6 +13,8 @@ However, these would be particularly useful for many \ac{KG}-related tasks like 
 Since no negative information is available in most \acp{KG}, we are left with two options to collect them \cite{safavi2021negater}: 
 One one hand they can be obtained by human annotation which is very cost-prohibitive at scale, but leads to very informative and useful samples. 
 On the other, they can be generated ad-hoc, which in turn does not represent a great effort, but also leads to uninformative and useless negative samples.
+In addition, ignores changes in the distribution of negative triplets and
+suffers from the vanishing gradient and biased estimation problem \cite{zhang2021efficient}.
 For this reason, we need to find a way between these two extreme approaches.
 
 In recent years, various machine learning approaches have proven to be very useful for finding useful and informative negative examples.
@@ -22,45 +24,78 @@ Samples generated in this way are very likely to represent negative samples, but
 E.g by replacing the head entity in given positive triple (Joe Biden, isPresidentOf, USA) by randomly selected entity 'Ferrari' leads to the new negative triplet (Ferrari, isPresidentOf, USA), which is a negative sample but also uninformative and useless for embedding learning.
 
 To find informative and more useful negative samples, they can be compared and ranked by different metrices which indicate the closeness to the positive sample.
-For this purpose, various options have already been presented that use different metrics like \ac{BPR} \cite{DNS} or \ac{WARP} \cite{WARP}. 
+For this purpose, various options have already been presented that use different metrics.
+E.g. \cite{DNS} presented with \ac{DNS} a pair-wise \ac{CF} algorithms based on \ac{BPR}.
+Other approaches like \ac{PinSAGE} \cite{PinSAGE} which is based on \ac{GraphSAGE} \cite{GraphSAGE} rely on 
+random-walk-based \ac{GCN}. 
+A Producer samples the network neighborhoods of a node, while the consumer 
+runs \ac{SGD} on computation graphs    
+One of the latest approaches for negative sampling is \ac{NegatER}
+which ranks a selection of statements using fine-tuned contextual \ac{LM} \cite{safavi2021negater}.
+With this approach, negative sampling process takes place in 2 steps:
+Firstly, a language model for positive knowledge is fine-tuned by using contrastive learning.
+Subsequently, statements are ranked by k-nearest-neighbors retrieval approach which are (i) most plausible or (ii) most surprising.
+
+ 
+While ranking negative samples a higher level of quality of the negative samples can be obtained,
+However,  it is still not guaranteed that the candidate set N of ranked negative samples contains large-gradient negative triplets \cite{zhang2021efficient}.
 
 
+    
+    
+2) HARD SAMPLES NEGATIVE SAMPLING
+    WARP (Weighted Approximate-Rank Pairwise loss)
+        -> rank the possible annotations of a given image that the highest ranked ones best describe the semantic content of the image
+    
+    DNS (Dynamic Negative Sampling)
+         ->
 
-
-
-
+    Fast GCN
+        ->
+        
     PinSAGE (Pinterest Sage, based on GraphSAGE(SAmple and aggreGatE),)
-    -> random-walk-based Graph Convolutional Network (GCN),
-    producer: samples node network neighborhoods
-    consumer: runs stochastic gradient descent on computation graphs    
+        -> random-walk-based Graph Convolutional Network (GCN),
+        producer: samples node network neighborhoods
+        consumer: runs stochastic gradient descent on computation graphs    
 
+    GraphSage
+        ->
+        
+    FastGCN
+        -> 
 
     NegatER (Negative Commonsense Knowledge in Enitity and Relation form) (Sep 2021):
-    -> ranks a selection of statements using fine-tuned contextual language model
-    1) Fine-tuning a language model for positive knowledge using contrastive learning
-    2) Ranking statements from k-nearest-neighbors retrieval approach by (i) most plausible or (ii) most surprising statements
+        -> ranks a selection of statements using fine-tuned contextual language model
+        1) Fine-tuning a language model for positive knowledge using contrastive learning
+        2) Ranking statements from k-nearest-neighbors retrieval approach by (i) most plausible or (ii) most surprising statements
     
+\cite{zhang2021efficient}:
+are two pioneering works, i.e., IGAN  and KBGAN
+Self adversarial sampling (Self-Adv)  uses the
+self embedding model to replace the generator. 
+A critical issue in the NSCaching algorithm is how to
+balance “exploration and exploitation”(E&E) in updating
+and sampling from the cache.
+
+3) GAN-BASED APPROACHES
     
-    
-3) GENERATIVE ADVERSARIAL NETWORKS
-    Generative Adversarial Networks
     IRGAN (a.k.a. Minimax Game): generator + discriminator  (2017) 
-    -> generator is designed to fit the true conditional distribution via minimising the Jensen Shannon divergence
+        -> generator is designed to fit the true conditional distribution via minimising the Jensen Shannon divergence
     
     KBGAN (Nov 17 2018)
-    -> instead of randomly sample entities for tail entitiy,
-    probability-based, log-loss embedding models as generator
-    -> samples randomly from small subset of candidates
-    distance-based, margin-loss embedding models as discriminator
+        -> instead of randomly sample entities for tail entitiy,
+        probability-based, log-loss embedding models as generator
+        -> samples randomly from small subset of candidates
+        distance-based, margin-loss embedding models as discriminator
     
     IGAN (Sep 2018) 
-    -> generator + discriminator, generator randomly replaces either head or tail entity in given positive sample for KG
+        -> generator + discriminator, generator randomly replaces either head or tail entity in given positive sample for KG
     
     NSCaching (Dec 2018)
-    -> fixes the suffering from instability and degeneracy of IGAN and KBGAn by using a cache
+        -> fixes the suffering from instability and degeneracy of IGAN and KBGAn by using a cache
 
     NSCaching extended (Jul2021)
-    ->  extends NSCaching with skip-gram model for graph embedding. 
+        ->  extends NSCaching with skip-gram model for graph embedding. 
     
     
     

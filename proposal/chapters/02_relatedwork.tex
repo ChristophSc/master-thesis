@@ -70,13 +70,17 @@ To evaluate the \ac{KGE} models, different metrics are available.
 Some most commonly used are the following metrices \cite{kotnis2017analysis}:
 \begin{itemize}
     \item 
-    \ac{MRR}
+    \ac{MRR} which is defines as
     $$MRR = \frac{1}{N} \sum_{i=1}^{N}\frac{1}{rank_i}$$
+    computes the average of the reciprocal ranks \cite{zhang2021efficient}
+    
     \item 
-    hits@k
+    hits@k which calculates the percentage of appearance in the top-10
+ranking \cite{zhang2021efficient}.
     $$hits@K = \frac{|\{i | rank_i < K\}|}{N}$$
-    where $rank_i$ is the rank of the positive instance i predicted by the
+    where $rank_i$ is the rank of the positive instance $i$ predicted by the
     model with respect to the negative samples and usually $k \in \{1,3,5,10\}$.
+    The 
 \end{itemize}
 
 \paragraph{\textbf{Standard evaluations for knowledge graph embedding models:}}
@@ -93,7 +97,6 @@ Active Learning can be divided into three main settings \cite{Settles2009ActiveL
     \item 
     Second active learning strategy  \textbf{pool-based active sampling} requires a large collection of unlabeled data.
     In comparison to stream-based selective sampling this setting evaluates and ranks the entire collection before selecting the best query.
-    
     
     \item 
     The last strategy is \textbf{stream-based selective sampling} where obtaining unlabeled instances is inexpensive and the learner can decide whether or not to request its label.
