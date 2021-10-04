@@ -272,3 +272,89 @@ Efficient, Simple and Automated Negative Sampling for Knowledge Graph Embedding
 - negative triplets with large gradients are important but rate 
 -> keep track of them with the cache
 - NSCaching extended by skip-gram model for graph embedding
+
+
+
+
+
+1) DEGREE-BASED NEGATIVE SAMPLING
+    
+    
+2) HARD SAMPLES NEGATIVE SAMPLING
+    WARP (Weighted Approximate-Rank Pairwise loss)
+        -> rank the possible annotations of a given image that the highest ranked ones best describe the semantic content of the image
+    
+    DNS (Dynamic Negative Sampling)
+         -> pair-wise CF algorithms is Bayesian Personalized Ranking (BPR)
+
+    Fast GCN
+        ->
+        
+    PinSAGE (Pinterest Sage, based on GraphSAGE(SAmple and aggreGatE),)
+        -> random-walk-based Graph Convolutional Network (GCN),
+        producer: samples node network neighborhoods
+        consumer: runs stochastic gradient descent on computation graphs    
+
+    GraphSage
+        ->
+        
+    FastGCN
+        -> 
+
+    NegatER (Negative Commonsense Knowledge in Enitity and Relation form) (Sep 2021):
+        -> ranks a selection of statements using fine-tuned contextual language model
+        1) Fine-tuning a language model for positive knowledge using contrastive learning
+        2) Ranking statements from k-nearest-neighbors retrieval approach by (i) most plausible or (ii) most surprising statements
+    
+    
+    
+    
+3) GAN-BASED APPROACHES
+    
+    IRGAN (a.k.a. Minimax Game): generator + discriminator  (2017) 
+        -> generator is designed to fit the true conditional distribution via minimising the Jensen Shannon divergence
+    
+    KBGAN (Nov 17 2018)
+        -> instead of randomly sample entities for tail entitiy,
+        probability-based, log-loss embedding models as generator
+        -> samples randomly from small subset of candidates
+        distance-based, margin-loss embedding models as discriminator
+    
+    IGAN (Sep 2018) 
+        -> generator + discriminator, generator randomly replaces either head or tail entity in given positive sample for KG
+    
+    NSCaching (Dec 2018)
+        -> fixes the suffering from instability and degeneracy of IGAN and KBGAn by using a cache
+
+    NSCaching extended (Jul2021)
+        ->  extends NSCaching with skip-gram model for graph embedding. 
+    
+    
+    
+In this approach, the generator just replaces the head or tail entity from a positive triplet received from the \ac{KG}, which is highly inefficient.
+    During the training, no similarities between entities are found nor there is any evidence to find interesting positive triplets which lead to useful negative ones.
+    
+??????????????
+    self-adversarial sampling (RotateE) (2019)
+        -> samples negative triples according to the current embedding model
+        treat probability as the weight of the negative sample.
+
+    SANS (2020)
+        -> utilizes the graph structure by using a subset of entities restricted to either the head or tail entity´s k-hop neighborhood
+
+
+
+
+
+
+- GAN-based approaches
+- discriminator takes the role as annotator, while generator provide negative samples
+- the more diffcult it is for discriminator to annotate a given triples as positive or negative, the higher the reward for the generator
+- models train each other
+- Baseline approaches: IGAN and KBGAN
+- randomly replace head or tail entity
+- NSCaching: 
+
+- infinite set of possible negative samples
+- random sampling does not generate informative negative examples, probably useless
+- 

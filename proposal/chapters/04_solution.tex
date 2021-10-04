@@ -1,2 +1,78 @@
 \chapter{Solution}
 \label{ch:solution}
+
+
+
+
+WHICH DATASETS ARE WE USING??
+try on simple datasets:
+KINSHIP
+UMLS
+
+
+
+membership query synthesis
+- we do know the data distribution oof the positive triples
+- since we can create in infinite set of negative samples obtained e.g. by random negative sapling with replacing head ehad or tail entity on a given positive triplet, we do not know the negative distribution
+- also we do not know what reasonable and good negative samples are since we 
+
+
+
+pool-based active sampling
+- we have a large collection of data, but because this setting evaluates and ranks the entire collection
+it would take a long time to do this for an entire \ac{KG}.
+
+
+stream-based
+- our approach is based on this
+- active learner/ sampler 
+(1) firstly has to query the right positive triplet from a \ac{KG} and 
+(2) secondly, create a useful negative from it.
+
+(1) 
+- sampler queries instances about which it is least certain how to label it
+- more principled approach is to define the region that is still unknown to
+the overall model class \cite{Settles2009ActiveLL}.
+(2)
+
+The job of the oracle is to annotate the unlabeled data retrieved from the sampler
+binary classification: 0=negative, 1=positive
+
+
+- label between 0 and 1:
+< 0.5 = negative sample: 
+close to 0.5 means probability of being positive is high -> good negative
+>= 0.5 = positive sample
+close to 0.5: probability of being positive is low
+close to 1: probability of being positive is high
+- binary classification, entropy-based uncertainty sampling is identical to choosing the instance with posterior closest to 0.5 \cite{Settles2009ActiveLL}.
+
+- oracle has to learn how classify instances binary 0 or 1
+-> maybe regression model between 0 and 1:
+0: instance does not help embedding model at all
+1: instance helps the embedding model a lot
+-> start embedding on a small subset from the KG
+-> embedding on an iterative way -> does MRR increase with new negative instance or decrease
+- 
+
+usually oracle in active learning is either a human or a machine, but the annotators can also help each other to annotate the unlabeled data -->human also says how "good" a negative sample was
+
+
+WHICH EMBEDDING ARE WE USING??
+
+
+WHICH APPLICATION ARE WE USING?
+
+
+WHICH METRIC ARE WE USING?
+
+
+idea:
+ranking with scores - candidates which look more plausible, almost positive
+ranking with gradients - candidates which most suprise the language model
+PEER - relative frequency of relations that peers of entity have
+POP - popularity of entity
+FRQ - frequency of same subject and predicate (s,p, \_)
+PIVO - textual background information
++ uncertainty
+
