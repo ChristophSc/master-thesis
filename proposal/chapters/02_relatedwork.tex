@@ -52,7 +52,7 @@ Groups of Negative sampling methods are:
     In recent years it was used for negative sampling approaches which achieved state-of-the-art accuracies. 
     \ac{GAN}-based approaches consist of two components:
     a generator and a discriminator. 
-    While the generator adaptively generates hard negative samples according to the reward from the discriminator, the discriminator itself learns to embed the \ac{KG} using the negative triplets from the generator \cite{wang2018incorporating}.
+    While the generator adaptively generates hard negative samples according to the reward from the discriminator, the discriminator itself learns to embed the \ac{KG} using the negative triplets from the generator \cite{IGAN}.
     
     
     %\item 
@@ -102,12 +102,37 @@ Active Learning can be divided into three main settings \cite{Settles2009ActiveL
     The last strategy is \textbf{stream-based selective sampling} where obtaining unlabeled instances is inexpensive and the learner can decide whether or not to request its label.
     Typically, each unlabeled instance is drawn iteratively from the data source,
     With "informativeness measure", "query strategy" or from a region of uncertainty.
-    
 \end{itemize}
 
 
+\paragraph{Active Learning}
+\citeauthor{Settles2009ActiveLL} describes in its survey the different approaches of Active Learning \cite{Settles2009ActiveLL}.
+The idea of Active Learning is to achieve greater accuracy with fewer labeled training instance by choosing the data from which it learns.
+It is well-motivated in many modern machine learning problems, where we have an abundant amount of unlabeled data, but it is difficult, time-consuming or expensive to obtain labeled data.
+For Active Learning three different settings are differentiated:
+\begin{enumerate}
+    \item \textbf{Membership Query Synthesis}
+    In this setting the learner usually generates queries de novo, rather than those sampled from an an underlying distribution. 
+    For example, the active learner rotates a given picture which is sent to and classified by the oracle.
+    
+    \item \textbf{Stream-Based Selective Sampling}
+    is an alternative to synthesizing queries and quieries samples my selective sampling with the key assumption that obtaining an unlabeled instance is unexpensive.
+    it is also called stream-based or sequential active learning, since it is done in an iterative manner.
+    
+    \item \textbf{Stream-Based Selective Sampling} is based on the assumption that we have a large collection of unlabeled data which can be gathered at once.
+    With this strategy, instances are queried according to an informativeness measure.
+    It is closely related to Stream-Based Selective Sampling since the only difference is that the instances are queried at once and not iteratively.
+\end{enumerate}
 
 
 
+%- GAN-based approaches
+%- discriminator takes the role as annotator, while generator provide negative %samples
+%- the more difficult it is for discriminator to annotate a given triples as positive or negative, the higher the reward for the generator
+%- models train each other
+%- Baseline approaches: IGAN and KBGAN
+%- randomly replace head or tail entity
+%- NSCaching: 
 
-
+%- infinite set of possible negative samples
+%- random sampling does not generate informative negative examples, probably useless
