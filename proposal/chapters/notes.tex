@@ -367,3 +367,22 @@ In this approach, the generator just replaces the head or tail entity from a pos
 - infinite set of possible negative samples
 - random sampling does not generate informative negative examples, probably useless
 - 
+
+
+
+Video
+- for efficiency considerations, we only store positive facts in KG
+- for machine learning, we need both negatives and positves (margin-loss)
+- TransE: randomly replaces head/tail enttity with randomly sampled entity
+-> for margin-based loss functions: 
+    minimize distance between (h+I) and t
+    maximize distance between (h+I) and t'
+    margin-loss function
+- issues:
+    - low-quality negative samples do not help to learn good embeddings
+- KBGAN: iteratively learn  better negative examples
+- both G and D are KGE models
+- use softmax to score and rank negative triples
+- benefits of KBGAN: better negative examples + faster convergence of embeddings
+- 
+    

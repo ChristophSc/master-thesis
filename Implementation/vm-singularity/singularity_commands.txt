@@ -1,0 +1,45 @@
+####### Build SIF for 
+
+# process:
+# 1) open vscode
+# 2) Open remote explorer
+# 3) start vagrant
+# 
+
+# Creating Singularity on vagrant 
+# ONLY EXECUTE ONCE !!! 
+# vagrant init sylabs/singularity-ce-3.8-ubuntu-bionic64
+# vagrant up
+
+vagrant ssh
+
+####### OPTION 1) Create image manually
+sudo singularity build --sandbox ubuntu/ library://ubuntu 
+sudo singularity exec --writable ubuntu /bin/bash
+
+# Now we are in the environment
+cd /opt
+
+Ctrl + D to exit Singularity environment
+
+# create sif file with image of ubuntu
+sudo singularity build prototype.sif ubuntu
+
+singularity exec prototype.sif <cmd>
+
+####### OPTION 2) Create (+run) form definition file
+sudo singularity build prototype.sif singularity.def
+singularity run prototype.sif
+
+
+https://sylabs.io/guides/2.6/user-guide/installation.html#singularity-vagrant-box
+
+# copy singularity image to local machine:
+vagrant ssh -c "sudo cat /home/vagrant/growl-llo-world.simg" > growl-llo-world.simg
+
+
+# login to OCulus: (VPN Verbindung vorher herstellen!!)
+Open putty
+=> chschaef@fe.pc2.uni-paderborn.de
+# copy file to Oculus 
+pscp "C:\Users\chris\OneDrive\OneDrive - mail.uni-paderborn.de\Studium\Master\4. Semester\Master thesis\repository\Implementation\vm-singularity\growl-llo-world.simg" chschaef@fe.pc2.uni-paderborn.de:/upb/departments/pc2/users/c/chschaef

@@ -1,0 +1,129 @@
+\documentclass[5p]{elsarticle} 
+
+\usepackage{algpseudocode}
+\usepackage{multirow}
+\usepackage{footnote}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{flushend}
+\usepackage{amsmath}
+\usepackage{tablefootnote}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage[toc,page]{appendix}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{comment}
+\usepackage[utf8]{inputenc}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\newcommand{\newtext}[1]{\textcolor{blue}{#1}}
+\newcommand{\revisiontwo}[1]{\textcolor{purple}{#1}}
+\newcommand{\ha}[1]{\textcolor{green}{Hiba: #1}}
+\newcommand{\jeff}[1]{\textcolor{orange}{[Jeff: #1]}}
+\newcommand{\term}[1]{\begin{small}\texttt{#1}\end{small}}
+\newtheorem{defn}{Definition}
+\newtheorem{problem}{Problem}
+\newcounter{example}
+\newenvironment{example}[1][]{\refstepcounter{example}\par\medskip
+   \noindent \textbf{Example~\theexample. #1} \rmfamily}{\medskip}
+\usepackage{textcomp}
+\newcommand{\textapprox}{\raisebox{0.5ex}{\texttildelow}}   
+
+
+\begin{document}
+
+\newcommand{\sr}[1]{{\textcolor{red}{SR: #1}}}
+\newcommand{\GW}[1]{{\color{purple}{GW: #1}}}
+
+\title{Negative Statements Considered Useful}
+
+\author[add1]{Hiba Arnaout\corref{cor1}}
+\ead{harnaout@mpi-inf.mpg.de}
+\author[add1]{Simon Razniewski}
+\ead{srazniew@mpi-inf.mpg.de}
+\author[add1]{Gerhard Weikum}
+\ead{weikum@mpi-inf.mpg.de}
+ \author[add2]{Jeff Z. Pan}
+\ead{http://knowledge-representation.org/j.z.pan/}
+
+\cortext[cor1]{Corresponding author}
+\address[add1]{Max Planck Institute for Informatics, Saarland Informatics Campus, Saarbr{\"u}cken 66123, Germany}
+\address[add2]{School of Informatics, The University of Edinburgh, Informatics Forum, Edinburgh EH8 9AB, Scotland}
+
+
+\begin{abstract}
+
+
+%
+Knowledge bases (KBs)
+%pragmatic collections of knowledge 
+about notable entities and their properties
+are an important asset in applications such as search, question answering and dialogue. 
+%Rooted in a long tradition in knowledge representation, 
+%GW: the fact that KBs ignore this KR work means they are not rooted in ...
+All popular KBs capture virtually only positive statements, 
+and abstain from taking any stance on statements not 
+stored in the KB.
+%  
+This paper makes the case for explicitly stating salient statements 
+%which 
+that
+%%%GW: there is a semantic diff between which and that
+do \textit{not} hold.
+Negative statements are useful to overcome
+ limitations of question answering systems that are mainly geared for positive questions;
+ they  can also contribute to informative summaries of entities.
+ Due to the abundance of such invalid statements, any effort to compile them needs to address ranking by saliency. We present a statistical inference method for 
+ compiling and ranking negative statements, based on expectations from positive statements of related  entities
+ in peer groups. %which we then rank using supervised and unsupervised features.} 
+ Experimental results, with a variety of datasets,
+ show that 
+ %this approach hold promising potential to 
+ the method can effectively
+ discover notable negative statements,
+ and extrinsic studies underline their usefulness for
+ entity summarization.
+ %%%GW: negation means negating s.t.; negative statements is a self-contained noun phrase
+ %Along with this paper, \newtext{we make the first resources on useful negative statements available, along with a web-based browsing interface for Wikidata entities, and code that allows researchers to discover useful negations in their own data.}
+ Datasets and code 
+ %for these experiments 
+ are released as resources for further research.
+
+%%% old abstract
+\begin{comment}
+Knowledge bases (KBs), pragmatic collections of knowledge about notable entities, are an important asset in applications such as search, question answering and dialogue. Rooted in a long tradition in knowledge representation, all popular KBs only store positive information, but abstain from taking any stance towards statements not contained in them.
+% 
+  In this paper, we make the case for explicitly stating useful statements which are \textit{not} true. Negative statements would be important to overcome current limitations of question answering, yet due to their potential abundance, any effort towards compiling them needs a tight coupling with ranking. We introduce an approach towards automatically compiling negative statements, based on expectations set from positive statements of related entities, which we then rank using supervised and unsupervised features. Experimental results show that this approach hold promising potential to discover notable negations. Along with this paper, we make the first resources on useful negative statements available, along with a web-based browsing interface for Wikidata entities, and code that allows researchers to discover useful negations in their own data.
+\end{comment} 
+
+\end{abstract}
+
+
+
+\begin{keyword}
+%knowledge bases \sep logics \sep negation \sep information retrieval\sep RDF \sep temporal data \sep information extraction \sep ranking
+knowledge bases, negative knowledge, 
+%temporal ordering, 
+information extraction, 
+statistical inference,
+ranking
+\end{keyword}
+
+\maketitle    
+
+\input{introduction}
+\input{related}
+\input{model}
+\input{peer}
+\input{orderedpeer}
+\input{conditional}
+\input{experiments}
+\input{extrinsic}
+\input{resources}
+\input{discussion}
+\input{conclusion}
+\bibliographystyle{splncs04}
+\bibliography{refs}
+
+
+\end{document}

@@ -1,0 +1,118 @@
+\section{Conditional Negative Statements}
+\label{sec:restricted}
+
+In our negation inference methods, we generate two classes of negative statements, grounded negative statements, and universally negative statements. These two classes represent extreme cases: each grounded statement negates just a single assertion, while each universally negative statement negates all possible assertions for a property. Consequently, grounded statements may make it difficult to be concise, while universally negative statements do not apply whenever at least one positive statement exists for a property.
+A compromise between these extremes is to restrict the scope of universal negation. For example, it is cumbersome to list all major universities that \textit{Einstein} did not study at, and it is not true that he did not study at any university. However, salient statements are that he \textit{did not study at any U.S. university}, or that he \textit{did not study at any private university}.
+We call these statements \emph{conditional negative statements}, as they represent a conditional case of universal negation. In principle, the conditions used to constrain the object could take the form of arbitrary logical formulas. For proof of concept, we focus here on conditions that take the form of a single triple pattern.
+
+\begin{defn}
+A conditional negative statement takes the form $\neg \exists o$: (s; p; $o$), (o; p'; o'). It is satisfied if there exists no $o$ such that (s; p; $o$) and  (o; p'; o') are in $K^i$.%, where C is a condition of form ($o$; $p_{1}^{'}$; $o_{1}^{'}$), ($o_{1}^{'}$; $p_{2}^{'}$; $o_{2}^{'}$), .., ($o_{n-1}^{'}$; $p_{n}^{'}$; $o_{n}^{'}$).
+\end{defn}
+%\sr{Needs alignment with Definition 1 Description Logic style}
+%\GW{the notation is a wild hybrid, looks like logics, but misses quantifiers and instead uses wildcards \_;
+%change to standard logics (not OWL):
+%e.g. not exists x: educated(Einstein,x) and locatedIn(x,USA),
+%along these lines}\ha{**but I can also take care of this based on what we will have for the first two types}\\
+
+%$p_{1}^{'}$, $p_{2}^{'}$, .., $p_{n}^{'}$ are aspects of the statement. With n=1, the condition $C$ becomes simply a single triple pattern.
+
+In the following, we call the property $p'$ the \textit{aspect} of the conditional negative statement.
+
+\begin{example}
+Consider the statement that Einstein did not study at any \textit{U.S.} university. It could be written as $\neg\exists o:$ \term{(Einstein; education; o)}, \term{(o; located in; U.S.)}. It is true, as \textit{Einstein} only studied at \textit{ETH Zurich, Luitpold-Gymnasium, Alte Kantonsschule Aarau}, and \textit{University of Zurich}, located in \textit{Switzerland} and \textit{Germany}. Another possible conditional negative statement is $\neg\exists o:$ \term{(Einstein; education; o)}, \term{(o; type; private University)}, as none of these schools are private.  %Now consider the statement that \textit{Einstein} did not study at any \textit{North American} university. The condition $C$ could be written by joining two triple patterns (i.e., $n=2$), as $\neg\exists o:$ \term{(Einstein; educated at; o)}, \term{(o; located in; x)}, \term{(x; continent; North America)}.
+\end{example}
+
+As before, the challenge is that there is a near-infinite set of true conditional negative statements, so a way to identify interesting ones is needed. For example, \textit{Einstein} also did not study at any \textit{Jamaican} university, nor did he study at any university that \textit{Richard Feynman} studied at, etc. 
+One way to proceed would be to traverse the space of possible conditional negative statements, and score them with another set of metrics. Yet compared to universally negative statements, the search space is considerably larger, as for every property, there is a large set of possible conditions via novel properties and constants (e.g., \textit{``that was located in Armenia/Brazil/China/Denmark/...''}, \textit{``that was attended by Abraham/Beethoven/Cleopatra/...''}). 
+So instead, for efficiency, we propose to make use of previously generated grounded negative statements: In a nutshell, the idea is first to generate grounded negative statements, then in a second step, to \emph{lift} subsets of these into more expressive conditional negative statements. 
+A crucial step is to define this lifting operation, and what the search space for this operation is.
+
+With the \textit{Einstein} example, shown in Table~\ref{tab:einsteinlifting}, we could start from three relevant grounded negative statements that \textit{Einstein} did not study at \textit{MIT, Stanford}, and \textit{Harvard}. One option is to lift them based on aspects they all share: their locations, their types, or their memberships. The values for these aspects are then automatically retrieved: they are all located in the \textit{U.S.}, they are all private universities, they are all members of the \textit{Digital Library Federation}, etc., however, not all of these may be interesting. So instead we propose to \emph{pre-define} possible aspects for lifting, either using manual definition, or using methods for facet discovery, e.g., for faceted interfaces~\cite{oren2006extending}. For manual definition, we assume the condition to be in the form of a single triple pattern. A few samples are shown in Table~\ref{tab:aspects}. For \term{educated at}, it would result in statements like ``e was not educated in the \textit{U.K.}'' or ``e was not educated at a public university''; for \term{award received}, like ``e did not win any category of \textit{Nobel Prize}''; and for \term{position held}, like ``e did not hold any position in the \textit{House of Representatives}''.\\
+
+
+\noindent
+\textbf{Research Problem 3.\ }
+Given a set of grounded negative statements about an entity $e$, compile a ranked list of useful conditional negative statements.\\
+
+We propose an approach with Algorithm~\ref{alg:restricted}. Consider $e$=\emph{Einstein}, and the set of possible aspects $\mathit{ASP}$ for lifting containing only two aspects about \term{educated at}, for readability. 
+\begin{equation*}
+ASP = [(\text{educated at: located in, instance of})].
+\end{equation*}
+The three grounded negative statements about \emph{Einstein} with \term{educated at} property are:
+\begin{equation*}
+\mathit{NEG}=[\neg(\text{educated at: MIT, Stanford, Harvard})].
+\end{equation*}
+The loop at line 2 considers every property ($neg.p$) in $\mathit{NEG}$ (e.g., \term{educated at}), and collect its aspects at line 3. For this example, the list of aspects $asp$ for this predicate consists of the location and the type of the educational institution.
+\begin{equation*}
+asp=[\text{located in, instance of}].
+\end{equation*}
+At line 4, the loop visits every aspect $a$ in $asp$ and look for aspect values (i.e., the locations and types of Einstein's schools). $neg.o$ are the objects that share the same predicate in the grounded negative statements list.
+\begin{equation*}
+neg.o=[\text{MIT, Stanford, Harvard}].
+\end{equation*}
+For every object $o$, aspect values are collected and their relative frequencies are stored. For readability, line 6 is only a high level version of this step. As mentioned before, the aspects are manually pre-defined and their values are automatically retrieved.
+\begin{equation*}
+ \begin{aligned}
+getaspvalues(\text{Wikidata, located in, MIT}) &= [\text{U.S}].\\ 
+getaspvalues(\text{Wikidata, located in, Stanford}) &= [U.S].\\
+getaspvalues(\text{Wikidata, located in, Harvard}) &= [U.S].\\
+getaspvalues(\text{Wikidata, instance of, MIT}) &=\\ [\text{institute of technology, private university}].\\
+getaspvalues(\text{Wikidata, instance of, Stanford}) &=\\ [\text{research university, private university}].\\
+getaspvalues(\text{Wikidata, instance of, Harvard}) &=\\ [\text{research university, private university}].\\
+ \end{aligned}
+\end{equation*}
+Hence the aspect value for \term{educated at}, namely \term{(located in; U.S.)} receives a score of 3, and is added to the conditional negation list $\mathit{cond\_NEG}$. After retrieving and scoring all the aspect values, the top-2 (with $k$ =2) conditional negative statements are returned. In this example, the final results are $\mathit{cond\_NEG}$ = \term{[($\neg\exists o$(Einstein; educated at; $o$) ($o$; located in; U.S.), 3)}, (\term{$\neg\exists o$(Einstein; educa\-ted at; $o$) ($o$, instance of; private university), 3)}].
+
+\begin{table*}
+  \caption{Negative statements about \textit{Einstein}, before and after lifting.}
+  \label{tab:einsteinlifting}
+  \centering
+  \scalebox{0.9}{
+   \begin{tabular}{l|l}
+    \toprule
+    \multicolumn{1}{c}{\textbf{Grounded negative statements}} & \multicolumn{1}{c}{\textbf{Conditional negative statements}}\\
+    \midrule
+$\neg$(educated at; MIT) & $\neg\exists o$(educated at; $o$) ($o$; located in; U.S.)\\
+$\neg$(educated at; Stanford) & $\neg\exists o$(educated at; $o$) ($o$, instance of; private university)\\
+$\neg$(educated at; Harvard) & \\
+    \bottomrule
+  \end{tabular}
+  }
+  \end{table*}
+  
+\begin{algorithm*}[t!]
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \Input{\small knowledge base $\mathit{KB}$, entity $e$, aspects $\mathit{ASP}$ = [($x_{1}$: $y_{1}$, $y_{2}$, ..), ..., ($x_{n}$: $y_{1}$, $y_{2}$, ..)], \small grounded negative statements about $e$ $\mathit{NEG}$ = [$\neg$($p_{1}$: $o_{1}$, $o_{2}$, ..), ..., $\neg$($p_{m}$: $o_{1}$, $o_{2}$, ..)], \small number of results $k$}
+    \Output{\small $k$-most frequent conditional negative statements for $e$}
+    \textbf{$\mathit{cond\_NEG}$}= $\emptyset$ \Comment{\small Ranked list of conditional negations about $e$.}\\
+           \For{$neg.p$ $\in$ $\mathit{NEG}$}{ 
+           $\mathit{asp}$ = $getspects(neg.p, ASP)$ \Comment{Retrieving aspects of predicate $neg.p$.}\\
+           \For{$a$ $\in$ $asp$}{
+           \For{$o$ $\in$ $neg.o$}{ 
+            $\mathit{cond\_NEG}$ += getaspvalues($\mathit{KB}$, $a$, $o$) \Comment{Collecting aspect values about $o$.}
+           }
+           }
+        }
+        $\mathit{cond\_NEG}$-=$inKB(e,\mathit{cond\_NEG})$\\
+        return $max(\mathit{cond\_NEG},k)$
+\caption{Lifting grounded negative statements algorithm.}
+\label{alg:restricted}
+\end{algorithm*}
+
+\begin{table}
+  \caption{A few samples of property aspects.}
+  \label{tab:aspects}
+  \centering
+  \scalebox{0.8}{
+   \begin{tabular}{l|l}
+    \toprule
+    \multicolumn{1}{c}{\textbf{Property}} & \multicolumn{1}{c}{\textbf{Aspect(s)}}\\
+    \midrule
+educated at & located in; instance of;\\
+award received & subclass of;\\
+position held & part of;\\
+    \bottomrule
+  \end{tabular}
+  }
+  \end{table}

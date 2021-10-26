@@ -1,0 +1,54 @@
+\section{Introduction}
+\label{sec:intro}
+\noindent
+\textbf{Motivation and Problem.\ }
+Structured knowledge is crucial in a range of applications like question answering, dialogue agents, and recommendation systems. The required knowledge is usually stored in KBs, and recent years have seen a rise of interest in KB construction, querying and maintenance, with notable projects being Wikidata~\cite{WD}, DBpedia~\cite{DBPEDIA}, Yago~\cite{YAGO}, or the Google Knowledge Graph~\cite{GKG}. These KBs store positive statements such as \textit{``Ren\'{e}e Zellweger won the 2020 Oscar for the best actress''}, and are a key asset for many knowledge-intensive AI applications.
+
+A major limitation of all these KBs is their inability to deal with negative information~\cite{FHPPW2006}. At present, most major KBs only contain positive statements, whereas statements such as that \textit{``Tom Cruise did not win an Oscar''} could only be inferred with the major assumption that the KB is complete - the so-called \textit{closed-world assumption} (CWA). Yet as KBs are only pragmatic collections of positive statements, the CWA is not realistic to assume, and there remains uncertainty whether statements not contained in a KBs are false, or truth is merely unknown to the KB. 
+
+Not being able to formally distinguish whether a statement is false or unknown poses challenges in a variety of applications. In medicine, for instance, it is important to distinguish between knowing about the absence of a biochemical reaction between substances, and not knowing about its existence at all. In corporate integrity, it is important to know whether a person was never employed by a certain competitor, while in anti-corruption investigations, absence of family relations needs to be ascertained. In data science and machine learning, on-the-spot counterexamples are important to ensure the correctness of learned extraction patterns and associations.
+
+\noindent
+\textbf{State of the Art and its Limitations.\ }
+Absence of explicit negative knowledge has consequences for usage of KBs: for instance, today's \textit{question answering} (QA) systems are well
+geared for positive questions, and questions where exactly one answer should be returned (e.g., quiz questions or reading comprehension tasks) \cite{Fader2014,WIKIQA}. In contrast, for answering negative questions like \emph{``Actors without Oscars''}, QA systems lack a data basis. Similarly,
+they struggle with positive questions that have no answer, like \emph{``Children of Emmanuel Macron''},
+too often still returning a best-effort answer even if
+it is incorrect. Materialized negative information would allow a better treatment of both cases. 
+
+
+\noindent
+\textbf{Approach and Contribution.\ }
+In this paper, we make the case that important negative knowledge should be explicitly materialized. We motivate this selective materialization with the challenge of overseeing a near-infinite space of false statements,
+%\\
+%\GW{what is ``near-infinite'' ?????}\ha{**}\\
+ and with the importance of explicit negation in search and question answering. %We 
+%then 
+%develop two complementary approaches towards generating negative statements derived based on related entities.\\ 
+
+We consider three classes of negative statements: (i) groun\-ded negative statements \textit{``Tom Cruise is not a British citizen''}, (ii) conditional negative statements \textit{``Tom Cruise has not won an award from the Oscar categories''} and (iii) universal negative statements \textit{``Tom Cruise is not member of any political party''}. In a nutshell, given a KB and an entity e, we select highly related entities to e (we call them \textit{peers}). We then use these peers to derive positive expectations about e, where the absence of these expectations might be interesting for e. In this approach, we are assuming completeness within a group of peers. More precisely, if the KB does not mention the \textit{Nobel Prize in Physics} as an award won by \textit{Stephen Hawking}, but does mention it for at least one of his peers, it is assumed to be false for \textit{Hawking}, and not a missing statement. This is followed by a ranking step where we use predicate and object prominence, frequency, and textual context in a  learning-to-rank model.
+
+
+%Our 
+%%%GW: avoid frequent use of first person plural
+The salient contributions of this paper are:
+
+\begin{enumerate}
+%[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+%GW: journal paper has no hard space limit ==> no unnecessary fiddling with latex env settings
+    \item We make the first comprehensive case for materializing \textit{useful} negative statements, and formalize important classes of such statements.
+    \item We present a judiciously designed method for collecting and ranking negative statements based on knowledge about related entities.
+    \item We show the usefulness of our models in use cases like entity summarization, decision support, and question answering.\\
+%    and make public a number of resources (data, open-code, and web tool) to encourage future research on this topic.}
+Experimental datasets and code are released as resources for further research\footnote{\url{https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/research/knowledge-base-recall/interesting-negations-in-kbs/}}.
+\end{enumerate}
+
+
+The present article extends the earlier conference publication~\cite{negationakbc} in several directions:
+
+\begin{enumerate}
+    \item We extend the statistical inference to ordered sets of related entities, thereby removing the need to select a single peer set, and obtaining finer-grained contextualizations of negative statements (Section~\ref{sec:temporal}); 
+    \item To bridge the gap between overly fine-grained groun\-ded negative statements and coarse universal negative statements, %\GW{this is incomprehensible without explicitly introducing these two categories earlier!} \ha{**how can we introduce them without being formal here, too soon?Can we be vague(we propose a new kind and show its necessity)}\\
+    we introduce a third notion of negative statement, \emph{conditional negative statements}, and show how to compute them post-hoc (Section~\ref{sec:restricted});
+    \item We evaluate the value of negative statements in an additional use case, with hotels from Booking.com (Section~\ref{sec:extrinsicevaluation}).
+\end{enumerate}

@@ -1,0 +1,120 @@
+\section{Discussion}
+\label{sec:discussion}
+\subsection{Quality Considerations}
+
+\noindent
+\textbf{The CWA on the Semantic Web.\ }
+Negation has traditionally been avoided on the Semantic Web, as it challenges the vision that anyone can state anything, without risking logical conflicts. In the present work, we showed that enriching KBs with useful negative statements is beneficial in use cases such as entity summarization and consumer decision making. In order to compile a set of likely correct negative statements about an entity, we assumed the CWA in parts of the KBs, namely within peer groups, and in the case of 
+%ground 
+grounded
+%%%GW: check the whole paper: ground --> grounded
+%
+negative statements, with the additional requirement that there is at least one other positive statement for the same entity-property pair. Although this approach outperforms other techniques, like embedding-based KB completion, inferences may still be incorrect. While correctness can be tuned to some extend by sacrificing recall (e.g., requiring very high thresholds on \textit{PEER} and \textit{PIVO}), errors are still possible. It is therefore advised to show 
+%our automated inferences to end-users as ``truths'', but rather to KB curators as suggestions~\cite{RECOIN}. 
+candidate statements from automatic inference to KB curators
+for final assessment~\cite{RECOIN}.
+%Alternatively, they may be used at aggregate level for training ML models~\cite{CSKB}.
+%They could nevertheless be used also as noisy samples for training ML models
+%at an aggregate level~\cite{CSKB}.
+
+
+\noindent
+\textbf{Real-world Changes and KB Maintenance.\ } 
+Due to real-world changes or new information added to the KB, some of the negative statements already inferred might become incorrect. For instance, \textit{DiCaprio} has won his first \textit{Oscar} in 2016. After the year 2016, the negative statement \term{$\neg$(DiCaprio; award; Oscar)} is no longer correct. Negative statements should therefore be timestamped, and ideally, additions of positive statements should automatically trigger updates of validity end-point timestamps.
+
+\noindent
+\textbf{Class Hierarchies.\ }
+Some incorrect negations can be detected by help of subsumption checks (rdfs:subClassOf). For example, the presented method might incorrectly infer the statement \term{$\neg$(Douglas Adams; occupation; author)}, which contradicts the two positive assertions that \textit{Douglas Adams is a writer}, and \textit{writer} is a subclass of \textit{author}. One could detect such contradictions by use of a generic ontology reasoner like Protégé, or implement custom checks. For our specific use case of negative inference at scale, we found that checks focused on one or two hops in the class hierarchy capture a significant proportion of these errors. For KBs at the scale of Wikidata, one could precompute prominent subsumptions, and build these checks into the methodology (e.g., triggering a check for presence of ``occupation-writer'' whenever ``occupation-not author'' is inferred).
+
+Subsumption similarly also affects properties: the relation \textit{CEO} (between a company and a person) is a subproperty of \textit{employee}, and as such, subject-object-pairs present for the former should not appear as negations for the latter.
+
+
+%To tackle incorrect negations due to problems with class hierarchies, at inference time, one can perform a number of hierarchical checks, using the property \textit{subclass of} for $n$ levels upward and $n$ downward. For n=1, an upward check would be ``director is a subclass of artist'' and a downward check would be ``film-director is a subclass of director''. For example, we consider the statement \term{$\neg$(Douglas Adams; occupation; author)} \textit{incorrect} because he is a writer, and writer is a subclass of author.
+%In an interactive retrieval system, these checks can be computationally expensive. The precomputation of inferences as well as hierarchical checks are recommended. Another way of exploiting the class hierarchy is to involve the subsumption relation between classes earlier in the methodology, for instance, when collecting positive statements about the input entity and its peers.}
+
+%\noindent
+%\newtext{\textbf{Type Relations.\ }
+%Similarly to classes, type relations can contribute to the correctness of the inferred negations. For example, for awards and their instances, a winner of an \textit{Academy Award for Best Actor} is a winner of an %\textit{Academy Award} (because the former is an ``instance of'' the latter).}
+%newtext
+
+
+\noindent
+\textbf{Modelling and Constraint Enforcement.\ } 
+Some inferred negations are incorrect due to modelling issues, resulting in inconsistencies. An example is \textit{Dijkstra} and the negative statement that his field of work is \textit{not} \textit{Computer Science}, and \textit{not} \textit{Information Technology}, while he has the positive value \textit{Informatics}, which is arguably near-synonymous, yet in the Wikidata taxonomy, the two represent independent concepts, two hops apart. Some other incorrect negative statements could be due to a lack of constraints. For instance, for most businesses, the \textit{headquarters location} property is completed using \textit{cities}, but for \textit{Siemens} in Wikidata, the \textit{building} is added instead (\textit{Palais Ludwig Ferdinand}), making our inferred statement \term{$\neg$(Siemens; headquarters location; Munich)} incorrect. Although Wikidata encourages editors to use cities for the  \textit{headquarters location} property and advise them to use another property for specific buildings, it has not been automatically enforced yet.\footnote{\url{https://www.wikidata.org/wiki/Property:P159}}
+%newtext
+
+\subsection{Discovering Relevant Lifting Aspects}
+For inferring conditional negative statements, the lifting aspects we used in this paper have been manually defined (see Table~\ref{tab:aspects}). For instance, if the grounded negative statements to be lifted describe educational institutions, then the aspects that make sense are the location of the institution (\textit{U.S., Germany, Japan, etc.}) and its type (\textit{public, private, research, etc.}). This 
+%for sure, 
+does not scale well when the KB contains thousands of properties with thousands of possible aspects. Automatically discovering these aspects would improve the quality of conditional negative statements. A good start is the work in~\cite{oren2006extending}. 
+An aspect is described as an important characteristic of an entity. For example, for a book, the number of pages is not an important aspect, but genre is.
+This work introduces aspect ranking metrics such as object cardinality: a \textit{good} predicate (e.g., genre) has a finite list of values to choose from (e.g., comedy, thriller, romance). Unsuitable predicates using this metric would be the predicate \textit{number of pages} or \textit{publication date}. In addition, the AMIE system~\cite{AMIE,AMIEP} mines rules on millions of triples, and is specifically tailored to support open-world KBs. It can discover, for example, that \textit{musicians that are influenced by each other often play the same instrument.} The \textit{instrument} can be directly used as an aspect for lifting grounded negative statements (with predicate \textit{influenced by}) about a \textit{musician-entity}. In particular, \textit{musician x} (a pianist), is not influenced by anyone who plays the guitar, or more surprisingly not influenced by anyone who plays the piano (if that is the case). We consider this to be a promising research direction. It is worth exploring and improving the ideas in Section~\ref{sec:restricted} further.%newtext
+
+\subsection{Entity Prominence and Class Specificity}
+
+\noindent
+\textbf{Negations in the Long Tail.\ }
+Our method builds on the assumption that peer entities are available, 
+%for which data is 
+%sufficiently complete. 
+for which we have sufficient data.
+%%%GW: complete sounds like a technically crisp term, and so does sufficiently complete. if this is meant informally here, then use more liberal wording.
+%
+For long-tail entities, both assumptions may be challenged. For entities with extremely little positive information (e.g., \url{https://www.wikidata.org/wiki/Q97355589}, for which only first name, last name, and gender are known), it is not possible to identify relevant peers, and hence, our method is not applicable. Low amounts of positive information on peers, in contrast, can be better compensated.
+Since our method is mainly concerned with finding the most interesting candidates for negation, absolute frequencies are not important, as long as it is possible to find a reasonable difference in frequencies among peers (i.e., not every positive statement appearing only once). If there is interest to put emphasis on specific facts, one could also 
+%manually tweak 
+adjust
+the ranking algorithms, e.g., giving ``citizenship'' negations a 
+%static 
+boost in the ranking.
+%newtext
+
+
+
+\begin{table*}
+  \caption{Negations across classes of Wikidata entities.}
+  \centering
+  \label{tab:differenttypes}
+    \scalebox{0.8}{\begin{tabular}{l|l|l|l}
+    \toprule
+        \multicolumn{1}{c}{\textbf{Class}} & 
+        \multicolumn{1}{c}{\textbf{Number of entities}} &
+        \multicolumn{1}{c}{\textbf{3 most frequent negated properties}} &  \multicolumn{1}{c}{\textbf{Sample entities}}\\
+            \midrule
+    \multicolumn{1}{l}{Book} & \multicolumn{1}{c}{8k} & \multicolumn{1}{l}{author, genre, publisher} & Fahrenheit 451, Little Birds\\
+    \multicolumn{1}{l}{Person} & \multicolumn{1}{c}{500k} & \multicolumn{1}{l}{spouse, child, occupation} & Elon Musk, Oprah Winfrey\\
+    \multicolumn{1}{l}{Country} & \multicolumn{1}{c}{199} & \multicolumn{1}{l}{diplomatic relation, member of, language used} & Germany, China\\
+     \multicolumn{1}{l}{Primary school} & \multicolumn{1}{c}{14k} & \multicolumn{1}{l}{instance of, heritage designation, country} & Deutsche Schule Helsinki, Saint Joseph school\\
+     \multicolumn{1}{l}{Film} & \multicolumn{1}{c}{26k} & \multicolumn{1}{l}{cast member, genre, screenwriter} & Taxi Driver, Inception\\    
+     \multicolumn{1}{l}{Building} & \multicolumn{1}{c}{28k} & \multicolumn{1}{l}{architect, instance of, heritage designation} & NY Times Building, White House\\ 
+     \multicolumn{1}{l}{Organizations} & \multicolumn{1}{c}{22k} & \multicolumn{1}{l}{headquarters location, instance of, country} & World Trade Organization, BBC\\
+     \multicolumn{1}{l}{Musical group} & \multicolumn{1}{c}{8k} & \multicolumn{1}{l}{instance of, record label, genre} & Coldplay, Jonas Brothers\\ 
+     \multicolumn{1}{l}{Business} & \multicolumn{1}{c}{20k} & \multicolumn{1}{l}{parent organization, headquarters location, industry} & Nokia, Facebook\\ 
+     \multicolumn{1}{l}{Scientific journal} & \multicolumn{1}{c}{5k} & \multicolumn{1}{l}{main subject, editor, publisher} & Journal of Web Semantics, Nature\\
+     \multicolumn{1}{l}{Literary work} & \multicolumn{1}{c}{24k} & \multicolumn{1}{l}{author, composer, lyrics by} & Diary of Anne Frank, Don Quixote\\
+    \bottomrule
+  \end{tabular}}
+\end{table*}
+
+
+\noindent
+\textbf{Negations for Different Classes.\ }
+In practice, we have applied our method on 11 diverse classes of entities: people, literary works, organizations, businesses, scientific journals, countries, buildings, musical groups, primary schools, books, and films. We have observed that within each class, interesting negations often cover the same properties. For instance, for people, interesting negative knowledge is mostly about awards, occupations, education, and 
+%spouses. 
+family.
+%
+We show 
+%some 
+statistics on frequent properties for every class of entities in Table~\ref{tab:differenttypes}. We do \textit{not} filter nor assign weights for certain properties per class. The relative frequency metric takes care of prioritizing which property's negation \textit{makes sense} in every class. For \textit{people}, the reported properties are fairly {general} and not %reflective of 
+tied to
+specific subsets of this very large class. For instance, for sports figures, \textit{member of sports team} is the most frequent property, and for politicians, \textit{position held} is the dominating property.
+
+We notice that negations for small classes, such as buildings and literary works,
+%are often more \textit{correct} 
+have a higher correctness ratio
+than larger classes, such as people. Entities of type \textit{person} have 3 times more possible properties to fill than entities of type \textit{book}. Given a book (e.g., \textit{Orientalism}), a handful of properties and property-object pairs could be added and the information about the entity is considered near-complete (e.g., \textit{main subject}, \textit{author}, \textit{genres}, \textit{publisher}, and \textit{language}). 
+%Whereas 
+In contrast,
+for a person (e.g., \textit{Joe Rogan}), the entity requires a greater effort and/or larger information sources to be considered complete (e.g.,  \textit{occupation}, \textit{education}, \textit{residence}, \textit{birth place}, \textit{citizenship}, \textit{sport}, \textit{religion}, and many more). On the other hand, larger classes offer richer and more diverse possibilities for \textit{interesting} negations. A result set for a person often covers a wider range of topics, such as personal information, professional achievements, relations with other people. A result set for a book is less diverse, often negating the same property repeatedly with different objects.\\
+
+

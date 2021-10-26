@@ -1,0 +1,37 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%pre 
+# Before install (host)
+
+%setup 
+# After install (host)
+
+%post
+# After install (guest)
+apt update
+apt --assume-yes install 
+
+%test 
+# Test to run in order to ensure working environment
+  exit 0
+
+%runscript 
+# Script to run when executing environment
+
+%startscript 
+# Script to run when executing as instance
+
+%labels
+  author Christoph Schaefer
+  version 1.0.0
+  
+%files 
+# Files to copy from host system
+prototype /opt/prototype
+
+%environment
+# Environment variables
+
+%help 
+# Text to show when help for the image is requested

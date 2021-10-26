@@ -1,0 +1,38 @@
+\documentclass{letter}
+\usepackage{hyperref}
+\usepackage[textwidth=5in,textheight=11in]{geometry}
+\signature{Hiba Arnaout\\ Simon Razniewski\\ Gerhard Weikum\\ Jeff Z. Pan}
+%\address{21 Bridge Street \\ Smallville \\ Dunwich DU3 4WE}
+\begin{document}
+
+\begin{letter}{Journal of Web Semantics \\ Editors}
+\opening{Dear JWS Editors-in-Chief and Associate Editors,}
+
+We wish to submit our manuscript entitled \textit{``Negative Statements Considered Useful''} for consideration as a research paper in the Journal of Web Semantics.
+
+Our study tackles for the first time the problem of explicitly stating useful negative statements that are \textit{not} true. The underlying idea is to automatically compile negative statements based on expectations from positive statements for highly related entities. Our work provides both theoretical and practical outcomes. On the theoretical side, we introduce three classes of negative statements in knowledge bases, and provide a methodology that retrieves and ranks candidates in order to identify \textit{useful} negations. On the experimental side, we evaluate our work intrinsically and on a set of use cases in entity summarization and decision making, showing that negative statements can significantly enhance these use cases. We provide resources for future research, in particular datasets and open-source code.
+
+The present submission is based on our previous work:
+
+\textit{Enriching Knowledge Bases with Negative Statements, Hiba Arnaout, Simon Raz\-niew\-ski and Gerhard Weikum, AKBC, 2020.}
+
+The present article extends the earlier conference publication in the following ways:
+\begin{enumerate}
+    \item We extended the statistical inference to ordered sets of related entities, thereby removing the need to select a single peer set, and obtaining finer-grained peer sets for negative statements (Section 5).
+    \item To bridge the gap between verbose grounded negative statements and coarse universal negative statements, we introduce a third notion of negative statement, \emph{conditional negative statements}, and show how to compute them post-hoc (Section 6).
+    \item We evaluate the value of negation in an extrinsic use case, decision making on hotel data from Booking.com (Section 8.2).
+\end{enumerate}
+
+We look forward to your comments.
+
+\closing{Sincerely,
+}
+
+%\ps
+%
+%P.S. You can find the full text of GFDL license at
+%\url{http://www.gnu.org/copyleft/fdl.html}.
+
+%\encl{Copyright permission form}
+\end{letter}
+\end{document}
