@@ -36,7 +36,10 @@ class BaseModule(nn.Module):
     def softmax_loss(self, src, rel, dst, truth):
         probs = self.prob(src, rel, dst)
         n = probs.size(0)
-        truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor).cuda(), truth] + 1e-30)
+        if torch.cuda.is_available():
+            truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor).cuda(), truth] + 1e-30)
+        else:
+            truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor), truth] + 1e-30)
         return -truth_probs
 
 
@@ -49,15 +52,22 @@ class BaseModel(object):
         torch.save(self.mdl.state_dict(), filename)
 
     def load(self, filename):
-        self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage.cuda()))
+        if torch.cuda.is_available():
+            self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage.cuda()))
+        else:
+            self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
 
     def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True):
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         n, m = dst.size()
-        rel_var = Variable(rel.cuda())
-        src_var = Variable(src.cuda())
-        dst_var = Variable(dst.cuda())
+        if torch.cuda.is_available():
+            rel = rel.cuda()
+            src = src.cuda()
+            dst = dst.cuda()
+        rel_var = Variable(rel)
+        src_var = Variable(src)
+        dst_var = Variable(dst)
 
         logits = self.mdl.prob_logit(src_var, rel_var, dst_var) / temperature
         probs = nnf.softmax(logits)
@@ -69,7 +79,9 @@ class BaseModel(object):
         if train:
             self.mdl.zero_grad()
             log_probs = nnf.log_softmax(logits)
-            reinforce_loss = -torch.sum(Variable(rewards) * log_probs[row_idx.cuda(), sample_idx.data])
+            if torch.cuda.is_available():
+                row_idx = row_idx.cuda()
+            reinforce_loss = -torch.sum(Variable(rewards) * log_probs[row_idx, sample_idx.data])
             reinforce_loss.backward()
             self.opt.step()
             self.mdl.constraint()
@@ -78,11 +90,17 @@ class BaseModel(object):
     def dis_step(self, src, rel, dst, src_fake, dst_fake, train=True):
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
-        src_var = Variable(src.cuda())
-        rel_var = Variable(rel.cuda())
-        dst_var = Variable(dst.cuda())
-        src_fake_var = Variable(src_fake.cuda())
-        dst_fake_var = Variable(dst_fake.cuda())
+        if torch.cuda.is_available():
+            src = src.cuda()
+            rel = rel.cuda()
+            dst = dst.cuda()
+            src_fake = src_fake.cuda()
+            dst_fake = dst_fake.cuda()
+        src_var = Variable(src)
+        rel_var = Variable(rel)
+        dst_var = Variable(dst)
+        src_fake_var = Variable(src_fake)
+        dst_fake_var = Variable(dst_fake)
         losses = self.mdl.pair_loss(src_var, rel_var, dst_var, src_fake_var, dst_fake_var)
         fake_scores = self.mdl.score(src_fake_var, rel_var, dst_fake_var)
         if train:
@@ -99,22 +117,39 @@ class BaseModel(object):
         count = 0
         for batch_s, batch_r, batch_t in batch_by_size(config().test_batch_size, *test_data):
             batch_size = batch_s.size(0)
-            rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent).cuda())
-            src_var = Variable(batch_s.unsqueeze(1).expand(batch_size, n_ent).cuda())
-            dst_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent).cuda())
-            all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
-                               .type(torch.LongTensor).cuda(), volatile=True)
+            if torch.cuda.is_available():
+                rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent).cuda())
+                src_var = Variable(batch_s.unsqueeze(1).expand(batch_size, n_ent).cuda())
+                dst_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent).cuda())
+                with torch.no_grad():
+                    all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
+                                .type(torch.LongTensor).cuda())
+            else:
+                rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent))
+                src_var = Variable(batch_s.unsqueeze(1).expand(batch_size, n_ent))
+                dst_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent))
+                with torch.no_grad():
+                    all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
+                                .type(torch.LongTensor))
+            
             batch_dst_scores = self.mdl.score(src_var, rel_var, all_var).data
             batch_src_scores = self.mdl.score(all_var, rel_var, dst_var).data
-            for s, r, t, dst_scores, src_scores in zip(batch_s, batch_r, batch_t, batch_dst_scores, batch_src_scores):
+            for s_tensor, r_tensor, t_tensor, dst_scores, src_scores in zip(batch_s, batch_r, batch_t, batch_dst_scores, batch_src_scores):
+                s, r, t = s_tensor.item(), r_tensor.item(), t_tensor.item()
                 if filt:
                     if tails[(s, r)]._nnz() > 1:
                         tmp = dst_scores[t]
-                        dst_scores += tails[(s, r)].cuda() * 1e30
+                        if torch.cuda.is_available():
+                            dst_scores += tails[(s, r)].cuda() * 1e30
+                        else:
+                            dst_scores += tails[(s, r)] * 1e30
                         dst_scores[t] = tmp
                     if heads[(t, r)]._nnz() > 1:
                         tmp = src_scores[s]
-                        src_scores += heads[(t, r)].cuda() * 1e30
+                        if torch.cuda.is_available():
+                            src_scores += heads[(t, r)].cuda() * 1e30
+                        else:
+                            src_scores += heads[(t, r)] * 1e30
                         src_scores[s] = tmp
                 mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)
                 mrr_tot += mrr

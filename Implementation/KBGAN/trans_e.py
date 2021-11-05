@@ -44,7 +44,8 @@ class TransE(BaseModel):
     def __init__(self, n_ent, n_rel, config):
         super(TransE, self).__init__()
         self.mdl = TransEModule(n_ent, n_rel, config)
-        self.mdl.cuda()
+        if t.cuda.is_available():
+            self.mdl.cuda()
         self.config = config
 
     def pretrain(self, train_data, corrupter, tester):
@@ -62,23 +63,24 @@ class TransE(BaseModel):
             rel = rel[rand_idx]
             dst = dst[rand_idx]
             src_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
-            src_cuda = src.cuda()
-            rel_cuda = rel.cuda()
-            dst_cuda = dst.cuda()
-            src_corrupted = src_corrupted.cuda()
-            dst_corrupted = dst_corrupted.cuda()
-            for s0, r, t0, s1, t1 in batch_by_num(n_batch, src_cuda, rel_cuda, dst_cuda, src_corrupted, dst_corrupted,
+            if t.cuda.is_available():
+                src = src.cuda()
+                rel = rel.cuda()
+                dst = dst.cuda()
+                src_corrupted = src_corrupted.cuda()
+                dst_corrupted = dst_corrupted.cuda()
+            for s0, r, t0, s1, t1 in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
                                                   n_sample=n_train):
                 self.mdl.zero_grad()
                 loss = t.sum(self.mdl.pair_loss(Variable(s0), Variable(r), Variable(t0), Variable(s1), Variable(t1)))
                 loss.backward()
                 optimizer.step()
                 self.mdl.constraint()
-                epoch_loss += loss.data[0]
+                epoch_loss += loss.item()
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, epoch_loss / n_train)
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 test_perf = tester()
                 if test_perf > best_perf:
-                    self.save(os.path.join(config().task.dir, self.config.model_file))
+                    self.save(os.path.join('models', config().task.dir, self.config.model_file))
                     best_perf = test_perf
         return best_perf

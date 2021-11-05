@@ -1,16 +1,14 @@
 \chapter{Problem}
 \label{ch:problem}
 
+% general introduction
 Since \acp{KG} contain large amount of information, they provide many application possibilities.
-However, to achieve good results for these applications we need to learn good embeddings which represent all the information in a low-dimensional vector space.
-The less information is lost in this representation as embeddings of the entities and their relationships, the better accuracies can be achieved by the subsequent applications and vice versa.
-
-%For reasons of efficiency and since most applications provide only positive information, most current \acp{KG} include only positive triples.
-%However, these would be particularly useful for many \ac{KG}-related tasks like question answering and recommendation by increasing the certainty in decision-making and avoiding mistakes \cite{safavi2021negater}.
-Since no negative information is available in most \acp{KG}, we are left with two options to collect them \cite{safavi2021negater}: 
+However, to achieve good results for these applications we need to learn good embeddings which represent as much information as possible in a graph representation of a low-dimensional vector space.
+Most of graph representation learning methods can be unified within a \ac{SampledNCE} framework comprising an encoder that generates node embeddings by learning to distinguish pairs of a positive and a negative triple \cite{MCNS}.
+Therefore, we need negative triples for embedding learning which are not available in most \acp{KG}.
+For this reason, we are left with two options to collect them \cite{safavi2021negater}: 
 On one hand they can be obtained by human annotation which is very cost-prohibitive at scale, but leads to very informative and useful examples. 
-On the other, they can be generated ad-hoc, which in turn does not represent a great effort, but also leads to uninformative and useless negative samples.
-In addition, it ignores changes in the distribution of negative triples and suffers from the vanishing gradient and biased estimation problem \cite{zhang2021efficient}.
+On the other, they can be generated ad-hoc, which in turn does not represent a great effort, but also leads to uninformative and useless negative examples.
 For this reason, we need to find a way between these two extreme approaches.
 
 % degree-based sampling
@@ -27,43 +25,81 @@ To find informative and more useful negative samples, they can be compared and r
 For this purpose, various options have already been presented that use different metrics.
 E.g. \cite{DNS} presented with \ac{DNS} a pair-wise \ac{CF} algorithms based on \ac{BPR}.
 Other approaches like \ac{PinSAGE} \cite{PinSAGE} which is based on \ac{GraphSAGE} \cite{GraphSAGE} rely on random-walk-based \ac{GCN}. 
-A producer samples the network neighborhoods of a node, while the consumer 
-runs \ac{SGD} on computation graphs.    
+A producer samples the network neighborhoods of a node, while the consumer runs \ac{SGD} on computation graphs.    
 One of the latest approaches for negative sampling is \ac{NegatER}
 which ranks a selection of statements using fine-tuned contextual \ac{LM} \cite{safavi2021negater}.
 With this approach, negative sampling process takes place in two steps:
 Firstly, a language model for positive knowledge is fine-tuned by using contrastive learning.
 Subsequently, statements are ranked by k-nearest-neighbors retrieval approach which are most plausible or most surprising.
 
+With these approaches of negative sampling from a fixed distribution two different problems arise:
+Since they ignore changes in the distribution of negative triples, they suffer from the vanishing gradient and biased estimation problem \cite{zhang2021efficient}.
+The scoring functions tend to give observed (positive) triplets large values and most of the non-observed (probably negative) triplets will have smaller values during the training.
+Therefore, if negative triplets are uniformly sampled, it is very likely to pick up one with zero gradients.
+
+This leads to the following main challenges for negative sampling \cite{zhang2021efficient}: 
+(i) The negative triple's dynamic distribution has to be captured and (ii) triples have to be effectively sampled from this distribution.
+
 % GAN-based approaches
-Instead of sampling from a fixed distribution, two pioneering works \ac{KBGAN} \cite{cai2017kbgan} and \ac{IGAN} \cite{IGAN} try to capture the dynamic distribution of negative examples by a \ac{GAN} \cite{zhang2021efficient}.
+Two pioneering works \ac{KBGAN} \cite{cai2017kbgan} and \ac{IGAN} \cite{IGAN} attempt to address these challenges by a \ac{GAN} \cite{zhang2021efficient}.
 \acp{GAN} were originally proposed for generating samples in a continuous space such as images and adapted for the generation of hard negative examples \cite{zhang2021efficient}.
 The process of \ac{KBGAN} is depicted in the Figure \ref{fig:overview} and described as follows:
 \begin{figure*}[t]
   \centering
-    \includegraphics[width=0.95\textwidth]{figures/kbgan_overview.pdf}
+    \includegraphics[width=0.95\textwidth]{figures/kbgan_original.png}
   \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan})}
   \label{fig:overview}
 \end{figure*}
-At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is created by uniformly sampling of $N_s$ entities $\in$ \entities to replace $h$ or $t$.
-For reasons of efficiency and to reduce the likelihood of creating false negatives, $N_s$ is a relatively small number compared to the number of all possible negative examples \cite{cai2017kbgan}.
-Subsequently, an adversarial training with two components starts.
-The \textit{generator} G is a \ac{KGE} model with softmax probabilities to provide high-quality negative samples.
-These are send to the discriminator (D) whose training objective is marginal loss function.
-The generator calculates a probability distribution $p_G(h',r,t'|h,r,t)$ given a positive triple $(h,r,t)$ for all negative triples $(h', r, t') \in Neg$.
-One triple is sampled according to distribution as the output and together with the ground truth triple $(h,r,t)$ sent to the discriminator, which calculates their scores. 
-During the training, the objective of G is to minimize the score of generated negative triple by policy gradient, and D minimizes the marginal loss between positive and negative triples by gradient descent \cite{cai2017kbgan}.
-However, this approach still has many problems since the model suffers from instability and degeneracy, because the \textsc{REINFORCE} gradient has high variance for training the generator and it is still not guaranteed that large-gradient negative triples are created \cite{zhang2021efficient}.
 
-Other approaches like \ac{NSCaching} tried to solve these problems by using a cache \cite{zhang2021efficient} to improve the training process of the generator or replacing the generator by a self embedding model in \ac{Self-Adv} and sample negative triples according to the current embedding model \cite{Self-Adv}.
+\begin{enumerate}
+    \item 
+    At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is created by uniformly sampling of $N_s$ entities $\in$ \entities to replace $h$ or $t$.
+    For reasons of efficiency and to reduce the likelihood of creating false negatives, $N_s$ is a relatively small number compared to the number of all possible negative examples \cite{cai2017kbgan}.
     
-In summary, there are already several approaches for negative sampling, but they still have problems to capture the dynamic distribution of the negative triples or effectively sample them \cite{zhang2021efficient}.
-Synthetic generated negative samples are still far away from the quality of human annotated samples.
-For this reason, we present a new approach for generating negative examples.
-% describe approach very short
+    \item 
+    Negative triples from $Neg$ are given to the generator (G) as input.
+    
+    \item 
+    G is a \ac{KGE} model with a softmax function to provide a probability for each given negative triple, which gives us a probability distribution $p_G(h',r,t'|h,r,t)$.
 
+    \item 
+    Afterwards, one of these triples is sampled as output of G according to the $p_G$, while high quality triples should have a high probability to be sampled.
+    
+    \item 
+    Discriminator (D) receives as input both the sampled negative triple and the ground truth triple $(h,r,t)$.
+    The training objective of D is a marginal loss function, because these benefit most from high quality negative examples \cite{cai2017kbgan}.
 
+    \item 
+    Subsequently, D calculates the scores of both triples $(h,r,t)$ and $(h',r,t')$ with score function $f_D$ of D, score function models distance between points or vectors and a smaller distance indicates a higher likelihood of truth \cite{cai2017kbgan}.
+    
+    \item 
+    Accordingly, the objective of D is to minimize the marginal loss function $L_D$ which is defined as
+    \begin{equation}
+        L_D=\sum_{(h,r,t)\in\mathcal{T}}[f_D(h,r,t)-f_D(h',r,t')+\gamma]_+ \in \mathbb{R}^+
+    \end{equation}
+    
+    \item 
+    To give G feedback for the sampled negative triple $(h',r,t')$ its calculated score $f_D(h',r,t')$ is send back to G as a reward, which is defined as
+    \begin{equation}
+        r = -f_D(h',r,t') \in \mathbb{R}^-
+    \end{equation}
+    since $f_D(h,r,t) \in \mathbb{R}^+$.
+    Therefore, the objective of G can be formulated as maximizing the expectation of negative distances:
+    \begin{equation}
+        R_G=\sum_{(h,r,t)\in\mathcal{T}}\mathbb{E}[-f_D(h',r,t')]
+    \end{equation}
+    
+    \item
+    This process continues until convergence
+\end{enumerate}
 
+However, this approach still has many problems since it increases the number of training parameters because of the generator and the model suffers from instability and degeneracy.
+This results from the fact, that the  \textsc{REINFORCE} gradient has high variance for training the generator and it is still not guaranteed that large-gradient negative triples are created \cite{zhang2021efficient}.
+From the set $Neg$ of negative´examples only a few negative triples lead to large gradients, and therefore, \ac{KBGAN} takes a lot of effort to model the distributions.
+The consequence is an instable training performance and pre-training becomes a must for generator and discriminator model.
+    
+In summary, there are already several approaches for Negative Sampling, but they still have problems to capture the dynamic distribution of the negative triples or effectively sample them \cite{zhang2021efficient}.
+Therefore, we present a new negative sampling technique which aims to \textbf{improve the efficiency of sampling by using more informative and useful negative examples for the embedding model}.
 
 
 

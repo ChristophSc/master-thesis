@@ -1,0 +1,1 @@
+gen.pretrain(train_data, corrupter, tester)

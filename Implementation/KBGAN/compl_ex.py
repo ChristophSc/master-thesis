@@ -72,6 +72,6 @@ class ComplEx(BaseModel):
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 test_perf = tester()
                 if test_perf > best_perf:
-                    self.save(os.path.join(config().task.dir, self.config.model_file))
+                    self.save(os.path.join('models', config().task.dir, self.config.model_file))
                     best_perf = test_perf
         return best_perf

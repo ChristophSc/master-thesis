@@ -1,11 +1,9 @@
 \chapter{Related Work}
 \label{ch:relatedwork}
 
-To ensure a common understanding and avoid misunderstandings, terminologies are described, important definitions are given and related works are presented.
-
 \section{Knowledge Graphs} 
 There are several definitions of a \acp{KG} in the literature. 
-In the scope of this work, we work with the following definition given by \cite{ConEx}:
+In the scope of this work, we work with the following definition given by \cite{ConEx, RotatE}:
 Let the set of entities and relations represented by \entities and \relations.
 Then, a \ac{KG} $\kg= \{\triple{h}{r}{t} \}  \subseteq \entities \times \relations \times \entities$ can be formalised as a set of triples where each triple contains a head entity $\texttt{h}$ and a tail entity $\texttt{t}$ with $\texttt{h}, \texttt{t} \in \entities$ and a relation $\texttt{r} \in \relations$. 
 A relation \texttt{r} in \kg is
@@ -23,7 +21,7 @@ In addition, the inverse of a relation \texttt{r}, denoted as $\texttt{r}^{-1}$,
 
 \section{Knowledge Graph Embeddings} 
 \acp{KGE} are low-dimensional representations of the entities and relations in a \ac{KG}. 
-Numerous methods have been developed in the last few years, all of them define a different score function to measure the distance between entities relative to their relation.
+Numerous methods have been developed in the last few years to tackle various problems such as defining a different score function to measure the distance between entities relative to their relation.
 Depending on the dimensionality of the embedding space and which types of relations should be embedded, a different embedding can be chosen.
 While some of them support only symmetric relations, others support antisymmetric ones as well. 
 Besides this, the types of relations in a \ac{KG} differ from each other.
@@ -36,18 +34,19 @@ On the basis of this, two different categories are derived:
 \textit{Triplet Fact-Based Representation Learning Models} are separated into three groups:
 \begin{enumerate}
     \item 
-    \textbf{Translation-Based Models}  which are based on word embedding algorithms. 
-    Example models are e.g. \textsc{TransE}, \textsc{TransH}, \textsc{TransR}, \textsc{TransD} and \textsc{RotatE}
+    \textbf{Translation-Based Models}  which are based on word embedding algorithms: 
+    \textsc{TransE} \cite{TransE}, \textsc{TransH} \cite{TransH}, \textsc{TransR} \cite{TransR}, \textsc{TransD} \cite{TransD}
+    and 
+    \textsc{RotatE} \cite{RotatE}
     
     \item 
-    \textbf{Tensor Factorization-Based Models}
-    \textsc{RESCAL}, \textsc{DistMult}, \textsc{ComplEx}, \textsc{HolE}
+    \textbf{Tensor Factorization-Based Models}:
+    \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, \textsc{HolE} \cite{HolE}
     
     \item 
-    \textbf{Neural Network-Based Models}
-    \textsc{ConvE}, \textsc{HypER}, \textsc{ConEx}, \textsc{ConvQ}, \textsc{ConvO}
+    \textbf{Neural Network-Based Models}:
+    \textsc{ConvE} \cite{ConvE}, \textsc{HypER} \cite{HypER}, \textsc{ConEx} \cite{ConEx}, \textsc{ConvQ} and  \textsc{ConvO} \cite{demir2021convolutional}
 \end{enumerate}
-Most of these graph representation learning methods can be unified within a \ac{SampledNCE} framework comprising an encoder that generates node embeddings by learning to distinguish pairs of a positive and a negative triple \cite{MCNS}.
 
 \section{Negative Sampling methods} 
 In the literature, several Negative Sampling methods are proposed to create synthetic negative examples which are used for subsequent embedding learning.
@@ -67,8 +66,7 @@ They can be separated into three different groups:
     Within this group, approaches like\ac{PinSAGE} \cite{PinSAGE}, sampling-max (\ac{DNS}) \cite{DNS} and \ac{WARP} \cite{WARP} can be mentioned.
     
     \item 
-    \textbf{\ac{GAN}-based Negative Sampling} was originally proposed for
-    generating samples in a continuous space such as images \cite{cai2017kbgan}.
+    \textbf{\ac{GAN}-based Negative Sampling} was originally proposed for generating samples in a continuous space such as images \cite{cai2017kbgan}.
     In recent years it was used for negative sampling approaches which achieved state-of-the-art accuracies. 
     \ac{GAN}-based approaches consist of two components:
     a generator and a discriminator. 
@@ -85,46 +83,95 @@ They can be separated into three different groups:
 \end{itemize}
 
 \section{Standard evaluations for knowledge graph embedding models} 
-
 To evaluate the \ac{KGE} models, different metrics are available.
 Some most commonly used are the following metrices \cite{kotnis2017analysis}:
 \begin{itemize}
     \item 
     \ac{MRR} which is defined as
-    $$MRR = \frac{1}{N} \sum_{i=1}^{N}\frac{1}{rank_i}$$
+    \begin{equation}
+        MRR = \frac{1}{N} \sum_{i=1}^{N}\frac{1}{rank_i}
+    \end{equation}
+    
     computes the average of the reciprocal ranks \cite{zhang2021efficient}
     
     \item 
     hits@k which calculates the percentage of appearance in the top-10 ranking \cite{zhang2021efficient}.
-    $$hits@K = \frac{|\{i | rank_i < K\}|}{N}$$
+    \begin{equation}
+        hits@K = \frac{|\{i | rank_i < K\}|}{N}
+    \end{equation}
     where $rank_i$ is the rank of the positive instance $i$ predicted by a model with respect to the negative examples and usually $K \in \{1, 3, 5, 10\}$.
- 
+\end{itemize}
+Since in many \ac{KGE} models either the head or the tail entity is randomly replaced by other entities of the KG, these corrupted triples may be true facts.
+For this reason, many approaches distinguish between \textit{raw} and \textit{filtered}, where for corrupted triples it is looked whether these occur in the train, test or validation set \cite{TransE}.
+
+\section{Uncertainty Sampling}
+https://link.springer.com/content/pdf/10.1007/s10994-021-06003-9.pdf
+
+\begin{enumerate}
+    \item 
+    \textbf{Evidence-based uncertainty (EBU)}
+    - differentiate between uncertainty due to conflicting evidence and insufficient evidence\\
+    - measures of conflicting-evidence uncertainty and insufficient-evidence uncertainty
+    
+    \item 
+    \textbf{Credal uncertainty (CU):}
+    - seeks to differentiate between the reducible and irreducible part of the uncertainty in a prediction.
+    
+    \item 
+    \textbf{Epistemic and aleatoric uncertainty (EAU):}
+    - distinction between the epistemic and aleatoric uncertainty\\
+    -  based on the use of relative likelihoods and justified in other settings such as possibility theory\\
+    - entropy-based
+\end{enumerate}
+
+following variants of uncertainty sampling:
+\begin{itemize}
+    \item 
+    Rand: Random sampling
+    
+    \item
+    ENT: Standard uncertainty sampling based on the entropy measure
+
+    \item
+    CEU: Conflicting-evidence uncertainty sampling
+    
+    \item
+    IEU: Insufficient-evidence uncertainty sampling
+    
+    \item
+    CU: Credal uncertainty sampling
+    
+    \item
+    EU: Epistemic uncertainty sampling
+    
+    \item
+    AU: Aleatoric uncertainty sampling
 \end{itemize}
 
 
-\section{Uncertainty Sampling}
 
-Add description of active Learning and Uncertainty Sampling here instead of just Active Learning??\\
-=> approach is more related to Uncertainty Sampling
+% In the case of binary classifcation, i.e, Y = {0, 1}, all these measures rank unlabelled instances in the same order and look for instances with small diference
 
-\section{Active Learning}
-\cite{Settles2009ActiveLL} describes in its survey the different approaches of Active Learning.
-The idea of Active Learning is to achieve greater accuracy with fewer labeled training instance by choosing the data from which it learns.
-It is well-motivated in many modern machine learning problems, where we have an abundant amount of unlabeled data, but it is difficult, time-consuming or expensive to obtain labeled data.
-For Active Learning three different settings are differentiated:
-\begin{enumerate}
-    \item \textbf{Membership Query Synthesis}
-    In this setting the learner usually generates queries de novo, rather than those sampled from an an underlying distribution. 
-    For example, the active learner rotates a given picture which is sent to and classified by the oracle.
+
+
+%\section{Active Learning}
+%\cite{Settles2009ActiveLL} investigates different approaches of Active Learning for several scenarios with different query strategy frameworks.
+%The idea of Active Learning is to achieve greater accuracy with fewer labeled training instance by choosing the data from which it learns.
+%It is well-motivated in many modern machine learning problems, where we have an abundant amount of unlabeled data, but it is difficult, time-consuming or expensive to obtain labeled data.
+%For Active Learning three different settings are differentiated:
+%\begin{enumerate}
+%    \item \textbf{Membership Query Synthesis}
+%    In this setting the learner usually generates queries de novo, rather than those sampled from an an underlying distribution. 
+%    For example, the active learner rotates a given picture which is sent to and classified by the oracle.
     
-    \item \textbf{Stream-Based Selective Sampling}
-    is an alternative to synthesizing queries and quieries samples my selective sampling with the key assumption that obtaining an unlabeled instance is unexpensive.
-    it is also called stream-based or sequential active learning, since it is done in an iterative manner.
+%    \item \textbf{Stream-Based Selective Sampling}
+%    is an alternative to synthesizing queries and quieries samples my selective sampling with the key assumption that obtaining an unlabeled instance is unexpensive.
+%    it is also called stream-based or sequential active learning, since it is done in an iterative manner.
     
-    \item \textbf{Pool-Based Selective Sampling} is based on the assumption that we have a large collection of unlabeled data which can be gathered at once.
-    With this strategy, instances are queried according to an informativeness measure.
-    It is closely related to Stream-Based Selective Sampling since the only difference is that the instances are queried and ranked at once and not iteratively.
-\end{enumerate}
+%    \item \textbf{Pool-Based Selective Sampling} is based on the assumption that we have a large collection of unlabeled data which can be gathered at once.
+%    With this strategy, instances are queried according to an informativeness measure.
+%    It is closely related to Stream-Based Selective Sampling since the only difference is that the instances are queried and ranked at once and not iteratively.
+%\end{enumerate}
 
 
 

@@ -1,37 +1,27 @@
 \chapter{Timeline}
 \label{ch:timeline}
 
-writing and implementation is done simultaniously
-
-\paragraph{WRITING}
-\begin{enumerate}
-    \item \textbf{Milestone}:Until end of October - Submission Proposal 
-    \item Until mid of November -  Further Research
-    \item Until end of November - Introduction + Related work + Background finished
-    \item Until end of December -  Approach
-    \item Until end of January - Implementation
-    \item Until mid of February - Evaluation + Summary and Discussion
-    \item Editing and re-writing master thesis
-    \item \textbf{Milestone}: End of February: Submission first version of master thesis
-    \item March: Corrections and rewriting
-    \item \textbf{Milestone}: End of March - Submission final version of master thesis
-    \item few weeks later: Presentation
-\end{enumerate}
-
-\paragraph{IMPLEMENTATION} - sprint of 2 weeks - working product at the end of each sprint
-\begin{enumerate}
-    \item \textbf{Milestone}: End of October - Submission of Prototype
-    \item Implementation
-    \item ...
-    \item \textbf{Milestone}: First
-    \item Refactoring
-    \item \textbf{Milestone}: Implementation finished
-    \item \textbf{Milestone}: Submission of implementation
-\end{enumerate}
-    
-\begin{figure*}[t]
+% general description of the schedule
+The schedule shown in Figure \ref{fig:timeline} is established for the master thesis.
+\begin{sidewaysfigure}
   \centering
     \includegraphics[width=0.95\textwidth]{figures/gantt_chart.png}
   \caption{Gantt-Chart with tasks and milestones of master thesis time plan.}
-  \label{fig:overview}
-\end{figure*}
+  \label{fig:timeline}
+\end{sidewaysfigure}
+The start of the thesis is scheduled for the beginning of November.
+The work is basically divided into a practical and a theoretical part, which should take place at the same time and both use multiple milestones.
+
+% Theoretical part
+The theoretical part contains three milestones:
+First, further research work follows so that the Introduction, Related work and Background for this Thesis can be given and the first milestone is reached.
+Subsequently, our \ac{UCGAN} approach is described, evaluated and summarized, so that the next milestone of a first version of the thesis is reached.
+After further corrections and revisions, the final version of the implementation will be handed in at the end of March.
+
+%Practical Part
+Simultaneously during the writing of the thesis the practical implementation of the \ac{UCGAN} approach takes place.
+First, the individual components of the score function are implemented, which includes the \ac{PEER}, \ac{POP}, \ac{FRQ} and \ac{PIVO} function.
+Second, the comprehensive score function is implmenented which includes the components and the embedding function $f_G$.
+Finally, Uncertainty Sampling will be implemented such that the first milestone of a first working version of \ac{UCGAN} is reached.
+Subsequently, an evaluation to compare the approach with others, further improvements and refactoring take place.
+For theoretical and practical part the final milestone of submitting the thesis as well as the code is end of March.
