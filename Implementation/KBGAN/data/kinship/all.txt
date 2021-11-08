@@ -10,7 +10,6 @@ Pierro	father	Marco
 Pierro	father	Angela
 Marco	father	Alfonso
 Marco	father	Sophia
-
 Penelope	mother	Arthur
 Penelope	mother	Victoria
 Christine	mother	James
@@ -23,7 +22,6 @@ Francesca	mother	Marco
 Francesca	mother	Angela
 Lucia	mother	Alfonso
 Lucia	mother	Sophia
-
 Christopher	husband	Penelope
 Andrew	husband	Christine
 Arthur	husband	Margaret
@@ -34,7 +32,6 @@ Pierro	husband	Francesca
 Emilio	husband	Gina
 Marco	husband	Lucia
 Tomaso	husband	Angela
-
 Penelope wife Christopher
 Christine wife Andrew
 Margaret wife Arthur
@@ -45,20 +42,18 @@ Francesca wife Pierro
 Gina wife Emilio
 Lucia wife Marco
 Angela wife Tomaso
-
 Arthur son Christopher
 Arthur son Penelope
 James son Andrew
 James son Christine
-son Colin son Victoria
-son Colin son James
-son Emilio son Roberto
-son Emilio son Maria
-son Marco son Pierro
-son Marco son Francesca
-son Alfonso son Lucia
-son Alfonso son Marco
-
+Colin son Victoria
+Colin son James
+Emilio son Roberto
+Emilio son Maria
+Marco son Pierro
+Marco son Francesca
+Alfonso son Lucia
+Alfonso son Marco
 Victoria daughter Christopher
 Victoria daughter Penelope
 Jennifer daughter Andrew
@@ -71,30 +66,26 @@ Angela daughter Pierro
 Angela daughter Francesca
 Sophia daughter Lucia
 Sophia daughter Marco
-
 Arthur brother Victoria
 James brother Jennifer
 Colin brother Charlotte
 Emilio brother Lucia
 Marco brother Angela
 Alfonso brother Sophia
-
 Victoria sister Arthur
 Jennifer sister James
 Charlotte sister Colin
 Lucia sister Emilio
 Angela sister Marco
 Sophia sister Alfonso
-
 Arthur uncle Colin
-uncle Charles uncle Colin
-uncle Arthur uncle Charlotte
-uncle Charles uncle Charlotte
-uncle Emilio uncle Alfonso
-uncle Tomaso uncle Alfonso
-uncle Emilio uncle Sophia
-uncle Tomaso uncle Sophia
-
+Charles uncle Colin
+Arthur uncle Charlotte
+Charles uncle Charlotte
+Emilio uncle Alfonso
+Tomaso uncle Alfonso
+Emilio uncle Sophia
+Tomaso uncle Sophia
 Jennifer aunt Colin
 Margaret aunt Colin
 Jennifer aunt Charlotte
@@ -103,7 +94,6 @@ Angela aunt Alfonso
 Gina aunt Alfonso
 Angela aunt Sophia
 Gina aunt Sophia
-
 Colin nephew Arthur
 Colin nephew Jennifer
 Alfonso nephew Emilio
@@ -112,7 +102,6 @@ Colin nephew Margaret
 Colin nephew Charles
 Alfonso nephew Gina
 Alfonso nephew Tomaso
-
 Charlotte  nieceArthur
 Charlotte niece Jennifer
 Sophia niece Emilio
@@ -121,7 +110,3 @@ Charlotte niece Margaret
 Charlotte niece Charles
 Sophia niece Gina
 Sophia niece Tomaso
-
-
-
-

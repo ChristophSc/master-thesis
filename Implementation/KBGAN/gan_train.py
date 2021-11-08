@@ -59,13 +59,18 @@ avg_reward = 0
 for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
-    src_cand, rel_cand, dst_cand = corrupter.corrupt(src, rel, dst, keep_truth=False)
+    # create set Neg of negative triples 
+    src_cand, rel_cand, dst_cand = corrupter.corrupt(src, rel, dst, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
     for s, r, t, ss, rs, ts in batch_by_num(n_batch, src, rel, dst, src_cand, rel_cand, dst_cand, n_sample=n_train):
+        # send corrupted triples from Neg of size "n_batch" to generator
         gen_step = gen.gen_step(ss, rs, ts, temperature=config().adv.temperature)
-        src_smpl, dst_smpl = next(gen_step)
+        # randomly sample from probability distribution of current negative triple set 
+        src_smpl, dst_smpl = next(gen_step)         # TODO: change next function and use Uncertainty Sampling
+        # send sampled negative triple "dst_smpl" and its ground truth triple "src_smpl" to discriminator 
         losses, rewards = dis.dis_step(s, r, t, src_smpl.squeeze(), dst_smpl.squeeze())
-        epoch_reward += torch.sum(rewards)
+        epoch_reward += torch.sum(rewards)        
         rewards = rewards - avg_reward
+        # send reward to generator
         gen_step.send(rewards.unsqueeze(1))
         epoch_d_loss += torch.sum(losses)
     avg_loss = epoch_d_loss / n_train

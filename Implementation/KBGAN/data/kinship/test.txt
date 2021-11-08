@@ -1,0 +1,22 @@
+Colin	brother	Charlotte
+Alfonso	son	Marco
+Alfonso	nephew	Tomaso
+Margaret	aunt	Charlotte
+Victoria	sister	Arthur
+Penelope	mother	Victoria
+Tomaso	uncle	Sophia
+Charlotte	niece	Margaret
+Sophia	daughter	Lucia
+Charlotte		nieceArthur
+Maria	mother	Lucia
+Colin	nephew	Charles
+Alfonso	nephew	Emilio
+Arthur	husband	Margaret
+Lucia	mother	Alfonso
+Margaret	wife	Arthur
+Gina	aunt	Sophia
+Francesca	mother	Angela
+Christine	mother	Jennifer
+Marco	husband	Lucia
+Victoria	mother	Charlotte
+Francesca	mother	Marco

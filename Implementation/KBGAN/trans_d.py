@@ -95,7 +95,7 @@ class TransD(BaseModel):
                 loss.backward()
                 optimizer.step()
                 self.mdl.constraint()
-                epoch_loss += loss.data[0]
+                epoch_loss += loss.item()
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, epoch_loss / n_train)
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 test_perf = tester()
