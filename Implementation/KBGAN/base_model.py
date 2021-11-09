@@ -131,26 +131,34 @@ class BaseModel(object):
                 with torch.no_grad():
                     all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
                                 .type(torch.LongTensor))
-            
             batch_dst_scores = self.mdl.score(src_var, rel_var, all_var).data
             batch_src_scores = self.mdl.score(all_var, rel_var, dst_var).data
             for s_tensor, r_tensor, t_tensor, dst_scores, src_scores in zip(batch_s, batch_r, batch_t, batch_dst_scores, batch_src_scores):
                 s, r, t = s_tensor.item(), r_tensor.item(), t_tensor.item()
                 if filt:
+                    print('1')
                     if tails[(s, r)]._nnz() > 1:
+                        print('2')
                         tmp = dst_scores[t]
+                        print('2')
                         if torch.cuda.is_available():
                             dst_scores += tails[(s, r)].cuda() * 1e30
                         else:
                             dst_scores += tails[(s, r)] * 1e30
+                        print('4')
                         dst_scores[t] = tmp
+                    print('5')
                     if heads[(t, r)]._nnz() > 1:
+                        print('6')
                         tmp = src_scores[s]
+                        print('7')
                         if torch.cuda.is_available():
                             src_scores += heads[(t, r)].cuda() * 1e30
                         else:
                             src_scores += heads[(t, r)] * 1e30
+                        print('8')
                         src_scores[s] = tmp
+                        print('9')
                 mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)
                 mrr_tot += mrr
                 mr_tot += mr

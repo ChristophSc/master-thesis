@@ -1,4 +1,4 @@
-pretrain_config: ComplEx
+pretrain_config: TransD
 g_config: DistMult
 d_config: TransD
 test_batch_size: 10 # 100
@@ -8,7 +8,7 @@ task:
 adv:
   n_sample: 20
   n_epoch: 50 # 5000
-  n_batch: 10 # 100
+  n_batch: 100 # 100
   epoch_per_test: 10 # 100
   temperature: 1.0
 TransE:
@@ -16,7 +16,7 @@ TransE:
   margin: 3
   p: 1
   n_epoch: 50 # 5000
-  n_batch: 10 # 100
+  n_batch: 100 # 100
   epoch_per_test: 10 # 50
   model_file: transe.mdl
 TransD:
@@ -24,7 +24,7 @@ TransD:
   margin: 3
   p: 1
   n_epoch: 50 # 5000
-  n_batch: 10 # 100
+  n_batch: 100 # 100
   epoch_per_test: 10 # 50
   model_file: transd.mdl
 DistMult:
@@ -33,7 +33,7 @@ DistMult:
   n_sample: 20
   sample_freq: 1
   n_epoch: 50 # 5000
-  n_batch: 10 # 100
+  n_batch: 100 # 100
   epoch_per_test: 10 # 50
   model_file: distmult.mdl
 ComplEx:
@@ -42,7 +42,7 @@ ComplEx:
   n_sample: 20
   sample_freq: 1
   n_epoch: 50 # 5000
-  n_batch: 10 # 100
+  n_batch: 100 # 100
   epoch_per_test: 10 # 50
   model_file: complex.mdl
 log:
