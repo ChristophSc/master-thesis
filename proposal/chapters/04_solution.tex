@@ -53,7 +53,7 @@ Therefore, our new score function $Generator\_Score$ is defined as follows:
          \\ \ \ 
          if\ \ \ \neg(\textit{h, r, t})
          \\ \\
-         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_4 \text{FRQ(\textit{r})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(h, r, t)
+         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{FRQ(\textit{r})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(h, r, t)
          \\ \ \ 
          if\ \ \ \neg \exists (\textit{h, r, \_})
          \\
@@ -91,7 +91,7 @@ Then the $Generator\_Score$ function contains the following features from \cite{
     
     \item 
     \emph{$f_G$:} 
-    $Score$ function of the \ac{KGE}  model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
+    $Generator\_Score$ function of the \ac{KGE}  model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
     
 \end{itemize}
 Input of the algorithm of our approach is like in original \ac{KBGAN} a pre-trained generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$, 
@@ -135,7 +135,7 @@ The training process can be described in the following steps:
     $$- (1 - \mathds{P}(y = 1|(h',r,t') log(1 - \mathds{P}(y = 1|(h',r,t'))$$
     To obtain the probabilities for a triple of being positive ($y=1$) we define
     \begin{equation}
-        \mathds{P}(y = 1|(h, r, t)) := \frac{score(h, r, t) - score_{min}}{score_{max} - score_{min}} \in [0, 1]
+        \mathds{P}(y = 1|(h, r, t)) := \frac{Generator\_Score(h, r, t) - score_{min}}{score_{max} - score_{min}} \in [0, 1]
     \end{equation}
     and accordingly the probability of a triple to be negative ($y=0$) as
     \begin{equation}
