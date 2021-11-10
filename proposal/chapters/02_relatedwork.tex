@@ -60,7 +60,7 @@ They can be separated into three different groups \cite{qianunderstanding}:
 	In contrast, Probabilistic Sampling speeds up the training process by including a train bias.
 	
 	\item 
-    \textbf{Custom Cluster-Based Sampling} samples negative triples from a small cluster based on closeness between entities.
+    \textbf{Custom Cluster-Based Sampling} samples negative triples from a small cluster-based on closeness between entities.
 	By the K-Means clustering algorithm or caching techniques, approaches like TransE-\ac{SNS} \cite{TransE-SNS} or \ac{NSCaching} \cite{NSCaching}, entities are divided into a number of groups and randomly sampled from
 	this group to create negative triples.	
     
@@ -72,9 +72,62 @@ They can be separated into three different groups \cite{qianunderstanding}:
 	Known approaches are \ac{KBGAN} \cite{cai2017kbgan}, \ac{IGAN}  \cite{IGAN} or \ac{MCNS} \cite{MCNS}.
 \end{itemize}
 
+
+\section{KBGAN} \label{sec:kbgan}
+The process of \ac{KBGAN} is depicted in the Figure \ref{fig:overview} and described as follows:
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.95\textwidth]{figures/kbgan_original.png}
+  \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan})}
+  \label{fig:overview}
+\end{figure*}
+
+\begin{enumerate}
+    \item 
+    At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is created by uniformly sampling of $N_s$ entities $\in$ \entities to replace $h$ or $t$.
+    For reasons of efficiency and to reduce the likelihood of creating false negatives, $N_s$ is a relatively small number compared to the number of all possible negative examples \cite{cai2017kbgan}.
+    
+    \item 
+    Negative triples from $Neg$ are given to the generator (G) as input.
+    
+    \item 
+    G is a \ac{KGE} model with a softmax function to provide a probability for each given negative triple, which gives us a probability distribution $p_G(h',r,t'|h,r,t)$.
+
+    \item 
+    Afterwards, one of these triples is sampled as output of G according to the $p_G$, while high quality triples should have a high probability to be sampled.
+    
+    \item 
+    Discriminator (D) receives as input both the sampled negative triple and the ground truth triple $(h,r,t)$.
+    The training objective of D is a marginal loss function, because these benefit most from high quality negative examples \cite{cai2017kbgan}.
+
+    \item 
+    Subsequently, D calculates the scores of both triples $(h,r,t)$ and $(h',r,t')$ with score function $f_D$ of D, score function models distance between points or vectors and a smaller distance indicates a higher likelihood of truth \cite{cai2017kbgan}.
+    
+    \item 
+    Accordingly, the objective of D is to minimize the marginal loss function $L_D$ which is defined as
+    \begin{equation}
+        L_D=\sum_{(h,r,t)\in\mathcal{T}}[f_D(h,r,t)-f_D(h',r,t')+\gamma]_+ \in \mathbb{R}^+
+    \end{equation}
+    
+    \item 
+    To give G feedback for the sampled negative triple $(h',r,t')$ its calculated score $f_D(h',r,t')$ is send back to G as a reward, which is defined as
+    \begin{equation}
+        r = -f_D(h',r,t') \in \mathbb{R}^-
+    \end{equation}
+    since $f_D(h,r,t) \in \mathbb{R}^+$.
+    Therefore, the objective of G can be formulated as maximizing the expectation of negative distances:
+    \begin{equation}
+        R_G=\sum_{(h,r,t)\in\mathcal{T}}\mathbb{E}[-f_D(h',r,t')]
+    \end{equation}
+    
+    \item
+    This process continues until convergence
+\end{enumerate}
+By this procedure of the adversarial training the dynamic distribution of the negative triple is determined. 
+
 \section{Standard evaluations for knowledge graph embedding models} 
 To evaluate the \ac{KGE} models, different metrics are available.
-Some most commonly used are the following metrices \cite{kotnis2017analysis}:
+Some most commonly used are the following metrics \cite{kotnis2017analysis}:
 \begin{itemize}
     \item 
     \ac{MRR} which is defined as
@@ -95,73 +148,53 @@ Since in many \ac{KGE} models either the head or the tail entity is randomly rep
 For this reason, many approaches distinguish between \textit{raw} and \textit{filtered}, where for corrupted triples it is looked whether these occur in the train, test or validation set \cite{TransE}.
 
 \section{Uncertainty Sampling}
-Uncertainty Sampling originally comes from Active Learning and is well-motivated in many machine learning approaches where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled data \cite{Settles2009ActiveLL}.
-With Uncertainty Sampling in Active Learning, we aim for greater accuracy with fewer labeled training instances by choosing the data from which we learn from \cite{Settles2009ActiveLL}.
-Uncertainty sampling methods can be subdivided into three different frameworks, which have several variants.
+Uncertainty sampling originates from Active Learning, 
+where labeled data for training a supervised model is obtained from a dataset of unlabeled instances.
+Based on the informativeness of the unlabeled instances for the learning algorithm, a prioritization results in which they are labeled.
+It is used in machine learning approaches, where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled data and aim for greater accuracy with fewer labeled training instances \cite{Settles2009ActiveLL}.
+These selected unlabeled instances can either be generated de novo or sampled from a given distribution.
+In the literature several query strategies have been proposed with different approaches how to receive informative instances, one of them is Uncertainty Sampling \cite{Settles2009ActiveLL}.
+
+In Uncertainty Sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of the unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$.
+Subsequently, the instance with the highest score will be sampled.
+Popular examples of measures for utility score include
+\begin{itemize}
+    \item the entropy:
+     $$s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}$$
+
+    \item the least confidence:
+    $$s(\theta, x) = 1 - \max_{y \in \mathcal{Y}}{p_{\theta}(y | x)}$$
+    
+    \item the smallest margin:
+    $$s(\theta, x) = p_{\theta}(y_m | x) - p_{\theta}(y_n|x)$$
+    where
+    $y_m = \argmax_{y \in \mathcal{Y}} p_{\theta}(y | x)$ 
+    and 
+    $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$
+\end{itemize}
+Following three different frameworks for measuring the  uncertainty of a learner can be separated \cite{nguyen2021howtomeasure}.
 While the first one has been specifically developed for the purpose of active learning, the others are more general approaches for machine learning \cite{nguyen2021howtomeasure}.
 \begin{enumerate}
     \item 
-    \textbf{Evidence-based uncertainty (EBU)}
-    The \ac{EBU} approach differentiates between uncertainty due to conflicting evidence and insufficient evidence.
-    Variants of \ac{EBU} are \ac{CEU} and \ac{IEU}
+    \textbf{Evidence-based uncertainty (EBU)} differentiates between uncertainty due to conflicting evidence and insufficient evidence.
+    \ac{EBU} looks at the influence of individual features,
+    partitions them into those that provide evidence for the positive and for the negative class, 
+    and either queries the instance with the highest conflicting evidence (\ac{CEU}) or where both evidences are low (\ac{IEU}).
 
     \item 
-    \textbf{Credal uncertainty (CU):}
-    \ac{CU} seeks to differentiate between the reducible and irreducible part of the uncertainty in a prediction.
-    This approach is searching for the instance x with the highest uncertainty, i.e, the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
+    \textbf{\ac{CU}} seeks to differentiate between the reducible and irreducible part of the uncertainty in a prediction by defining a
+    credal set of models with probability distributions.
+    A class y is dominated by another y' if y is more likely than y' for any distribution in the credal set
+    An instance x is sampled, which has the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
 
     \item 
-    \textbf{Epistemic and aleatoric uncertainty (EAU):}
-    In \ac{EAU} there is a distinction between the epistemic and aleatoric uncertainty. This approach is based on the use of relative likelihoods and justified in other settings such as possibility theory. 
-    Measures are \ac{EU}, \ac{AU} and the standard \ac{ENT}, 
+    \textbf{Epistemic and aleatoric uncertainty (EAU)} are based on the use of relative likelihoods. 
+    
+    \ac{EU} samples instance for which both the positive and the negative class appear to be plausible, while \ac{AU} samples instances where none of the classes is supported.
+    Therefore, the uncertainty due to either influence of the classes or lack of knowledge. 
 \end{enumerate}
+There are several other query strategies in Active Learning, e.g. Query-By-Committee, Expected Model Change, Variance Reduction, Fisher Information Ration, Estimated Error Reduction and 
+Density-Weighted Methods.
+They provide different strategies to obtain informative instances from the unlabeled dataset like voting of a committee consisting of several trained models, querying the instance that would impart the greatest change to the current model if we knew its label or queries instances which minimize the learner’s future error by minimizing its variance.
 
 
-
-% In the case of binary classifcation, i.e, Y = {0, 1}, all these measures rank unlabelled instances in the same order and look for instances with small diference
-
-
-
-%\section{Active Learning}
-%\cite{Settles2009ActiveLL} investigates different approaches of Active Learning for several scenarios with different query strategy frameworks.
-%The idea of Active Learning is to achieve greater accuracy with fewer labeled training instance by choosing the data from which it learns.
-%It is well-motivated in many modern machine learning problems, where we have an abundant amount of unlabeled data, but it is difficult, time-consuming or expensive to obtain labeled data.
-%For Active Learning three different settings are differentiated:
-%\begin{enumerate}
-%    \item \textbf{Membership Query Synthesis}
-%    In this setting the learner usually generates queries de novo, rather than those sampled from an an underlying distribution. 
-%    For example, the active learner rotates a given picture which is sent to and classified by the oracle.
-    
-%    \item \textbf{Stream-Based Selective Sampling}
-%    is an alternative to synthesizing queries and quieries samples my selective sampling with the key assumption that obtaining an unlabeled instance is unexpensive.
-%    it is also called stream-based or sequential active learning, since it is done in an iterative manner.
-    
-%    \item \textbf{Pool-Based Selective Sampling} is based on the assumption that we have a large collection of unlabeled data which can be gathered at once.
-%    With this strategy, instances are queried according to an informativeness measure.
-%    It is closely related to Stream-Based Selective Sampling since the only difference is that the instances are queried and ranked at once and not iteratively.
-%\end{enumerate}
-
-
-
-%- GAN-based approaches
-%- discriminator takes the role as annotator, while generator provide negative %samples
-%- the more difficult it is for discriminator to annotate a given triples as positive or negative, the higher the reward for the generator
-%- models train each other
-%- Baseline approaches: IGAN and KBGAN
-%- randomly replace head or tail entity
-%- NSCaching: 
-
-%- infinite set of possible negative samples
-%- random sampling does not generate informative negative examples, probably useless
-
-
-%(move following part to related work?)
-%    \begin{defn}[Negative Statements] \mbox{ }
-%        \begin{enumerate}
-%            \item 
-%            A grounded negative statement $\neg (h, r, t)$ is satisfied if $(h, r, t) %\notin$ KG.
-%            
-%            \item 
-%            A universally  negative statement $\neg\exists(h, r, \_)$ is satisfied if %there exists no $t$ such that $(h; r; t) \in KG$.
-%        \end{enumerate} 
-%    \end{defn}

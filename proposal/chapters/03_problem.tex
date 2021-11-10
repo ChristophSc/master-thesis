@@ -5,7 +5,8 @@
 Since \acp{KG} contain large amount of information, they provide many application possibilities.
 However, to achieve good results for these applications we need to learn good embeddings which represent as much information as possible in a graph representation of a low-dimensional vector space.
 Most of graph representation learning methods can be unified within a \ac{SampledNCE} framework comprising an encoder that generates node embeddings by learning to distinguish pairs of a positive and a negative triple \cite{MCNS}.
-Therefore, we need negative triples for embedding learning which are not available in most \acp{KG}.
+Therefore, we need negative triples for embedding learning which are not available in most \acp{KG} 
+
 For this reason, we are left with two options to collect them \cite{safavi2021negater}: 
 On one hand they can be obtained by human annotation which is very cost-prohibitive at scale, but leads to very informative and useful examples. 
 On the other, they can be generated ad-hoc, which in turn does not represent a great effort, but also leads to uninformative and useless negative examples.
@@ -37,56 +38,11 @@ This leads to the following main challenges for negative sampling \cite{zhang202
 % GAN-based approaches
 Two pioneering works \ac{KBGAN} \cite{cai2017kbgan} and \ac{IGAN} \cite{IGAN} attempt to address these challenges by a \ac{GAN} \cite{zhang2021efficient}.
 \acp{GAN} were originally proposed for generating examples in a continuous space such as images and adapted for the generation of hard negative examples \cite{zhang2021efficient}.
-The process of \ac{KBGAN} is depicted in the Figure \ref{fig:overview} and described as follows:
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.95\textwidth]{figures/kbgan_original.png}
-  \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan})}
-  \label{fig:overview}
-\end{figure*}
 
-\begin{enumerate}
-    \item 
-    At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is created by uniformly sampling of $N_s$ entities $\in$ \entities to replace $h$ or $t$.
-    For reasons of efficiency and to reduce the likelihood of creating false negatives, $N_s$ is a relatively small number compared to the number of all possible negative examples \cite{cai2017kbgan}.
-    
-    \item 
-    Negative triples from $Neg$ are given to the generator (G) as input.
-    
-    \item 
-    G is a \ac{KGE} model with a softmax function to provide a probability for each given negative triple, which gives us a probability distribution $p_G(h',r,t'|h,r,t)$.
+% reference to description of process in related work part
+\autoref{sec:kbgan}
 
-    \item 
-    Afterwards, one of these triples is sampled as output of G according to the $p_G$, while high quality triples should have a high probability to be sampled.
-    
-    \item 
-    Discriminator (D) receives as input both the sampled negative triple and the ground truth triple $(h,r,t)$.
-    The training objective of D is a marginal loss function, because these benefit most from high quality negative examples \cite{cai2017kbgan}.
 
-    \item 
-    Subsequently, D calculates the scores of both triples $(h,r,t)$ and $(h',r,t')$ with score function $f_D$ of D, score function models distance between points or vectors and a smaller distance indicates a higher likelihood of truth \cite{cai2017kbgan}.
-    
-    \item 
-    Accordingly, the objective of D is to minimize the marginal loss function $L_D$ which is defined as
-    \begin{equation}
-        L_D=\sum_{(h,r,t)\in\mathcal{T}}[f_D(h,r,t)-f_D(h',r,t')+\gamma]_+ \in \mathbb{R}^+
-    \end{equation}
-    
-    \item 
-    To give G feedback for the sampled negative triple $(h',r,t')$ its calculated score $f_D(h',r,t')$ is send back to G as a reward, which is defined as
-    \begin{equation}
-        r = -f_D(h',r,t') \in \mathbb{R}^-
-    \end{equation}
-    since $f_D(h,r,t) \in \mathbb{R}^+$.
-    Therefore, the objective of G can be formulated as maximizing the expectation of negative distances:
-    \begin{equation}
-        R_G=\sum_{(h,r,t)\in\mathcal{T}}\mathbb{E}[-f_D(h',r,t')]
-    \end{equation}
-    
-    \item
-    This process continues until convergence
-\end{enumerate}
-By this procedure of the adversarial training the dynamic distribution of the negative triple is determined. 
 However, this is not an efficient training process and it is not effectively sampled from this distribution.
 Additionally, it increases the number of training parameters because of the generator and the model suffers from instability and degeneracy.
 This results from the fact, that the \textsc{REINFORCE} gradient has high variance for training the generator and only a few negative triples lead to large gradient \cite{zhang2021efficient}.
