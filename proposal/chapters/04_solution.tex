@@ -2,48 +2,47 @@
 \label{ch:solution}
 
 % description and general introduction to solution
-Our approach addresses the problem of instability and degeneracy of the training process due to high variance and the non-guaranteed sampling of large-gradient negative triples.
-The training process is improved by adding more information in the sampling process and selecting negative examples that are more informative and therefore, more useful for the embedding model.
+With our approach, we aim to improve the training process of the embedding model by incorporating more information into the Negative Sampling process and thus selecting negative examples that are more informative and more valuable for the embedding model.
 This is achieved by including Uncertainty Sampling in state-of-the-art approaches.
-Since \ac{KBGAN} captures the dynamic distribution of negative samples, but suffers particularly from non-efficient Sampling, our first considerations are based on this approach.
-However, it is also conceivable for other existing approaches with an inefficient negative sampling process by replacing it with Uncertainty Sampling.
+Uncertainty Sampling is the most commonly used query framework among all the other strategies frameworks (\autoref{sec:uncertaintysampling}) from Active Learning.
+In addition, it is easier to implement than some other frameworks, because, for example, it does not require to train multiple models as is the case with the Query-by-Committee approach.
+Nevertheless, it provides promising results for many Active Learning scenarios and is therefore also used for our approach to sample negative triples.
+
+Since \ac{KBGAN} captures the dynamic distribution of negative examples, but suffers particularly from non-efficient Sampling, our first considerations are based on this approach.
+This addresses the problem of instability and degeneracy of the training process, so that it is more likely to sample negative examples with a higher gradient.
+However, it is also conceivable for other existing approaches with an inefficient Negative Sampling process by replacing it with Uncertainty Sampling.
 
 % ways to improve KBGAN
-In general, in \ac{KBGAN} there are two different ways to improve the approach:
+In general, in \ac{KBGAN} there are two different ways to improve the approach and to allow Sampling of negative triples with a higher gradient:
 First, this can be achieved by improving the general quality of the negative examples in subset $Neg$.
 In the original approach, $Neg$ is generated only by Uniform Sampling, so that with high probability there are many useless negative triples.
-Second, the adversarial learning process can be optimized by learning faster with less sampling which is addressed by our approach.
+Second, the adversarial learning process can be optimized by learning faster with less Sampling which is addressed by our approach.
+To achieve this, we want to sample more informative negative examples.
+Informative at this point means particularly interesting triples for the embedding model because those that are difficult to classify as positive or negative triple.
 
-% Uncertainty Sampling -> why not other frameworks?
-\ac{EBU} sampling:
-restriction to the most uncertain cases puts evidence-based uncertainty sampling close to standard uncertainty sampling
-
-
-In our case, we want to sample informative negative examples, which are used in the embedding model to obtain a good \ac{KGE} and achieve higher accuracies in the subsequent tasks. 
-Informative at this point means that  particularly interesting triples for the embedding model because those that are difficult to classify as positive or negative triple.
-In Uncertainty Sampling this is expressed by the uncertainty of the active learner \cite{Settles2009ActiveLL}.
-
-For this purpose, we have several measures and frameworks of Uncertainty Sampling at our disposal.
-One of it is based on entropy and is used for binary classification problems.
-If we introduce the labels 0 for negative triples and 1 for positive triples, we can use entropy-based Uncertainty Sampling for our case.
-Using this measurement for Uncertainty Sampling is identical to choose the instance whose posterior probability of being positive is nearest to 0.5 \cite{Settles2009ActiveLL}.
+For Uncertainty Sampling, we have several measures and frameworks at our disposal which are stated in \autoref{sec:uncertaintysampling}.
+Entropy-based Uncertainty Sampling represents the standard approach and is used in for binary classification problems.
+Since we are dealing with negative and positive triples and their distinction, our first approach will start with a binary classification problem for which we define label 0 for negative triples and 1 for positive triples.
+For this we use standard entropy-based Uncertainty Sampling, which works with the probability that a given triple is positive. 
+Further possibilities arise for example by using other Uncertainty Sampling variants and methods like \ac{EBU}, \ac{CU} or \ac{EAU} which set a different focus in Sampling and represent more complex alternatives, as additional factors are included in the calculation.
+By choosing entropy-based Uncertainty Sampling we sample the instance whose posterior probability of being positive is nearest to 0.5 \cite{Settles2009ActiveLL}.
 In our case, since we have a binary classification between negative triples ($y=0$) and positive triples ($y=1$), $<$ 0.5 represents a negative and $\geq$ 0.5 a positive triple.
 The result is that we query examples that are close to 0.5, or in other words: 
 we query triples where the embedding model is most uncertain how to label it.
 
 The structure of our approach is illustrated in Figure \ref{fig:architecture}.
-It can be seen that Uncertainty Sampling replaces the original sampling process from probability distribution.
+It can be seen that Uncertainty Sampling replaces the original Sampling process from a probability distribution.
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/architecture.png}
-    \caption{Structure of our negative sampling approach including two components:
+    \caption{Structure of our Negative Sampling approach including two components:
     A generator G which samples negative triples by Uncertainty Sampling and a discriminator D which scores the difference of positive triple $(h,r,t)$ and negative triple $(h',r,t')$ by given embedding score function $f_D$}
     \label{fig:architecture}
 \end{figure}
 In the original \ac{KBGAN} approach, a softmax function is applied to obtain probabilities of being sampled for each generated negative triple.
 However, for Uncertainty Sampling we need probabilities of each triple to be positive. 
 Therefore, we need probabilities $\mathds{P}(y_i | x; \theta)$ for the classes $y_i \in \{0, 1\}$.
-To incorporate more information in the score function than just the embedding of a triple, we want to extend the original score function by several information about entities and relations in a \ac{KG}.
+To incorporate more information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by several information about entities and relations in the \ac{KG}.
 Therefore, our new score function $Generator\_Score$ is defined as follows:
 \begin{equation}
     Generator\_Score(h, r, t)=
@@ -58,10 +57,15 @@ Therefore, our new score function $Generator\_Score$ is defined as follows:
          \\
     \end{cases}
 \end{equation}
-where $\lambda_i \in [0, 1]$ for $i \in [1,4]$ and $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.\\
+where $\lambda_i \in [0, 1]$ for $i \in [1,4]$ are hyperparameters and are set to randomly generated values at the beginning but can be optimized at a later stage.
+Furthermore, $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.
+\textit{PEER}, \textit{POP}, \textit{PIVO} and \textit{FRQ} are functions that provide additional information about the \ac{KG}, its entities and relations such that the $Generator\_Score$ can make more reliable statements about whether the given triple $(h, r, t)$ is positive or not.
+However, these components of the function can also be replaced or extended by further components known from for example Cluster-Based Sampling methods that give more information about a \ac{KG} and its structure.
+For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling or Near miss Sampling can be considered \cite{kotnis2017analysis}.
+
 Assuming $\mathcal{T} \subset $ \ac{KG} is a set of positive triples and $\entities_{\mathcal{T}}$, $\relations_{\mathcal{T}}$ are its sets of entities and relations.
 Additionally we have the function $peergroup(e) \subseteq \mathcal{T}$ which returns a set of peers for given entity $e \in \entities_{\mathcal{T}}$ by its embedding. 
-Then the $Generator\_Score$ function contains the following features from \cite{arnaout2020enriching} for peer groups and provides additional information about the relations and entities of triples:
+Then the $Generator\_Score$ function contains the following features from \cite{arnaout2020enriching}:
 \begin{itemize}
     \item 
     \emph{\ac{PEER}:} 
@@ -90,7 +94,7 @@ Then the $Generator\_Score$ function contains the following features from \cite{
     
     \item 
     \emph{$f_G$:} 
-    $Generator\_Score$ function of the \ac{KGE}  model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
+    $Generator\_Score$ function of the \ac{KGE} model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
     
 \end{itemize}
 Input of the algorithm of our approach is like in original \ac{KBGAN} a pre-trained generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$, 
@@ -152,97 +156,14 @@ The training process can be described in the following steps:
     The reward defined by $r = - f_D(h',r,t')$ of the current triple pair is calculated and added to the reward sum $r_{sum}$.
     
 \end{enumerate}
-These adversarial training steps are repeated until convergence, such that the generator improves the quality of sampled negatives and discriminator improves embedding over time.
+These adversarial training steps are repeated until convergence, such that the generator improves the quality of sampled negative triples and discriminator improves embedding over time.
 Output of our algorithm is the adversarially trained discriminator and its embedding.
-By incorporating additional information from the graph and sampling triples that have the most added value to the embedding model, we expect promising results.
-Further possibilities arise for example by using other Uncertainty Sampling variants and methods like \ac{EBU}, \ac{CU} or \ac{EAU}.
-In addition, the $Generator\_Score$ function and the creation of negative triple set $Neg$ can be supplemented or replaced by other components known from Cluster-Based Sampling , such as the use of K-Means \cite{qianunderstanding}, Relational Sampling, Nearest Neighbor Sampling, Near miss Sampling \cite{kotnis2017analysis} or Bernoulli Sampling \cite{qianunderstanding}.
+By incorporating additional information from the graph and Sampling triples by uncertainty that have the most added value to the embedding model, we expect promising results.
 
 Initially, the approach will be implemented on the local computer and tested with small data sets such as \textsc{KINSHIP} or \textsc{UMLS}.
 Subsequently, we want to compare our achieved accuracy with state-of-the-art approaches.
 Therefore, we want to use \ac{MRR} and Hit@10 metrics on datasets \textsc{WN18}, \textsc{WN18RR}, \textsc{FB15K}, \textsc{FB15K237}, \textsc{YAGO3-10}.
 Since these datasets are large and running algorithms on them are computationally expensive, we use the servers of \ac{PC2} \footnote{https://pc2.uni-paderborn.de/} to ensure faster processing of the learning process of our model.
-Additionally, we will test the impact of our negative sampling approach on different embeddings with the given datasets and compare in which areas our method outperforms the current state-of-the-art approaches.
+Additionally, we will test the impact of our Negative Sampling approach on different embeddings with the given datasets and compare in which areas our method outperforms the current state-of-the-art approaches.
 For this reason, we will use the most common embeddings from the three groups of embedding types:
 \textsc{TransE}, \textsc{TransH} for \textit{Translation-Based Models}, \textsc{DistMult} and \textsc{ComplEx} for \textit{Tensor Factorization-Based Models}, and \textsc{ConvE} and \textsc{ConEx} for \textit{Neural Network-Based Models}.
-
-% ---------------------------- OLD ----------------------------  
-
-%These interesting and useful negative samples are subsequently used to learn the embedding.
-%As described in the related work chapter, we have three different settings available for active learning:
-%Since we do not know anything about the distribution of negative samples at the beginning, and we have a large pool of negative samples, it would be very time-consuming to rank each instance.
-%For this reason, \textit{Pool-Based Active Learning} is the least appropriate for our scenario.
-%So the decision if we chose \textit{Membership Query Synthesis} or \textit{Stream-Based Selective Sampling} depends on if we already have a negative sample pool or we have to create them de novo.
-%For the former scenario we can select positive samples from the \ac{KG} and generate a negative sample by replacing the head or tail entity.
-%With this approach the active learner would learn how to replace entities to create useful and informative negative samples.
-%The latter setting of \textit{Stream-Based Selective Sampling} would already require an existing large pool of negative samples.
-%This could be done by replacing head or tail entity randomly by any other entity of the \ac{KG} for a set of chosen positive samples.
-%Since the setting of \textit{Membership Query Synthesis} seems to be less time-consuming and less-memory intense, this one meets our requirements more and, therefore, is used for our scenario.
-
-%Each of the active learning settings evaluate the informativeness of unlabeled
-%%instances, which is in our case the informativeness of negative samples \cite{Settles2009ActiveLL}.
-%In the literature, several ways of formulating query strategies have been proposed, which results in the following general frameworks:
-%\begin{itemize}
-%    \item Uncertainty Sampling
-%    \item Query-By-Committee
-%    \item Expected Model Change
-%    \item Variance Reduction and Fisher Information Ratio
-%    \item Estimated Error Reduction
-%    \item Density-Weighted Methods
-%\end{itemize}
-
-
-
-%The second component of an annotator is our \textbf{oracle}. 
-%Since human annotations are too time-consuming and inefficient, our annotator is represented by an oracle, which is a machine learning model.
-%The job of the oracle is to distinguish negative samples from our sampler from positive triples from \ac{KG}. 
-%Therefore, we have a binary classification model which labels triples 0 or 1, where 0 represents a negative and 1 a positive triple.
-%Compared to the normal oracle in an active learning process, in our negative sampling process we know the ground-truth value of our triples, as they are either from the KG or generated by the negative sampler.
-%We can use this knowledge to give the oracle not only the task of labeling but also feedback to the negative sampler.
-%The feedback should be based on various factors, that take into account different criteria for the current generated, negative sample and evaluate it using a combined rank metric.
-%For this, we have the following factors in mind, which are combined into one metric:
-%\begin{enumerate}
-%    \item ranking with gradients - candidates which most surprise the language model
-%    \item PEER - relative frequency of relations that peers of an entity have
-%    \item POP - popularity of entity
-%    \item FRQ - frequency of same subject and predicate (s,p, \_)
-%    \item (PIVO - textual background information)
-%    \item (ranking with scores - candidates which look more plausible, almost positive)
-%\end{enumerate}
-%Based on the feedback of the oracle, our active learner either retrained by replacing head or tail with a different entity, or a new positive sample can be retrieved from the \ac{KG} for new training.
-
-% DESCRIBE PROCESS OF SAMPLING in several steps
-
-
-%Like in other approaches, we can replace both the head and the tail entity with any other entity of the KG to obtain a negative triple.
-%This leads to an abundant amount of negative samples at our disposal, but we are not certain about their quality in sense of informativeness and usefulness.
-%For this reason, we want our approach to filter out exactly those negative samples from the large pool that represent the greatest possible benefit for the creation of embedding.
-
-%Our proposed negative sampling method contains two components:
-%The negative sampler and an oracle giving feedback to the sampler.
-%sampler gets two inputs:
-% interesting positive triplets from the \ac{KG} 
-% feedback from the oracle for the quality of the negative example generated before.
- 
-
-%The oracle in turn just receives generated negative examples from the sampler. 
-%The evaluation of the quality of the negative sample depends on two factors:
-%At first, it measures the probability of the negative example to be a positive one, 
-%which indicates the closeness to the positive triple. 
-%Secondly, it measures the uncertainty of the \ac{KGE} in this area of a \ac{KG}. 
-%For example, if a \ac{KG} is very incomplete or there is less information about this area, the \ac{KGE} is probably uncertain on how to embed these triples and differentiate between positives and negatives.
-%Depending on the overall score for the generated negative example, the oracle gives feedback to the sampler.
-%Either the sample was not good and has to be retrained, or a new positive sample can be retrieved from the \ac{KG} for new training.
-%As a result, the sampler alternates between re-training and selecting new examples in each iteration.
-
-
-
-
-%p(i) = \frac{p_{sampled}(i) \cdot p_{negative}(i)}{\sum_j{p_{sampled}(j) \cdot p_{negative}(j)}}$
-
-
-
-%\begin{multline}
-%    p_G(h',r,t'|h,r,t)=\frac{\exp score(h',r,t')}{\sum\exp score(h^*,r,t^*)} \\
-%    (h^*,r,t^*)\in Neg(h,r,t)
-%\end{multline}
