@@ -29,7 +29,7 @@ def config():
                 break
         print('Reading config from ' + config_path)
         with open(config_path) as f:
-            _config = _make_config_dict(yaml.load(f))
+            _config = _make_config_dict(yaml.safe_load(f))
         overwrite_config_with_args()
     return _config
 

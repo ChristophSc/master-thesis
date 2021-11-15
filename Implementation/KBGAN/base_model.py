@@ -14,6 +14,7 @@ class BaseModule(nn.Module):
         super(BaseModule, self).__init__()
 
     def score(self, src, rel, dst):
+        print('NotImplementedError')
         raise NotImplementedError
 
     def dist(self, src, rel, dst):
@@ -116,6 +117,8 @@ class BaseModel(object):
         hit10_tot = 0
         count = 0
         for batch_s, batch_r, batch_t in batch_by_size(config().test_batch_size, *test_data):
+            print('start')
+            
             batch_size = batch_s.size(0)
             if torch.cuda.is_available():
                 rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent).cuda())
@@ -125,48 +128,65 @@ class BaseModel(object):
                     all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
                                 .type(torch.LongTensor).cuda())
             else:
+                print('5')
                 rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent))
                 src_var = Variable(batch_s.unsqueeze(1).expand(batch_size, n_ent))
                 dst_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent))
+                print('6')
                 with torch.no_grad():
-                    all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
-                                .type(torch.LongTensor))
+                    print('7')
+                    x = torch.arange(0, n_ent)
+                    print('8')
+                    x = x.unsqueeze(0)
+                    print('9')
+                    x = x.expand(batch_size, n_ent)
+                    print('10')
+                    x = x.type(torch.LongTensor)
+                    print('11')
+                    all_var = Variable(x)
+                    print('12')            
             batch_dst_scores = self.mdl.score(src_var, rel_var, all_var).data
-            batch_src_scores = self.mdl.score(all_var, rel_var, dst_var).data
+            batch_src_scores = self.mdl.score(all_var, rel_var, dst_var).data      
+            print('mid')           
+            print('13')
             for s_tensor, r_tensor, t_tensor, dst_scores, src_scores in zip(batch_s, batch_r, batch_t, batch_dst_scores, batch_src_scores):
+                print(s_tensor.shape, r_tensor.shape, t_tensor.shape, dst_scores.shape, src_scores.shape)
                 s, r, t = s_tensor.item(), r_tensor.item(), t_tensor.item()
                 if filt:
-                    print('1')
+                    print('14')
                     if tails[(s, r)]._nnz() > 1:
-                        print('2')
+                        print('15')
                         tmp = dst_scores[t]
-                        print('2')
+                        print('16')
                         if torch.cuda.is_available():
                             dst_scores += tails[(s, r)].cuda() * 1e30
                         else:
                             dst_scores += tails[(s, r)] * 1e30
-                        print('4')
+                        print('17')
                         dst_scores[t] = tmp
-                    print('5')
+                    print('18')
                     if heads[(t, r)]._nnz() > 1:
-                        print('6')
+                        print('19')
                         tmp = src_scores[s]
-                        print('7')
+                        print('20')
                         if torch.cuda.is_available():
                             src_scores += heads[(t, r)].cuda() * 1e30
                         else:
                             src_scores += heads[(t, r)] * 1e30
-                        print('8')
+                        print('21')
                         src_scores[s] = tmp
-                        print('9')
-                mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)
+                        print('22')
+                print('23')
+                mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)                
                 mrr_tot += mrr
                 mr_tot += mr
                 hit10_tot += hit10
                 mrr, mr, hit10 = mrr_mr_hitk(src_scores, s)
+                print('24')
                 mrr_tot += mrr
                 mr_tot += mr
                 hit10_tot += hit10
                 count += 2
+            print('end')
         logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr_tot / count, mr_tot / count, hit10_tot / count)
         return mrr_tot / count
