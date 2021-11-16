@@ -1,19 +1,17 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-\acp{KG} are a network of nodes and edges which represent information of the real world. 
-Especially the benefit of combining different data sources and different types of data in meaningful ways leads to many applications in the area of machine learning.
-Some of them are question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
-For these numerous applications, \acp{KG} provide effective and well-structured relational information and thus substantially support knowledge-based ML approaches.
-For these, different \ac{KG} datasets are available, such as \textsc{FB15K}, \textsc{WN18}, \textsc{YAGO} \cite{ConEx} and \textsc{WikiData} \cite{arnaoutwikinegata}.
+\acp{KG} represent structured collections of facts describing the world \cite{hogan2020knowledge}.
+These collections of facts have been used in a wide range of application, e.g., question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
+In recent years, numerous \acp{KG} such as \textsc{FB15K}, \textsc{WN18}, \textsc{YAGO} \cite{ConEx} and \textsc{WikiData} \cite{arnaoutwikinegata} have been released.
 Within a \ac{KG}, entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
-Facts from the reality are represented as a triple in the form of (head entity, relation, tail entity), denoted as $(h, r, t)$.
+Facts are represented as a triple in the form of (head entity, relation, tail entity), denoted as $(h, r, t)$.
 These triples indicate that the head entity $h$ (subject) is connected with the tail entity $t$ (object) by a specific relation $r$ (predicate) \cite{zhang2019nscaching, Alam2020AffinityDN}.
-One of the main challenges for using a discrete representation of a \ac{KG} is the lack of capability of accessing the similarities among different entities and relations \cite{cai2017kbgan}. 
+One of the main challenges in using such discrete data is the lack of capability of accessing the similarities among different entities and relations \cite{cai2017kbgan}. 
 A renowned area of research in recent years is the transformation of \acp{KG} into a low-dimensional vector space using embedding models, known as \acp{KGE} \cite{Alam2020AffinityDN}.
 Many approaches learn vector representations for \acp{KG} while learning a parametrized scoring function that assigns scores to a input triples.
 A score of a triple is expected to reflect the likelihood that the input triple is true \cite{ConvE, qiannegative}.
-To be able to evaluate the plausibility of a triple as well as possible, information about true facts are needed.
+To be able to evaluate the plausibility of a triple, information about true facts are needed.
 However, additional information about false facts would also be valuable for the scoring function, to discriminate positive and negative samples \cite{qiannegative}
 Most known \acp{KG} contain only positive instances
 for space efficiency \cite{qiannegative}.
@@ -31,8 +29,10 @@ A standard technique is Negative Random Sampling which replaces either the head 
 Although models trained with Negative Random Sampling have been successfully applied in many applications \cite{TransE}, there have been several attempts to model more effective strategies, e.g. 
 a self-adversarial technique \cite{RotatE} or the 1VsAll approach \cite{ConvE}.
 
-Many of these approaches try to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process.
-Our approach goes one step further by generating negative triples in a way that best contributes to the embedding learning process. 
+Many of these approaches aim to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process. 
+In this thesis, we aim to go one step further by generating more informative negative examples. 
+By doing so, we aim to accelerate the learning process.
 It is based on Uncertainty Sampling which aims to
 find more informative negative examples for embedding learning so that an improvement in the learning process and resulting embedding is achieved.
 These can be hard negative examples, but also other negative triples which are valuable for the embedding model.
+

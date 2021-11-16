@@ -61,20 +61,19 @@ On the basis of this, two different categories are derived:
 \end{enumerate}
 
 
-\section{Negative Sampling methods} \label{sec:negativesamplingmethods}
-In the literature, several Negative Sampling methods are proposed to create synthetic negative examples which are used for subsequent embedding learning.
+\section{Negative Sampling Methods} \label{sec:negativesamplingmethods}
+In the literature, several negative sampling methods are proposed to create synthetic negative examples which are used for subsequent embedding learning.
 They can be separated into three different groups \cite{qianunderstanding}:
 \begin{itemize}
     \item 
-    \textbf{Static Distribution-Based Sampling} include methods like Uniform, Bernoulli and Probabilistic Sampling and sample negative triples from a fixed and static distribution of negative triples.
-	While in Uniform Sampling either the head or tail entity is replaced by an entity randomly sampled from entity set \entities,
-	Bernoulli Sampling uses different probabilities for replacing head or tail entity depending on the underlying relation type.
-	In contrast, Probabilistic Sampling speeds up the training process by including a train bias.
+    \textbf{Static Distribution-Based Sampling} include methods like the uniform, Bernoulli and probabilistic sampling technique from a fixed and static distribution of negative triples.
+	While in the uniform sampling either the head or tail entity is replaced by an entity randomly sampled from entity set \entities,
+	the Bernoulli sampling technique uses different probabilities for replacing head or tail entity depending on the underlying relation type.
+	In contrast, probabilistic sampling speeds up the training process by including a train bias.
 	
 	\item 
     \textbf{Custom Cluster-Based Sampling} samples negative triples from small clusters which are based on closeness between entities.
-    Instead of Sampling from the whole set of entities, they a are divided into a number of groups and randomly sampled to create negative triples.	
-	Examples are TransE-\ac{SNS} \cite{TransE-SNS} or \ac{NSCaching} \cite{zhang2019nscaching} which are based on K-Means clustering algorithm or caching techniques. 
+    Instead of sampling from the whole set of entities, they a are divided into a number of groups and randomly sampled to create negative triples. Examples are TransE-\ac{SNS} \cite{TransE-SNS} or \ac{NSCaching} \cite{zhang2019nscaching} which are based on K-Means clustering algorithm or caching techniques. 
     
     \item 
     \textbf{Dynamic Distribution-Based Sampling} tries to model the changes the distribution of negative triples by using a \ac{GAN}-based framework which includes two components: A generator and a discriminator.
@@ -85,7 +84,7 @@ They can be separated into three different groups \cite{qianunderstanding}:
 
 
 \section{KBGAN} \label{sec:kbgan}
-In the group of \textit{Dynamic Distribution-Based Sampling}, \ac{KBGAN} is one of the pioneering worsk among \ac{GAN}-based approaches and contains two components which are trained in an adversarial training process.
+In the group of \textit{Dynamic Distribution-Based Sampling}, \ac{KBGAN} is one of the pioneering works among \ac{GAN}-based approaches and contains two components which are trained in an adversarial training process.
 This process of \ac{KBGAN} is depicted in \autoref{fig:overview} and described as follows:
 \begin{figure*}[t]
   \centering
@@ -136,9 +135,9 @@ This process of \ac{KBGAN} is depicted in \autoref{fig:overview} and described a
     \item
     This process continues until convergence
 \end{enumerate}
-By this procedure of the adversarial training the dynamic distribution of the negative triple is determined. 
+The dynamic distribution of the negative triple is determined through this procedure of the adversarial training, 
 
-\section{Standard evaluations for knowledge graph embedding models} 
+\section{Evaluating Knowledge Graph Embeddings} 
 To evaluate the \ac{KGE} models, different metrics are available.
 Some most commonly used are the following metrics \cite{kotnis2017analysis}:
 \begin{itemize}
