@@ -1,4 +1,4 @@
-pretrain_config: TransD
+pretrain_config: DistMult
 g_config: DistMult
 d_config: TransD
 test_batch_size: 100 # 100
@@ -32,7 +32,7 @@ DistMult:
   lam: 0.1
   n_sample: 20
   sample_freq: 1
-  n_epoch: 5000 # 5000
+  n_epoch: 1000 # 5000
   n_batch: 100 # 100
   epoch_per_test: 50 # 50
   model_file: distmult.mdl
