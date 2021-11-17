@@ -14,7 +14,6 @@ class BaseModule(nn.Module):
         super(BaseModule, self).__init__()
 
     def score(self, src, rel, dst):
-        print('NotImplementedError')
         raise NotImplementedError
 
     def dist(self, src, rel, dst):
@@ -24,7 +23,7 @@ class BaseModule(nn.Module):
         raise NotImplementedError
 
     def prob(self, src, rel, dst):
-        return nnf.softmax(self.prob_logit(src, rel, dst))
+        return nnf.softmax(self.prob_logit(src, rel, dst),  dim=1)
 
     def constraint(self):
         pass
@@ -71,15 +70,15 @@ class BaseModel(object):
         dst_var = Variable(dst)
 
         logits = self.mdl.prob_logit(src_var, rel_var, dst_var) / temperature
-        probs = nnf.softmax(logits)
-        row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)
+        probs = nnf.softmax(logits, dim=1)
+        row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)          
         sample_idx = torch.multinomial(probs, n_sample, replacement=True)
         sample_srcs = src[row_idx, sample_idx.data.cpu()]
         sample_dsts = dst[row_idx, sample_idx.data.cpu()]
         rewards = yield sample_srcs, sample_dsts
         if train:
             self.mdl.zero_grad()
-            log_probs = nnf.log_softmax(logits)
+            log_probs = nnf.log_softmax(logits, dim=1)
             if torch.cuda.is_available():
                 row_idx = row_idx.cuda()
             reinforce_loss = -torch.sum(Variable(rewards) * log_probs[row_idx, sample_idx.data])
@@ -116,9 +115,7 @@ class BaseModel(object):
         mr_tot = 0
         hit10_tot = 0
         count = 0
-        for batch_s, batch_r, batch_t in batch_by_size(config().test_batch_size, *test_data):
-            # print(batch_s, batch_r, batch_t )
-            
+        for batch_s, batch_r, batch_t in batch_by_size(config().test_batch_size, *test_data):         
             batch_size = batch_s.size(0)
             if torch.cuda.is_available():
                 rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent).cuda())
