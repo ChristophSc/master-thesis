@@ -12,10 +12,12 @@ from trans_d import TransD
 from distmult import DistMult
 from compl_ex import ComplEx
 
-logger_init()
+config()
+overwrite_config_with_args()
+logger_init("pretrain")
 if torch.cuda.is_available():
     torch.cuda.set_device(select_gpu())
-overwrite_config_with_args()
+
 
 task_dir = config().task.dir
 kb_index = index_ent_rel(os.path.join('data', task_dir, 'train.txt'),

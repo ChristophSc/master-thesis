@@ -15,11 +15,11 @@ from logger_init import logger_init
 from select_gpu import select_gpu
 from corrupter import BernCorrupterMulti
 
-
-logger_init()
+config()
+overwrite_config_with_args()
+logger_init("gan_train")
 if torch.cuda.is_available():
     torch.cuda.set_device(select_gpu())
-overwrite_config_with_args()
 dump_config()
 
 task_dir = config().task.dir

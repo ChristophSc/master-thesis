@@ -48,5 +48,5 @@ ComplEx:
 log:
   dump_config: false
   to_file: false
-  dir: ./log
-  prefix:
+  dir: ./logs
+  prefix: 
