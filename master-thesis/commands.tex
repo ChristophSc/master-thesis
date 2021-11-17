@@ -5,6 +5,7 @@
 \theoremstyle{plain}
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{lemma}[definition]{Lemma}
+\newtheorem{defn}{Definition}
 \ifgerman
 	\newtheorem{theorem}[definition]{Satz}
 	\newtheorem{corollary}[definition]{Korollar}
@@ -18,13 +19,32 @@
 
 
 %%%%%%%%%
-% Your commands should go here...
+% Commands
 %%%%%%%%%
 \newcommand*{\eg}{e.\,g.}
 \newcommand*{\ie}{i.\,e.}
 \newcommand*{\cf}{c.\,f.}
 \newcommand*{\etal}{et~al.}
+\newcommand*{\ecu}{\ac{ecu}}
+\newcommand{\kg}{\ensuremath{\mathcal{G}}\xspace}
+\newcommand{\entities}{\ensuremath{\mathcal{E}}\xspace}
+\newcommand{\relations}{\ensuremath{\mathcal{R}}\xspace}
+\newcommand{\embdim}{\ensuremath{d}\xspace}
+\newcommand{\triple}[3]{(\texttt{#1}, \texttt{#2}, \texttt{#3})}
+\newcommand{\scoreFunc}{\phi\xspace}
+\newcommand{\distmult}{}
+\newcommand{\complex}{\textsc{ComplEx}}
 
-\newacro{template}[UPB-CS-TT]{Paderborn University Computer Science thesis template}
 
+%%%%%%%%%
+% Color-Definitions
+%%%%%%%%%
+\definecolor{darkgreen}{rgb}{0.0, 0.5, 0.0}
+	
+%%%%%%%%%
+% MathOperators
+%%%%%%%%%
+\DeclareMathOperator*{\argmax}{argmax} 
+\DeclareMathOperator*{\argmin}{argmin} 
 \DeclareMathOperator{\testop}{top}
+

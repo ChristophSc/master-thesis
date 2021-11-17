@@ -1,0 +1,38 @@
+\chapter{Introduction}
+\label{ch:introduction}
+
+\acp{KG} represent structured collections of facts describing the world   \cite{hogan2020knowledge}.
+These collections of facts have been used in a wide range of application, e.g., question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
+In recent years, numerous \acp{KG} such as \textsc{FB15K}, \textsc{WN18}, \textsc{YAGO} \cite{ConEx} and \textsc{WikiData} \cite{arnaoutwikinegata} have been released.
+Within a \ac{KG}, entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
+Facts are represented as a triple in the form of (head entity, relation, tail entity), denoted as \triple{h}{r}{t}.
+These triples indicate that the head entity \texttt{h} (subject) is connected with the tail entity \texttt{t} (object) by a specific relation \texttt{r} (predicate) \cite{zhang2019nscaching, Alam2020AffinityDN}.
+One of the main challenges in using such discrete data is the lack of capability of accessing the similarities among different entities and relations \cite{cai2017kbgan}. 
+A renowned area of research in recent years is the transformation of \acp{KG} into a low-dimensional vector space using embedding models, known as \acp{KGE} \cite{Alam2020AffinityDN}.
+Many approaches learn vector representations for \acp{KG} while learning a parametrized scoring function that assigns scores to a input triples.
+A score of a triple is expected to reflect the likelihood that the input triple is true \cite{ConvE, qiannegative}.
+To be able to evaluate the plausibility of a triple, information about true facts are needed.
+However, additional information about false facts would also be valuable for the scoring function, to discriminate positive and negative samples \cite{qiannegative}
+Most known \acp{KG} contain only positive instances
+for space efficiency \cite{qiannegative}.
+Moreover, not all positive information are represented in the \acp{KG}, so their picture of reality is incomplete.
+Since there are no negative facts, but many embedding learning models (as well as language models \cite{MikolovSCCD13}) require them, we need to create them by Negative Sampling.
+Therefore, Negative Sampling represents a non-trivial step in \ac{KG} embedding, as the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
+Knowledge representation learning models are trained under the \ac{OWA} or the \ac{CWA}.
+While the \ac{CWA} assumes that unobserved facts which are not in a \ac{KG} are false, the \ac{OWA}  states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
+Due to the incomplete nature of KGs, most models prefer the \ac{OWA}, which, however, has the two main drawbacks of 
+worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.
+
+Due to the need for negative facts, in the literature several Negative Sampling methods have been proposed which sample negative triplets.
+Subsequently, these sampled triples are used to facilitate the learning process. 
+A standard technique is Negative Random Sampling which replaces either the head or the tail entity in a given positive triple  \triple{h}{r}{t} by any other entity of the \ac{KG}, which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
+Although models trained with Negative Random Sampling have been successfully applied in many applications \cite{TransE}, there have been several attempts to model more effective strategies, e.g. 
+a self-adversarial technique \cite{RotatE} or the 1VsAll approach \cite{ConvE}.
+
+Many of these approaches aim to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process. 
+In this thesis, we aim to go one step further by generating more informative negative examples. 
+By doing so, we aim to accelerate the learning process.
+It is based on Uncertainty Sampling which aims to
+find more informative negative examples for embedding learning so that an improvement in the learning process and resulting embedding is achieved.
+These can be hard negative examples, but also other negative triples which are valuable for the embedding model.
+
