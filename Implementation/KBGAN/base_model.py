@@ -167,3 +167,7 @@ class BaseModel(object):
                 count += 2
         logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr_tot / count, mr_tot / count, hit10_tot / count)
         return mrr_tot / count
+    
+    
+    def pretrain(self, train_data, corrupter, tester):
+        raise NotImplementedError()

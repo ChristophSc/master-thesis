@@ -1,6 +1,23 @@
 @startuml
-Alice -> Bob: Authentication Request
-loop n_epoch
-    Alice -> Bob: DNS Attack
-end
+
+gan_train -> Corrupter: corrupt(all positives (h,r,t) from KG)
+gan_train <-- Corrupter: Neg [set of negatives (h',r,t')]
+
+gan_train -> Generator: Neg
+
+Generator -> Sampler: sample(Neg)
+Generator <-- Sampler: one negative instance (h',r,t')
+
+Generator -> Discriminator: triple pair: [(h,r,t), (h',r,t')]
+
+Discriminator -> BaseModule: pair_loss(h,r,t,h',t')
+Discriminator <-- BaseModule: loss
+
+Discriminator -> BaseModule: score()
+Discriminator <-- BaseModule: score
+Discriminator -> Discriminator: reward = -score
+Generator <-- Discriminator: reward
+
+gan_train -> Generator: reward
+
 @enduml

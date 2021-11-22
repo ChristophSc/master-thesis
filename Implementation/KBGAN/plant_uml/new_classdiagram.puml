@@ -85,18 +85,34 @@ abstract class KBGAN.BaseSampler {
 }
 KBGAN.BaseModel o-- KBGAN.BaseSampler 
 
-abstract class KBGAN.RandomSampler {
+class KBGAN.RandomSampler {
   + RandomSampler(mdl: BaseModule)
   + torch.tensor sample(src_var, rel_var, dst_var) 
 }
 KBGAN.BaseSampler <|-- KBGAN.RandomSampler
 
 
-abstract class KBGAN.UncertaintySampler {
+class KBGAN.UncertaintySampler {
   + UncertaintySampler(mdl: BaseModule)
   + torch.tensor sample(src_var, rel_var, dst_var) 
 }
 KBGAN.BaseSampler <|-- KBGAN.UncertaintySampler
+
+' ------------ Config ------------
+class KBGAN.ConfigDict {
+
+}
+dict <|-- KBGAN.ConfigDict
+
+' ------------ Optimizer ------------
+class Optimizer {
+
+}
+
+class Adam {
+
+}
+Optimizer <|-- Adam
 
 ' ------------ Models ------------
 class KBGAN.BaseModel {
@@ -111,8 +127,12 @@ class KBGAN.BaseModel {
   + void gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True):
   + dis_step(self, src, rel, dst, src_fake, dst_fake, train=True)
   + float test_link(self, test_data, n_ent, heads, tails, filt=True)
+  + pretrain(self, train_data, corrupter, tester)
 }
 KBGAN.BaseModel o-- KBGAN.BaseModule 
+KBGAN.BaseModel o-- KBGAN.ConfigDict
+KBGAN.BaseModel o-- Optimizer
+KBGAN.BaseModel --> KBGAN.Corrupter
 
 class KBGAN.ComplEx {
   + pretrain(self, train_data, corrupter, tester)
@@ -161,13 +181,6 @@ class KBGAN.BernCorrupter {
   + ? corrupt(self, src, rel, dst)
 }
 KBGAN.Corrupter <|-- KBGAN.BernCorrupter
-
-' ------------ Config ------------
-class KBGAN.ConfigDict {
-
-}
-dict <|-- KBGAN.ConfigDict
-
 
 
 @enduml
