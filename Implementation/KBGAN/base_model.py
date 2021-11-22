@@ -8,7 +8,6 @@ from metrics import mrr_mr_hitk
 from data_utils import batch_by_size
 import logging
 
-
 class BaseModule(nn.Module):
     def __init__(self):
         super(BaseModule, self).__init__()
@@ -22,11 +21,13 @@ class BaseModule(nn.Module):
     def prob_logit(self, src, rel, dst):
         raise NotImplementedError
 
+    def constraint(self):
+        pass
+    
     def prob(self, src, rel, dst):
         return nnf.softmax(self.prob_logit(src, rel, dst),  dim=1)
 
-    def constraint(self):
-        pass
+
 
     def pair_loss(self, src, rel, dst, src_bad, dst_bad):
         d_good = self.dist(src, rel, dst)
@@ -70,7 +71,11 @@ class BaseModel(object):
         dst_var = Variable(dst)
 
         logits = self.mdl.prob_logit(src_var, rel_var, dst_var) / temperature
+        
         probs = nnf.softmax(logits, dim=1)
+        # TODO: add Uncertainty Sampling here
+        
+        # 
         row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)          
         sample_idx = torch.multinomial(probs, n_sample, replacement=True)
         sample_srcs = src[row_idx, sample_idx.data.cpu()]

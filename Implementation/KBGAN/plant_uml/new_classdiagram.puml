@@ -1,0 +1,173 @@
+@startuml
+
+' ------------ Modules ------------
+class torch.nn.Module {}
+
+abstract class KBGAN.BaseModule {
+  + score(self, src, rel, dst)
+  + dist(self, src, rel, dst)
+  + prob_logit(self, src, rel, dst)
+  + prob(self, src, rel, dst)
+  + constraint(self)
+  + pair_loss(self, src, rel, dst, src_bad, dst_bad)
+  + softmax_loss(self, src, rel, dst, truth)
+}
+torch.nn.Module <|-- KBGAN.BaseModule
+
+class KBGAN.ComplExModule {
+  - rel_re_embed: nn.Embedding
+  - rel_im_embed: nn.Embedding
+  - ent_re_embed: nn.Embedding
+  - ent_im_embed: nn.Embedding
+
+  + forward(self, src, rel, dst)
+  + score(self, src, rel, dst)
+  + dist(self, src, rel, dst)
+  + prob_logit(self, src, rel, dst)
+
+}
+KBGAN.BaseModule <|-- KBGAN.ComplExModule
+
+class KBGAN.DistMultModule {
+  - rel_embed: nn.Embedding
+  - ent_embed: nn.Embedding
+
+  + DistMultModule( n_ent, n_rel, config)
+  + forward(self, src, rel, dst)
+  + score(self, src, rel, dst)
+  + dist(self, src, rel, dst)
+  + prob_logit(self, src, rel, dst)
+}
+KBGAN.BaseModule <|-- KBGAN.DistMultModule
+
+class KBGAN.TransDModule {
+  - margin: ?
+  - p: ?
+  - temp: ?
+  - rel_embed: ?
+  - ent_embed: ?
+  - proj_rel_embed: nn.Embedding
+  - proj_ent_embed: nn.Embedding
+
+  + TransDModule(self, n_ent, n_rel, config)
+
+  + init_weight(self)
+  + forward(self, src, rel, dst)
+  + dist(self, src, rel, dst)
+  + score(self, src, rel, dst)
+  + prob_logit(self, src, rel, dst)
+  + constraint(self)
+}
+KBGAN.BaseModule <|-- KBGAN.TransDModule
+
+class KBGAN.TransEModule {
+  - p: ?
+  - margin: ?
+  - temp: ?
+  - rel_embed: nn.Embedding
+  - ent_embed: nn.Embedding
+
+  + init_weight(self)
+  + forward(self, src, rel, dst)
+  + dist(self, src, rel, dst)
+  + score(self, src, rel, dst)
+  + prob_logit(self, src, rel, dst)
+  + constraint(self)
+}
+KBGAN.BaseModule <|-- KBGAN.TransEModule
+
+' ------------ Sampler ------------
+abstract class KBGAN.BaseSampler {
+  - mdl: BaseModule
+
+  + BaseSampler(mdl: BaseModule)
+  + torch.tensor sample(src_var, rel_var, dst_var) 
+}
+KBGAN.BaseModel o-- KBGAN.BaseSampler 
+
+abstract class KBGAN.RandomSampler {
+  + RandomSampler(mdl: BaseModule)
+  + torch.tensor sample(src_var, rel_var, dst_var) 
+}
+KBGAN.BaseSampler <|-- KBGAN.RandomSampler
+
+
+abstract class KBGAN.UncertaintySampler {
+  + UncertaintySampler(mdl: BaseModule)
+  + torch.tensor sample(src_var, rel_var, dst_var) 
+}
+KBGAN.BaseSampler <|-- KBGAN.UncertaintySampler
+
+' ------------ Models ------------
+class KBGAN.BaseModel {
+  - opt: Optimizer
+  - mdl: BaseModule
+  - smpl: BaseSampler
+  - weight_decay: int
+  - config: ?
+
+  + void save(self, filename)
+  + void load(self, filename)
+  + void gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True):
+  + dis_step(self, src, rel, dst, src_fake, dst_fake, train=True)
+  + float test_link(self, test_data, n_ent, heads, tails, filt=True)
+}
+KBGAN.BaseModel o-- KBGAN.BaseModule 
+
+class KBGAN.ComplEx {
+  + pretrain(self, train_data, corrupter, tester)
+}
+KBGAN.BaseModel <|-- KBGAN.ComplEx
+
+
+class KBGAN.DistMult {
+  + pretrain(self, train_data, corrupter, tester):
+}
+KBGAN.BaseModel <|-- KBGAN.DistMult
+
+class KBGAN.TransD {
+  + load_vec(self, path)
+  + pretrain(self, train_data, corrupter, tester)
+}
+KBGAN.BaseModel <|-- KBGAN.TransD
+
+class KBGAN.TransE {
+  + pretrain(self, train_data, corrupter, tester)
+}
+KBGAN.BaseModel <|-- KBGAN.TransE
+
+
+
+
+
+
+' ------------ Corrupter ------------
+abstract class KBGAN.Corrupter {
+  - bern_prob: ?
+  - n_ent: int
+}
+
+class KBGAN.BernCorrupterMulti {
+  - n_sample: int
+
+  + ? corrupt(self, src, rel, dst, keep_truth=True)
+}
+KBGAN.Corrupter <|-- KBGAN.BernCorrupterMulti
+
+class KBGAN.BernCorrupter {
+  - bern_prob: ?
+  - n_ent: int
+
+  + ? corrupt(self, src, rel, dst)
+}
+KBGAN.Corrupter <|-- KBGAN.BernCorrupter
+
+' ------------ Config ------------
+class KBGAN.ConfigDict {
+
+}
+dict <|-- KBGAN.ConfigDict
+
+
+
+@enduml

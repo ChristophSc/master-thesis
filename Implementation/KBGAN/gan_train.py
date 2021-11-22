@@ -15,6 +15,7 @@ from logger_init import logger_init
 from select_gpu import select_gpu
 from corrupter import BernCorrupterMulti
 
+# load config and logger, overwrite config with args
 config()
 overwrite_config_with_args()
 logger_init("gan_train")
@@ -28,6 +29,7 @@ kb_index = index_ent_rel(os.path.join('data', task_dir, 'train.txt'),
                          os.path.join('data', task_dir, 'test.txt'))
 n_ent, n_rel = graph_size(kb_index)
 
+# load pretrained models for generator and discriminator
 models = {'TransE': TransE, 'TransD': TransD, 'DistMult': DistMult, 'ComplEx': ComplEx}
 gen_config = config()[config().g_config]
 dis_config = config()[config().d_config]
@@ -36,6 +38,7 @@ dis = models[config().d_config](n_ent, n_rel, dis_config)
 gen.load(os.path.join('models', task_dir, gen_config.model_file))
 dis.load(os.path.join('models', task_dir, dis_config.model_file))
 
+# load train-, valid- and testdata
 train_data = read_data(os.path.join('data', task_dir, 'train.txt'), kb_index)
 inplace_shuffle(*train_data)
 valid_data = read_data(os.path.join('data', task_dir, 'valid.txt'), kb_index)
@@ -46,8 +49,10 @@ test_data = [torch.LongTensor(vec) for vec in test_data]
 tester = lambda: dis.test_link(valid_data, n_ent, filt_heads, filt_tails)
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
+# test link prediction of discriminator model with pretrained model only (not adverarial training)
 dis.test_link(test_data, n_ent, filt_heads, filt_tails)
 
+# load Corrupter which creates set of negatives (Neg) from positive triples in KG
 corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, config().adv.n_sample)
 src, rel, dst = train_data
 n_train = len(src)
