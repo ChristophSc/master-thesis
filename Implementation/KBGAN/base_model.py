@@ -8,6 +8,8 @@ from metrics import mrr_mr_hitk
 from data_utils import batch_by_size
 import logging
 
+from random_sampler import RandomSampler
+
 class BaseModule(nn.Module):
     def __init__(self):
         super(BaseModule, self).__init__()
@@ -48,7 +50,7 @@ class BaseModel(object):
     def __init__(self):
         self.mdl = None # type: BaseModule
         self.weight_decay = 0
-        # TODO: initialize Sampler here
+        self.smpl = None
 
     def save(self, filename):
         torch.save(self.mdl.state_dict(), filename)
@@ -59,10 +61,10 @@ class BaseModel(object):
         else:
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
 
-    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True):
+    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
-        n, m = dst.size()
+        n, m = dst.size() # dst.size() same as src.size and rel.size()
         if torch.cuda.is_available():
             rel = rel.cuda()
             src = src.cuda()
@@ -78,7 +80,8 @@ class BaseModel(object):
         # TODO: get features with information about the KG (e.g. structure) (PEER, POP, FRQ, ...)
         # TODO: add Uncertainty Sampling here
         
-        # sampler.sample(probs)
+        # smpl.sample(n_sample, probs)
+        row_idx, sample_idx = sampler.sample(src, rel, dst, n_sample, probs)
         
         # TODO: move following to RandomSampler
         row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)          
@@ -175,6 +178,16 @@ class BaseModel(object):
         logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr_tot / count, mr_tot / count, hit10_tot / count)
         return mrr_tot / count
     
-    
+
     def pretrain(self, train_data, corrupter, tester):
+        """ Pretrains model on given training data.
+
+        Args:
+            train_data ([type]): Training data]
+            corrupter ([type]): Corrupter that creates negative examples
+            tester ([type]): test function, usually test_link-function to test link prediction with MRR, MR and H@10.
+
+        Raises:
+            NotImplementedError: Only for BaseModel this function is abstract, inherited class should implement it.
+        """
         raise NotImplementedError()

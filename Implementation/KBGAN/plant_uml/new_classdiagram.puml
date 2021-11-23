@@ -1,4 +1,4 @@
-@startuml
+@startuml NewClassDiagram
 
 ' ------------ Modules ------------
 class torch.nn.Module {}
@@ -124,8 +124,6 @@ class KBGAN.BaseModel {
 
   + void save(self, filename)
   + void load(self, filename)
-  + void gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True):
-  + dis_step(self, src, rel, dst, src_fake, dst_fake, train=True)
   + float test_link(self, test_data, n_ent, heads, tails, filt=True)
   + pretrain(self, train_data, corrupter, tester)
 }
@@ -138,7 +136,6 @@ class KBGAN.ComplEx {
   + pretrain(self, train_data, corrupter, tester)
 }
 KBGAN.BaseModel <|-- KBGAN.ComplEx
-
 
 class KBGAN.DistMult {
   + pretrain(self, train_data, corrupter, tester):
@@ -155,11 +152,6 @@ class KBGAN.TransE {
   + pretrain(self, train_data, corrupter, tester)
 }
 KBGAN.BaseModel <|-- KBGAN.TransE
-
-
-
-
-
 
 ' ------------ Corrupter ------------
 abstract class KBGAN.Corrupter {
@@ -182,5 +174,19 @@ class KBGAN.BernCorrupter {
 }
 KBGAN.Corrupter <|-- KBGAN.BernCorrupter
 
+class KBGAN.Generator {
+  - smpl: BaseSampler
+  - mdl: BaseModel
+
+  + void gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True)
+}
+KBGAN.BaseModel *-- KBGAN.Generator
+
+class KBGAN.Discriminator {
+  - mdl: BaseModel
+
+  + dis_step(self, src, rel, dst, src_fake, dst_fake, train=True)
+}
+KBGAN.BaseModel *-- KBGAN.Discriminator
 
 @enduml

@@ -14,6 +14,7 @@ from compl_ex import ComplEx
 from logger_init import logger_init
 from select_gpu import select_gpu
 from corrupter import BernCorrupterMulti
+from random_sampler import RandomSampler
 
 # load config and logger, overwrite config with args
 config()
@@ -32,6 +33,7 @@ n_ent, n_rel = graph_size(kb_index)
 # load pretrained models for generator and discriminator
 models = {'TransE': TransE, 'TransD': TransD, 'DistMult': DistMult, 'ComplEx': ComplEx}
 gen_config = config()[config().g_config]
+gen_sampler = RandomSampler()
 dis_config = config()[config().d_config]
 gen = models[config().g_config](n_ent, n_rel, gen_config)
 dis = models[config().d_config](n_ent, n_rel, dis_config)

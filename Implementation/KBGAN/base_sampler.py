@@ -2,21 +2,17 @@ class BaseSampler(object):
   def __init__(self):
     pass
   
-  def sample(neg, ):
-    pass
+  def sample(src, rel, dst, n_sample, *args):
+    raise NotImplementedError()
   
   
-class Measures(object):
+class Measure(object):
   def __init__(self):
-    pass
+    self.fct = None
   
-  def measure_function():
-    pass
   
     
-class EntropyMeasure(Measures):
+class Entropy(Measure):
   def __init__(self):
     pass
   
-  def measure_function():
-    pass
