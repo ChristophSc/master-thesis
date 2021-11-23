@@ -48,6 +48,7 @@ class BaseModel(object):
     def __init__(self):
         self.mdl = None # type: BaseModule
         self.weight_decay = 0
+        # TODO: initialize Sampler here
 
     def save(self, filename):
         torch.save(self.mdl.state_dict(), filename)
@@ -73,13 +74,19 @@ class BaseModel(object):
         logits = self.mdl.prob_logit(src_var, rel_var, dst_var) / temperature
         
         probs = nnf.softmax(logits, dim=1)
+        
+        # TODO: get features with information about the KG (e.g. structure) (PEER, POP, FRQ, ...)
         # TODO: add Uncertainty Sampling here
         
-        # 
+        # sampler.sample(probs)
+        
+        # TODO: move following to RandomSampler
         row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)          
         sample_idx = torch.multinomial(probs, n_sample, replacement=True)
         sample_srcs = src[row_idx, sample_idx.data.cpu()]
         sample_dsts = dst[row_idx, sample_idx.data.cpu()]
+        
+        
         rewards = yield sample_srcs, sample_dsts
         if train:
             self.mdl.zero_grad()
