@@ -1,0 +1,12 @@
+@startuml
+gan_train -> gan_train: config()
+gan_train <-- gan_train: _config
+loop n_epoch
+    gan_train -> Corrupter: 
+    loop n_batch
+        gan_train -> gan_train: <math>int_0^1f(x)dx</math> 
+
+    end
+    Alice -> Bob: DNS Attack
+end
+@enduml

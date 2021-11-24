@@ -1,0 +1,13 @@
+\begin{table*}[t]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Hyperparameters} & \textbf{Constraints or Regularizations}  \\ \hline
+\textsc{TransE} & $L_1$ distance, $k=50, \gamma=3$ & $||\mathbf{e}||_2\leq 1,||\mathbf{r}||_2\leq 1$ \\ \hline
+\textsc{TransD} & $L_1$ distance, $k=50, \gamma=3$ & $||\mathbf{e}||_2\leq 1,||\mathbf{r}||_2\leq 1,||\mathbf{e_p}||_2\leq 1,||\mathbf{r_p}||_2\leq 1$  \\ \hline
+\textsc{DistMult} & $k=50, \lambda=1/0.1$ & L2 regularization: $L_{reg}=L+\lambda||\Theta||_2^2$ \\ \hline
+\textsc{ComplEx}  & $2k=50, \lambda=1/0.1$ & L2 regularization: $L_{reg}=L+\lambda||\Theta||_2^2$ \\ \hline
+\end{tabular}
+\caption{Hyperparameter settings of the 4 models we used. For \textsc{DistMult} and \textsc{ComplEx}, $\lambda=1$ is used for FB15k-237 and $\lambda=0.1$ is used for WN18 and WN18RR. All other hyperparameters are shared among all datasets. $L$ is the global loss defined in Equation \eqref{eq:nllloss}. $\Theta$ represents all parameters in the model.}
+\label{tab:hyperparams}
+\end{table*}
