@@ -9,6 +9,7 @@ from data_utils import batch_by_size
 import logging
 
 from random_sampler import RandomSampler
+from uncertainty_sampler import UncertaintySampler
 
 class BaseModule(nn.Module):
     def __init__(self):
@@ -61,7 +62,7 @@ class BaseModel(object):
         else:
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
 
-    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
+    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=UncertaintySampler()):
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         n, m = dst.size() # dst.size() same as src.size and rel.size()
@@ -82,13 +83,9 @@ class BaseModel(object):
         
         # smpl.sample(n_sample, probs)
         row_idx, sample_idx = sampler.sample(src, rel, dst, n_sample, probs)
-        
-        # TODO: move following to RandomSampler
-        row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)          
-        sample_idx = torch.multinomial(probs, n_sample, replacement=True)
+    
         sample_srcs = src[row_idx, sample_idx.data.cpu()]
-        sample_dsts = dst[row_idx, sample_idx.data.cpu()]
-        
+        sample_dsts = dst[row_idx, sample_idx.data.cpu()]        
         
         rewards = yield sample_srcs, sample_dsts
         if train:

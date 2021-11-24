@@ -1,23 +1,46 @@
-@startuml
+@startuml 
+gan_train -> gan_train: load_config()
+gan_train -> gan_train: load_pretrained_models()
+gan_train -> gan_train: load_data()
 
-gan_train -> Corrupter: corrupt(all positives (h,r,t) from KG)
-gan_train <-- Corrupter: Neg [set of negatives (h',r,t')]
 
-gan_train -> Generator: Neg
+loop for epoch in n_epochs
+    gan_train -> Corrupter: corrupt(all positives (h,r,t) from KG)
+    gan_train <-- Corrupter: Neg [set of negatives (h',r,t')]
 
-Generator -> Sampler: sample(Neg)
-Generator <-- Sampler: one negative instance (h',r,t')
+    gan_train -> Generator: Neg
 
-Generator -> Discriminator: triple pair: [(h,r,t), (h',r,t')]
+    loop for n_batches  
+      Generator -> Generator: probs = softmax()
 
-Discriminator -> BaseModule: pair_loss(h,r,t,h',t')
-Discriminator <-- BaseModule: loss
+      Generator -> Sampler: sample(Neg, probs)
+      Generator <-- Sampler: one negative instance (h',r,t')
+      Generator -> Generator: train()
 
-Discriminator -> BaseModule: score()
-Discriminator <-- BaseModule: score
-Discriminator -> Discriminator: reward = -score
-Generator <-- Discriminator: reward
+      Generator -> Discriminator: triple pair: [(h,r,t), (h',r,t')]
 
-gan_train -> Generator: reward
+      Discriminator -> BaseModule: pair_loss((h,r,t),(h',r,t'))
+      Discriminator <-- BaseModule: loss
+
+      Discriminator -> BaseModule: score()
+      Discriminator <-- BaseModule: score
+
+      Discriminator -> Discriminator: train()
+
+      Generator <-- Discriminator: reward = -score
+    end
+    gan_train <-- Generator:  avg_loss + avg_reward
+
+    note over gan_train: Epoch ./..., D_loss=..., reward=...
+
+    alt epoch / epoch_per_test == 0
+      gan_train->gan_train: test_link_prediction(...)
+      gan_train->gan_train: save_discriminator_model(...)
+      note over gan_train: Test_MRR=..., Test_MR=..., Test_H@10=...
+    end
+end
+
+gan_train->gan_train: load_discriminator_model(...)
+gan_train->gan_train: test_link_prediction(...)
 
 @enduml

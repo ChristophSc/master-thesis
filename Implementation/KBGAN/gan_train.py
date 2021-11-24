@@ -72,7 +72,7 @@ for epoch in range(n_epoch):
         # send corrupted triples from Neg of size "n_batch" to generator
         gen_step = gen.gen_step(ss, rs, ts, temperature=config().adv.temperature)
         # randomly sample from probability distribution of current negative triple set 
-        src_smpl, dst_smpl = next(gen_step)         # TODO: change next function and use Uncertainty Sampling
+        src_smpl, dst_smpl = next(gen_step)
         # send sampled negative triple "dst_smpl" and its ground truth triple "src_smpl" to discriminator 
         losses, rewards = dis.dis_step(s, r, t, src_smpl.squeeze(), dst_smpl.squeeze())
         epoch_reward += torch.sum(rewards)        
