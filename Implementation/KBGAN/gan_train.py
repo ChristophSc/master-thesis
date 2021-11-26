@@ -2,6 +2,8 @@ import os
 import logging
 import datetime
 import torch
+import matplotlib.pyplot as plt
+
 from random import sample, random
 
 from config import config, overwrite_config_with_args, dump_config
@@ -15,6 +17,8 @@ from logger_init import logger_init
 from select_gpu import select_gpu
 from corrupter import BernCorrupterMulti
 from random_sampler import RandomSampler
+from graph_utils import create_figure
+
 
 # load config and logger, overwrite config with args
 config()
@@ -48,7 +52,6 @@ test_data = read_data(os.path.join('data', task_dir, 'test.txt'), kb_index)
 filt_heads, filt_tails = heads_tails(n_ent, train_data, valid_data, test_data)
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
-tester = lambda: dis.test_link(valid_data, n_ent, filt_heads, filt_tails)
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
 # test link prediction of discriminator model with pretrained model only (not adverarial training)
@@ -60,9 +63,16 @@ src, rel, dst = train_data
 n_train = len(src)
 n_epoch = config().adv.n_epoch
 n_batch = config().adv.n_batch
-mdl_name = 'gan_dis_' + datetime.datetime.now().strftime("%m%d%H%M%S") + '.mdl'
-best_perf = 0
+create_graphs = config().graph.create_graphs
+timestamp = datetime.datetime.now().strftime("%m%d%H%M%S")
+mdl_name = 'gan_dis_' + timestamp + '.mdl'
+best_mrr = 0
 avg_reward = 0
+logged_rewards = []
+logged_D_losses = []
+logged_mrrs = []
+logged_hit10s = []
+
 for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
@@ -80,14 +90,40 @@ for epoch in range(n_epoch):
         # send reward to generator
         gen_step.send(rewards.unsqueeze(1))
         epoch_d_loss += torch.sum(losses)
+
     avg_loss = epoch_d_loss / n_train
     avg_reward = epoch_reward / n_train
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
+    if create_graphs:
+        logged_rewards.append(avg_loss.data)
+        logged_D_losses.append(avg_reward.data)
+    
     if (epoch + 1) % config().adv.epoch_per_test == 0:
         #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
-        perf = dis.test_link(valid_data, n_ent, filt_heads, filt_tails)
-        if perf > best_perf:
-            best_perf = perf
+        mrr, hit10 = dis.test_link(valid_data, n_ent, filt_heads, filt_tails)
+        if create_graphs:
+            logged_mrrs.append(mrr)
+            logged_hit10s.append(hit10)
+        if mrr > best_mrr:
+            best_mrr = mrr
             dis.save(os.path.join('models', config().task.dir, mdl_name))
+            
+if create_graphs:
+    # create folder which contains all figures
+    dir = os.path.join(config().graph.dir, timestamp)
+    os.mkdir(dir)    
+
+    # plot results of current adversarial learning process
+    create_figure(task_dir.upper() + ' Rewards', [x+1 for x in range(n_epoch)], logged_rewards, 'Epochs', 'Rewards','blue').savefig(os.path.join(dir, task_dir + '_rewards'))
+    create_figure(task_dir.upper() + ' Discriminator Losses', [x+1 for x in range(n_epoch)], logged_D_losses, 'Epochs', 'Losses', 'red').savefig(os.path.join(dir, task_dir + '_losses'))
+    create_figure(task_dir.upper() + ' Validation MRR', [x+1 for x in range(n_epoch) if (x + 1) % config().adv.epoch_per_test == 0], logged_mrrs,'Epochs', 'MRR',  'green').savefig(os.path.join(dir, task_dir + '_mrr'))
+    create_figure(task_dir.upper() + ' Validation H@10', [x+1 for x in range(n_epoch) if (x + 1) % config().adv.epoch_per_test == 0], logged_hit10s, 'Epochs', 'H@10', 'orange').savefig(os.path.join(dir, task_dir + '_hit10'))
+
+    # TODO: load plots from original KBGAN approach an compare them 
+    #   -> for each model
+    #   -> for each dataset
+    # TODO: combine plots of my approach for each model and each dataset
+    
+    
 dis.load(os.path.join('models', config().task.dir, mdl_name))
 dis.test_link(test_data, n_ent, filt_heads, filt_tails)

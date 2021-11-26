@@ -49,4 +49,7 @@ log:
   dump_config: false
   to_file: false
   dir: ./logs
-  prefix: 
+  prefix:
+graph:
+  create_graphs: true
+  dir: ./graphs

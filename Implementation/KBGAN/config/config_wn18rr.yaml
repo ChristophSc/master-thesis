@@ -50,3 +50,6 @@ log:
   to_file: true
   dir: ./logs
   prefix: wn18rr_
+graph:
+  create_graphs: true
+  dir: ./graphs

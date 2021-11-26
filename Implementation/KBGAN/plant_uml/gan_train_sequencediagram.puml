@@ -1,4 +1,4 @@
-@startuml 
+@startuml  AdversarialTraining_SequenceDiagram
 gan_train -> gan_train: load_config()
 gan_train -> gan_train: load_pretrained_models()
 gan_train -> gan_train: load_data()

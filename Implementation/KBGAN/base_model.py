@@ -30,8 +30,6 @@ class BaseModule(nn.Module):
     def prob(self, src, rel, dst):
         return nnf.softmax(self.prob_logit(src, rel, dst),  dim=1)
 
-
-
     def pair_loss(self, src, rel, dst, src_bad, dst_bad):
         d_good = self.dist(src, rel, dst)
         d_bad = self.dist(src_bad, rel, dst_bad)
@@ -48,6 +46,8 @@ class BaseModule(nn.Module):
 
 
 class BaseModel(object):
+    """BaseModel for all KGE-Models (including Generator and Discriminator)"""
+    
     def __init__(self):
         self.mdl = None # type: BaseModule
         self.weight_decay = 0
@@ -62,7 +62,22 @@ class BaseModel(object):
         else:
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
 
-    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=UncertaintySampler()):
+    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
+        """One learning step of the Generator component in Adversarial Learning Process.
+        
+
+        Args:
+            src (torch.tensor): corrupted head entities from Neg (from negative triple)
+            rel (torch.tensor): relations
+            dst (torch.tensor): corrupted tail entities from Neg (from negative triple)
+            n_sample (int, optional): Number of negatives to be sampled from Neg. Defaults to 1.
+            temperature (float, optional): dividant of the logits. Defaults to 1.0.
+            train (bool, optional): train the Generator?. Defaults to True.
+            sampler (BaseSampler, optional): Sampler which samples negative triples from set Neg. Defaults to UncertaintySampler().
+
+        Yields:
+            sample_srcs, sample_dsts (torch.tensor, torch.tensor): sampled negative heads and tails
+        """
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         n, m = dst.size() # dst.size() same as src.size and rel.size()
@@ -75,15 +90,11 @@ class BaseModel(object):
         dst_var = Variable(dst)
 
         logits = self.mdl.prob_logit(src_var, rel_var, dst_var) / temperature
-        
         probs = nnf.softmax(logits, dim=1)
-        
-        # TODO: get features with information about the KG (e.g. structure) (PEER, POP, FRQ, ...)
-        # TODO: add Uncertainty Sampling here
-        
-        # smpl.sample(n_sample, probs)
+        # call sampler to retrieve n_sample from negative triple set Neg
         row_idx, sample_idx = sampler.sample(src, rel, dst, n_sample, probs)
     
+        # get head and tail of negative triple by sampled index
         sample_srcs = src[row_idx, sample_idx.data.cpu()]
         sample_dsts = dst[row_idx, sample_idx.data.cpu()]        
         
@@ -100,6 +111,20 @@ class BaseModel(object):
         yield None
 
     def dis_step(self, src, rel, dst, src_fake, dst_fake, train=True):
+        """One learning step of the Discriminator component in Adversarial Learning Process.
+
+        Args:
+            src (torch.tensor): original head entities from KG (positive triples)
+            rel (torch.tensor): original relations from KG
+            dst (torch.tensor): original tail entities from KG (positive triples)
+            src_fake (torch.tensor): corrupted head entities sampled from Neg (negative triples)
+            dst_fake (torch.tensor): corrupted tail entities sampled from Neg (negative triples)
+            train (bool, optional): Train the Discriminator. Defaults to True.
+
+        Returns:
+            discriminator_losses, rewards (torch.tensor, torch,tensor): 
+            Losses of discriminator learning process and rewards for sampled negative triples for Generator
+        """
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         if torch.cuda.is_available():
@@ -172,8 +197,11 @@ class BaseModel(object):
                 mr_tot += mr
                 hit10_tot += hit10
                 count += 2
-        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr_tot / count, mr_tot / count, hit10_tot / count)
-        return mrr_tot / count
+        mrr =mrr_tot / count
+        mr = mr_tot / count
+        hit10 = hit10_tot / count
+        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr, mr, hit10)
+        return mrr, hit10
     
 
     def pretrain(self, train_data, corrupter, tester):
