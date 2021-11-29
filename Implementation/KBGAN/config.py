@@ -22,14 +22,14 @@ _config = None
 def config():
     global _config
     if _config is None:
-        config_path = 'config/config.yaml'
+        config_path = 'config.yaml'
         for arg in sys.argv[1:]:
             if arg.startswith('--config='):
                 config_path = arg[9:]
                 break
         print('Reading config from ' + config_path)
         with open(config_path) as f:
-            _config = _make_config_dict(yaml.safe_load(f))
+            _config = _make_config_dict(yaml.load(f, Loader=yaml.FullLoader))
         overwrite_config_with_args()
     return _config
 

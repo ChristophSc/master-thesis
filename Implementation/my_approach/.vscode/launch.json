@@ -7,7 +7,7 @@
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "args": ["--config=config_wn18rr.yaml", "--log.prefix=umls_", "--log.to_file=false"]
+      "args": ["--config=config/config_umls.yaml", "--g_config=DistMult", "--d_config=TransE", "--log.prefix=umls_", "--log.to_file=false"]
     }
   ]
 }

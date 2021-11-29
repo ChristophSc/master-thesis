@@ -51,8 +51,6 @@ class TransD(BaseModel):
     def __init__(self, n_ent, n_rel, config):
         super(TransD, self).__init__()
         self.mdl = TransDModule(n_ent, n_rel, config)
-        if t.cuda.is_available():
-            self.mdl.cuda()
         self.config = config
 
     def load_vec(self, path):
@@ -64,8 +62,6 @@ class TransD(BaseModel):
         a_mat = np.loadtxt(os.path.join(path, 'A.vec'))
         self.mdl.proj_rel_embed.weight.data.copy_(t.from_numpy(a_mat[:n_rel, :]))
         self.mdl.proj_ent_embed.weight.data.copy_(t.from_numpy(a_mat[n_rel:, :]))
-        if t.cuda.is_available():
-            self.mdl.cuda()
 
     def pretrain(self, train_data, corrupter, tester):
         src, rel, dst = train_data
@@ -82,24 +78,23 @@ class TransD(BaseModel):
             rel = rel[rand_idx]
             dst = dst[rand_idx]
             src_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
-            if t.cuda.is_available():
-                src = src.cuda()
-                rel = rel.cuda()
-                dst = dst.cuda()
-                src_corrupted = src_corrupted.cuda()
-                dst_corrupted = dst_corrupted.cuda()
-            for s0, r, t0, s1, t1 in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
+            src_cuda = src
+            rel_cuda = rel
+            dst_cuda = dst
+            src_corrupted = src_corrupted
+            dst_corrupted = dst_corrupted
+            for s0, r, t0, s1, t1 in batch_by_num(n_batch, src_cuda, rel_cuda, dst_cuda, src_corrupted, dst_corrupted,
                                                   n_sample=n_train):
                 self.mdl.zero_grad()
                 loss = t.sum(self.mdl.pair_loss(Variable(s0), Variable(r), Variable(t0), Variable(s1), Variable(t1)))
                 loss.backward()
                 optimizer.step()
                 self.mdl.constraint()
-                epoch_loss += loss.item()
+                epoch_loss += loss.data[0]
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, epoch_loss / n_train)
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 test_perf = tester()
                 if test_perf > best_perf:
-                    self.save(os.path.join('models', config().task.dir, self.config.model_file))
+                    self.save(os.path.join(config().task.dir, self.config.model_file))
                     best_perf = test_perf
         return best_perf

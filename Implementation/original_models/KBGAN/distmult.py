@@ -34,8 +34,7 @@ class DistMult(BaseModel):
     def __init__(self, n_ent, n_rel, config):
         super(DistMult, self).__init__()
         self.mdl = DistMultModule(n_ent, n_rel, config)
-        if t.cuda.is_available():
-            self.mdl.cuda()
+        self.mdl.cuda()
         self.config = config
         self.weight_decay = config.lam / config.n_batch
 
@@ -54,20 +53,16 @@ class DistMult(BaseModel):
                 rel = rel[rand_idx]
                 dst = dst[rand_idx]
                 src_corrupted, rel_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
-                if t.cuda.is_available():
-                    src_corrupted = src_corrupted.cuda()
-                    rel_corrupted = rel_corrupted.cuda()
-                    dst_corrupted = dst_corrupted.cuda()
+                src_corrupted = src_corrupted.cuda()
+                rel_corrupted = rel_corrupted.cuda()
+                dst_corrupted = dst_corrupted.cuda()
             for ss, rs, ts in batch_by_num(n_batch, src_corrupted, rel_corrupted, dst_corrupted, n_sample=n_train):
                 self.mdl.zero_grad()
-                if t.cuda.is_available():
-                    label = t.zeros(len(ss)).type(t.LongTensor).cuda()
-                else:
-                    label = t.zeros(len(ss)).type(t.LongTensor)
+                label = t.zeros(len(ss)).type(t.LongTensor).cuda()
                 loss = t.sum(self.mdl.softmax_loss(Variable(ss), Variable(rs), Variable(ts), label))
                 loss.backward()
                 optimizer.step()
-                epoch_loss += loss.data.item()
+                epoch_loss += loss.data[0]
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, epoch_loss / n_train)
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 test_perf = tester()

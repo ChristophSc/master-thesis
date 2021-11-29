@@ -45,9 +45,10 @@ def batch_by_num(n_batch, *lists, n_sample=None):
     if n_sample is None:
         n_sample = len(lists[0])
     for i in range(n_batch):
-        head = int(n_sample * i / n_batch)
-        tail = int(n_sample * (i + 1) / n_batch)
-        ret = [ls[head:tail] for ls in lists]
+        first_idx = int(n_sample * i / n_batch)   # first possible index
+        last_idx = int(n_sample * (i + 1) / n_batch) # last possible index (index in dataset) -> last - first = batch size
+        # dataset is divided into "n_batch"-batches
+        ret = [ls[first_idx:last_idx] for ls in lists] # len(ret)=6: src, rel, dst, src_cand, rel_cand, dst_cand
         if len(ret) > 1:
             yield ret
         else:

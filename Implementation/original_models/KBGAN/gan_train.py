@@ -17,15 +17,14 @@ from corrupter import BernCorrupterMulti
 
 
 logger_init()
-if torch.cuda.is_available():
-    torch.cuda.set_device(select_gpu())
+torch.cuda.set_device(select_gpu())
 overwrite_config_with_args()
 dump_config()
 
 task_dir = config().task.dir
-kb_index = index_ent_rel(os.path.join('data', task_dir, 'train.txt'),
-                         os.path.join('data', task_dir, 'valid.txt'),
-                         os.path.join('data', task_dir, 'test.txt'))
+kb_index = index_ent_rel(os.path.join(task_dir, 'train.txt'),
+                         os.path.join(task_dir, 'valid.txt'),
+                         os.path.join(task_dir, 'test.txt'))
 n_ent, n_rel = graph_size(kb_index)
 
 models = {'TransE': TransE, 'TransD': TransD, 'DistMult': DistMult, 'ComplEx': ComplEx}
@@ -33,13 +32,13 @@ gen_config = config()[config().g_config]
 dis_config = config()[config().d_config]
 gen = models[config().g_config](n_ent, n_rel, gen_config)
 dis = models[config().d_config](n_ent, n_rel, dis_config)
-gen.load(os.path.join('models', task_dir, gen_config.model_file))
-dis.load(os.path.join('models', task_dir, dis_config.model_file))
+gen.load(os.path.join(task_dir, gen_config.model_file))
+dis.load(os.path.join(task_dir, dis_config.model_file))
 
-train_data = read_data(os.path.join('data',task_dir, 'train.txt'), kb_index)
+train_data = read_data(os.path.join(task_dir, 'train.txt'), kb_index)
 inplace_shuffle(*train_data)
-valid_data = read_data(os.path.join('data',task_dir, 'valid.txt'), kb_index)
-test_data = read_data(os.path.join('data',task_dir, 'test.txt'), kb_index)
+valid_data = read_data(os.path.join(task_dir, 'valid.txt'), kb_index)
+test_data = read_data(os.path.join(task_dir, 'test.txt'), kb_index)
 filt_heads, filt_tails = heads_tails(n_ent, train_data, valid_data, test_data)
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
@@ -61,16 +60,11 @@ for epoch in range(n_epoch):
     epoch_reward = 0
     src_cand, rel_cand, dst_cand = corrupter.corrupt(src, rel, dst, keep_truth=False)
     for s, r, t, ss, rs, ts in batch_by_num(n_batch, src, rel, dst, src_cand, rel_cand, dst_cand, n_sample=n_train):
-        # generator: create sampling for current batch
         gen_step = gen.gen_step(ss, rs, ts, temperature=config().adv.temperature)
         src_smpl, dst_smpl = next(gen_step)
-        
-        # discriminator
         losses, rewards = dis.dis_step(s, r, t, src_smpl.squeeze(), dst_smpl.squeeze())
         epoch_reward += torch.sum(rewards)
         rewards = rewards - avg_reward
-        
-        # send reward to generator
         gen_step.send(rewards.unsqueeze(1))
         epoch_d_loss += torch.sum(losses)
     avg_loss = epoch_d_loss / n_train
@@ -81,6 +75,6 @@ for epoch in range(n_epoch):
         perf = dis.test_link(valid_data, n_ent, filt_heads, filt_tails)
         if perf > best_perf:
             best_perf = perf
-            dis.save(os.path.join('models', config().task.dir, mdl_name))
-dis.load(os.path.join('models', config().task.dir, mdl_name))
+            dis.save(os.path.join(config().task.dir, mdl_name))
+dis.load(os.path.join(config().task.dir, mdl_name))
 dis.test_link(test_data, n_ent, filt_heads, filt_tails)
