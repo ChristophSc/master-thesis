@@ -1,1 +1,1 @@
-gen.pretrain(train_data, corrupter, tester)
+log_dir

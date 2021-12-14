@@ -8,6 +8,7 @@ from torch.optim import Adam, SGD, Adagrad
 from torch.autograd import Variable
 from data_utils import batch_by_num
 from base_model import BaseModel, BaseModule
+from TrainingProcessLogger import TrainingProcessLogger
 
 class TransEModule(BaseModule):
     def __init__(self, n_ent, n_rel, config):
@@ -25,9 +26,28 @@ class TransEModule(BaseModule):
             param.data.renorm_(2, 0, 1)
 
     def forward(self, src, rel, dst):
-        return t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
+        # (1)
+        # (1.1) Real embeddings of head entities
+        emb_head = self.ent_embed(src)
+        # (1.2) Real embeddings of relations
+        emb_rel = self.rel_embed(rel)
+        # (1.3) Real embeddings of tail entities
+        emb_tail = self.ent_embed(dst)
+        # distance = t.norm((emb_head + emb_rel) - emb_tail, p=self.p, dim=1)
+        d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
+        return d
 
     def dist(self, src, rel, dst):
+        """Distance between head + rel = tail
+
+        Args:
+            src (torch.tensor): head entities
+            rel (torch.tensor): relations
+            dst (torch.tensor): tail entities
+
+        Returns:
+            real value > 0: distance head + rel = tail
+            """
         return self.forward(src, rel, dst)
 
     def score(self, src, rel, dst):
@@ -48,7 +68,7 @@ class TransE(BaseModel):
             self.mdl.cuda()
         self.config = config
 
-    def pretrain(self, train_data, corrupter, tester):
+    def pretrain(self, train_data, corrupter, tester, log_dir):
         src, rel, dst = train_data
         n_train = len(src)
         optimizer = Adam(self.mdl.parameters())
@@ -56,6 +76,7 @@ class TransE(BaseModel):
         n_epoch = self.config.n_epoch
         n_batch = self.config.n_batch
         best_perf = 0
+        tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test)
         for epoch in range(n_epoch):
             epoch_loss = 0
             rand_idx = t.randperm(n_train)
@@ -77,10 +98,16 @@ class TransE(BaseModel):
                 optimizer.step()
                 self.mdl.constraint()
                 epoch_loss += loss.item()
-            logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, epoch_loss / n_train)
+                
+            avg_epoch_loss = epoch_loss / n_train
+            tp_logger.log_loss_reward(epoch, avg_epoch_loss)     
+            logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, avg_epoch_loss)
             if (epoch + 1) % self.config.epoch_per_test == 0:
-                test_perf = tester()
-                if test_perf > best_perf:
+                mrr, hit10 = tester()
+                tp_logger.log_performance(mrr, hit10)
+                if mrr > best_perf:
                     self.save(os.path.join('models', config().task.dir, self.config.model_file))
-                    best_perf = test_perf
+                    best_perf = mrr
+        if config().log.log_pretrain_graph:
+            tp_logger.create_and_save_figures(log_dir)
         return best_perf

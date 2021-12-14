@@ -5,11 +5,6 @@ class UncertaintySampler(BaseSampler):
   
   def __init__(self):
     self.measure = None # TODO: replace and add as parameter
-  
-  
-  
-  def generator_Score(self, src, rel, dst):
-    pass
     
   def sample(self, src, rel, dst, n_sample, *args):
     n, m = dst.size()
@@ -18,7 +13,6 @@ class UncertaintySampler(BaseSampler):
       raise ValueError()
     
     batch_probs = args[0]
-      
     batch_entropies = []
     # probs: torch.Size([52, 20])
     # 52 = batch size
@@ -31,27 +25,32 @@ class UncertaintySampler(BaseSampler):
         ent = - (prob * torch.log(prob)) - ((1 - prob) * torch.log(1 - prob)) 
         entropies.append(ent)
       batch_entropies.append(entropies)
-    
-    row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)       
-    batch_entropies = torch.Tensor(batch_entropies  )
+    batch_entropies = torch.Tensor(batch_entropies)
     # get the maximum    
-    max = torch.max(batch_entropies, 1)   
-           
-    # sample_idx = torch.multinomial(args[0], n_sample, replacement=True)
+    max = torch.max(batch_entropies, 1) 
+      
+    # RandomSampling would sample the following:
     sample_idx_random = torch.multinomial(args[0], n_sample, replacement=True)
 
-    sample_idx = max.indices 
-    sample_idx_list = []   
-    cnt_equals, cnt_odd = 0, 0
-    for i in range(sample_idx.shape[0]): 
-      sample_idx_list.append([sample_idx[i],])
-      if sample_idx[i] == sample_idx_random[i][0]:
-        cnt_equals += 1
-      else:
-        cnt_odd += 1
+    sample_idx_uncertainty = max.indices.unsqueeze(1)  
+    # cnt_equals, cnt_unequals = 0, 0
+    # for i in range(sample_idx_random.shape[0]): 
+    #   if sample_idx_random[i][0] == sample_idx_uncertainty[i][0]:
+    #     cnt_equals += 1
+    #   else:
+    #     cnt_unequals += 1
         
-    sample_idx = torch.tensor(sample_idx_list)
-    #print('equals:', cnt_equals)
-    #print('odd:', cnt_odd)
+    # idx = int(sample_idx_random[0][0])
+    # if idx not in base_model.BaseModel.sampled_instances_random.keys():
+    #     base_model.BaseModel.sampled_instances_random[idx] = 0                 
+    # base_model.BaseModel.sampled_instances_random[idx] += 1
     
-    return row_idx, sample_idx
+    # idx = int(sample_idx[0][0])
+    # if idx not in base_model.BaseModel.sampled_instances_uncertainty.keys():
+    #     base_model.BaseModel.sampled_instances_uncertainty[idx] = 0    
+    # base_model.BaseModel.sampled_instances_uncertainty[idx] += 1
+    #print('equals:', cnt_equals)
+    #print('unequals:', cnt_odd)
+    
+    row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)       
+    return row_idx, sample_idx_uncertainty

@@ -18,21 +18,24 @@ def _make_config_dict(obj):
 
 _config = None
 
-
+def get_config_path():
+    config_path = 'config/config.yaml'
+    for arg in sys.argv[1:]:
+        if arg.startswith('--config='):
+            config_path = arg[9:]
+            break
+    return config_path
+    
+    
 def config():
     global _config
     if _config is None:
-        config_path = 'config/config.yaml'
-        for arg in sys.argv[1:]:
-            if arg.startswith('--config='):
-                config_path = arg[9:]
-                break
+        config_path = get_config_path()
         print('Reading config from ' + config_path)
         with open(config_path) as f:
-            _config = _make_config_dict(yaml.safe_load(f, Loader=yaml.FullLoader))
+            _config = _make_config_dict(yaml.safe_load(f))
         overwrite_config_with_args()
     return _config
-
 
 def path_set(path, val, sep='.', auto_convert=False):
     steps = path.split(sep)

@@ -9,6 +9,7 @@ from torch.optim import Adam, SGD, Adagrad
 from torch.autograd import Variable
 from data_utils import batch_by_num
 from base_model import BaseModel, BaseModule
+from TrainingProcessLogger import TrainingProcessLogger
 
 class TransDModule(BaseModule):
     def __init__(self, n_ent, n_rel, config):
@@ -67,7 +68,7 @@ class TransD(BaseModel):
         if t.cuda.is_available():
             self.mdl.cuda()
 
-    def pretrain(self, train_data, corrupter, tester):
+    def pretrain(self, train_data, corrupter, tester, log_dir):
         src, rel, dst = train_data
         n_train = len(src)
         optimizer = Adam(self.mdl.parameters())
@@ -75,6 +76,7 @@ class TransD(BaseModel):
         n_epoch = self.config.n_epoch
         n_batch = self.config.n_batch
         best_perf = 0
+        tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test)
         for epoch in range(n_epoch):
             epoch_loss = 0
             rand_idx = t.randperm(n_train)
@@ -96,10 +98,16 @@ class TransD(BaseModel):
                 optimizer.step()
                 self.mdl.constraint()
                 epoch_loss += loss.item()
-            logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, epoch_loss / n_train)
+                
+            avg_epoch_loss = epoch_loss / n_train
+            tp_logger.log_loss_reward(epoch, avg_epoch_loss)     
+            logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch,avg_epoch_loss)
             if (epoch + 1) % self.config.epoch_per_test == 0:
-                test_perf = tester()
-                if test_perf > best_perf:
+                mrr, hit10 = tester()
+                tp_logger.log_performance(mrr, hit10)
+                if mrr > best_perf:
                     self.save(os.path.join('models', config().task.dir, self.config.model_file))
-                    best_perf = test_perf
+                    best_perf = mrr
+        if config().log.log_pretrain_graph:
+            tp_logger.create_and_save_figures(log_dir)
         return best_perf

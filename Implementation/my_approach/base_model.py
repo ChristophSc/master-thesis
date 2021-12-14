@@ -39,9 +39,9 @@ class BaseModule(nn.Module):
         probs = self.prob(src, rel, dst)
         n = probs.size(0)
         if torch.cuda.is_available():
-            truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor).cuda(), truth] + 1e-30)
+            truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor).cuda(), truth])   # + 1e-30
         else:
-            truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor), truth] + 1e-30)
+            truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor), truth])   # + 1e-30
         return -truth_probs
 
 
@@ -61,7 +61,9 @@ class BaseModel(object):
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage.cuda()))
         else:
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
-
+            
+    #sampled_instances_random = dict()
+    #sampled_instances_uncertainty = dict()
     def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
         """One learning step of the Generator component in Adversarial Learning Process.
         
@@ -97,7 +99,7 @@ class BaseModel(object):
         # get head and tail of negative triple by sampled index
         sample_srcs = src[row_idx, sample_idx.data.cpu()]
         sample_dsts = dst[row_idx, sample_idx.data.cpu()]        
-        
+                
         rewards = yield sample_srcs, sample_dsts
         if train:
             self.mdl.zero_grad()
@@ -146,7 +148,7 @@ class BaseModel(object):
             self.opt.step()
             self.mdl.constraint()
         return losses.data, -fake_scores.data
-
+    	
     def test_link(self, test_data, n_ent, heads, tails, filt=True):
         mrr_tot = 0
         mr_tot = 0
@@ -173,20 +175,22 @@ class BaseModel(object):
             for s_tensor, r_tensor, t_tensor, dst_scores, src_scores in zip(batch_s, batch_r, batch_t, batch_dst_scores, batch_src_scores):
                 # print(s_tensor, r_tensor, t_tensor, dst_scores, src_scores)
                 s, r, t = s_tensor.item(), r_tensor.item(), t_tensor.item()
+                
+                # filter triples which are already in the training data -> set their score very low
                 if filt:                    
                     if tails[(s, r)]._nnz() > 1:
                         tmp = dst_scores[t]
                         if torch.cuda.is_available():
-                            dst_scores += tails[(s, r)].cuda() #@IgnoreException# * 1e30   # add +1 (+1e30) at indices in stored in tails vector
+                            dst_scores += tails[(s, r)].to_dense().cuda() * -1e30  #@IgnoreException# 
                         else:
-                            dst_scores += tails[(s, r)].to_dense() * 1e30
+                            dst_scores += tails[(s, r)].to_dense() * -1e30
                         dst_scores[t] = tmp
                     if heads[(t, r)]._nnz() > 1:
                         tmp = src_scores[s]
                         if torch.cuda.is_available():
-                            src_scores += heads[(t, r)].cuda() * 1e30
+                            src_scores += heads[(t, r)].to_dense().cuda() * -1e30
                         else:
-                            src_scores += heads[(t, r)].to_dense() * 1e30
+                            src_scores += heads[(t, r)].to_dense() * -1e30
                         src_scores[s] = tmp
                 mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)                
                 mrr_tot += mrr
@@ -201,10 +205,10 @@ class BaseModel(object):
         mr = mr_tot / count
         hit10 = hit10_tot / count
         logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr, mr, hit10)
-        return mrr, hit10
+        return mrr.item(), hit10
     
 
-    def pretrain(self, train_data, corrupter, tester):
+    def pretrain(self, train_data, corrupter, tester, log_dir):
         """ Pretrains model on given training data.
 
         Args:

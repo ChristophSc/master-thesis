@@ -14,10 +14,9 @@ from compl_ex import ComplEx
 
 config()
 overwrite_config_with_args()
-logger_init("pretrain")
+log_dir = logger_init("pretrain")
 if torch.cuda.is_available():
     torch.cuda.set_device(select_gpu())
-
 
 task_dir = config().task.dir
 kb_index = index_ent_rel(os.path.join('data', task_dir, 'train.txt'),
@@ -49,6 +48,9 @@ elif mdl_type == 'DistMult':
 elif mdl_type == 'ComplEx':
     corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, gen_config.n_sample)
     gen = ComplEx(n_ent, n_rel, gen_config)
-gen.pretrain(train_data, corrupter, tester)
+    
+    
+gen.pretrain(train_data, corrupter, tester, log_dir)
 gen.load(os.path.join('models', task_dir, gen_config.model_file))
-gen.test_link(test_data, n_ent, heads, tails)
+logging.info('Best Performance:')
+mrr, hit10 = gen.test_link(test_data, n_ent, heads, tails)

@@ -122,3 +122,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+/implementation/my_approach/pretrained_models
