@@ -35,7 +35,7 @@ class TransEModule(BaseModule):
         emb_tail = self.ent_embed(dst)
         distance = t.norm((emb_head + emb_rel) - emb_tail, p=self.p, dim=-1)
         # d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
-        return  t.sigmoid(distance) # all distances >= 0: apply sigmoid to have valued between 0 and 1
+        return distance # all distances >= 0: apply sigmoid to have valued between 0 and 1
 
     def dist(self, src, rel, dst):
         """Distance between head + rel = tail
