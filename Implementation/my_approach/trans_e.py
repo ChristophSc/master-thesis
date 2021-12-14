@@ -33,9 +33,9 @@ class TransEModule(BaseModule):
         emb_rel = self.rel_embed(rel)
         # (1.3) Real embeddings of tail entities
         emb_tail = self.ent_embed(dst)
-        # distance = t.norm((emb_head + emb_rel) - emb_tail, p=self.p, dim=1)
-        d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
-        return d
+        distance = t.norm((emb_head + emb_rel) - emb_tail, p=self.p, dim=-1)
+        # d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
+        return distance
 
     def dist(self, src, rel, dst):
         """Distance between head + rel = tail
