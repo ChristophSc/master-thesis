@@ -21,10 +21,18 @@ class DistMultModule(BaseModule):
         self.ent_embed.weight.data.div_((config.dim / sigma ** 2) ** (1 / 6))
 
     def forward(self, src, rel, dst):
-        return t.sum(self.ent_embed(dst) * self.ent_embed(src) * self.rel_embed(rel), dim=-1)
+        # (1)
+        # (1.1) Real embeddings of head entities
+        emb_head_real = self.ent_embed(src)
+        # (1.2) Real embeddings of relations
+        emb_rel_real = self.rel_embed(rel)
+         # (1.3) Real embeddings of tails
+        emb_tail_real = self.ent_embed(dst)
+        return t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)    
 
     def score(self, src, rel, dst):
         return -self.forward(src, rel, dst)
+        # return t.sigmoid(self.forward(src, rel, dst))
 
     def dist(self, src, rel, dst):
         return -self.forward(src, rel, dst)
