@@ -12,9 +12,9 @@ def compute_confidence_interval(results):
 
 
 def create_experiment_folder(folder_name='Experiments'):
-    directory = os.getcwd() + '/' + folder_name + '/'
-    folder_name = str(datetime.datetime.now())
-    path_of_folder = directory + folder_name
+    directory = os.path.join(os.getcwd(), folder_name)
+    folder_name = str(datetime.datetime.now().strftime("%m%d%H%M%S"))
+    path_of_folder = os.path.join(directory, folder_name)
     os.makedirs(path_of_folder)
     return path_of_folder, path_of_folder[:path_of_folder.rfind('/')]
 

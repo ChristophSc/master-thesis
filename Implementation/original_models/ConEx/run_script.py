@@ -22,9 +22,9 @@ def start(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', type=str, default='Distmult')
-    parser.add_argument('--num_of_epochs', type=int, default=100)
+    parser.add_argument('--num_of_epochs', type=int, default=10)
     parser.add_argument('--batch_size', type=int, default=512)
-    parser.add_argument('--scoring_technique', default='KvsAll',
+    parser.add_argument('--scoring_technique', default=20,
                         help="KvsAll technique or Negative Sampling. For Negative Sampling, use any positive integer as input parameter")
     parser.add_argument('--label_smoothing', type=float, default=0.1)
     parser.add_argument('--learning_rate', type=float, default=.01)

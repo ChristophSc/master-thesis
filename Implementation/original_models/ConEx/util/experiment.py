@@ -354,7 +354,7 @@ class Experiment:
             if self.decay_rate:
                 self.scheduler.step()
             losses.append(loss_of_epoch)
-        self.logger.info('Loss at {0}.th epoch:{1}'.format(it, loss_of_epoch))
+            self.logger.info('Loss at {0}.th epoch:{1}'.format(it, loss_of_epoch))
         np.savetxt(fname=self.storage_path + "/loss_per_epoch.csv", X=np.array(losses), delimiter=",")
         model.eval()
         return model
@@ -409,7 +409,7 @@ class Experiment:
             if it % printout_it == 0:
                 self.val(model)
 
-        self.logger.info('Loss at {0}.th epoch:{1}'.format(it, loss_of_epoch))
+            self.logger.info('Loss at {0}.th epoch:{1}'.format(it, loss_of_epoch))
         np.savetxt(fname=self.storage_path + "/loss_per_epoch.csv", X=np.array(losses), delimiter=",")
         model.eval()
         return model
