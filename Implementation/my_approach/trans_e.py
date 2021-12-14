@@ -35,7 +35,7 @@ class TransEModule(BaseModule):
         emb_tail = self.ent_embed(dst)
         distance = t.norm((emb_head + emb_rel) - emb_tail, p=self.p, dim=-1)
         # d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
-        return distance # all distances >= 0: apply sigmoid to have valued between 0 and 1
+        return distance
 
     def dist(self, src, rel, dst):
         """Distance between head + rel = tail
@@ -51,8 +51,8 @@ class TransEModule(BaseModule):
         return self.forward(src, rel, dst)
 
     def score(self, src, rel, dst):
-        # If distance is very small , then score is very high, i.e. 1.0
-        # If distance is very large, then score is very small, i.e. 0.0
+        # If distance is very small , then score is very high
+        # If distance is very large, then score is very small
         return self.forward(src, rel, dst)
 
     def prob_logit(self, src, rel, dst):
@@ -94,9 +94,16 @@ class TransE(BaseModel):
                 dst_corrupted = dst_corrupted.cuda()
             for s0, r, t0, s1, t1 in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
                                                   n_sample=n_train):
+                # zero gradients
                 self.mdl.zero_grad()
+                
+                # forward pass
                 loss = t.sum(self.mdl.pair_loss(Variable(s0), Variable(r), Variable(t0), Variable(s1), Variable(t1)))
+                
+                #backward pass
                 loss.backward()
+                
+                # update
                 optimizer.step()
                 self.mdl.constraint()
                 epoch_loss += loss.item()

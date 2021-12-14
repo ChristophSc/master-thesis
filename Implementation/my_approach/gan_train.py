@@ -27,8 +27,9 @@ config()
 overwrite_config_with_args()
 timestamp = datetime.datetime.now().strftime("%m%d%H%M%S")
 log_dir = logger_init("gan_train")
-if torch.cuda.is_available():
-    torch.cuda.set_device(select_gpu())
+device_name = "cuda:" + str(select_gpu()) if torch.cuda.is_available()  else "cpu"
+device = torch.device(device_name)
+    
 dump_config()
 
 task_dir = config().task.dir

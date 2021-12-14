@@ -94,8 +94,7 @@ class DistMult(BaseModel):
                 tp_logger.log_performance(mrr, hit10)
                 if mrr > best_perf:
                     self.save(os.path.join('models', config().task.dir, self.config.model_file))
-                    best_perf = mrr
-                    
+                    best_perf = mrr                    
         if config().log.log_pretrain_graph:
             tp_logger.create_and_save_figures(log_dir)
         return best_perf
