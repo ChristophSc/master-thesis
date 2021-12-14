@@ -179,12 +179,14 @@ class BaseModel(object):
                 # filter triples which are already in the training data -> set their score very low
                 if filt:                    
                     if tails[(s, r)]._nnz() > 1:
+                        #print(dst_scores)
                         tmp = dst_scores[t]
                         if torch.cuda.is_available():
                             dst_scores += tails[(s, r)].to_dense().cuda() * -1e30  #@IgnoreException# 
                         else:
                             dst_scores += tails[(s, r)].to_dense() * -1e30
                         dst_scores[t] = tmp
+                        #print(dst_scores)
                     if heads[(t, r)]._nnz() > 1:
                         tmp = src_scores[s]
                         if torch.cuda.is_available():
@@ -192,10 +194,10 @@ class BaseModel(object):
                         else:
                             src_scores += heads[(t, r)].to_dense() * -1e30
                         src_scores[s] = tmp
-                mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)                
+                mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)               
                 mrr_tot += mrr
                 mr_tot += mr
-                hit10_tot += hit10
+                hit10_tot += hit10                
                 mrr, mr, hit10 = mrr_mr_hitk(src_scores, s)
                 mrr_tot += mrr
                 mr_tot += mr

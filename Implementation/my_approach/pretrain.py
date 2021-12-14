@@ -5,7 +5,7 @@ from corrupter import BernCorrupter, BernCorrupterMulti
 from read_data import index_ent_rel, graph_size, read_data
 from config import config, overwrite_config_with_args
 from logger_init import logger_init
-from data_utils import inplace_shuffle, heads_tails
+from data_utils import inplace_shuffle, filter_heads_tails
 from select_gpu import select_gpu
 from trans_e import TransE
 from trans_d import TransD
@@ -28,10 +28,10 @@ train_data = read_data(os.path.join('data',task_dir, 'train.txt'), kb_index)
 inplace_shuffle(*train_data)
 valid_data = read_data(os.path.join('data',task_dir, 'valid.txt'), kb_index)
 test_data = read_data(os.path.join('data',task_dir, 'test.txt'), kb_index)
-heads, tails = heads_tails(n_ent, train_data, valid_data, test_data)
+heads_filt, tails_filt = filter_heads_tails(n_ent, train_data, valid_data, test_data)
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
-tester = lambda: gen.test_link(valid_data, n_ent, heads, tails)
+tester = lambda: gen.test_link(valid_data, n_ent, heads_filt, tails_filt)
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
 mdl_type = config().pretrain_config
@@ -53,4 +53,4 @@ elif mdl_type == 'ComplEx':
 gen.pretrain(train_data, corrupter, tester, log_dir)
 gen.load(os.path.join('models', task_dir, gen_config.model_file))
 logging.info('Best Performance:')
-mrr, hit10 = gen.test_link(test_data, n_ent, heads, tails)
+mrr, hit10 = gen.test_link(test_data, n_ent, heads_filt, tails_filt)

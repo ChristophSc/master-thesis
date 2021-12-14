@@ -1,7 +1,7 @@
 import os
 import torch
 from read_data import index_ent_rel, graph_size, read_data
-from data_utils import inplace_shuffle, heads_tails
+from data_utils import inplace_shuffle, filter_heads_tails
 
 task_dirs = ['umls', 'kinship', 'fb15k237', 'wn18', 'wn18rr']
 for task_dir in task_dirs:  
@@ -19,9 +19,9 @@ for task_dir in task_dirs:
   test_data = read_data(os.path.join('data',task_dir, 'test.txt'), kb_index)
   print('test:', len(test_data[0]))
   
-  heads, tails = heads_tails(n_ent, train_data, valid_data, test_data)
-  print('#heads:', len(heads))
-  print('#tails:', len(tails))
+  heads_filt, tails_filt = filter_heads_tails(n_ent, train_data, valid_data, test_data)
+  print('#heads:', len(heads_filt))
+  print('#tails:', len(tails_filt))
   print('')
   
 

@@ -2,7 +2,7 @@ from random import randint
 from collections import defaultdict
 import torch
 
-def heads_tails(n_ent, train_data, valid_data=None, test_data=None):
+def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
     train_src, train_rel, train_dst = train_data
     if valid_data:
         valid_src, valid_rel, valid_dst = valid_data

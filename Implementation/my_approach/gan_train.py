@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from random import sample, random
 from config import config, overwrite_config_with_args, dump_config
 from read_data import index_ent_rel, graph_size, read_data
-from data_utils import heads_tails, inplace_shuffle, batch_by_num
+from data_utils import filter_heads_tails, inplace_shuffle, batch_by_num
 from config_utils import load_sampler
 from trans_e import TransE
 from trans_d import TransD
@@ -52,13 +52,13 @@ train_data = read_data(os.path.join('data', task_dir, 'train.txt'), kb_index)
 inplace_shuffle(*train_data)
 valid_data = read_data(os.path.join('data', task_dir, 'valid.txt'), kb_index)
 test_data = read_data(os.path.join('data', task_dir, 'test.txt'), kb_index)
-filt_heads, filt_tails = heads_tails(n_ent, train_data, valid_data, test_data)
+heads_filt, tails_filt = filter_heads_tails(n_ent, train_data, valid_data, test_data)
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
 # test link prediction of discriminator model with pretrained model only (not adverarial training)
-dis.test_link(test_data, n_ent, filt_heads, filt_tails)
+dis.test_link(test_data, n_ent, heads_filt, tails_filt)
 
 # load Corrupter which creates set of negatives (Neg) from positive triples in KG
 corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, config().adv.n_sample)
@@ -97,7 +97,7 @@ for epoch in range(n_epoch):
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
     if (epoch + 1) % config().adv.epoch_per_test == 0:
         #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
-        mrr, hit10 = dis.test_link(valid_data, n_ent, filt_heads, filt_tails)
+        mrr, hit10 = dis.test_link(valid_data, n_ent, heads_filt, tails_filt)
         tp_logger.log_performance(mrr, hit10)
         if mrr > best_mrr:
             best_mrr = mrr
@@ -108,4 +108,4 @@ if config().log.log_pretrain_graph:
 
 dis.load(os.path.join('models', config().task.dir, mdl_name))
 logging.info('Best Performance:')
-dis.test_link(test_data, n_ent, filt_heads, filt_tails)
+dis.test_link(test_data, n_ent, heads_filt, tails_filt)
