@@ -17,18 +17,12 @@ class UncertaintySampler(BaseSampler):
     # probs: torch.Size([52, 20])
     # 52 = batch size
     # 20 = size of negative set Neg
-    for probs in batch_probs:
-      # sum(probs) is always 1 
-      # len(probs) = 20 = number of negatives in Neg
-      entropies = []
-      for prob in probs:        
-        ent = - (prob * torch.log(prob)) - ((1 - prob) * torch.log(1 - prob)) 
-        entropies.append(ent)
-      batch_entropies.append(entropies)
-    batch_entropies = torch.Tensor(batch_entropies)
+    
+    batch_entropies = - (batch_probs * torch.log(batch_probs)) - ((1 - batch_probs) * torch.log(1 - batch_probs)) 
+
     # get the maximum    
     max = torch.max(batch_entropies, 1) 
-      
+    
     # RandomSampling would sample the following:
     sample_idx_random = torch.multinomial(args[0], n_sample, replacement=True)
 
