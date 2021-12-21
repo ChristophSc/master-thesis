@@ -278,7 +278,7 @@ class BaseModel(object):
             tail_val = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent)) #.cuda())
             rela_val = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent)) #.cuda())
             all_val = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent).type(torch.LongTensor)) #.cuda())
-            batch_head_scores = self.model.score(all_val, tail_val, rela_val).data
+            batch_head_scores = self.model.score(all_val, tail_val, rel a_val).data
             batch_tail_scores = self.model.score(head_val, all_val, rela_val).data
             # for each positive, compute its head scores and tail scores
             for h, t, r, head_score, tail_score in zip(batch_h, batch_t, batch_r, batch_head_scores, batch_tail_scores):

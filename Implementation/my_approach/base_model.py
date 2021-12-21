@@ -15,28 +15,28 @@ class BaseModule(nn.Module):
     def __init__(self):
         super(BaseModule, self).__init__()
 
-    def score(self, src, rel, dst):
+    def score(self, head, rel, tail):
         raise NotImplementedError
 
-    def dist(self, src, rel, dst):
+    def dist(self, head, rel, tail):
         raise NotImplementedError
 
-    def prob_logit(self, src, rel, dst):
+    def prob_logit(self, head, rel, tail):
         raise NotImplementedError
 
     def constraint(self):
         pass
     
-    def prob(self, src, rel, dst):
-        return nnf.softmax(self.prob_logit(src, rel, dst),  dim=1)
+    def prob(self, head, rel, tail):
+        return nnf.softmax(self.prob_logit(head, rel, tail),  dim=1)
 
-    def pair_loss(self, src, rel, dst, src_bad, dst_bad):
-        d_good = self.dist(src, rel, dst)
-        d_bad = self.dist(src_bad, rel, dst_bad)
-        return nnf.relu(self.margin + d_good - d_bad)
+    def pair_loss(self, head, rel, tail, head_corr, tail_corr):
+        score_pos = self.score(head, rel, tail)
+        score_neg = self.score(head_corr, rel, tail_corr)
+        return nnf.relu(self.margin + score_pos - score_neg)
 
-    def softmax_loss(self, src, rel, dst, truth):
-        probs = self.prob(src, rel, dst)
+    def softmax_loss(self, head, rel, tail, truth):
+        probs = self.prob(head, rel, tail)
         n = probs.size(0)
         if torch.cuda.is_available():
             truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor).cuda(), truth])   # + 1e-30
@@ -179,19 +179,23 @@ class BaseModel(object):
                     all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
                                 .type(torch.LongTensor).cuda())
             else:
-                rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent))
-                head_var = Variable(batch_h.unsqueeze(1).expand(batch_size, n_ent))
+                rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent))  
+                head_var = Variable(batch_h.unsqueeze(1).expand(batch_size, n_ent)) 
                 tail_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent))
                 with torch.no_grad():
                     all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
-                                .type(torch.LongTensor))              
-                    
+                                .type(torch.LongTensor))    #  .cuda())          
+                   
+            # Scoring functions measure the plausibility of triplets in knowledge graph (KG), 
+            # high scores = high probability to be in the KG
             batch_head_scores = self.mdl.score(all_var, rel_var, tail_var).data
             batch_tail_scores = self.mdl.score(head_var, rel_var, all_var).data   
             
             # compute head andn tail scores for each positive  
             for h_tensor, r_tensor, t_tensor, head_scores, tail_scores in zip(batch_h, batch_r, batch_t, batch_head_scores, batch_tail_scores):
                 # src_scores/dst_scores: scores for predicted heads/tails
+                
+                # indices of head, relation and tail in the KG
                 h = int(h_tensor.data.cpu().numpy())
                 r = int(r_tensor.data.cpu().numpy())
                 t = int(t_tensor.data.cpu().numpy())
@@ -204,16 +208,18 @@ class BaseModel(object):
                     # to_dense(): creates dense tensor with 0s and 1s                    
                     if tails[(h, r)]._nnz() > 1:    # nnz = number of non zeroes => there are tails t which are connected to head h and tail t in triple (h,r,t) in KG
                         #print(tail_scores)
-                        tmp = tail_scores[t].data.cpu().numpy()
+                        tmp = tail_scores[t].item()   # save score for current predicted
                         idx = tails[(h, r)]._indices()
-                        tail_scores[idx] = 0.0
-                        tail_scores[t] = torch.from_numpy(tmp)#.cuda()
+                         # since we know all other triples (including tails) and that they exist in the KG, we can set score very high such that they are not
+                        tail_scores[idx] = 1e20 
+                        # reset score of current triple
+                        tail_scores[t] = tmp
                         #print(tail_scores)
                     if heads[(t, r)]._nnz() > 1:
-                        tmp = head_scores[h].data.cpu().numpy()
+                        tmp = head_scores[h].item()
                         idx = heads[(t, r)]._indices()
-                        head_scores[idx] = 0.0
-                        head_scores[h] = torch.from_numpy(tmp)#.cuda()
+                        head_scores[idx] = 1e20  # since we know all other triples (including heads) and that they exist in the KG, we can set score very high
+                        head_scores[h] = tmp
                 mrr, mr, hits = mrr_mr_hitk(tail_scores, t)               
                 mrr_tot += mrr
                 mr_tot += mr
@@ -223,7 +229,7 @@ class BaseModel(object):
                 mr_tot += mr
                 hits_tot += hits
                 count += 2
-        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f, Count=%d', float(mrr_tot)/count, float(mr_tot)/count, hits_tot[2]/count, count)
+        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', float(mrr_tot)/count, float(mr_tot)/count, hits_tot[2]/count)
         return mrr, hits
     
 

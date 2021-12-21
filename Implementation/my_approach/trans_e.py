@@ -26,11 +26,6 @@ class TransEModule(BaseModule):
             param.data.renorm_(2, 0, 1)
 
     def forward(self, head, rel, tail):
-        shape = head.size()
-        head_embed = f.normalize(self.ent_embed(head), 2,-1)
-        tail_embed = f.normalize(self.ent_embed(tail),2,-1)
-        rela_embed = self.rel_embed(rel)
-        x = t.norm(tail_embed - head_embed - rela_embed, p=self.p, dim=-1).view(shape)
         # (1)
         # (1.1) Real embeddings of head entities
         emb_head = self.ent_embed(head)
@@ -41,31 +36,18 @@ class TransEModule(BaseModule):
         # distance = || h + r - t||
         # => higher distance = smaller score because estimated likelihood of the triple to be true
         score = t.norm((-1)*((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
-        # d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)        
+        # d = t.norm(self.ent_embed(tail) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)        
         # distance is always > 0
         return score
-
-    def dist(self, src, rel, dst):
-        """Distance between head + rel = tail
-
-        Args:
-            src (torch.tensor): head entities
-            rel (torch.tensor): relations
-            dst (torch.tensor): tail entities
-
-        Returns:
-            real value > 0: distance head + rel = tail
-            """
-        return -self.forward(src, rel, dst)
 
     def score(self, head, rel, tail):
         score = self.forward(head, rel, tail)   # TODO: replace by parameter gamma from config
         # If distance is very small , then score is very high i.e. 1.0
         # If distance is very large, then score is very small i.e. 0.0
-        return t.sigmoid(score)
+        return score
 
-    def prob_logit(self, src, rel, dst):
-        return -self.forward(src, rel ,dst) / self.temp
+    def prob_logit(self, head, rel, tail):
+        return -self.forward(head, rel,  tail) / self.temp
 
     def constraint(self):
         self.ent_embed.weight.data.renorm_(2, 0, 1)
@@ -80,8 +62,8 @@ class TransE(BaseModel):
         self.config = config
 
     def pretrain(self, train_data, corrupter, tester, log_dir):
-        src, rel, dst = train_data
-        n_train = len(src)
+        head, rel, tail = train_data
+        n_train = len(head)
         optimizer = Adam(self.mdl.parameters())
         #optimizer = SGD(self.mdl.parameters(), lr=1e-4)
         n_epoch = self.config.n_epoch
@@ -91,23 +73,26 @@ class TransE(BaseModel):
         for epoch in range(n_epoch):
             epoch_loss = 0
             rand_idx = t.randperm(n_train)
-            head = src[rand_idx]
+            head = head[rand_idx]
             rel = rel[rand_idx]
-            dst = dst[rand_idx]
-            src_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
+            tail = tail[rand_idx]
+            head_corrupted, tail_corrupted = corrupter.corrupt(head, rel, tail)
             if t.cuda.is_available():
-                src = src.cuda()
+                head = head.cuda()
                 rel = rel.cuda()
-                dst = dst.cuda()
-                src_corrupted = src_corrupted.cuda()
-                dst_corrupted = dst_corrupted.cuda()
-            for s0, r, t0, s1, t1 in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
+                tail = tail.cuda()
+                head_corrupted = head_corrupted.cuda()
+                tail_corrupted = tail_corrupted.cuda()
+            for h0, r, t0, h_corr, t_corr in batch_by_num(n_batch, head, rel, tail, head_corrupted, tail_corrupted,
                                                   n_sample=n_train):
+                # h0, t0 = original head/tail from positive triple
+                # h_corr, t_corr = corrupted head/tail for negative triple
+                
                 # zero gradients
                 self.mdl.zero_grad()
                 
                 # forward pass
-                loss = t.sum(self.mdl.pair_loss(Variable(s0), Variable(r), Variable(t0), Variable(s1), Variable(t1)))
+                loss = t.sum(self.mdl.pair_loss(Variable(h0), Variable(r), Variable(t0), Variable(h_corr), Variable(t_corr)))
                 
                 #backward pass
                 loss.backward()
