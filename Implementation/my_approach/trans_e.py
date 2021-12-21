@@ -25,17 +25,25 @@ class TransEModule(BaseModule):
             param.data.normal_(1 / param.size(1) ** 0.5)
             param.data.renorm_(2, 0, 1)
 
-    def forward(self, src, rel, dst):
+    def forward(self, head, rel, tail):
+        shape = head.size()
+        head_embed = f.normalize(self.ent_embed(head), 2,-1)
+        tail_embed = f.normalize(self.ent_embed(tail),2,-1)
+        rela_embed = self.rel_embed(rel)
+        x = t.norm(tail_embed - head_embed - rela_embed, p=self.p, dim=-1).view(shape)
         # (1)
         # (1.1) Real embeddings of head entities
-        emb_head = self.ent_embed(src)
+        emb_head = self.ent_embed(head)
         # (1.2) Real embeddings of relations
         emb_rel = self.rel_embed(rel)
         # (1.3) Real embeddings of tail entities
-        emb_tail = self.ent_embed(dst)
-        distance = t.norm((emb_head + emb_rel) - emb_tail, p=self.p, dim=-1)
-        # d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)
-        return distance
+        emb_tail = self.ent_embed(tail)
+        # distance = || h + r - t||
+        # => higher distance = smaller score because estimated likelihood of the triple to be true
+        score = t.norm((-1)*((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
+        # d = t.norm(self.ent_embed(dst) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)        
+        # distance is always > 0
+        return score
 
     def dist(self, src, rel, dst):
         """Distance between head + rel = tail
@@ -48,12 +56,13 @@ class TransEModule(BaseModule):
         Returns:
             real value > 0: distance head + rel = tail
             """
-        return self.forward(src, rel, dst)
+        return -self.forward(src, rel, dst)
 
-    def score(self, src, rel, dst):
-        # If distance is very small , then score is very high
-        # If distance is very large, then score is very small
-        return self.forward(src, rel, dst)
+    def score(self, head, rel, tail):
+        score = self.forward(head, rel, tail)   # TODO: replace by parameter gamma from config
+        # If distance is very small , then score is very high i.e. 1.0
+        # If distance is very large, then score is very small i.e. 0.0
+        return t.sigmoid(score)
 
     def prob_logit(self, src, rel, dst):
         return -self.forward(src, rel ,dst) / self.temp
@@ -82,7 +91,7 @@ class TransE(BaseModel):
         for epoch in range(n_epoch):
             epoch_loss = 0
             rand_idx = t.randperm(n_train)
-            src = src[rand_idx]
+            head = src[rand_idx]
             rel = rel[rand_idx]
             dst = dst[rand_idx]
             src_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)

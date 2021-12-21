@@ -149,65 +149,82 @@ class BaseModel(object):
             self.mdl.constraint()
         return losses.data, -fake_scores.data
     	
+     
     def test_link(self, test_data, n_ent, heads, tails, filt=True):
+        """Evaluation Method to compare model results by link prediction tasks.  
+        Returns Mean Retriprocal Rank (MMR) and Hit@10 
+
+        Args:
+            test_data (torch.tensor): training/validation data which is used for link prediction task.  
+            n_ent (int): Number of entities  
+            heads (dict with torch.tensor values): set of head entities  
+            tails (dict with torch.tensor values): Set of tail entities  
+            filt (bool, optional): Filters head and tail entities which are already in training data. Defaults to True.  
+
+        Returns:
+            (float, float): MRR, Hit@10
+        """
         mrr_tot = 0
         mr_tot = 0
-        hit10_tot = 0
+        hits_tot = 0
         count = 0
-        for batch_s, batch_r, batch_t in batch_by_size(config().test_batch_size, *test_data):         
-            batch_size = batch_s.size(0)
+        for batch_h, batch_r, batch_t in batch_by_size(config().test_batch_size, *test_data):         
+            batch_size = batch_h.size(0)
             if torch.cuda.is_available():
+                head_var = Variable(batch_h.unsqueeze(1).expand(batch_size, n_ent).cuda())
                 rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent).cuda())
-                src_var = Variable(batch_s.unsqueeze(1).expand(batch_size, n_ent).cuda())
-                dst_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent).cuda())
+                
+                tail_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent).cuda())
                 with torch.no_grad():
                     all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
                                 .type(torch.LongTensor).cuda())
             else:
                 rel_var = Variable(batch_r.unsqueeze(1).expand(batch_size, n_ent))
-                src_var = Variable(batch_s.unsqueeze(1).expand(batch_size, n_ent))
-                dst_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent))
+                head_var = Variable(batch_h.unsqueeze(1).expand(batch_size, n_ent))
+                tail_var = Variable(batch_t.unsqueeze(1).expand(batch_size, n_ent))
                 with torch.no_grad():
                     all_var = Variable(torch.arange(0, n_ent).unsqueeze(0).expand(batch_size, n_ent)
-                                .type(torch.LongTensor))           
-            batch_dst_scores = self.mdl.score(src_var, rel_var, all_var).data
-            batch_src_scores = self.mdl.score(all_var, rel_var, dst_var).data      
-            for s_tensor, r_tensor, t_tensor, dst_scores, src_scores in zip(batch_s, batch_r, batch_t, batch_dst_scores, batch_src_scores):
-                # print(s_tensor, r_tensor, t_tensor, dst_scores, src_scores)
-                s, r, t = s_tensor.item(), r_tensor.item(), t_tensor.item()
+                                .type(torch.LongTensor))              
+                    
+            batch_head_scores = self.mdl.score(all_var, rel_var, tail_var).data
+            batch_tail_scores = self.mdl.score(head_var, rel_var, all_var).data   
+            
+            # compute head andn tail scores for each positive  
+            for h_tensor, r_tensor, t_tensor, head_scores, tail_scores in zip(batch_h, batch_r, batch_t, batch_head_scores, batch_tail_scores):
+                # src_scores/dst_scores: scores for predicted heads/tails
+                h = int(h_tensor.data.cpu().numpy())
+                r = int(r_tensor.data.cpu().numpy())
+                t = int(t_tensor.data.cpu().numpy())
                 
                 # filter triples which are already in the training data -> set their score very low
-                if filt:                    
-                    if tails[(s, r)]._nnz() > 1:
-                        #print(dst_scores)
-                        tmp = dst_scores[t]
-                        if torch.cuda.is_available():
-                            dst_scores += tails[(s, r)].to_dense().cuda() * -1e30  #@IgnoreException# 
-                        else:
-                            dst_scores += tails[(s, r)].to_dense() * -1e30
-                        dst_scores[t] = tmp
-                        #print(dst_scores)
+                if filt:      
+                    # (h, r): key h=head, r=relation
+                    # tails: dict indicates which tails t are connected with current (h,r) in ther KG
+                    # -> spare tensor, only indices with value != 0 and their value is stored, here only binary \in {0,1} 0 = no connection, 1 = connection
+                    # to_dense(): creates dense tensor with 0s and 1s                    
+                    if tails[(h, r)]._nnz() > 1:    # nnz = number of non zeroes => there are tails t which are connected to head h and tail t in triple (h,r,t) in KG
+                        #print(tail_scores)
+                        tmp = tail_scores[t].data.cpu().numpy()
+                        idx = tails[(h, r)]._indices()
+                        tail_scores[idx] = 0.0
+                        tail_scores[t] = torch.from_numpy(tmp)#.cuda()
+                        #print(tail_scores)
                     if heads[(t, r)]._nnz() > 1:
-                        tmp = src_scores[s]
-                        if torch.cuda.is_available():
-                            src_scores += heads[(t, r)].to_dense().cuda() * -1e30
-                        else:
-                            src_scores += heads[(t, r)].to_dense() * -1e30
-                        src_scores[s] = tmp
-                mrr, mr, hit10 = mrr_mr_hitk(dst_scores, t)               
+                        tmp = head_scores[h].data.cpu().numpy()
+                        idx = heads[(t, r)]._indices()
+                        head_scores[idx] = 0.0
+                        head_scores[h] = torch.from_numpy(tmp)#.cuda()
+                mrr, mr, hits = mrr_mr_hitk(tail_scores, t)               
                 mrr_tot += mrr
                 mr_tot += mr
-                hit10_tot += hit10                
-                mrr, mr, hit10 = mrr_mr_hitk(src_scores, s)
+                hits_tot += hits                
+                mrr, mr, hits = mrr_mr_hitk(head_scores, h)
                 mrr_tot += mrr
                 mr_tot += mr
-                hit10_tot += hit10
+                hits_tot += hits
                 count += 2
-        mrr =mrr_tot / count
-        mr = mr_tot / count
-        hit10 = hit10_tot / count
-        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr, mr, hit10)
-        return mrr.item(), hit10
+        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f, Count=%d', float(mrr_tot)/count, float(mr_tot)/count, hits_tot[2]/count, count)
+        return mrr, hits
     
 
     def pretrain(self, train_data, corrupter, tester, log_dir):

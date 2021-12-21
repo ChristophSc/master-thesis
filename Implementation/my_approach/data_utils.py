@@ -3,6 +3,17 @@ from collections import defaultdict
 import torch
 
 def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
+    """creates filtered set of heads and tails:  
+
+    Args:
+        n_ent ([type]): [description]
+        train_data ([type]): [description]
+        valid_data ([type], optional): [description]. Defaults to None.
+        test_data ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
     train_src, train_rel, train_dst = train_data
     if valid_data:
         valid_src, valid_rel, valid_dst = valid_data

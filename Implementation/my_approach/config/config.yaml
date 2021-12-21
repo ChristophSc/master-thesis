@@ -48,9 +48,9 @@ ComplEx:
   model_file: complex.mdl
 log:
   dump_config: false
-  log_train: true
-  log_config: true
+  log_train: false
+  log_config: false
   dir: ./logs
-  log_advtrain_graphs: true
-  log_pretrain_graph: true
+  log_advtrain_graphs: false
+  log_pretrain_graph: false
   graph_every_nth_epoch: 10
