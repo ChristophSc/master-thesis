@@ -32,7 +32,6 @@ class DistMultModule(BaseModule):
 
     def score(self, src, rel, dst):
         return -self.forward(src, rel, dst)
-        # return t.sigmoid(self.forward(src, rel, dst))
 
     def dist(self, src, rel, dst):
         return -self.forward(src, rel, dst)

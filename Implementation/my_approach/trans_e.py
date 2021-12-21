@@ -35,7 +35,7 @@ class TransEModule(BaseModule):
         emb_tail = self.ent_embed(tail)
         # distance = || h + r - t||
         # => higher distance = smaller score because estimated likelihood of the triple to be true
-        score = t.norm((-1)*((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
+        score = t.norm( ((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
         # d = t.norm(self.ent_embed(tail) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)        
         # distance is always > 0
         return score

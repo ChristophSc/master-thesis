@@ -64,43 +64,43 @@ class BaseModel(object):
             
     #sampled_instances_random = dict()
     #sampled_instances_uncertainty = dict()
-    def gen_step(self, src, rel, dst, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
+    def gen_step(self, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
         """One learning step of the Generator component in Adversarial Learning Process.
         
 
         Args:
-            src (torch.tensor): corrupted head entities from Neg (from negative triple)
+            head (torch.tensor): corrupted head entities from Neg (from negative triple)
             rel (torch.tensor): relations
-            dst (torch.tensor): corrupted tail entities from Neg (from negative triple)
+            tail (torch.tensor): corrupted tail entities from Neg (from negative triple)
             n_sample (int, optional): Number of negatives to be sampled from Neg. Defaults to 1.
             temperature (float, optional): dividant of the logits. Defaults to 1.0.
             train (bool, optional): train the Generator?. Defaults to True.
             sampler (BaseSampler, optional): Sampler which samples negative triples from set Neg. Defaults to UncertaintySampler().
 
         Yields:
-            sample_srcs, sample_dsts (torch.tensor, torch.tensor): sampled negative heads and tails
+            sample_heads, sample_tails (torch.tensor, torch.tensor): sampled negative heads and tails
         """
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
-        n, m = dst.size() # dst.size() same as src.size and rel.size()
+        n, m = tail.size() # tail.size() same as head.size and rel.size()
         if torch.cuda.is_available():
-            rel = rel.cuda()
-            src = src.cuda()
-            dst = dst.cuda()
-        rel_var = Variable(rel)
-        src_var = Variable(src)
-        dst_var = Variable(dst)
+            head = head.cuda()
+            rel = rel.cuda()           
+            tail = tail.cuda()
+        head_var = Variable(head)
+        rel_var = Variable(rel)        
+        tail_var = Variable(tail)
 
-        logits = self.mdl.prob_logit(src_var, rel_var, dst_var) / temperature
+        logits = self.mdl.prob_logit(head_var, rel_var, tail_var) / temperature
         probs = nnf.softmax(logits, dim=1)
         # call sampler to retrieve n_sample from negative triple set Neg
-        row_idx, sample_idx = sampler.sample(src, rel, dst, n_sample, probs)
+        row_idx, sample_idx = sampler.sample(head, rel, tail, n_sample, probs)
     
         # get head and tail of negative triple by sampled index
-        sample_srcs = src[row_idx, sample_idx.data.cpu()]
-        sample_dsts = dst[row_idx, sample_idx.data.cpu()]        
+        sample_heads = head[row_idx, sample_idx.data.cpu()]
+        sample_tails = tail[row_idx, sample_idx.data.cpu()]        
                 
-        rewards = yield sample_srcs, sample_dsts
+        rewards = yield sample_heads, sample_tails
         if train:
             self.mdl.zero_grad()
             log_probs = nnf.log_softmax(logits, dim=1)
@@ -112,15 +112,15 @@ class BaseModel(object):
             self.mdl.constraint()
         yield None
 
-    def dis_step(self, src, rel, dst, src_fake, dst_fake, train=True):
+    def dis_step(self, head, rel, tail, head_fake, tail_fake, train=True):
         """One learning step of the Discriminator component in Adversarial Learning Process.
 
         Args:
-            src (torch.tensor): original head entities from KG (positive triples)
+            head (torch.tensor): original head entities from KG (positive triples)
             rel (torch.tensor): original relations from KG
-            dst (torch.tensor): original tail entities from KG (positive triples)
-            src_fake (torch.tensor): corrupted head entities sampled from Neg (negative triples)
-            dst_fake (torch.tensor): corrupted tail entities sampled from Neg (negative triples)
+            tail (torch.tensor): original tail entities from KG (positive triples)
+            head_fake (torch.tensor): corrupted head entities sampled from Neg (negative triples)
+            tail_fake (torch.tensor): corrupted tail entities sampled from Neg (negative triples)
             train (bool, optional): Train the Discriminator. Defaults to True.
 
         Returns:
@@ -130,18 +130,18 @@ class BaseModel(object):
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         if torch.cuda.is_available():
-            src = src.cuda()
+            head = head.cuda()
             rel = rel.cuda()
-            dst = dst.cuda()
-            src_fake = src_fake.cuda()
-            dst_fake = dst_fake.cuda()
-        src_var = Variable(src)
+            tail = tail.cuda()
+            head_fake = head_fake.cuda()
+            tail_fake = tail_fake.cuda()
+        head_var = Variable(head)
         rel_var = Variable(rel)
-        dst_var = Variable(dst)
-        src_fake_var = Variable(src_fake)
-        dst_fake_var = Variable(dst_fake)
-        losses = self.mdl.pair_loss(src_var, rel_var, dst_var, src_fake_var, dst_fake_var)
-        fake_scores = self.mdl.score(src_fake_var, rel_var, dst_fake_var)
+        tail_var = Variable(tail)
+        head_fake_var = Variable(head_fake)
+        tail_fake_var = Variable(tail_fake)
+        losses = self.mdl.pair_loss(head_var, rel_var, tail_var, head_fake_var, tail_fake_var)
+        fake_scores = self.mdl.score(head_fake_var, rel_var, tail_fake_var)
         if train:
             self.mdl.zero_grad()
             torch.sum(losses).backward()
@@ -193,7 +193,7 @@ class BaseModel(object):
             
             # compute head andn tail scores for each positive  
             for h_tensor, r_tensor, t_tensor, head_scores, tail_scores in zip(batch_h, batch_r, batch_t, batch_head_scores, batch_tail_scores):
-                # src_scores/dst_scores: scores for predicted heads/tails
+                # head_scores/tail_scores: scores for predicted heads/tails
                 
                 # indices of head, relation and tail in the KG
                 h = int(h_tensor.data.cpu().numpy())
