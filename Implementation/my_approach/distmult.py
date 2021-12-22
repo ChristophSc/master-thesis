@@ -20,24 +20,24 @@ class DistMultModule(BaseModule):
         self.ent_embed = nn.Embedding(n_ent, config.dim)
         self.ent_embed.weight.data.div_((config.dim / sigma ** 2) ** (1 / 6))
 
-    def forward(self, src, rel, dst):
+    def forward(self, head, rel, tail):
         # (1)
         # (1.1) Real embeddings of head entities
-        emb_head_real = self.ent_embed(src)
+        emb_head_real = self.ent_embed(head)
         # (1.2) Real embeddings of relations
         emb_rel_real = self.rel_embed(rel)
          # (1.3) Real embeddings of tails
-        emb_tail_real = self.ent_embed(dst)
+        emb_tail_real = self.ent_embed(tail)
         return t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)    
 
-    def score(self, src, rel, dst):
-        return -self.forward(src, rel, dst)
+    def score(self, head, rel, tail):
+        return -self.forward(head, rel, tail)
 
-    def dist(self, src, rel, dst):
-        return -self.forward(src, rel, dst)
+    def dist(self, head, rel, tail):
+        return -self.forward(head, rel, tail)
 
-    def prob_logit(self, src, rel, dst):
-        return self.forward(src, rel, dst)
+    def prob_logit(self, head, rel, tail):
+        return self.forward(head, rel, tail)
 
 class DistMult(BaseModel):
     def __init__(self, n_ent, n_rel, config):
@@ -49,8 +49,8 @@ class DistMult(BaseModel):
         self.weight_decay = config.lam / config.n_batch
 
     def pretrain(self, train_data, corrupter, tester, log_dir = None):
-        src, rel, dst = train_data
-        n_train = len(src)
+        head, rel, tail = train_data
+        n_train = len(head)
         n_epoch = self.config.n_epoch
         n_batch = self.config.n_batch
         optimizer = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
@@ -60,15 +60,15 @@ class DistMult(BaseModel):
             epoch_loss = 0
             if epoch % self.config.sample_freq == 0:
                 rand_idx = t.randperm(n_train)
-                src = src[rand_idx]
+                head = head[rand_idx]
                 rel = rel[rand_idx]
-                dst = dst[rand_idx]
-                src_corrupted, rel_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
+                tail = tail[rand_idx]
+                head_corrupted, rel_corrupted, tail_corrupted = corrupter.corrupt(head, rel, tail)
                 if t.cuda.is_available():
-                    src_corrupted = src_corrupted.cuda()
+                    head_corrupted = head_corrupted.cuda()
                     rel_corrupted = rel_corrupted.cuda()
-                    dst_corrupted = dst_corrupted.cuda()
-            for ss, rs, ts in batch_by_num(n_batch, src_corrupted, rel_corrupted, dst_corrupted, n_sample=n_train):
+                    tail_corrupted = tail_corrupted.cuda()
+            for ss, rs, ts in batch_by_num(n_batch, head_corrupted, rel_corrupted, tail_corrupted, n_sample=n_train):
                 # zero gradients
                 self.mdl.zero_grad()
                 if t.cuda.is_available():
