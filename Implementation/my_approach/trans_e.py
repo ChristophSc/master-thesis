@@ -34,10 +34,9 @@ class TransEModule(BaseModule):
         # (1.3) Real embeddings of tail entities
         emb_tail = self.ent_embed(tail)
         # distance = || h + r - t||
-        # => higher distance = smaller score because estimated likelihood of the triple to be true
-        score = t.norm((-1)* ((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
-        # d = t.norm(self.ent_embed(tail) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)        
-        # distance is always > 0
+        # => higher distance = smaller score because estimated likelihood of the triple to be true  
+        distance = (emb_head + emb_rel) - emb_tail
+        score = t.norm((-1)*distance, p=self.p, dim=-1)
         return score
 
     def score(self, head, rel, tail):

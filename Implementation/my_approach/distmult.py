@@ -28,12 +28,10 @@ class DistMultModule(BaseModule):
         emb_rel_real = self.rel_embed(rel)
          # (1.3) Real embeddings of tails
         emb_tail_real = self.ent_embed(tail)
-        return t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)    
+        score = t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)
+        return score  
 
     def score(self, head, rel, tail):
-        return -self.forward(head, rel, tail)
-
-    def dist(self, head, rel, tail):
         return -self.forward(head, rel, tail)
 
     def prob_logit(self, head, rel, tail):
