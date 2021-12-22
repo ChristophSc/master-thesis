@@ -103,8 +103,8 @@ class TransD(BaseModel):
             tp_logger.log_loss_reward(epoch, avg_epoch_loss)     
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch,avg_epoch_loss)
             if (epoch + 1) % self.config.epoch_per_test == 0:
-                mrr, hit10 = tester()
-                tp_logger.log_performance(mrr, hit10)
+                mrr, hits = tester()
+                tp_logger.log_performance(mrr, hits)
                 if mrr > best_perf:
                     self.save(os.path.join('models', config().task.dir, self.config.model_file))
                     best_perf = mrr

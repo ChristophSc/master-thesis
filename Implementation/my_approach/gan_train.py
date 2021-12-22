@@ -99,8 +99,8 @@ for epoch in range(n_epoch):
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
     if (epoch + 1) % config().adv.epoch_per_test == 0:
         #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
-        mrr, hit10 = dis.test_link(valid_data, n_ent, heads_filt, tails_filt)
-        tp_logger.log_performance(mrr, hit10)
+        mrr, hits = dis.test_link(valid_data, n_ent, heads_filt, tails_filt)
+        tp_logger.log_performance(mrr, hits)
         if mrr > best_mrr:
             best_mrr = mrr
             dis.save(os.path.join('models', config().task.dir, mdl_name))

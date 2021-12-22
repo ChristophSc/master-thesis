@@ -234,7 +234,11 @@ class BaseModel(object):
                 mr_tot += mr
                 hits_tot += hits
                 count += 2
-        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', float(mrr_tot)/count, float(mr_tot)/count, hits_tot[2]/count)
+                
+        mrr = float(mrr_tot)/count
+        mr = float(mr_tot)/count
+        hits = hits_tot / count
+        logging.info('Test_MRR=%f, Test_MR=%f, Test_H@10=%f', mrr, mr, hits[2])
         return mrr, hits
     
 

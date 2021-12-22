@@ -6,10 +6,12 @@ import logging
 class TrainingProcessLogger():
   
   def __init__(self, type, n_epochs, epoch_per_test):
-    self.rewards = []
-    self.losses = []
-    self.mrrs = []
-    self.hit10s = []
+    self.rewards = [0,]
+    self.losses = [0,]
+    self.mrrs = [0,]
+    self.hit3s = [0,]
+    self.hit5s = [0,]
+    self.hit10s = [0,]
     self.n_epochs = n_epochs
     self.type = type
     self.epoch_per_test = epoch_per_test
@@ -21,9 +23,11 @@ class TrainingProcessLogger():
       if reward:
         self.rewards.append(reward.item())
       
-  def log_performance(self, mrr, hit10):
+  def log_performance(self, mrr, hits):
     self.mrrs.append(mrr)
-    self.hit10s.append(hit10)    
+    self.hit3s.append(hits[0])    
+    self.hit5s.append(hits[1])    
+    self.hit10s.append(hits[2])    
   
     
   def create_figure(self, title, x, y, x_label, y_label, color):
@@ -41,13 +45,17 @@ class TrainingProcessLogger():
     logging.getLogger('matplotlib.font_manager').disabled = True
       
     filename = os.path.join(graph_dir, self.type + '_' + config().task.dir)
-    n_points = int(self.n_epochs/config().log.graph_every_nth_epoch)
-    if len(self.rewards) > 0:
-      self.create_figure(config().task.dir.upper() + ' Rewards', [(x+1) * config().log.graph_every_nth_epoch for x in range(n_points)], self.rewards, 'Epochs', 'Rewards','blue').savefig(filename + '_rewards')
+    n_points = [x for x in range(0, self.n_epochs+1, config().log.graph_every_nth_epoch)]
+    if len(self.rewards) > 1:
+      self.create_figure(config().task.dir.upper() + ' Rewards', n_points, self.rewards, 'Epochs', 'Rewards','blue').savefig(filename + '_rewards')
       
-    self.create_figure(config().task.dir.upper() + ' Losses', [(x+1) * config().log.graph_every_nth_epoch for x in range(n_points)], self.losses, 'Epochs', 'Losses', 'red').savefig(filename + '_losses')
-    self.create_figure(config().task.dir.upper() + ' Validation MRR', [x+1 for x in range(self.n_epochs) if (x + 1) % self.epoch_per_test == 0], self.mrrs,'Epochs', 'MRR',  'green').savefig(filename + '_mrr')
-    self.create_figure(config().task.dir.upper() + ' Validation H@10', [x+1 for x in range(self.n_epochs) if (x + 1) % self.epoch_per_test == 0], self.hit10s, 'Epochs', 'H@10', 'orange').savefig(filename + '_hit10')
+    self.create_figure(config().task.dir.upper() + ' Losses', n_points, self.losses, 'Epochs', 'Losses', 'red').savefig(filename + '_losses')
+    n_points = [x for x in range(0, self.n_epochs+1, self.epoch_per_test)]
+    self.create_figure(config().task.dir.upper() + ' Validation MRR', n_points, self.mrrs,'Epochs', 'MRR',  'green').savefig(filename + '_mrr')
+    
+    self.create_figure(config().task.dir.upper() + ' Validation H@3', n_points, self.hit3s, 'Epochs', 'H@3', 'orange').savefig(filename + '_hit3')
+    self.create_figure(config().task.dir.upper() + ' Validation H@5', n_points, self.hit5s, 'Epochs', 'H@5', 'orange').savefig(filename + '_hit5')
+    self.create_figure(config().task.dir.upper() + ' Validation H@10', n_points, self.hit10s, 'Epochs', 'H@10', 'orange').savefig(filename + '_hit10')
     
 
   # TODO: load plots from original KBGAN approach an compare them 
