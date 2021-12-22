@@ -99,6 +99,7 @@ class BaseModel(object):
         probs = nnf.softmax(logits, dim=-1)
         # call sampler to retrieve n_sample from negative triple set Neg
         row_idx, sample_idx = sampler.sample(head, rel, tail, n_sample, probs)
+        row_idx1, sample_idx1 = RandomSampler().sample(head, rel, tail, n_sample, probs)
     
         # get head and tail of negative triple by sampled index
         sample_heads = head[row_idx, sample_idx.data.cpu()]
