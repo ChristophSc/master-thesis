@@ -69,7 +69,6 @@ class BaseModel(object):
     def gen_step(self, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
         """One learning step of the Generator component in Adversarial Learning Process.
         
-
         Args:
             head (torch.tensor): corrupted head entities from Neg (from negative triple)
             rel (torch.tensor): relations
@@ -93,8 +92,11 @@ class BaseModel(object):
         rel_var = Variable(rel)        
         tail_var = Variable(tail)
 
+        # 
         logits = self.mdl.prob_logit(head_var, rel_var, tail_var) / temperature
-        probs = nnf.softmax(logits, dim=1)
+        
+        # calculate probabilities for each negative triple to be sampled = 
+        probs = nnf.softmax(logits, dim=-1)
         # call sampler to retrieve n_sample from negative triple set Neg
         row_idx, sample_idx = sampler.sample(head, rel, tail, n_sample, probs)
     
@@ -105,9 +107,11 @@ class BaseModel(object):
         rewards = yield sample_heads, sample_tails
         if train:
             self.mdl.zero_grad()
-            log_probs = nnf.log_softmax(logits, dim=1)
+            log_probs = nnf.log_softmax(logits, dim=-1)
             if torch.cuda.is_available():
                 row_idx = row_idx.cuda()
+                
+            # 
             reinforce_loss = -torch.sum(Variable(rewards) * log_probs[row_idx, sample_idx.data])
             reinforce_loss.backward()
             self.opt.step()
