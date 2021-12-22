@@ -40,19 +40,19 @@ class BernCorrupterMulti(object):
         self.n_ent = n_ent
         self.n_sample = n_sample
 
-    def corrupt(self, src, rel, dst, keep_truth=True):
-        n = len(src)
+    def corrupt(self, head, rel, tail, keep_truth=True):
+        n = len(head)
         prob = self.bern_prob[rel]
         selection = torch.bernoulli(prob).numpy().astype('bool')
-        src_out = np.tile(src.numpy(), (self.n_sample, 1)).transpose()
-        dst_out = np.tile(dst.numpy(), (self.n_sample, 1)).transpose()
+        head_out = np.tile(head.numpy(), (self.n_sample, 1)).transpose()
         rel_out = rel.unsqueeze(1).expand(n, self.n_sample)
+        tail_out = np.tile(tail.numpy(), (self.n_sample, 1)).transpose()        
         if keep_truth:
             ent_random = choice(self.n_ent, (n, self.n_sample - 1))
-            src_out[selection, 1:] = ent_random[selection]
-            dst_out[~selection, 1:] = ent_random[~selection]
+            head_out[selection, 1:] = ent_random[selection]
+            tail_out[~selection, 1:] = ent_random[~selection]
         else:
             ent_random = choice(self.n_ent, (n, self.n_sample))
-            src_out[selection, :] = ent_random[selection]
-            dst_out[~selection, :] = ent_random[~selection]
-        return torch.from_numpy(src_out), rel_out, torch.from_numpy(dst_out)
+            head_out[selection, :] = ent_random[selection]
+            tail_out[~selection, :] = ent_random[~selection]
+        return torch.from_numpy(head_out), rel_out, torch.from_numpy(tail_out)

@@ -31,8 +31,10 @@ class BaseModule(nn.Module):
         return nnf.softmax(self.prob_logit(head, rel, tail),  dim=1)
 
     def pair_loss(self, head, rel, tail, head_corr, tail_corr):
+        # distance of positive triple should be lower than distance of negative triple
+        # => score of positive triple should be higher than score of negative triple
         score_pos = self.score(head, rel, tail)
-        score_neg = self.score(head_corr, rel, tail_corr)
+        score_neg = self.score(head_corr, rel, tail_corr) 
         return nnf.relu(self.margin + score_pos - score_neg)
 
     def softmax_loss(self, head, rel, tail, truth):
@@ -140,13 +142,16 @@ class BaseModel(object):
         tail_var = Variable(tail)
         head_fake_var = Variable(head_fake)
         tail_fake_var = Variable(tail_fake)
+        # calculate the marginal loss between score of positive and negative triple
         losses = self.mdl.pair_loss(head_var, rel_var, tail_var, head_fake_var, tail_fake_var)
+        # calculate score of negative triple => the lower the better 
         fake_scores = self.mdl.score(head_fake_var, rel_var, tail_fake_var)
         if train:
             self.mdl.zero_grad()
             torch.sum(losses).backward()
             self.opt.step()
             self.mdl.constraint()
+        # return reward to generator which has to be maximized => small positive fake_scores = rewards are small negative values (close to zero)
         return losses.data, -fake_scores.data
     	
      

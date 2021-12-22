@@ -1,6 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 from config import config
+import logging
 
 class TrainingProcessLogger():
   
@@ -37,13 +38,14 @@ class TrainingProcessLogger():
   def create_and_save_figures(self, log_dir):
     graph_dir = os.path.join(log_dir, "graphs")
     os.mkdir(graph_dir) 
+    logging.getLogger('matplotlib.font_manager').disabled = True
       
     filename = os.path.join(graph_dir, self.type + '_' + config().task.dir)
     n_points = int(self.n_epochs/config().log.graph_every_nth_epoch)
     if len(self.rewards) > 0:
-      self.create_figure(config().task.dir.upper() + ' Rewards', [x+1 for x in range(n_points)], self.rewards, 'Epochs', 'Rewards','blue').savefig(filename + '_rewards')
+      self.create_figure(config().task.dir.upper() + ' Rewards', [(x+1) * config().log.graph_every_nth_epoch for x in range(n_points)], self.rewards, 'Epochs', 'Rewards','blue').savefig(filename + '_rewards')
       
-    self.create_figure(config().task.dir.upper() + ' Losses', [x+1 for x in range(n_points)], self.losses, 'Epochs', 'Losses', 'red').savefig(filename + '_losses')
+    self.create_figure(config().task.dir.upper() + ' Losses', [(x+1) * config().log.graph_every_nth_epoch for x in range(n_points)], self.losses, 'Epochs', 'Losses', 'red').savefig(filename + '_losses')
     self.create_figure(config().task.dir.upper() + ' Validation MRR', [x+1 for x in range(self.n_epochs) if (x + 1) % self.epoch_per_test == 0], self.mrrs,'Epochs', 'MRR',  'green').savefig(filename + '_mrr')
     self.create_figure(config().task.dir.upper() + ' Validation H@10', [x+1 for x in range(self.n_epochs) if (x + 1) % self.epoch_per_test == 0], self.hit10s, 'Epochs', 'H@10', 'orange').savefig(filename + '_hit10')
     
