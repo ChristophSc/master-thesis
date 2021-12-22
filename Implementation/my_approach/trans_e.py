@@ -35,15 +35,15 @@ class TransEModule(BaseModule):
         emb_tail = self.ent_embed(tail)
         # distance = || h + r - t||
         # => higher distance = smaller score because estimated likelihood of the triple to be true
-        score = t.norm( ((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
+        score = t.norm((-1)* ((emb_head + emb_rel) - emb_tail), p=self.p, dim=-1)
         # d = t.norm(self.ent_embed(tail) - self.ent_embed(src) - self.rel_embed(rel) + 1e-30, p=self.p, dim=-1)        
         # distance is always > 0
         return score
 
     def score(self, head, rel, tail):
-        score = self.forward(head, rel, tail)   # TODO: replace by parameter gamma from config
-        # If distance is very small , then score is very high i.e. 1.0
-        # If distance is very large, then score is very small i.e. 0.0
+        score = self.forward(head, rel, tail)
+        # If distance is very small , then score is very high
+        # If distance is very large, then score is very small
         return score
 
     def prob_logit(self, head, rel, tail):
@@ -83,7 +83,7 @@ class TransE(BaseModel):
                 tail = tail.cuda()
                 head_corrupted = head_corrupted.cuda()
                 tail_corrupted = tail_corrupted.cuda()
-            for h0, r, t0, h_corr, t_corr in batch_by_num(n_batch, head, rel, tail, head_corrupted, tail_corrupted,
+            for h_pos, r, t_pos, h_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_corrupted, tail_corrupted,
                                                   n_sample=n_train):
                 # h0, t0 = original head/tail from positive triple
                 # h_corr, t_corr = corrupted head/tail for negative triple
@@ -92,7 +92,7 @@ class TransE(BaseModel):
                 self.mdl.zero_grad()
                 
                 # forward pass
-                loss = t.sum(self.mdl.pair_loss(Variable(h0), Variable(r), Variable(t0), Variable(h_corr), Variable(t_corr)))
+                loss = t.sum(self.mdl.pair_loss(Variable(h_pos), Variable(r), Variable(t_pos), Variable(h_neg), Variable(t_neg)))
                 
                 #backward pass
                 loss.backward()

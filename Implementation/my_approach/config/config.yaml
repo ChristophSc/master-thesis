@@ -1,24 +1,24 @@
-pretrain_config: DistMult
+pretrain_config: TransE
 g_config: DistMult
 d_config: TransE
 test_batch_size: 100 # 100
 task:
-  dir: umls  # wn18
+  dir: wn18rr  # wn18
   type: link  # link
 adv:
   n_sample: 20 #   20
   sample_type: random      # random, uncertainty
-  n_epoch: 100  # 5000
+  n_epoch: 1000  # 5000
   n_batch: 100 # 100
   epoch_per_test: 10 # 100
   temperature: 1.0  # 1.0
 TransE:
   dim: 50
-  margin: 3
+  margin: 3 # gamma
   p: 1
   n_epoch: 100 # 5000
   n_batch: 100 # 100
-  epoch_per_test: 10 # 50
+  epoch_per_test: 50 # 50   k
   model_file: transe.mdl
 TransD:
   dim: 50

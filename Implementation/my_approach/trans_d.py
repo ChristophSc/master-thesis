@@ -90,10 +90,10 @@ class TransD(BaseModel):
                 dst = dst.cuda()
                 src_corrupted = src_corrupted.cuda()
                 dst_corrupted = dst_corrupted.cuda()
-            for s0, r, t0, s1, t1 in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
+            for h_pos, r, t_pos, h_neg, t_neg in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
                                                   n_sample=n_train):
                 self.mdl.zero_grad()
-                loss = t.sum(self.mdl.pair_loss(Variable(s0), Variable(r), Variable(t0), Variable(s1), Variable(t1)))
+                loss = t.sum(self.mdl.pair_loss(Variable(h_pos), Variable(r), Variable(t_pos), Variable(h_neg), Variable(t_neg)))
                 loss.backward()
                 optimizer.step()
                 self.mdl.constraint()

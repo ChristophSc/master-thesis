@@ -209,13 +209,12 @@ class BaseModel(object):
                 if filt:      
                     # (h, r): key h=head, r=relation
                     # tails: dict indicates which tails t are connected with current (h,r) in ther KG
-                    # -> spare tensor, only indices with value != 0 and their value is stored, here only binary \in {0,1} 0 = no connection, 1 = connection
-                    # to_dense(): creates dense tensor with 0s and 1s                    
+                    # -> spare tensor, only indices with value != 0 and their value is stored, here only binary \in {0,1} 0 = no connection, 1 = connection               
                     if tails[(h, r)]._nnz() > 1:    # nnz = number of non zeroes => there are tails t which are connected to head h and tail t in triple (h,r,t) in KG
                         #print(tail_scores)
                         tmp = tail_scores[t].item()   # save score for current predicted
                         idx = tails[(h, r)]._indices()
-                         # since we know all other triples (including tails) and that they exist in the KG, we can set score very high such that they are not
+                         # since we know all other triples (including tails) and that they exist in the KG, we can set score very high
                         tail_scores[idx] = 1e20 
                         # reset score of current triple
                         tail_scores[t] = tmp
