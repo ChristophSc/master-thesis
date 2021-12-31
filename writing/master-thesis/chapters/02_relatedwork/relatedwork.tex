@@ -18,6 +18,11 @@ Then, a \ac{KG} $\kg= \{\triple{h}{r}{t} \}  \subseteq \entities \times \relatio
 \end{itemize}
 In addition, the inverse of a relation \texttt{r}, denoted as $\texttt{r}^{-1}$, is a relation such that for any two entities $\texttt{h}$ and \texttt{t}, $\triple{h}{r}{t} \in \kg \iff (\texttt{t},\texttt{r}^{-1},\texttt{h}) \in \kg $.
 
+
+
+
+
+
 \section{Knowledge Graph Embeddings} 
 \acp{KGE} are low-dimensional representations of entities and relations in a \ac{KG}. 
 Numerous methods have been developed in the last few years to tackle various problems such as defining a different score function to measure the distance between entities relative to their relation.
@@ -37,10 +42,54 @@ On the basis of this, two different categories are derived:
     \textsc{TransE} \cite{TransE}, \textsc{TransH} \cite{TransH}, \textsc{TransR} \cite{TransR}, \textsc{TransD} \cite{TransD}
     and 
     \textsc{RotatE} \cite{RotatE}
+    The basic idea of TransE is that a functional relation $r$ corresponds to a translation of the embeddings, i.e. $h + r \thickapprox t$ when (h,r,t) holds.
+    If it does not hold, $t$ should be far away from $h + r$
+    leda to a energy-based framework $d(h+r, t)$ for some dissimilarity measure $d$ ($L_1$ or $L_2$ norm) \cite{TransE}.
+    Therefore, to learn the embeddings a margin-based ranking criterion has to be minimized:
+    $$\mathcal{L} = \sum_{(h,r,t) \in S)} \sum_{(h',r,t') \in S'_{(h,r,t))})} [\gamma + d(h + r, t) - d(h' + r, t')]_+$$
+    for training set S of positive triples and corresponding negative triples from S' with 
+    $$S'_{(h,r,t)} = \{(h',r,t)| h' \in \entities\} \cup \{(h,r,t')| t' \in \entities\}$$.
+    
+    scoring function
+    Therefore, since positive triples have a lower distance and negative triples a higher one, the distance needs to be inverted such that the score reflects the likelihood of the triple to be true.
+    This can be done either by defining 
+    $score(h,r,t) = \gamma - distance(h,r,t)$ or 
+    $score(h,r,t) = (-1) * distance(h,r,t)$
+
+    
+    \begin{figure*}[t]
+      \centering
+        \includegraphics[width=0.95\textwidth]{figures/TransE+TransD.png}
+      \caption{(a) TransE (d) TransD (based on: \cite{cai2017kbgan})}
+      \label{fig:overview}
+    \end{figure*}
+        
+    
+    
+    
+    
+    
+    
     
     \item 
     \textbf{Tensor Factorization-Based Models}:
     \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, \textsc{HolE} \cite{HolE}
+    
+    Since \textsc{DistMult} and  \textsc{ComplEx} play an important role in our approach, we will describe them in more detail.
+    
+
+
+
+DistMult \cite{DistMult}
+Tensor Factorization-Based Models whre the representations
+are learned using neural networks with energy-based objectives.
+Training objective is to minimize the margin-based ranking loss
+$$\mathcal{L} = \sum_{(h,r,t) \in S)} \sum_{(h',r,t') \in S'_{(h,r,t))})}  max\{ S_{(h',r,t')} - S_{(h,r,t)} + 1\}$$
+Scoring function: 
+$$score(h,r,t) = \langle e_h, e_r, e_t \rangle$$ where $e_h$, $e_r$ and $e_t$ are embeddings of heads, relations and tails.\\
+    
+    
+    
     
     \item 
     \textbf{Neural Network-Based Models}: 
@@ -59,6 +108,45 @@ On the basis of this, two different categories are derived:
      \item 
     \textbf{Other Models} that cannot be assigned to the other two categories and pay attention to further triple information such as temporal aspects.
 \end{enumerate}
+
+
+
+
+
+
+
+
+\section{Training Objective Types}
+\cite{cai2017kbgan}
+A \textit{score function} $f(h,r,t)$ assigns a score to every possible triple in the knowledge graph.
+The estimated likelihood of a triple to be true depends only on its score given by the score function.
+Since different \ac{KGE} models fomulate different designs for this scoring function, the interpretation of this score is also different which in turn leads to different training objectives
+The two most common forms are \textbf{Marginal Loss function} and \textbf{Log-softmax function}:
+\begin{enumerate}
+    \item \textbf{Marginal loss function}
+    
+    
+    \item \textbf{Log-softmax loss function}
+    
+    
+    \item \textbf{Other forms}
+    
+    
+    
+\end{enumerate}
+
+
+
+
+
+\section{Training techniques}
+\begin{enumerate}
+    \item 1vsAll 
+    
+    \item Negative Sampling 
+    
+\end{enumerate}
+
 
 
 \section{Negative Sampling Methods} \label{sec:negativesamplingmethods}
@@ -159,6 +247,16 @@ Some most commonly used are the following metrics \cite{kotnis2017analysis}:
 Since in many \ac{KGE} models either the head or the tail entity is randomly replaced by other entities of the KG, these corrupted triples may be true facts.
 For this reason, many approaches distinguish between \textit{raw} and \textit{filtered}, where for corrupted triples it is looked whether these occur in the train, test or validation set \cite{TransE}.
 
+
+
+
+
+
+
+
+
+
+
 \section{Uncertainty Sampling} \label{sec:uncertaintysampling}
 Uncertainty Sampling originates from Active Learning, 
 where labeled data for training a supervised model is obtained from a dataset of unlabeled instances.
@@ -207,6 +305,16 @@ While the first one has been specifically developed for the purpose of active le
     \ac{EU} samples instance for which both the positive and the negative class appear to be plausible, while \ac{AU} samples instances where none of the classes is supported.
     Therefore, the uncertainty due to either influence of the classes or lack of knowledge. 
 \end{enumerate}
+
+
+
+
+
+
+
+
+
+
 
 
 

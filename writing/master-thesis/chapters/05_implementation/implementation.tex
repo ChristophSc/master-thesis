@@ -1,2 +1,55 @@
 \chapter{Implementation}
 \label{ch:implementation}
+
+\section{Data analysis}
+
+
+
+
+
+\section{Our Model}
+
+
+
+
+
+
+
+
+How is a filtered rank computed?\\
+\cite{Ruffinelli2020You}
+- rank(j | i, k ) the filtered rank of object j, i.e. tge rank of model score s(i,k,j) among the collection of all pseudo-negative object scores
+- $$\{s(i,k,j'): j' \in \entities \text{ and $(i,k,j')$ does not occur in training, validation, or test data}\}$$.s
+- the higher the score of a triple, the more likely it is considered to be true by the model. 
+- Evaluation: Most common evaluation task for \ac{KGE} methods is a form of question answering which is called \textit{entitiy ranking} and is performed after  partitioning the available data in into a set of training, validation and test triples. 
+Given a test triple $(i,k,j)$  which is unseen during training, the entity ranking task is to determine the correct answer to the questions $(i,k,?)$ and $(?,k,j)$ for entities $j$ and $i$.
+All potential answers are first ranked by their score in descending order, filtered to not the ranking and finally metrics like MRR and Hits\@K are computed.\\
+
+
+
+
+
+
+
+
+b) how are filtered ranks of missing entities computed ?\\
+1) For each test triplet, head is replaced by each of the entities from the KG in turn
+2) dissimilarities/energies of those corrupted triplets are computed 
+3) sorted by ascending order 
+(score of corrupted triplets should be lower than score of positive triplets
+4) rank of the correct entity (for this example we have (h,r,?) and correct entity is corresponding t while (h,r,t) is in the KG)) is stored
+5) rank is used for metrics like MRR and Hits\@K
+same procedure for removing the tails instead of the head
+
+
+c) Why do we apply filtered setting ?\\
+- clearer evaluation of the performance of the methods in link prediction
+- results can be flawed when some corrupted triplets are actually valid
+ones \cite{TransE}.
+
+
+
+
+
+
+

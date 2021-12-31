@@ -2,7 +2,6 @@
 
 % load your own packages and user-defined commands
 \input{packages}
-\input{acronyms}
 \input{commands}
 
 
@@ -25,7 +24,6 @@
 \supervisor{Prof. Dr. Axel-Cyrille Ngonga Ngomo\\Jun.-Prof. Dr. Sebastian Peitz}
 \submissiondate{\today{}}
 
-
 % here your thesis really starts
 \begin{document}
 
@@ -47,7 +45,14 @@
 %%%%%%%%%
 % the contents of your thesis go into file body.tex
 %%%%%%%%%
+\usepackage[nolist]{acronym}
+\input{acronyms.tex}
+
 \input{body}
+
+
+
+
 
 % include the bibliography, and add it as a chapter the table of contents
 \newpage
@@ -60,6 +65,10 @@
 % the appendices of your thesis go into file appendix.tex
 %%%%%%%%%
 \appendix
+
+
+
+
 \input{appendix}
 
 \end{document}
