@@ -36,13 +36,22 @@ class TransEModule(BaseModule):
         # distance = || h + r - t||
         # => higher distance = smaller score because estimated likelihood of the triple to be true  
         distance = (emb_head + emb_rel) - emb_tail
-        score = t.norm((-1)*distance, p=self.p, dim=-1)
+        score = t.norm(distance, p=self.p, dim=-1)
         return score
 
     def score(self, head, rel, tail):
-        score = self.forward(head, rel, tail)
-        # If distance is very small , then score is very high
-        # If distance is very large, then score is very small
+        """ Returns score of TransE. Score function = L1/L2 distance between h + r - t.
+        => low score indicates high probaility of triple to be true.
+
+        Args:
+            head (torch.tensor): set of head entities
+            rel (torch.tensor): set of relations
+            tail (torch.tensor): set of tail entities
+
+        Returns:
+            Score = Distance of triple
+        """
+        score = self.forward(head, rel, tail)        
         return score
 
     def prob_logit(self, head, rel, tail):

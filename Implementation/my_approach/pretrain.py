@@ -47,8 +47,7 @@ elif mdl_type == 'DistMult':
     gen = DistMult(n_ent, n_rel, gen_config)
 elif mdl_type == 'ComplEx':
     corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, gen_config.n_sample)
-    gen = ComplEx(n_ent, n_rel, gen_config)
-    
+    gen = ComplEx(n_ent, n_rel, gen_config)    
     
 gen.pretrain(train_data, corrupter, tester, log_dir)
 gen.load(os.path.join('models', task_dir, gen_config.model_file))

@@ -20,7 +20,8 @@ class DistMultModule(BaseModule):
         self.ent_embed = nn.Embedding(n_ent, config.dim)
         self.ent_embed.weight.data.div_((config.dim / sigma ** 2) ** (1 / 6))
 
-    def forward(self, head, rel, tail):
+
+    def forward(self, head, rel, tail):        
         # (1)
         # (1.1) Real embeddings of head entities
         emb_head_real = self.ent_embed(head)
@@ -28,9 +29,12 @@ class DistMultModule(BaseModule):
         emb_rel_real = self.rel_embed(rel)
          # (1.3) Real embeddings of tails
         emb_tail_real = self.ent_embed(tail)
-        return t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)  
+        x = t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)   
+        return x   
 
     def score(self, head, rel, tail):
+        # low scores indicate a low probability of a triple to be true and vice versa
+        # => *(-1) to use the same evaluation function test_link as it is used for TransE/TransD
         return -self.forward(head, rel, tail)
 
     def prob_logit(self, head, rel, tail):
@@ -65,15 +69,15 @@ class DistMult(BaseModel):
                     head_corrupted = head_corrupted.cuda()
                     rel_corrupted = rel_corrupted.cuda()
                     tail_corrupted = tail_corrupted.cuda()
-            for ss, rs, ts in batch_by_num(n_batch, head_corrupted, rel_corrupted, tail_corrupted, n_sample=n_train):
+            for h_neg, r_neg, t_neg in batch_by_num(n_batch, head_corrupted, rel_corrupted, tail_corrupted, n_sample=n_train):
                 # zero gradients
                 self.mdl.zero_grad()
                 if t.cuda.is_available():
-                    label = t.zeros(len(ss)).type(t.LongTensor).cuda()
+                    label = t.zeros(len(h_neg)).type(t.LongTensor).cuda()     # since DistMult is working with negatives, their label should be 0 = negative, and not 1 = positive
                 else:
-                    label = t.zeros(len(ss)).type(t.LongTensor)
+                    label = t.zeros(len(h_neg)).type(t.LongTensor)
                 # forward pass
-                loss = t.sum(self.mdl.softmax_loss(Variable(ss), Variable(rs), Variable(ts), label))
+                loss = t.sum(self.mdl.softmax_loss(Variable(h_neg), Variable(r_neg), Variable(t_neg), label))
 
                 # backward pass
                 loss.backward()

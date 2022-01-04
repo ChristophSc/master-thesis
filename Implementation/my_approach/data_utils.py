@@ -3,7 +3,8 @@ from collections import defaultdict
 import torch
 
 def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
-    """creates filtered set of heads and tails:  
+    """ Creates filtered set of heads and tails: Returns 2 sparse Tensors for heads and tails with values
+        1 if there is a head h for triple (?,r,t) / 1 if there is a tail t for triple (h,r,?)
 
     Args:
         n_ent ([type]): [description]
@@ -14,23 +15,23 @@ def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
     Returns:
         [type]: [description]
     """
-    train_src, train_rel, train_dst = train_data
+    train_heads, train_rel, train_tails = train_data
     if valid_data:
-        valid_src, valid_rel, valid_dst = valid_data
+        valid_heads, valid_rel, valid_tails = valid_data
     else:
-        valid_src = valid_rel = valid_dst = []
+        valid_heads = valid_rel = valid_tails = []
     if test_data:
-        test_src, test_rel, test_dst = test_data
+        test_heads, test_rel, test_tails = test_data
     else:
-        test_src = test_rel = test_dst = []
-    all_src = train_src + valid_src + test_src
+        test_heads = test_rel = test_tails = []
+    all_heads = train_heads + valid_heads + test_heads
     all_rel = train_rel + valid_rel + test_rel
-    all_dst = train_dst + valid_dst + test_dst
+    all_tails = train_tails + valid_tails + test_tails
     heads = defaultdict(lambda: set())
     tails = defaultdict(lambda: set())
-    for s, r, t in zip(all_src, all_rel, all_dst):
-        tails[(s, r)].add(t)
-        heads[(t, r)].add(s)
+    for h, r, t in zip(all_heads, all_rel, all_tails):
+        tails[(h, r)].add(t)
+        heads[(t, r)].add(h)
     heads_sp = {}
     tails_sp = {}
     for k in tails.keys():

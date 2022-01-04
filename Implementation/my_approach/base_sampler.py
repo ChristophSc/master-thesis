@@ -2,7 +2,7 @@ class BaseSampler(object):
   def __init__(self):
     pass
   
-  def sample(src, rel, dst, n_sample, *args):
+  def sample(src, h, r, t, h_neg, r_neg, t_neg, n_sample, *args):
     raise NotImplementedError()
   
   

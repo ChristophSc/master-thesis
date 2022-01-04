@@ -98,7 +98,7 @@ class TransE(torch.nn.Module):
         xavier_normal_(self.emb_rel_real.weight.data)
 
     def get_embeddings(self):
-        return self.emb_ent_real.weight.data, self.emb_rel_real.weight.data
+        return self.emb_ent_real.weifght.data, self.emb_rel_real.weight.data
 
     def forward_triples(self, *, e1_idx, rel_idx, e2_idx):
         # (1)
