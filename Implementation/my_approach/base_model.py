@@ -91,7 +91,7 @@ class BaseModel(object):
             
     #sampled_instances_random = dict()
     #sampled_instances_uncertainty = dict()
-    def gen_step(self, h, r, t, h_neg, r_neg, t_neg, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler(), min_score = None, max_score = None):
+    def gen_step(self, head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler(), min_score = None, max_score = None):
         """One learning step of the Generator component in Adversarial Learning Process.
         
         Args:
@@ -121,18 +121,18 @@ class BaseModel(object):
             scores = self.mdl.score(h_neg_var, r_neg_var, t_neg_var)
         
             # call sampler to retrieve n_sample from negative triple set Neg
-            row_idx, sample_idx, logits = sampler.sample(h, r, t, h_neg, r_neg, t_neg, n_sample, scores, min_score, max_score)
+            row_idx, sample_idx, logits = sampler.sample(head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample, scores, min_score, max_score)
             probs = nnf.softmax(logits, dim=-1)
-            sample_idx = torch.multinomial(probs, n_sample, replacement=True)
-            
-        else:   # original random Sampler            
+            sample_idx = torch.multinomial(probs, n_sample, replacement=True)            
+        else:   
+            # original random Sampler            
             logits = self.mdl.prob_logit(h_neg_var, r_neg_var, t_neg_var) / temperature
 
             # calculate probabilities for each negative triple to be sampled =             
             probs = nnf.softmax(logits, dim=-1)
             
             # call sampler to retrieve n_sample from negative triple set Neg            
-            row_idx, sample_idx = sampler.sample(h, r, t, h_neg, r_neg, t_neg, n_sample, probs)
+            row_idx, sample_idx = sampler.sample(head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample, probs)
         
         # get head and tail of negative triple by sampled index
         sample_heads = h_neg[row_idx, sample_idx.data.cpu()]

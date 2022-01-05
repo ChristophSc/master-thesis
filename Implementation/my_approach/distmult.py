@@ -22,20 +22,33 @@ class DistMultModule(BaseModule):
 
 
     def forward(self, head, rel, tail):        
-        # (1)
-        # (1.1) Real embeddings of head entities
+        # (1) Real embeddings of head entities
         emb_head_real = self.ent_embed(head)
-        # (1.2) Real embeddings of relations
+        # (2) Real embeddings of relations
         emb_rel_real = self.rel_embed(rel)
-         # (1.3) Real embeddings of tails
+         # (3) Real embeddings of tails
         emb_tail_real = self.ent_embed(tail)
         x = t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)   
         return x   
 
-    def score(self, head, rel, tail):
+    def score(self, heads, rels, tails):
+        """ Score function of DistMult.
+            Indicates the plausability of a triple to be true 
+            -> the higher the score to more likely the triple is true
+            we return this value * (-1) such that we can use the same evaluation function as for TransE/TransD
+
+        Args:
+            head (torch.tensor): head entities
+            rel (torch.tensor): relations
+            tail (torch.tensor)): tail entities
+            
+        Returns:
+            torch.tensor: scores of each triple (h, r, t) * (-1)
+        """
+        
         # low scores indicate a low probability of a triple to be true and vice versa
         # => *(-1) to use the same evaluation function test_link as it is used for TransE/TransD
-        return -self.forward(head, rel, tail)
+        return -self.forward(heads, rels, tails)
 
     def prob_logit(self, head, rel, tail):
         return self.forward(head, rel, tail)

@@ -25,22 +25,21 @@ class TransEModule(BaseModule):
             param.data.normal_(1 / param.size(1) ** 0.5)
             param.data.renorm_(2, 0, 1)
 
-    def forward(self, head, rel, tail):
-        # (1)
-        # (1.1) Real embeddings of head entities
-        emb_head = self.ent_embed(head)
-        # (1.2) Real embeddings of relations
-        emb_rel = self.rel_embed(rel)
-        # (1.3) Real embeddings of tail entities
-        emb_tail = self.ent_embed(tail)
+    def forward(self, heads, rels, tails):
+        # (1) Real embeddings of head entities
+        emb_head = self.ent_embed(heads)
+        # (2) Real embeddings of relations
+        emb_rel = self.rel_embed(rels)
+        # (3) Real embeddings of tail entities
+        emb_tail = self.ent_embed(tails)
         # distance = || h + r - t||
         # => higher distance = smaller score because estimated likelihood of the triple to be true  
         distance = (emb_head + emb_rel) - emb_tail
         score = t.norm(distance, p=self.p, dim=-1)
         return score
 
-    def score(self, head, rel, tail):
-        """ Returns score of TransE. Score function = L1/L2 distance between h + r - t.
+    def score(self, heads, rels, tails):
+        """ Returns score of TransE. Score function = L1/L2 distance of h + r - t.
         => low score indicates high probaility of triple to be true.
 
         Args:
@@ -51,11 +50,11 @@ class TransEModule(BaseModule):
         Returns:
             Score = Distance of triple
         """
-        score = self.forward(head, rel, tail)        
+        score = self.forward(heads, rels, tails)        
         return score
 
-    def prob_logit(self, head, rel, tail):
-        return -self.forward(head, rel,  tail) / self.temp
+    def prob_logit(self, heads, rels, tails):
+        return -self.forward(heads, rels, tails) / self.temp
 
     def constraint(self):
         self.ent_embed.weight.data.renorm_(2, 0, 1)
