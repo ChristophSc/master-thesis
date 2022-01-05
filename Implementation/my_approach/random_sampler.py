@@ -11,7 +11,7 @@ class RandomSampler(BaseSampler):
     
     if len(args) != 1:
       raise ValueError()
-              
+    
     row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)          
     sample_idx = torch.multinomial(args[0], n_sample, replacement=True)
         

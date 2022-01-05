@@ -3,7 +3,8 @@ import logging
 import datetime
 import torch
 import matplotlib.pyplot as plt
-from random import sample, random
+import numpy as np
+import random
 from config import config, overwrite_config_with_args, dump_config
 from read_data import index_ent_rel, graph_size, read_data
 from data_utils import filter_heads_tails, inplace_shuffle, batch_by_num, get_statistics, head_tail_counter
@@ -22,6 +23,12 @@ from random_sampler import RandomSampler
 from uncertainty_sampler import UncertaintySampler_Basic, UncertaintySampler_Advanced
 from TrainingProcessLogger import TrainingProcessLogger
 
+# set seeds
+# torch.manual_seed(0)
+# random.seed(0)
+# np.random.seed(0)
+# torch.use_deterministic_algorithms(True)
+ 
 # load config and logger, overwrite config with args
 config()
 overwrite_config_with_args()
@@ -80,24 +87,24 @@ avg_reward = 0
 tp_logger = TrainingProcessLogger('gan_train', n_epoch, config().adv.epoch_per_test) 
 
 max_score = -1e30
+min_score = +1e30
 for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
     # create set Neg of negative triples 
     head_cand, rel_cand, tail_cand = corrupter.corrupt(heads, rels, tails, keep_truth=True)         
-    min_score, cur_max_score = get_statistics(gen, dis, heads, rels, tails, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
-    if cur_max_score > max_score:
-        # update max_score if score of one negative triple is higher than positive one
-        max_score = cur_max_score        
-    for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, heads, rels, tails, head_cand, rel_cand, tail_cand, n_sample=n_train):
-        # h,r,t = indices of heads, relations and tails in batch
+    pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_statistics(gen, dis, heads, rels, tails, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
+        
+    logging.info('Positives: (%f, %f), Negatives: (%f, %f)', pos_min_score, pos_max_score, neg_min_score, neg_max_score)
+    for h_pos, r_pos, t_pos, h_neg, r_neg, t_neg in batch_by_num(n_batch, heads, rels, tails, head_cand, rel_cand, tail_cand, n_sample=n_train):
+        # h_pos, r_pos, t_pos = indices of heads, relations and tails of positive triples in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
         # send corrupted triples from Neg of size "n_batch" to generator
-        gen_step = gen.gen_step(head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = min_score, max_score = max_score)
+        gen_step = gen.gen_step(head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = pos_max_score, max_score = neg_min_score)
         # randomly sample from probability distribution of current negative triple set 
         head_smpl, tail_smpl = next(gen_step)
         # send sampled negative triple "tail_smpl" and its ground truth triple "head_smpl" to discriminator 
-        losses, rewards = dis.dis_step(h, r, t, head_smpl.squeeze(), tail_smpl.squeeze())
+        losses, rewards = dis.dis_step(h_pos, r_pos, t_pos, head_smpl.squeeze(), tail_smpl.squeeze())
         epoch_reward += torch.sum(rewards)        
         rewards = rewards - avg_reward
         # send reward to generator

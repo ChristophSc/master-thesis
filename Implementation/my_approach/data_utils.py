@@ -70,9 +70,6 @@ def head_tail_counter(train_data, valid_data, test_data):
     return head_rel_count, rel_tail_count
 
 
-
-
-
 def filter_negatives(heads_neg, relations_neg, tails_neg, true_heads, true_tails):
     heads_neg_filt, rel_neg_filt, tails_neg_filt = [], [], []
     for batch_h, batch_r, batch_t in zip(heads_neg, relations_neg, tails_neg):
@@ -118,20 +115,20 @@ def get_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, 
         pos_min_score, pos_max_score, pos_mean_score = get_statistics('Positives', model, pos_head_entities, pos_relations, pos_tail_entities)        
         if print_statistics:
             print('')
-        return pos_min_score, neg_max_score
+        return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
     with torch.no_grad():
-        # High scores indicate a low probability if a triple to be true   
+        # High scores indicate a low probability if a triple to be true               
         heads_neg_filt, rel_neg_filt, tails_neg_filt = filter_negatives(heads_neg, relations_neg, tails_neg, heads_filt, tails_filt)
         if print_statistics:
             print('----------', 'Generator statistics:', '----------')  
-        pos_min_score, neg_max_score = get_model_statistics(gen,  heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt)  
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen,  heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt)  
         if print_statistics:
             print('----------', 'Discriminator statistics:', '----------')  
         get_model_statistics(dis, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt)   
         if print_statistics:
             print('')
-        return pos_min_score, neg_max_score
+        return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
 
 def inplace_shuffle(*lists):

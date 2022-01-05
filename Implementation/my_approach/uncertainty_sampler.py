@@ -55,7 +55,7 @@ class UncertaintySampler_Advanced(BaseSampler):
   
    
     
-  def sample(self, head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample, *args):
+  def sample(self, head_rel_count, rels, rel_tail_count, h_neg, r_neg, t_neg, n_sample, *args):
     n, m = t_neg.size()
     
     if len(args) != 3:
@@ -72,32 +72,35 @@ class UncertaintySampler_Advanced(BaseSampler):
     torch.set_printoptions(threshold=10_000) 
      
     #print(batch_probs)
-    lambda_1 = lambda_2 = lambda_3 = 0.33333
-    head_score = - self.rel_tail_frq(h_neg, r_neg, t_neg, tail_count)
-    tail_score = - self.head_rel_frq(h_neg, r_neg, t_neg, head_count)  
-    # print(head_score)
-    # print(tail_score)
-    generator_score = lambda_1 * scores + lambda_2 * head_score + lambda_3 * tail_score       # TODO: change and add more information to generator_score
+    lambda_1 = lambda_2 = lambda_3 = 0.5
+    head_rel_score = - self.rel_tail_frq(h_neg, r_neg, t_neg, rel_tail_count)
+    rel_tail_score = - self.head_rel_frq(h_neg, r_neg, t_neg, head_rel_count)  
+    #print(head_rel_score)
+    #print(rel_tail_score)
+    generator_score = lambda_1 * scores + lambda_2 * head_rel_score + lambda_3 * rel_tail_score       # TODO: change and add more information to generator_score
     
-    #print(generator_score)
+    # print(generator_score)
+    
+    # TODO: work with softmax here?
     is_positive_probs = (generator_score - min_score) / (max_score - min_score)
     # avoid nan values if there is a score < min_score or a score > max_score
-    is_positive_probs[is_positive_probs <= 0] = 0.0001
-    is_positive_probs[is_positive_probs >= 1] = 0.9999
+    is_positive_probs[is_positive_probs <= 0] = 0.00001
+    is_positive_probs[is_positive_probs >= 1] = 0.99999
     
     #print(is_positive_probs)    
     is_negative_probs = 1 - is_positive_probs
     #print(is_negative_probs)
     #print(sample_probs)
     entropies = - (is_negative_probs * torch.log(is_negative_probs)) - ((1 - is_negative_probs) * torch.log(1 - is_negative_probs)) 
-    #print(entropies)
+    # print(entropies)
     #print(entropies)
     # get the maximum  
-    # max = torch.max(entropies, 1) 
+    max = torch.max(entropies, 1) 
+    #print(max.indices)
     #print(max.values)
-    # sample_idx_uncertainty = max.indices.unsqueeze(1)  
-    
+    sample_idx_uncertainty = max.indices.unsqueeze(1)  
+    sample_idx_uncertainty = None
     row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)       
     logits = entropies
-    return row_idx, None, logits
+    return row_idx, sample_idx_uncertainty, logits
   
