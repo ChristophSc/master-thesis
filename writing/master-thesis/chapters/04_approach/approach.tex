@@ -1,12 +1,31 @@
 \chapter{Approach}
 \label{ch:approach}
 
+In this chapter our approach of Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty is described.
+At first, in \autoref{sec:idea} the general idea of Sampling by Uncertainty is described and how this idea came about.
+Subsequently, 
+Since the implementation of Uncertainty Sampling is initially based on the \ac{KBGAN} approach, the architecture and structure (\autoref{sec:architecture}) of our approach will be explained first in order to highlight where we start in the original approach.
+Additionally, basic procedure is described in \autoref{sec:procedure} and what information is required for Uncertainty Sampling.
+From this required information the following sections result.
+First, we introduce the various feature functions (\autoref{sec:featurefunctions}) that provide additional information about the graph and contribute for measuring the "uncertainty" of our model.
+Subsequently, these feature functions are combined an weighted within our Generator Score which is described in more detail in \autoref{sec:generatorscore}.
+From this Generator Score, which gives information about the plausibility of triples, the probabilities of triples whether they are positive or negative can be calculated (\autoref{sec:probabilities}). 
+Finally, these probabilities are used to sample negative triples by the uncertainty of the model which is described in \autoref{sec:uncertaintysampling approach}.
+
+
+
+%Option1: downward description/ big to small
+%Uncertainty Sampling -> needs probabilities -> probability of being a positive/negative triple -> calculation of probabilities -> Generator Score -> features for Generator score
+
+%Option 2: upward description -> small to big (current approach)
+%(everything is understandable because it was described in section before
+%features -> generator score -> probabilities -> uncertainty Sampling
+
+
 \section{Idea} \label{sec:idea}
 
-
-
 % description and general introduction to solution
-With our approach, we aim to improve the training process of the embedding model by incorporating more information into the Negative Sampling process and thus selecting negative examples that are more informative and more valuable for the embedding model.
+With our approach, we aim to improve the training process of embedding models by incorporating more information into the Negative Sampling process and thus selecting negative examples that are more informative and more valuable for the embedding model.
 This is achieved by including Uncertainty Sampling in state-of-the-art approaches.
 Uncertainty Sampling is the most commonly used query framework among all the other strategies frameworks (\autoref{sec:uncertaintysampling}) from Active Learning.
 In addition, it is easier to implement than some other frameworks, because, for example, it does not require to train multiple models as is the case with the Query-by-Committee approach.
@@ -23,7 +42,58 @@ In the original approach, $Neg$ is generated only by Uniform Sampling, so that w
 Second, the adversarial learning process can be optimized by learning faster with less Sampling which is addressed by our approach.
 To achieve this, we want to sample more informative negative examples.
 Informative at this point means particularly interesting triples for the embedding model because those that are difficult to classify as positive or negative triple.
+In many other negative sampling approaches, the goal is to create so-called hard negative examples and use them for the training process of the embedding model. 
+In our approach, the result of the sampling process can also be such a hard negative example, but this need not necessarily be the case.
+Now, what 
+In \autoref{fig:informativeinstances} the distinction between informative and hard negative examples is illustrated.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/informative_instances.PNG}
+  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
+  \label{fig:informativeinstances}
+\end{figure*}
+For simplicity, positive and negative instances are shown here in two-dimensional embedding space with dimensions d1 and d2.
+The embedding models sets the border between positive and negative triples at b1.
+For the approach of sampling hard negatives the embedding model should choose negative instance n1 because it is the closest one to the border b1 and therefore, it is the most difficult one to classify as positive or negative.
+Instead, Uncertainty Sampling aims to sample the most informative negative triple.
+But what is the most informative triple for an embedding model?
+The most informative triple is the one that the model helps the most to distinguish between positive and negative triples.
+For this reason, the negative triple n2 would be much more informative, since its classification would indicate whether the boundary between positive and negative triples should rather be set at b1 or at b2.
+Thus, by setting the new boundary b2 would contribute to a more accurate embedding of the data.
 
+\section{Architecture} \label{sec:architecture}
+
+In the original \cb{KBGAN} approach, as shown in \autoref{fig:architecture}, the sampling process from a negative triple set $Neg$ is replaced by Uncertainty Sampling.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.90\textwidth]{figures/architecture.png}
+  \caption{Uncertainty Sampling replaces the original Random Sampling technique in \ac{KBGAN}.}
+  \label{fig:architecture}
+\end{figure*}
+After the set of negative triples $Neg$ is formed, different scores are calculated for all triples in the set.
+Based on this calculated value, the uncertainty of the model in the classification is calculated.
+Based on this uncertainty, it is then sampled. 
+This can be the case, for example, if many reasons speak for the classes "positive" and "negative" respectively, or also if few speak for the respective class.
+
+\section{Procedure} \label{sec:procedure}
+
+
+
+\section{Feature Functions} \label{sec:featurefunctions}
+
+- Functions like PIVO, PEER, FRQ, POP which give more information about the KG
+- $f_G$
+
+
+\subsection{Generator Score} \label{sec:generatorscore}
+
+
+
+\subsection{Probabilities of Positive and Negative Triples} \label{sec:probabilities}
+
+
+
+\section{Uncertainty Sampling} \label{sec:uncertaintysampling approach}
 For Uncertainty Sampling, we have several measures and frameworks at our disposal which are stated in \autoref{sec:uncertaintysampling}.
 Entropy-based Uncertainty Sampling represents the standard approach and is used in for binary classification problems.
 Since we are dealing with negative and positive triples and their distinction, our first approach will start with a binary classification problem for which we define label 0 for negative triples and 1 for positive triples.
@@ -34,17 +104,16 @@ In our case, since we have a binary classification between negative triples ($y=
 The result is that we query examples that are close to 0.5, or in other words: 
 we query triples where the embedding model is most uncertain how to label it.
 
-The structure of our approach is illustrated in Figure \ref{fig:architecture}.
-It can be seen that Uncertainty Sampling replaces the original Sampling process from a probability distribution.
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/architecture.png}
-    \caption{Structure of our Negative Sampling approach including two components:
-    A generator G which samples negative triples by Uncertainty Sampling and a discriminator D which scores the difference of positive triple $(h,r,t)$ and negative triple $(h',r,t')$ by given embedding score function $f_D$}
-    \label{fig:architecture}
-\end{figure}
-In the original \ac{KBGAN} approach, a softmax function is applied to obtain probabilities of being sampled for each generated negative triple.
-However, for Uncertainty Sampling we need probabilities of each triple to be positive. 
+
+
+
+
+
+
+
+
+
+sampling we need probabilities of each triple to be positive. 
 Therefore, we need probabilities $\mathds{P}(y_i | x; \theta)$ for the classes $y_i \in \{0, 1\}$.
 To incorporate more information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by several information about entities and relations in the \ac{KG}.
 Therefore, our new score function $Generator\_Score$ is defined as follows:
@@ -164,20 +233,29 @@ These adversarial training steps are repeated until convergence, such that the g
 Output of our algorithm is the adversarially trained discriminator and its embedding.
 By incorporating additional information from the graph and Sampling triples by uncertainty that have the most added value to the embedding model, we expect promising results.
 
-Initially, the approach will be implemented on the local computer and tested with small data sets such as \textsc{KINSHIP} or \textsc{UMLS}.
-Subsequently, we want to compare our achieved accuracy with state-of-the-art approaches.
-Therefore, we want to use \ac{MRR} and Hit@10 metrics on datasets \textsc{WN18}, \textsc{WN18RR}, \textsc{FB15K}, \textsc{FB15K237}, \textsc{YAGO3-10}.
-Since these datasets are large and running algorithms on them are computationally expensive, we use the servers of \ac{PC2} \footnote{https://pc2.uni-paderborn.de/} to ensure faster processing of the learning process of our model.
-Additionally, we will test the impact of our Negative Sampling approach on different embeddings with the given datasets and compare in which areas our method outperforms the current state-of-the-art approaches.
-For this reason, we will use the most common embeddings from the three groups of embedding types:
-\textsc{TransE}, \textsc{TransH} for \textit{Translation-Based Models}, \textsc{DistMult} and \textsc{ComplEx} for \textit{Tensor Factorization-Based Models}, and \textsc{ConvE} and \textsc{ConEx} for \textit{Neural Network-Based Models}.
 
 
 
-\input{chapters/04_approach/hyperparameters_table}
 
-\input{chapters/04_approach/datasets_table}
 
+
+
+
+
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.PNG}
+  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
+  \label{fig:informativeinstances}
+\end{figure*}
+
+
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.PNG}
+  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
+  \label{fig:informativeinstances}
+\end{figure*}
 
 
 

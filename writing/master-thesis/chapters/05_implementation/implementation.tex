@@ -5,51 +5,37 @@
 
 
 
-
-
 \section{Our Model}
 
+ADD AND DESCRIBE CLASS DIAGRAMM
+
+
+\section{Used Knowledge Graph Embeddungs}
+
+Additionally, we will test the impact of our Negative Sampling approach on different embeddings with the given datasets and compare in which areas our method outperforms the current state-of-the-art approaches.
+For this reason, we will use the most common embeddings from the three groups of embedding types:
+\textsc{TransE}, \textsc{TransH} for \textit{Translation-Based Models}, \textsc{DistMult} and \textsc{ComplEx} for \textit{Tensor Factorization-Based Models}, and \textsc{ConvE} and \textsc{ConEx} for \textit{Neural Network-Based Models}.
+
+
+\section{Algorithm}
+
+\input{chapters/05_implementation/algorithm}
+
+\subsection{Hyperparameter Optimization}
+
+\input{chapters/05_implementation/hyperparameters_table}
+
+
+\subsection{Processing on $PC^2$}
+Since these datasets are large and running algorithms on them are computationally expensive, we use the servers of \ac{PC2} \footnote{https://pc2.uni-paderborn.de/} to ensure faster processing of the learning process of our model.
+
+
+\subsection{Datasets}
+
+Initially, the approach will be implemented on the local computer and tested with small data sets such as \textsc{KINSHIP} or \textsc{UMLS}.
+Subsequently, we want to compare our achieved accuracy with state-of-the-art approaches.
+Therefore, we want to use \ac{MRR} and Hit@10 metrics on datasets \textsc{WN18}, \textsc{WN18RR}, \textsc{FB15K}, \textsc{FB15K237}, \textsc{YAGO3-10}.
 
 
 
-
-
-
-
-How is a filtered rank computed?\\
-\cite{Ruffinelli2020You}
-- rank(j | i, k ) the filtered rank of object j, i.e. tge rank of model score s(i,k,j) among the collection of all pseudo-negative object scores
-- $$\{s(i,k,j'): j' \in \entities \text{ and $(i,k,j')$ does not occur in training, validation, or test data}\}$$.s
-- the higher the score of a triple, the more likely it is considered to be true by the model. 
-- Evaluation: Most common evaluation task for \ac{KGE} methods is a form of question answering which is called \textit{entitiy ranking} and is performed after  partitioning the available data in into a set of training, validation and test triples. 
-Given a test triple $(i,k,j)$  which is unseen during training, the entity ranking task is to determine the correct answer to the questions $(i,k,?)$ and $(?,k,j)$ for entities $j$ and $i$.
-All potential answers are first ranked by their score in descending order, filtered to not the ranking and finally metrics like MRR and Hits\@K are computed.\\
-
-
-
-
-
-
-
-
-b) how are filtered ranks of missing entities computed ?\\
-1) For each test triplet, head is replaced by each of the entities from the KG in turn
-2) dissimilarities/energies of those corrupted triplets are computed 
-3) sorted by ascending order 
-(score of corrupted triplets should be lower than score of positive triplets
-4) rank of the correct entity (for this example we have (h,r,?) and correct entity is corresponding t while (h,r,t) is in the KG)) is stored
-5) rank is used for metrics like MRR and Hits\@K
-same procedure for removing the tails instead of the head
-
-
-c) Why do we apply filtered setting ?\\
-- clearer evaluation of the performance of the methods in link prediction
-- results can be flawed when some corrupted triplets are actually valid
-ones \cite{TransE}.
-
-
-
-
-
-
-
+\input{chapters/05_implementation/datasets_table}
