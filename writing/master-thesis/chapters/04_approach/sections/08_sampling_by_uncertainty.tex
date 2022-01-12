@@ -1,0 +1,18 @@
+
+\section{Sampling by Uncertainty} \label{sec:sampling_by_uncertainty}
+
+To sample the negative triple $(h',r,t')^{*}_{ENT}$, we need to calculate the entropy-based uncertainty, which is defined as: 
+$$(h',r,t')^{*}_{ENT} = \argmax_{(h',r,t') \in Neg)} -  \sum_{i}{\mathds{P}(y_i | (h',r,t')) log \mathds{P}(y_i|(h',r,t'))}$$
+Since we have a binary classification with $y_i \in \{0,1\}$:\\
+$$= \argmax_{(h',r,t') \in Neg)} - \mathds{P}(y = 1| (h',r,t')) log \mathds{P}(y = 1|(h',r,t'))$$
+$$- \mathds{P}(y = 0| (h',r,t')) log \mathds{P}(y = 0|(h',r,t'))$$
+$$= \argmax_{(h',r,t') \in Neg)} - \mathds{P}(y = 1| (h',r,t')) log \mathds{P}(y = 1|(h',r,t'))$$
+$$- (1 - \mathds{P}(y = 1|(h',r,t') log(1 - \mathds{P}(y = 1|(h',r,t'))$$
+To obtain the probabilities for a triple of being positive ($y=1$) we define
+\begin{equation}
+    \mathds{P}(y = 1|(h, r, t)) := \frac{Generator\_Score(h, r, t) - score_{min}}{score_{max} - score_{min}} \in [0, 1]
+\end{equation}
+and accordingly the probability of a triple to be negative ($y=0$) as
+\begin{equation}
+    \mathds{P}(y = 0|(h, r, t)) := 1 - \mathds{P}(y = 1|(h, r, t)) \in [0,1]
+\end{equation}

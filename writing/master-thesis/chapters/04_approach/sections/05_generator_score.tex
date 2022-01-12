@@ -1,0 +1,33 @@
+\section{Generator Score} \label{sec:generatorscore}
+
+
+Calculate $Generator\_Score$ (equation (2)) for all positive triples $(h, r, t) \in \mathcal{T}_{batch}$.
+\begin{equation}
+    score_{max} := \argmax_{(h,r,t) \in \mathcal{T}_{batch}}{Generator\_Score(h,r,t)}
+\end{equation}
+Assuming $(h,r,t)_{max}$ achieved the highest score, 
+it is considered to have a probability of being positive (y=1) of 1:
+\begin{equation}
+    \mathds{P}(y = 1|(h, r, t)_{max}) := 1
+\end{equation}
+
+To incorporate more information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by several information about entities and relations in the \ac{KG}.
+Therefore, our new score function $Generator\_Score$ is defined as follows:
+\begin{equation}
+    Generator\_Score(h, r, t)=
+    \begin{cases}
+         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{POP(\textit{t})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(\textit{h, r, t})
+         \\ \ \ 
+         if\ \ \ \neg(\textit{h, r, t})
+         \\ \\
+         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{FRQ(\textit{r})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(h, r, t)
+         \\ \ \ 
+         if\ \ \ \neg \exists (\textit{h, r, \_})
+         \\
+    \end{cases}
+\end{equation}
+where $\lambda_i \in [0, 1]$ for $i \in [1,4]$ are hyperparameters and are set to randomly generated values at the beginning but can be optimized at a later stage.
+Furthermore, $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.
+\textit{PEER}, \textit{POP}, \textit{PIVO} and \textit{FRQ} are functions that provide additional information about the \ac{KG}, its entities and relations such that the $Generator\_Score$ can make more reliable statements about whether the given triple $(h, r, t)$ is positive or not.
+However, these components of the function can also be replaced or extended by further components known from for example Cluster-Based Sampling methods that give more information about a \ac{KG} and its structure.
+For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling or Near miss Sampling can be considered \cite{kotnis2017analysis}.

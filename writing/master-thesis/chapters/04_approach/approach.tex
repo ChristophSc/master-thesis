@@ -4,15 +4,12 @@
 In this chapter our approach of Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty is described.
 At first, in \autoref{sec:idea} the general idea of Sampling by Uncertainty is described and how this idea came about.
 Subsequently, 
-Since the implementation of Uncertainty Sampling is initially based on the \ac{KBGAN} approach, the architecture and structure (\autoref{sec:architecture}) of our approach will be explained first in order to highlight where we start in the original approach.
-Additionally, basic procedure is described in \autoref{sec:procedure} and what information is required for Uncertainty Sampling.
-From this required information the following sections result.
+Since the implementation of Uncertainty Sampling is initially based on the \ac{KBGAN} approach, the architecture and the corresponding procedure of our approach is described in \autoref{sec:architectureandprocedure}.
+From this procedure and the required information within the steps of the procedure and Uncertainty Sampling, the following sections result.
 First, we introduce the various feature functions (\autoref{sec:featurefunctions}) that provide additional information about the graph and contribute for measuring the "uncertainty" of our model.
 Subsequently, these feature functions are combined an weighted within our Generator Score which is described in more detail in \autoref{sec:generatorscore}.
 From this Generator Score, which gives information about the plausibility of triples, the probabilities of triples whether they are positive or negative can be calculated (\autoref{sec:probabilities}). 
 Finally, these probabilities are used to sample negative triples by the uncertainty of the model which is described in \autoref{sec:uncertaintysampling approach}.
-
-
 
 %Option1: downward description/ big to small
 %Uncertainty Sampling -> needs probabilities -> probability of being a positive/negative triple -> calculation of probabilities -> Generator Score -> features for Generator score
@@ -21,243 +18,18 @@ Finally, these probabilities are used to sample negative triples by the uncertai
 %(everything is understandable because it was described in section before
 %features -> generator score -> probabilities -> uncertainty Sampling
 
+\input{chapters/04_approach/sections/01_idea}
 
-\section{Idea} \label{sec:idea}
+\input{chapters/04_approach/sections/02_architecture_and_procedure}
 
-% description and general introduction to solution
-With our approach, we aim to improve the training process of embedding models by incorporating more information into the Negative Sampling process and thus selecting negative examples that are more informative and more valuable for the embedding model.
-This is achieved by including Uncertainty Sampling in state-of-the-art approaches.
-Uncertainty Sampling is the most commonly used query framework among all the other strategies frameworks (\autoref{sec:uncertaintysampling}) from Active Learning.
-In addition, it is easier to implement than some other frameworks, because, for example, it does not require to train multiple models as is the case with the Query-by-Committee approach.
-Nevertheless, it provides promising results for many Active Learning scenarios and is therefore also used for our approach to sample negative triples.
+\input{chapters/04_approach/sections/03_scoring_of_triples}
 
-Since \ac{KBGAN} captures the dynamic distribution of negative examples, but suffers particularly from non-efficient Sampling, our first considerations are based on this approach.
-This addresses the problem of instability and degeneracy of the training process, so that it is more likely to sample negative examples with a higher gradient.
-However, it is also conceivable for other existing approaches with an inefficient Negative Sampling process by replacing it with Uncertainty Sampling.
+\input{chapters/04_approach/sections/04_feature_functions}
 
-% ways to improve KBGAN
-In general, in \ac{KBGAN} there are two different ways to improve the approach and to allow Sampling of negative triples with a higher gradient:
-First, this can be achieved by improving the general quality of the negative examples in subset $Neg$.
-In the original approach, $Neg$ is generated only by Uniform Sampling, so that with high probability there are many useless negative triples.
-Second, the adversarial learning process can be optimized by learning faster with less Sampling which is addressed by our approach.
-To achieve this, we want to sample more informative negative examples.
-Informative at this point means particularly interesting triples for the embedding model because those that are difficult to classify as positive or negative triple.
-In many other negative sampling approaches, the goal is to create so-called hard negative examples and use them for the training process of the embedding model. 
-In our approach, the result of the sampling process can also be such a hard negative example, but this need not necessarily be the case.
-Now, what 
-In \autoref{fig:informativeinstances} the distinction between informative and hard negative examples is illustrated.
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.75\textwidth]{figures/informative_instances.PNG}
-  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
-  \label{fig:informativeinstances}
-\end{figure*}
-For simplicity, positive and negative instances are shown here in two-dimensional embedding space with dimensions d1 and d2.
-The embedding models sets the border between positive and negative triples at b1.
-For the approach of sampling hard negatives the embedding model should choose negative instance n1 because it is the closest one to the border b1 and therefore, it is the most difficult one to classify as positive or negative.
-Instead, Uncertainty Sampling aims to sample the most informative negative triple.
-But what is the most informative triple for an embedding model?
-The most informative triple is the one that the model helps the most to distinguish between positive and negative triples.
-For this reason, the negative triple n2 would be much more informative, since its classification would indicate whether the boundary between positive and negative triples should rather be set at b1 or at b2.
-Thus, by setting the new boundary b2 would contribute to a more accurate embedding of the data.
+\input{chapters/04_approach/sections/05_generator_score}
 
-\section{Architecture} \label{sec:architecture}
+\input{chapters/04_approach/sections/06_probabilities}
 
-In the original \cb{KBGAN} approach, as shown in \autoref{fig:architecture}, the sampling process from a negative triple set $Neg$ is replaced by Uncertainty Sampling.
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.90\textwidth]{figures/architecture.png}
-  \caption{Uncertainty Sampling replaces the original Random Sampling technique in \ac{KBGAN}.}
-  \label{fig:architecture}
-\end{figure*}
-After the set of negative triples $Neg$ is formed, different scores are calculated for all triples in the set.
-Based on this calculated value, the uncertainty of the model in the classification is calculated.
-Based on this uncertainty, it is then sampled. 
-This can be the case, for example, if many reasons speak for the classes "positive" and "negative" respectively, or also if few speak for the respective class.
+\input{chapters/04_approach/sections/07_uncertainty}
 
-\section{Procedure} \label{sec:procedure}
-
-
-
-\section{Feature Functions} \label{sec:featurefunctions}
-
-- Functions like PIVO, PEER, FRQ, POP which give more information about the KG
-- $f_G$
-
-
-\subsection{Generator Score} \label{sec:generatorscore}
-
-
-
-\subsection{Probabilities of Positive and Negative Triples} \label{sec:probabilities}
-
-
-
-\section{Uncertainty Sampling} \label{sec:uncertaintysampling approach}
-For Uncertainty Sampling, we have several measures and frameworks at our disposal which are stated in \autoref{sec:uncertaintysampling}.
-Entropy-based Uncertainty Sampling represents the standard approach and is used in for binary classification problems.
-Since we are dealing with negative and positive triples and their distinction, our first approach will start with a binary classification problem for which we define label 0 for negative triples and 1 for positive triples.
-For this we use standard entropy-based Uncertainty Sampling, which works with the probability that a given triple is positive. 
-Further possibilities arise for example by using other Uncertainty Sampling variants and methods like \ac{EBU}, \ac{CU} or \ac{EAU} which set a different focus in Sampling and represent more complex alternatives, as additional factors are included in the calculation.
-By choosing entropy-based Uncertainty Sampling we sample the instance whose posterior probability of being positive is nearest to 0.5 \cite{Settles2009ActiveLL}.
-In our case, since we have a binary classification between negative triples ($y=0$) and positive triples ($y=1$), $<$ 0.5 represents a negative and $\geq$ 0.5 a positive triple.
-The result is that we query examples that are close to 0.5, or in other words: 
-we query triples where the embedding model is most uncertain how to label it.
-
-
-
-
-
-
-
-
-
-
-sampling we need probabilities of each triple to be positive. 
-Therefore, we need probabilities $\mathds{P}(y_i | x; \theta)$ for the classes $y_i \in \{0, 1\}$.
-To incorporate more information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by several information about entities and relations in the \ac{KG}.
-Therefore, our new score function $Generator\_Score$ is defined as follows:
-\begin{equation}
-    Generator\_Score(h, r, t)=
-    \begin{cases}
-         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{POP(\textit{t})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(\textit{h, r, t})
-         \\ \ \ 
-         if\ \ \ \neg(\textit{h, r, t})
-         \\ \\
-         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{FRQ(\textit{r})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(h, r, t)
-         \\ \ \ 
-         if\ \ \ \neg \exists (\textit{h, r, \_})
-         \\
-    \end{cases}
-\end{equation}
-where $\lambda_i \in [0, 1]$ for $i \in [1,4]$ are hyperparameters and are set to randomly generated values at the beginning but can be optimized at a later stage.
-Furthermore, $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.
-\textit{PEER}, \textit{POP}, \textit{PIVO} and \textit{FRQ} are functions that provide additional information about the \ac{KG}, its entities and relations such that the $Generator\_Score$ can make more reliable statements about whether the given triple $(h, r, t)$ is positive or not.
-However, these components of the function can also be replaced or extended by further components known from for example Cluster-Based Sampling methods that give more information about a \ac{KG} and its structure.
-For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling or Near miss Sampling can be considered \cite{kotnis2017analysis}.
-
-Assuming $\mathcal{T} \subset $ \ac{KG} is a set of positive triples and $\entities_{\mathcal{T}}$, $\relations_{\mathcal{T}}$ are its sets of entities and relations.
-Additionally we have the function $peergroup(e) \subseteq \mathcal{T}$ which returns a set of peers for given entity $e \in \entities_{\mathcal{T}}$ by its embedding. 
-Then the $Generator\_Score$ function contains the following features from \cite{arnaout2020enriching}:
-\begin{itemize}
-    \item 
-    \emph{\ac{PEER}:} 
-    Relative frequency of peers within a peer group that is related to different objects, e.g. 0.9 of persons are married. 
-    \begin{equation}
-        PEER(h,r) = \frac{|\{p | p \in peergroup(h), (p, r, \_) \in \mathcal{T}\}|}{|peergroup(h)|}
-    \end{equation}
-
-    \item
-    \emph{\ac{POP}:} 
-    The popularity of the tail entity $t$ in $\mathcal{T}$. 
-    \begin{equation}
-        POP(t) = \frac{|\{t | (\_, t, \_) \in \mathcal{T}\}|}{|\mathcal{T}|}
-    \end{equation}
-
-    \item 
-    \emph{\ac{FRQ}:} 
-    Frequency of a relation/predicate $r$ in $\mathcal{T}$. 
-    \begin{equation}
-        FRQ(r) = \frac{|\{r | (\_, r, \_) \in \mathcal{T}\}|}{|\mathcal{T}|}
-    \end{equation}
-    
-    \item 
-    \emph{\ac{PIVO}:} 
-    Textual background information about an entities $h$ and $t$ and is a pivoting classifier like in \cite{arnaout2020enriching}.
-    
-    \item 
-    \emph{$f_G$:} 
-    $Generator\_Score$ function of the \ac{KGE} model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
-    
-\end{itemize}
-Input of the algorithm of our approach is like in original \ac{KBGAN} a pre-trained generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$, 
-and a pre-trained discriminator D with parameters $\theta_D$ and score function $f_D(h,r,t)$.
-The training process can be described in the following steps:
-\begin{enumerate}
-    \item 
-    If $\mathcal{T} \subset $ \ac{KG} is the training set of positive fact triples, sample a mini-batch of data $\mathcal{T}_{batch} \subset \mathcal{T}$.
- 
-    \item  Calculate $Generator\_Score$ (equation (2)) for all positive triples $(h, r, t) \in \mathcal{T}_{batch}$.
-    \begin{equation}
-        score_{max} := \argmax_{(h,r,t) \in \mathcal{T}_{batch}}{Generator\_Score(h,r,t)}
-    \end{equation}
-    Assuming $(h,r,t)_{max}$ achieved the highest score, 
-    it is considered to have a probability of being positive (y=1) of 1:
-    \begin{equation}
-        \mathds{P}(y = 1|(h, r, t)_{max}) := 1
-    \end{equation}
-    
-    \item 
-    Create a set of negative triples $Neg(h,r,t)=\{(h_i',r,t_i')\}_{i=1\dots N_s}$ by uniformly randomly sample $N_s$ negative triples by replacing head $h$ or tail entity $t$ for given positive triple $(h, r, t)$.
-    
-    \item 
-    Calculate $Generator\_Score$ of each triple $(h',r,t') \in Neg$.
-    Remember triple $(h',r,t')_{min}$ which achieves the minimum negative score which is defined as
-    \begin{equation}
-        score_{min} := \argmin_{(h', r, t') \in Neg}{Generator\_Score(h', r, t')}
-    \end{equation}
-    In the next step, $score_{min}$ is the lower bound for the probability of a triple to be positive (y=1), so it is considered to be a probability of 0.
-    \begin{equation}
-        \mathds{P}(y = 1|(h', r, t')_{min}) := 0
-    \end{equation}
-    
-    \item 
-    To sample the negative triple $(h',r,t')^{*}_{ENT}$, we need to calculate the entropy-based uncertainty, which is defined as: 
-    $$(h',r,t')^{*}_{ENT} = \argmax_{(h',r,t') \in Neg)} -  \sum_{i}{\mathds{P}(y_i | (h',r,t')) log \mathds{P}(y_i|(h',r,t'))}$$
-    Since we have a binary classification with $y_i \in \{0,1\}$:\\
-    $$= \argmax_{(h',r,t') \in Neg)} - \mathds{P}(y = 1| (h',r,t')) log \mathds{P}(y = 1|(h',r,t'))$$
-    $$- \mathds{P}(y = 0| (h',r,t')) log \mathds{P}(y = 0|(h',r,t'))$$
-    $$= \argmax_{(h',r,t') \in Neg)} - \mathds{P}(y = 1| (h',r,t')) log \mathds{P}(y = 1|(h',r,t'))$$
-    $$- (1 - \mathds{P}(y = 1|(h',r,t') log(1 - \mathds{P}(y = 1|(h',r,t'))$$
-    To obtain the probabilities for a triple of being positive ($y=1$) we define
-    \begin{equation}
-        \mathds{P}(y = 1|(h, r, t)) := \frac{Generator\_Score(h, r, t) - score_{min}}{score_{max} - score_{min}} \in [0, 1]
-    \end{equation}
-    and accordingly the probability of a triple to be negative ($y=0$) as
-    \begin{equation}
-        \mathds{P}(y = 0|(h, r, t)) := 1 - \mathds{P}(y = 1|(h, r, t)) \in [0,1]
-    \end{equation}
-    
-    \item 
-    From this step on, everything is the same as the original \ac{KBGAN} approach:
-    The generated negative triple $(h',r,t')$ as well as the positive triple $(h, r, t)$ are sent to the discriminator.
-    
-    \item 
-    The discriminator distinguishes both triples by given scoring function $f_D$, which is usually a translation-based \ac{KGE} model like \textsc{TransE} or \textsc{TransD}.
-    
-    \item 
-    The reward defined by $r = - f_D(h',r,t')$ of the current triple pair is calculated and added to the reward sum $r_{sum}$.
-    
-\end{enumerate}
-These adversarial training steps are repeated until convergence, such that the generator improves the quality of sampled negative triples and discriminator improves embedding over time.
-Output of our algorithm is the adversarially trained discriminator and its embedding.
-By incorporating additional information from the graph and Sampling triples by uncertainty that have the most added value to the embedding model, we expect promising results.
-
-
-
-
-
-
-
-
-
-
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.PNG}
-  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
-  \label{fig:informativeinstances}
-\end{figure*}
-
-
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.PNG}
-  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
-  \label{fig:informativeinstances}
-\end{figure*}
-
-
-
-
-
+\input{chapters/04_approach/sections/08_sampling_by_uncertainty}

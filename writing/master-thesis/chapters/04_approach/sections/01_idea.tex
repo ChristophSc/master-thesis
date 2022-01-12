@@ -1,0 +1,38 @@
+
+\section{Idea} \label{sec:idea}
+% description and general introduction to solution
+With our approach, we aim to improve the training process of embedding models by incorporating more information into the Negative Sampling process and thus selecting negative examples that are more informative and more valuable for the embedding model.
+This is achieved by including Uncertainty Sampling in state-of-the-art approaches.
+Uncertainty Sampling is the most commonly used query framework among all the other strategies frameworks (\autoref{sec:uncertaintysampling}) from Active Learning.
+In addition, it is easier to implement than some other frameworks, because, for example, it does not require to train multiple models as is the case with the Query-by-Committee approach.
+Nevertheless, it provides promising results for many Active Learning scenarios and is therefore also used for our approach to sample negative triples.
+
+Since \ac{KBGAN} captures the dynamic distribution of negative examples, but suffers particularly from non-efficient Sampling, our first considerations are based on this approach.
+This addresses the problem of instability and degeneracy of the training process, so that it is more likely to sample negative examples with a higher gradient.
+However, it is also conceivable for other existing approaches with an inefficient Negative Sampling process by replacing it with Uncertainty Sampling.
+
+% ways to improve KBGAN
+In general, in \ac{KBGAN} there are two different ways to improve the approach and to allow Sampling of negative triples with a higher gradient:
+First, this can be achieved by improving the general quality of the negative examples in subset $Neg$.
+In the original approach, $Neg$ is generated only by Uniform Sampling, so that with high probability there are many useless negative triples.
+Second, the adversarial learning process can be optimized by learning faster with less Sampling which is addressed by our approach.
+To achieve this, we want to sample more informative negative examples.
+Informative at this point means particularly interesting triples for the embedding model because those that are difficult to classify as positive or negative triple.
+In many other negative sampling approaches, the goal is to create so-called hard negative examples and use them for the training process of the embedding model. 
+In our approach, the result of the sampling process can also be such a hard negative example, but this need not necessarily be the case.
+Now, what 
+In \autoref{fig:informativeinstances} the distinction between informative and hard negative examples is illustrated.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/informative_instances.PNG}
+  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
+  \label{fig:informativeinstances}
+\end{figure*}
+For simplicity, positive and negative instances are shown here in two-dimensional embedding space with dimensions d1 and d2.
+The embedding models sets the border between positive and negative triples at b1.
+For the approach of sampling hard negatives the embedding model should choose negative instance n1 because it is the closest one to the border b1 and therefore, it is the most difficult one to classify as positive or negative.
+Instead, Uncertainty Sampling aims to sample the most informative negative triple.
+But what is the most informative triple for an embedding model?
+The most informative triple is the one that the model helps the most to distinguish between positive and negative triples.
+For this reason, the negative triple n2 would be much more informative, since its classification would indicate whether the boundary between positive and negative triples should rather be set at b1 or at b2.
+Thus, by setting the new boundary b2 would contribute to a more accurate embedding of the data.

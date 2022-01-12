@@ -1,0 +1,28 @@
+\section{Probabilities of Positive and Negative Triples} \label{sec:probabilities}
+
+Therefore, we need probabilities $\mathds{P}(y_i | x; \theta)$ for the classes $y_i \in \{0, 1\}$.
+
+Calculate $Generator\_Score$ of each triple $(h',r,t') \in Neg$.
+Remember triple $(h',r,t')_{min}$ which achieves the minimum negative score which is defined as
+\begin{equation}
+    score_{min} := \argmin_{(h', r, t') \in Neg}{Generator\_Score(h', r, t')}
+\end{equation}
+In the next step, $score_{min}$ is the lower bound for the probability of a triple to be positive (y=1), so it is considered to be a probability of 0.
+\begin{equation}
+    \mathds{P}(y = 1|(h', r, t')_{min}) := 0
+\end{equation}
+
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.PNG}
+  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
+  \label{fig:informativeinstances}
+\end{figure*}
+
+
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.PNG}
+  \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
+  \label{fig:informativeinstances}
+\end{figure*}

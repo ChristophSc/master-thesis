@@ -1,0 +1,10 @@
+\section{Uncertainty} \label{sec:uncertainty}
+For Uncertainty Sampling, we have several measures and frameworks at our disposal which are stated in \autoref{sec:uncertaintysampling}.
+Entropy-based Uncertainty Sampling represents the standard approach and is used in for binary classification problems.
+Since we are dealing with negative and positive triples and their distinction, our first approach will start with a binary classification problem for which we define label 0 for negative triples and 1 for positive triples.
+For this we use standard entropy-based Uncertainty Sampling, which works with the probability that a given triple is positive. 
+Further possibilities arise for example by using other Uncertainty Sampling variants and methods like \ac{EBU}, \ac{CU} or \ac{EAU} which set a different focus in Sampling and represent more complex alternatives, as additional factors are included in the calculation.
+By choosing entropy-based Uncertainty Sampling we sample the instance whose posterior probability of being positive is nearest to 0.5 \cite{Settles2009ActiveLL}.
+In our case, since we have a binary classification between negative triples ($y=0$) and positive triples ($y=1$), $<$ 0.5 represents a negative and $\geq$ 0.5 a positive triple.
+The result is that we query examples that are close to 0.5, or in other words: 
+we query triples where the embedding model is most uncertain how to label it.

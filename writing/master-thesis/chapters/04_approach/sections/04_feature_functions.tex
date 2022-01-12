@@ -1,0 +1,37 @@
+
+\section{Feature Functions} \label{sec:feature_functions}
+
+Assuming $\mathcal{T} \subset $ \ac{KG} is a set of positive triples and $\entities_{\mathcal{T}}$, $\relations_{\mathcal{T}}$ are its sets of entities and relations.
+Additionally we have the function $peergroup(e) \subseteq \mathcal{T}$ which returns a set of peers for given entity $e \in \entities_{\mathcal{T}}$ by its embedding. 
+Then the $Generator\_Score$ function contains the following features from \cite{arnaout2020enriching}:
+\begin{itemize}
+    \item 
+    \emph{\ac{PEER}:} 
+    Relative frequency of peers within a peer group that is related to different objects, e.g. 0.9 of persons are married. 
+    \begin{equation}
+        PEER(h,r) = \frac{|\{p | p \in peergroup(h), (p, r, \_) \in \mathcal{T}\}|}{|peergroup(h)|}
+    \end{equation}
+
+    \item
+    \emph{\ac{POP}:} 
+    The popularity of the tail entity $t$ in $\mathcal{T}$. 
+    \begin{equation}
+        POP(t) = \frac{|\{t | (\_, t, \_) \in \mathcal{T}\}|}{|\mathcal{T}|}
+    \end{equation}
+
+    \item 
+    \emph{\ac{FRQ}:} 
+    Frequency of a relation/predicate $r$ in $\mathcal{T}$. 
+    \begin{equation}
+        FRQ(r) = \frac{|\{r | (\_, r, \_) \in \mathcal{T}\}|}{|\mathcal{T}|}
+    \end{equation}
+    
+    \item 
+    \emph{\ac{PIVO}:} 
+    Textual background information about an entities $h$ and $t$ and is a pivoting classifier like in \cite{arnaout2020enriching}.
+    
+    \item 
+    \emph{$f_G$:} 
+    $Generator\_Score$ function of the \ac{KGE} model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
+    
+\end{itemize}
