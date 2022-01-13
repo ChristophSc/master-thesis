@@ -1,0 +1,11 @@
+\section{Background}
+\label{sec:background}
+
+
+% give information about different learning strategies
+% introduction to Negative Sampling
+% and a more detailed description of Negative Sampling and current approaches
+Therefore, Negative Sampling represents a non-trivial step in \ac{KG} embedding, as the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
+Knowledge representation learning models are trained under the \ac{OWA} or the \ac{CWA}.
+While the \ac{CWA} assumes that unobserved facts which are not in a \ac{KG} are false, the \ac{OWA}  states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
+Due to the incomplete nature of \acp{KG}, most models prefer the \ac{OWA}, which, however, has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.

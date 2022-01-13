@@ -1,0 +1,22 @@
+\section{Negative Sampling Methods} 
+\label{sec:negativesamplingmethods}
+
+In the literature, several negative sampling methods are proposed to create synthetic negative examples which are used for subsequent embedding learning.
+They can be separated into three different groups \cite{qianunderstanding}:
+\begin{itemize}
+    \item 
+    \textbf{Static Distribution-Based Sampling} include methods like the uniform, Bernoulli and probabilistic sampling technique from a fixed and static distribution of negative triples.
+	While in the uniform sampling either the head or tail entity is replaced by an entity randomly sampled from entity set \entities,
+	the Bernoulli sampling technique uses different probabilities for replacing head or tail entity depending on the underlying relation type.
+	In contrast, probabilistic sampling speeds up the training process by including a train bias.
+	
+	\item 
+    \textbf{Custom Cluster-Based Sampling} samples negative triples from small clusters which are based on closeness between entities.
+    Instead of sampling from the whole set of entities, they a are divided into a number of groups and randomly sampled to create negative triples. Examples are TransE-\ac{SNS} \cite{TransE-SNS} or \ac{NSCaching} \cite{zhang2019nscaching} which are based on K-Means clustering algorithm or caching techniques. 
+    
+    \item 
+    \textbf{Dynamic Distribution-Based Sampling} tries to model the changes the distribution of negative triples by using a \ac{GAN}-based framework which includes two components: A generator and a discriminator.
+	While the generator dynamically approximates the constantly updated Negative Sampling distribution to provide high-qualitative negative triples, 
+	the discriminator learns to distinguish positive and negative triples with its own \ac{KGE} model.
+	Known approaches are \ac{KBGAN} \cite{cai2017kbgan}, \ac{IGAN}  \cite{IGAN} or \ac{MCNS} \cite{MCNS}.
+\end{itemize}

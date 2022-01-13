@@ -1,0 +1,48 @@
+\section{Uncertainty Sampling} \label{sec:uncertaintysampling}
+Uncertainty Sampling originates from Active Learning, 
+where labeled data for training a supervised model is obtained from a dataset of unlabeled instances.
+Based on the informativeness of the unlabeled instances for the learning algorithm, a prioritization results in which they are labeled.
+It is used in machine learning approaches, where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled data \cite{Settles2009ActiveLL}.
+They aim for greater accuracy with fewer labeled training instances \cite{Settles2009ActiveLL}.
+These selected unlabeled instances can either be generated de novo or sampled from a given distribution.
+In the literature several query strategies have been proposed with different approaches how to receive informative instances, one of them is Uncertainty Sampling \cite{Settles2009ActiveLL}.
+Other query strategies for Active Learning are Query-By-Committee, Expected Model Change, Variance Reduction, Fisher Information Ration, Estimated Error Reduction and Density-Weighted Methods \cite{Settles2009ActiveLL}.
+They provide different strategies to obtain informative instances from the unlabeled dataset like voting of a committee consisting of several trained models, querying the instance that would impart the greatest change to the current model if we knew its label or queries instances which minimize the learner’s future error by minimizing its variance.
+
+In Uncertainty Sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of the unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$.
+Subsequently, the instance with the highest score will be sampled.
+Popular examples of measures for utility score include
+\begin{itemize}
+    \item the entropy:
+     $$s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}$$
+
+    \item the least confidence:
+    $$s(\theta, x) = 1 - \max_{y \in \mathcal{Y}}{p_{\theta}(y | x)}$$
+    
+    \item the smallest margin:
+    $$s(\theta, x) = p_{\theta}(y_m | x) - p_{\theta}(y_n|x)$$
+    where
+    $y_m = \argmax_{y \in \mathcal{Y}} p_{\theta}(y | x)$ 
+    and 
+    $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$
+\end{itemize}
+Following three different frameworks for measuring the  uncertainty of a learner can be separated \cite{nguyen2021howtomeasure}.
+While the first one has been specifically developed for the purpose of active learning, the others are more general approaches for machine learning \cite{nguyen2021howtomeasure}.
+\begin{enumerate}
+    \item 
+    \textbf{Evidence-based uncertainty (EBU)} differentiates between uncertainty due to conflicting evidence and insufficient evidence.
+    \ac{EBU} looks at the influence of individual features,
+    partitions them into those that provide evidence for the positive and for the negative class, 
+    and either queries the instance with the highest conflicting evidence (\ac{CEU}) or where both evidences are low (\ac{IEU}).
+
+    \item 
+    \textbf{\ac{CU}} seeks to differentiate between the reducible and irreducible part of the uncertainty in a prediction by defining a
+    credal set of models with probability distributions.
+    A class y is dominated by another y' if y is more likely than y' for any distribution in the credal set
+    An instance x is sampled, which has the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
+
+    \item 
+    \textbf{Epistemic and aleatoric uncertainty (EAU)} are based on the use of relative likelihoods. 
+    \ac{EU} samples instance for which both the positive and the negative class appear to be plausible, while \ac{AU} samples instances where none of the classes is supported.
+    Therefore, the uncertainty due to either influence of the classes or lack of knowledge. 
+\end{enumerate}

@@ -1,0 +1,16 @@
+\section{Problem}
+
+Due to the need for negative facts, in the literature several Negative Sampling methods have been proposed which sample negative triplets.
+Subsequently, these sampled triples are used to facilitate the learning process. 
+A standard technique is Negative Random Sampling which replaces either the head or the tail entity in a given positive triple  \triple{h}{r}{t} by any other entity of the \ac{KG}, which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
+Although models trained with Negative Random Sampling have been successfully applied in many applications \cite{TransE}, there have been several attempts to model more effective strategies, e.g. 
+a self-adversarial technique \cite{RotatE} or the 1VsAll approach \cite{ConvE}.
+
+Many of these approaches aim to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process. 
+
+
+- several KGE require Negative Sampling for learning the embeddings for all triples
+- 
+- Negatives are too easy
+- do not help the \ac{KGE} model to improve the embedding
+- 

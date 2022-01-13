@@ -1,41 +1,16 @@
 \chapter{Implementation}
 \label{ch:implementation}
 
-\section{Data analysis}
+\input{chapters/05_implementation/sections/01_data_set_analysis}
+
+\input{chapters/05_implementation/sections/02_model}
+
+\input{chapters/05_implementation/sections/03_used_knowledge_graph_embeddings}
+
+\input{chapters/05_implementation/sections/04_algorithm}
+
+\input{chapters/05_implementation/sections/05_hyperparameter_optimization}
+
+\input{chapters/05_implementation/sections/06_processing_on_pc2}
 
 
-
-\section{Our Model}
-
-ADD AND DESCRIBE CLASS DIAGRAMM
-
-
-\section{Used Knowledge Graph Embeddungs}
-
-Additionally, we will test the impact of our Negative Sampling approach on different embeddings with the given datasets and compare in which areas our method outperforms the current state-of-the-art approaches.
-For this reason, we will use the most common embeddings from the three groups of embedding types:
-\textsc{TransE}, \textsc{TransH} for \textit{Translation-Based Models}, \textsc{DistMult} and \textsc{ComplEx} for \textit{Tensor Factorization-Based Models}, and \textsc{ConvE} and \textsc{ConEx} for \textit{Neural Network-Based Models}.
-
-
-\section{Algorithm}
-
-\input{chapters/05_implementation/algorithm}
-
-\subsection{Hyperparameter Optimization}
-
-\input{chapters/05_implementation/hyperparameters_table}
-
-
-\subsection{Processing on $PC^2$}
-Since these datasets are large and running algorithms on them are computationally expensive, we use the servers of \ac{PC2} \footnote{https://pc2.uni-paderborn.de/} to ensure faster processing of the learning process of our model.
-
-
-\subsection{Datasets}
-
-Initially, the approach will be implemented on the local computer and tested with small data sets such as \textsc{KINSHIP} or \textsc{UMLS}.
-Subsequently, we want to compare our achieved accuracy with state-of-the-art approaches.
-Therefore, we want to use \ac{MRR} and Hit@10 metrics on datasets \textsc{WN18}, \textsc{WN18RR}, \textsc{FB15K}, \textsc{FB15K237}, \textsc{YAGO3-10}.
-
-
-
-\input{chapters/05_implementation/datasets_table}

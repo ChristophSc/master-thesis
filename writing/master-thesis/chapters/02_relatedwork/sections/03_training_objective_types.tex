@@ -1,0 +1,31 @@
+\section{Training Objective Types} 
+\label{sec:training_objective_types}
+
+
+As described in \cite{cai2017kbgan} several Training Objective Types for \ac{KGE} models exist.
+Every model defines a \textit{score function} $f(h,r,t)$ which assigns a score to every possible triple in the knowledge graph.
+The estimated likelihood of a triple to be true depends only on its score given by the score function.
+Since different \ac{KGE} models formulate different designs for this scoring function, the interpretation of this score is also different which in turn leads to different training objectives.
+The two most common forms are \textbf{Marginal Loss function} and \textbf{Log-softmax function}:
+\begin{enumerate}
+    \item \textbf{Marginal loss function} is mostly used by translation-based models like \textsc{TransE} and \textsc{TransD}.
+    Since these models work with distances, a smaller distance indicates a higher likelihood of a triple to be true.
+    It is defined as 
+    \begin{equation}
+        L_{m}=\sum_{(h,r,t)\in\mathcal{T}}[f(h,r,t)-f(h',r,t')+\gamma]_+\label{eq:marginalloss}
+    \end{equation}
+    where $\gamma$ is the margin, $[\cdot]_+=\max(0,\cdot)$ is the hinge function, and $(h',r,t')\in\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is a negative triple.
+    
+    \item \textbf{Log-softmax loss function} is commonly used for models which have a probabilistic interpretation for score function like \distmult or \complex.
+    Therefore, for corrupted, negative triples the score should be lower than for positive ones.
+    The loss function is defined as
+    \begin{multline}
+        L_{l}=\sum_{(h,r,t)\in\mathcal{T}}-\log \frac{\exp f(h,r,t)}{\sum\exp f(h',r,t')}\\
+        (h',r,t')\in\{(h,r,t)\}\cup Neg(h,r,t)\label{eq:nllloss}
+    \end{multline}
+    where $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is a set of sampled corrupted triples.
+    Therefore, it provides a probability distribution over a set of triples where each triple $(h, r, t)$ has probability $p(h,r,t)=\frac{\exp f(h,r,t)}{\sum_{(h',r,t')}\exp f(h',r,t')}$.
+    In the original \kbgan approach this distribution is provided by the generator from which one negative triple is sampled and given to the discriminator.
+
+    \item \textbf{Other forms} like a triple-wise logistic function \cite{ConvE} exist, but the two other ones are the most common used.
+\end{enumerate}

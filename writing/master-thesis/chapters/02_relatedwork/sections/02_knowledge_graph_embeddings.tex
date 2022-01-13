@@ -1,0 +1,74 @@
+\section{Knowledge Graph Embeddings} 
+\label{sec:knowledge_graph_embeddings}
+
+
+\acp{KGE} are low-dimensional representations of entities and relations in a \ac{KG}. 
+Numerous methods have been developed in the last few years to tackle various problems such as defining a different score function to measure the distance between entities relative to their relation.
+Depending on the dimensionality of the embedding space and which types of relations should be embedded, a different embedding can be chosen.
+While some of them support only symmetric relations, others support antisymmetric ones as well. 
+Besides this, the types of relations in a \ac{KG} differ from each other.
+We can differentiate between 1-to-1, 1-to-N, N-to-1, and N-to-N relations.
+Overall, all the embedding methods can be separated by three different aspects \cite{electronics9050750}:
+(i) How they represent entities and relations, (ii) how they define the scoring function and (iii) how they optimize the ranking criterion.
+On the basis of this, two different categories are derived:
+\textit{Triplet Fact-Based Representation Learning Models} and \textit{Description-Based Representation Learning Models} \cite{electronics9050750}.
+
+\textit{Triplet Fact-Based Representation Learning Models} are separated into three groups:
+\begin{enumerate}
+    \item 
+    \textbf{Translation-Based Models}  which are based on word embedding algorithms: 
+    \textsc{TransE} \cite{TransE}, \textsc{TransH} \cite{TransH}, \textsc{TransR} \cite{TransR}, \textsc{TransD} \cite{TransD}
+    and 
+    \textsc{RotatE} \cite{RotatE}
+    The basic idea of \transe is that a functional relation $r$ corresponds to a translation of the embeddings, i.e. $h + r \thickapprox t$ when (h,r,t) holds.
+    If it does not hold, $t$ should be far away from $h + r$ which lead to a energy-based framework $d(h+r, t)$ for some dissimilarity measure $d$ ($L_1$ or $L_2$ norm) \cite{TransE}.
+    The idea of \transe is depicted in \autoref{fig:translationbasedmodels} (a).
+    \begin{figure*}[t]
+      \centering
+        \includegraphics[width=0.95\textwidth]{figures/TransE+TransD.png}
+      \caption{(a) TransE (d) TransD (based on: \cite{cai2017kbgan})}
+      \label{fig:translationbasedmodels}
+    \end{figure*}
+    Therefore, head entity $h$, tail entity $t$ and relation $r$ are in the same vector space and the model tries to create the embeddings so that $h+r$ map to $t$ as closely as possible, which leads to the scoring function
+    \begin{equation}
+        f_r(h,t) = || h + r - t ||_{l_1, l_2}
+        \label{eq:transescoringfunction}
+    \end{equation}
+    \transd on the other hand works with two vectors for each entity and relation.
+    The first one captures the meaning and the second one is used to construct the mapping matrices \cite{TransD}.
+
+    \item 
+    \textbf{Tensor Factorization-Based Models}:
+    \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, \textsc{HolE} \cite{HolE}
+
+    
+    \distmult \cite{DistMult} simplifies the computational complexity of \rescal and restricts matrix $M_r$ to be a diagonal matrices, i.e. $M_r = diag(r), r \in \mathbb{R}^d$ \cite{electronics9050750}. 
+    Therefore, its scoring function is transformed to
+    \begin{equation}
+        f_r(h,r) = h^{\top}diag(r)t\label{eq:distmultscoringfunction}
+    \end{equation}
+    Since \distmult is not able to model asymmetric relations, \complex \cite{ComplEx} extends \distmult by complex-valued embeddings \cite{electronics9050750} which leads to the scoring function
+    \begin{equation}
+        f_r(h,r) = Re(h^{\top}diag(r)\bar{t})
+        \label{eq:complexscoringfunction}
+    \end{equation}
+    where $Re(\dot)$ denotes the real part of a complex value and $\bar{t}$ is the complex conjugate of t.
+    
+    
+    \item 
+    \textbf{Neural Network-Based Models}: 
+    \textsc{ConvE} \cite{ConvE}, \textsc{HypER} \cite{HypER}, \textsc{ConEx} \cite{ConEx}, \textsc{ConvQ} and  \textsc{ConvO} \cite{demir2021convolutional}
+\end{enumerate}
+\textit{Description-Based Representation Learning Models} can also be broken down into three further categories:
+\begin{enumerate}
+    \item 
+    \textbf{Textual Description-Based Models} is an extension of the traditional triplet-based model and integrates additional textual information for entities to evolve its performance.
+    Examples are \ac{TKRL} \cite{TKRL} and \ac{TEKE} \cite{TEKE}.
+    
+    \item 
+    \textbf{Relation Path-Based Models} refines the performance of an embedding model by multi-step relational paths, which reveal semantic relations between the entities.
+    One example is \ac{PTransE} \cite{PTransE}.
+    
+     \item 
+    \textbf{Other Models} that cannot be assigned to the other two categories and pay attention to further triple information such as temporal aspects.
+\end{enumerate}
