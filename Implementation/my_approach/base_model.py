@@ -134,7 +134,7 @@ class BaseModel(object):
             # sample_idx = torch.multinomial(probs, n_sample, replacement=True)            
         else:   
             # original random Sampler            
-            logits = -self.mdl.prob_logit(h_neg_var, r_neg_var, t_neg_var) / temperature
+            logits = self.mdl.prob_logit(h_neg_var, r_neg_var, t_neg_var) / temperature
 
             # calculate probabilities for each negative triple to be sampled =             
             probs = nnf.softmax(logits, dim=-1)
