@@ -1,11 +1,21 @@
 \section{Background}
 \label{sec:background}
 
+Negative Sampling represents a non-trivial step in \ac{KG} embedding, as the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
 
-% give information about different learning strategies
-% introduction to Negative Sampling
-% and a more detailed description of Negative Sampling and current approaches
-Therefore, Negative Sampling represents a non-trivial step in \ac{KG} embedding, as the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
-Knowledge representation learning models are trained under the \ac{OWA} or the \ac{CWA}.
-While the \ac{CWA} assumes that unobserved facts which are not in a \ac{KG} are false, the \ac{OWA}  states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
+% -> WHERE DOES NEGATIVE SAMPLING COME FROM?
+As described from \cite{qianunderstanding}, the idea if Negative Sampling was firstly raised in probabilistic neural language models and called importance sampling. 
+To benefit the training of word2vec, it was emphasized as a simplified version of \ac{NCE}  and wanted to overcome the computational difficulty which was associated with probabilistic language models.
+Due to their partition functions which sum over all words which is expensive if the amount of vocabularies is high.
+Negative Sampling in comparison, transforms the difficult this density estimation problem into a binary classification problem where true samples are distinguished from noise samples.
+This transformations simplifies the computation as well as accelerates the training.
+Asymptotically estimating the “true” distribution by separating true from noise samples leads to high efficiency and low computational cost.
+If we consider nodes as words and neighbors of nodes as the context of a word, \acp{KG} are similar to modeling languages.
+Therefore, the idea was applied to \ac{KGE} learning and has become common practice over the past several years.
+Instead of discriminating true samples from noise samples, in \acp{KG} positive triples are descriminated from negative ones.
+
+Usually, Knowledge representation learning models are trained under the \ac{OWA} or the \ac{CWA}.
+While the \ac{CWA} assumes that unobserved facts which are not in a \ac{KG} are false, the \ac{OWA} states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
 Due to the incomplete nature of \acp{KG}, most models prefer the \ac{OWA}, which, however, has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.
+
+

@@ -16,8 +16,31 @@ One of the main challenges for \ac{KG} is to find a Knowledge Graph Representati
 \ac{KGE} is a renowned area of research in recent years is the transformation of \acp{KG} into a low-dimensional vector space using embedding models \cite{Alam2020AffinityDN}.
 Many approaches learn vector representations for \acp{KG} while learning a parametrized scoring function that assigns scores to input triples.
 A score of a triple is expected to reflect the likelihood that the input triple is true \cite{ConvE, qiannegative}.
-To learn these low-dimensional \acp{KGE} for entities and relations, several training approaches are available, which differ mainly in the way negative examples are generated \cite{Ruffinelli2020You}. 
-However, additional information about false facts would also be valuable for the scoring function, to discriminate positive and negative samples \cite{qiannegative}.
-Most known \acp{KG} contain only positive instances for space efficiency \cite{qiannegative}.
-Moreover, not all positive information are represented in the \acp{KG}, so their picture of reality is incomplete.
-Since there are no negative facts, but many embedding learning models (as well as language models \cite{MikolovSCCD13}) require them, we need to create them by Negative Sampling.
+To learn these low-dimensional \acp{KGE} for entities and relations, several training approaches are available \cite{Ruffinelli2020You}.
+During the training process of these approaches positive and negative triples are discriminated.
+However, most known \acp{KG} contain only positive instances for space efficiency \cite{qiannegative} and not all positive information are represented in the \acp{KG} either.
+Accordingly, \acp{KG} are an incomplete picture of the reality.
+Nevertheless, missing negative examples are needed for learning the \ac{KGE}, these \ac{KGE} models have developed and used different methods to generate the negative triples.
+It is an essential part of distinguishing the models \cite{Ruffinelli2020You} and impacts the \ac{KGRL} and the performance of subsequent tasks which are using \acp{KGE}. 
+Therefore, generating negative examples by Negative Sampling is an essential and important part of learning \c{KGE}.
+
+% -> WE NEED NEGATIVE SAMPLING
+
+
+
+
+
+
+
+
+\cite{zhang2021efficient}:
+- find a good representation for entities and relations is a fundamental problem
+-> early works in statistical relational learning by using the symbolic triplet data
+- embedding based models:
+    - have better generalization ability
+    - better inference efficiency
+    - scalable
+    - shown promising performance in basic KG tasks
+\cite{qianunderstanding}:
+- One-hot encoding is broadly used to convert features or instances into vectors,
+-> great interpretability but incapable of capturing latent semantics

@@ -1,0 +1,21 @@
+\section{Contributions}
+
+In this thesis, we aim to go one step further by generating more informative negative examples. 
+By doing so, we aim to accelerate the learning process.
+It is based on Uncertainty Sampling which aims to find more informative negative examples for embedding learning so that an improvement in the learning process and resulting embedding is achieved.
+These can be hard negative examples, but also other negative triples which are valuable for the embedding model.
+
+Therefore, in the course of this work, we want to implement Uncertainty Sampling.
+This is to be done on the basis of the dynamic distribution-based sampling method KBGAN, in which the original random sampling is replaced.
+By implementing this new sampling method, we hope to improve the adversarial learning process, i.e., either achieve the same accuracies with less epochs, the same accuracies with less training time or by achieving a better overall accuracy as the original KBGAN approach.
+To achieve this, we first want to analyze already existing methods in the related work part.
+These will then be analyzed for their problems and weaknesses.
+Due to this, first the idea and the thought behind our approach will be explained and then its implementation will be described in detail.
+
+- try several methods how to measure uncertainty\\
+- add additional information to sampling process and classify triples as positives or negatives\\
+- run model on several datasets\\
+- run model on $PC^2$\\
+- provide evaluation and compare it with original KBGAN approach\\
+- compare with several other Negative Sampling approaches\\
+- leave future work: (do not mention here, only in Future Work section in last chapter!)\\
