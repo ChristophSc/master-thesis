@@ -57,7 +57,6 @@ class BaseModule(nn.Module):
         """
         # used for TransE and TransD
         # distance of positive triple should be lower than distance of negative triple
-        # => score of positive triple should be higher than score of negative triple
         score_pos = self.score(head, rel, tail)
         score_neg = self.score(head_corr, rel, tail_corr) 
         return nnf.relu(self.margin + score_pos - score_neg)
@@ -131,15 +130,15 @@ class BaseModel(object):
         
             # call sampler to retrieve n_sample from negative triple set Neg
             row_idx, sample_idx, logits = sampler.sample(head_rel_count, rels, rel_tail_count, h_neg, r_neg, t_neg, n_sample, scores, min_score, max_score)
-            probs = nnf.softmax(logits, dim=-1)
-            sample_idx = torch.multinomial(probs, n_sample, replacement=True)            
+            # probs = nnf.softmax(logits, dim=-1)
+            # sample_idx = torch.multinomial(probs, n_sample, replacement=True)            
         else:   
             # original random Sampler            
-            logits = self.mdl.prob_logit(h_neg_var, r_neg_var, t_neg_var) / temperature
+            logits = -self.mdl.prob_logit(h_neg_var, r_neg_var, t_neg_var) / temperature
 
             # calculate probabilities for each negative triple to be sampled =             
             probs = nnf.softmax(logits, dim=-1)
-            
+   
             # call sampler to retrieve n_sample from negative triple set Neg            
             row_idx, sample_idx = sampler.sample(head_rel_count, rels, rel_tail_count, h_neg, r_neg, t_neg, n_sample, probs)
         

@@ -99,7 +99,7 @@ class UncertaintySampler_Advanced(BaseSampler):
     #print(max.indices)
     #print(max.values)
     sample_idx_uncertainty = max.indices.unsqueeze(1)  
-    sample_idx_uncertainty = None
+    # sample_idx_uncertainty = None
     row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)       
     logits = entropies
     return row_idx, sample_idx_uncertainty, logits

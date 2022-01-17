@@ -54,6 +54,18 @@ class TransEModule(BaseModule):
         return score
 
     def prob_logit(self, heads, rels, tails):
+        """ Function to provide logits for sampling. High logits = higher probability to be sampled.
+            Forward returns small distances = small scores for positives.
+            Therefore, their logit must be inverted
+
+        Args:
+            heads ([type]): [description]
+            rels ([type]): [description]
+            tails ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         return -self.forward(heads, rels, tails) / self.temp
 
     def constraint(self):

@@ -93,9 +93,9 @@ for epoch in range(n_epoch):
     epoch_reward = 0
     # create set Neg of negative triples 
     head_cand, rel_cand, tail_cand = corrupter.corrupt(heads, rels, tails, keep_truth=True)         
-    pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_statistics(gen, dis, heads, rels, tails, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
+    pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None # get_statistics(gen, dis, heads, rels, tails, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
         
-    logging.info('Positives: (%f, %f), Negatives: (%f, %f)', pos_min_score, pos_max_score, neg_min_score, neg_max_score)
+    # logging.info('Positives: (%f, %f), Negatives: (%f, %f)', pos_min_score, pos_max_score, neg_min_score, neg_max_score)
     for h_pos, r_pos, t_pos, h_neg, r_neg, t_neg in batch_by_num(n_batch, heads, rels, tails, head_cand, rel_cand, tail_cand, n_sample=n_train):
         # h_pos, r_pos, t_pos = indices of heads, relations and tails of positive triples in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
