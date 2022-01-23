@@ -1,6 +1,7 @@
-\section{Background}
-\label{sec:background}
+\section{Negative Sampling}
+\label{sec:negative_sampling}
 
+% -> WE NEED NEGATIVE SAMPLING
 Negative Sampling represents a non-trivial step in \ac{KG} embedding, as the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
 
 % -> WHERE DOES NEGATIVE SAMPLING COME FROM?
@@ -19,3 +20,29 @@ While the \ac{CWA} assumes that unobserved facts which are not in a \ac{KG} are 
 Due to the incomplete nature of \acp{KG}, most models prefer the \ac{OWA}, which, however, has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\cite{zhang2021efficient}:
+- find a good representation for entities and relations is a fundamental problem
+-> early works in statistical relational learning by using the symbolic triplet data
+- embedding based models:
+    - have better generalization ability
+    - better inference efficiency
+    - scalable
+    - shown promising performance in basic KG tasks
+\cite{qianunderstanding}:
+- One-hot encoding is broadly used to convert features or instances into vectors,
+-> great interpretability but incapable of capturing latent semantics

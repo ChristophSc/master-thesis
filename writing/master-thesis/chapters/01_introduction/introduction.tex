@@ -1,13 +1,38 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-\input{chapters/01_introduction/sections/01_introduction}
+% general introduction to the topic, definition of important terms
 
-\input{chapters/01_introduction/sections/02_background}
+\acp{KG} represent structured collections of facts describing the world   \cite{hogan2020knowledge}.
+% TODO: advantages and possibilities of KG graphs in comparison to (relational) databases
+% https://www.ontotext.com/knowledgehub/fundamentals/what-is-a-knowledge-graph/
+These collections of facts have been used in a wide range of application, e.g., question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
+In recent years, numerous \acp{KG} such as \textsc{FB15K}, \textsc{WN18}, \textsc{YAGO} \cite{ConEx} and \textsc{WikiData} \cite{arnaoutwikinegata} have been released.
+% TODO: Why are there several ones, which kind of data to they contain?
+% TODO: Mention RDF and other format of triples?
+Within a \ac{KG}, entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
+Facts are represented as a triple in the form of (head entity, relation, tail entity), denoted as \triple{h}{r}{t}.
+These triples indicate that the head entity \texttt{h} (subject) is connected with the tail entity \texttt{t} (object) by a specific relation \texttt{r} (predicate) \cite{zhang2019nscaching, Alam2020AffinityDN}.
+One of the main challenges for \ac{KG} is to find a Knowledge Graph Representation which encodes both entities and relations in such a way that similarities among different entities and relations are stored within the encoding. 
+\ac{KRL} is a critical research issue and forms the basis for many knowledge acquisition tasks and applications.
+\ac{KGE} is a renowned area of research in recent years is the transformation of \acp{KG} into a low-dimensional vector space using embedding models \cite{Alam2020AffinityDN}.
+Many approaches learn vector representations for \acp{KG} while learning a parametrized scoring function that assigns scores to input triples.
+A score of a triple is expected to reflect the likelihood that the input triple is true \cite{ConvE, qiannegative}.
+To learn these low-dimensional \acp{KGE} for entities and relations, several training approaches are available \cite{Ruffinelli2020You}.
+During the training process of these approaches positive and negative triples are discriminated.
+However, most known \acp{KG} contain only positive instances for space efficiency \cite{qiannegative} and not all positive information are represented in the \acp{KG} either.
+Accordingly, \acp{KG} are an incomplete picture of the reality.
+Nevertheless, missing negative examples are needed for learning the \ac{KGE}, these \ac{KGE} models have developed and used different methods to generate the negative triples.
+It is an essential part of distinguishing the models \cite{Ruffinelli2020You} and impacts the \ac{KGRL} and the performance of subsequent tasks which are using \acp{KGE}. 
+Therefore, generating negative examples by Negative Sampling is an essential and important part of learning \acp{KGE}.
 
-\input{chapters/01_introduction/sections/03_problem}
+\input{chapters/01_introduction/sections/01_negative_sampling}
 
-\input{chapters/01_introduction/sections/04_contributions}
+\input{chapters/01_introduction/sections/02_problem_analysis}
+
+\input{chapters/01_introduction/sections/03_objectives}
+
+\input{chapters/01_introduction/sections/04_related_work}
 
 \input{chapters/01_introduction/sections/05_structure_of_thesis}
 

@@ -1,6 +1,6 @@
 
 \section{Architecture and Procedure} \label{sec:architecture_and_procedure}
-In the original \cb{KBGAN} approach, as shown in \autoref{fig:architecture}, the sampling process from a negative triple set $Neg$ is replaced by Uncertainty Sampling.
+In the original \ac{KBGAN} approach, as shown in \autoref{fig:architecture}, the sampling process from a negative triple set $Neg$ is replaced by Uncertainty Sampling.
 \begin{figure*}[t]
   \centering
     \includegraphics[width=0.90\textwidth]{figures/architecture.png}
@@ -26,7 +26,7 @@ According to this architecture the training process of the original \ac{KBGAN} a
     
     \item All of these scores from generator score function $f_G$ are handed to the Uncertainty Sampler to calculate the uncertainty of the model.
     For this purpose, the calculated scores of the generator from the function $f_G$ are included, as well as outputs from other functions which include further information of the \ac{KG}.
-    These functions and which information they contain is described in more more detail in \autoref{sec:featurefunctions}.
+    These functions and which information they contain is described in more detail in \autoref{sec:featurefunctions}.
     
     \item All of these information are combined and weighted by hyperparameters in the $Generator\_Score$ function to obtain one single score for each negative triple (\autoref{sec:generatorscore}).
     Again, a high score reflects a higher likelihood of being a negative triple.
