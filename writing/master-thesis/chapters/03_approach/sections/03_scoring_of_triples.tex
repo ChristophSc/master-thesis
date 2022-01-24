@@ -1,4 +1,35 @@
-\section{Scoring of Triples} \label{sec:scoring_of_triples}
+\section{Scoring of Triples} 
+\label{sec:scoring_of_triples}
+
+3) Scoring of Triples
+- What is uncertainty in relation to KGEs?
+-> Uncertainty how to classify a triple -> negative or positive
+- Where does the Uncertainty come from?
+-> overlap of scores from positive and negative triple scoring ranges
+Background: 
+- presentation + reference to different scoring functions
+-> scoring functions are used for loss functions
+- different loss Functions for different scoring functions
+- learning process goal: decrease the loss
+-> a.k.a. increase margin between positives and negatives
+-> Show Figure which illustrates positive and negative triples + margin between them
+- examples:
+    - DistMult: Score of positive triples need to be higher than for negative triples
+    - TransE: score of negative need to be higher than for positive triples
+- show Figure with positives + negative score ranges -> uncertainty in overlapping scores
+- mathematical explanation with definition of loss function and scoring function
+-> give an example of positive + negative where model is certain
+-> give an example of positive + negative where model in uncertain
+
+-> uncertainty according to scores which are returned by models
+- models include only implicit information about the structure etc
+- add additional information about structure, clusters, ...
+- ... feature functions
+
+- Option 1: Uncertainty from Generator Model: negative score < positive score
+- Option 2: Uncertainty from Discriminator Model: negative score > positive score
+-> depending on the, also the feature functions need to reflect the same score for positives/negatives
+
 
 To distinguish between positive and negative triples, a scoring function is defined for each \ac{KGE} model which assigns a score to each triple.
 Depending on the model this score must be low or high to reflect a positive triple.

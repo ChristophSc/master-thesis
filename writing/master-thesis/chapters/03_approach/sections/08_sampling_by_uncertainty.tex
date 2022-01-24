@@ -1,5 +1,12 @@
+\section{Sampling by Uncertainty} 
+\label{sec:sampling_by_uncertainty}
 
-\section{Sampling by Uncertainty} \label{sec:sampling_by_uncertainty}
+8) Sampling by Uncertainty
+- calculate uncertainty of model for all negative triples from negative triple set $Neg$
+- Option1: always sample the maximum
+- Option2: calculate a probability distribution again and sample the triples with highest uncertainty with highest probability
+
+
 
 To sample the negative triple $(h',r,t')^{*}_{ENT}$, we need to calculate the entropy-based uncertainty, which is defined as: 
 $$(h',r,t')^{*}_{ENT} = \argmax_{(h',r,t') \in Neg)} -  \sum_{i}{\mathds{P}(y_i | (h',r,t')) log \mathds{P}(y_i|(h',r,t'))}$$

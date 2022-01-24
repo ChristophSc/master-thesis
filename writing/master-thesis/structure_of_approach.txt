@@ -1,0 +1,81 @@
+\textbf{Structure of this chapter + notes:}\\
+
+1) Presentation of my idea\\
+- origin of my idea\\
+- Reasons for Uncertainty - advantages and expected results\\
+- Why did I choose KBGAN (Sampling Negatives from Dynamic Distribution) as basis for my approach\\
+- disadvantages of KBGAN that I want to solve\\
+- why uncertainty sampling can solve them\\
+
+2) Architecture and Procedure\\
+- general procedure for placement in the overall context \\
+- comparison between original KBGAN approach and my approach\\
+- references to the following sections an why these are described\\
+
+3) Scoring of Triples\\
+- What is uncertainty in relation to KGEs?\\
+-> Uncertainty how to classify a triple -> negative or positive\\
+- Where does the Uncertainty come from?\\
+-> overlap of scores from positive and negative triple scoring ranges\\
+Background: \\
+- presentation + reference to different scoring functions\\
+-> scoring functions are used for loss functions\\
+- different loss Functions for different scoring functions\\
+- learning process goal: decrease the loss \\
+-> a.k.a. increase margin between positives and negatives\\
+-> Show Figure which illustrates positive and negative triples + margin between them\\
+- examples:\\
+    - DistMult: Score of positive triples need to be higher than for negative triples\\
+    - TransE: score of negative need to be higher than for positive triples\\
+- show Figure with positives + negative score ranges -> uncertainty in overlapping scores\\
+- mathematical explanation with definition of loss function and scoring function\\
+-> give an example of positive + negative where model is certain\\
+-> give an example of positive + negative where model in uncertain\\\\
+
+-> uncertainty according to scores which are returned by models\\
+- models include only implicit information about the structure etc\\
+- add additional information about structure, clusters, ...\\
+- ... feature functions\\
+
+- Option 1: Uncertainty from Generator Model: negative score < positive score\\
+- Option 2: Uncertainty from Discriminator Model: negative score > positive score\\
+-> depending on the, also the feature functions need to reflect the same score for positives/negatives\\
+
+4) Feature Functions\\
+
+- present all different feature functions\\
+-> depending on option 1 or 2: they have to return same order of positive and negative triple scores\\
+- a) (h,r,?) number of appearances in KG
+- b) (?,r,t) number of appearances in KG
+- c) ...
+
+5) Generator Score
+
+- combines all the information from KGE model of generator + feature functions
+Option1: minimum and maximum of all triples
+- min.score: minimum score of all triples (-> should be a positive one)
+- max.score: maximum score of all triples (-> should be a negative one)
+Option2: left and right boundary of the uncertain range for positives and negatives
+- min.score: left boundary of the negative triples (if they are higher than the positive ones)
+- max.score: right boundary of the positive triples (if they are lower than the negative ones)
+
+6) Probabilities 
+- probabilities are needed for Uncertanty Sampling 
+-> model in uncertain about how to label a triple instance (positive or negative)
+- binary classification
+- y=0: triple is a positive
+- y=1: triple is a negative
+- min.score: P(y=1)=0, P(y=0)=1 
+- max.score: P(y=1)=1, P(y=0)=0
+
+
+7) Uncertainty
+- presentation of the different uncertainty types and what they mean in current context
+- entropy
+- least confidence
+- smallest margin
+
+8) Sampling by Uncertainty
+- calculate uncertainty of model for all negative triples from negative triple set $Neg$
+- Option1: always sample the maximum
+- Option2: calculate a probability distribution again and sample the triples with highest uncertainty with highest probability

@@ -1,5 +1,16 @@
-\section{Generator Score} \label{sec:generatorscore}
+\section{Generator Score} 
+\label{sec:generatorscore}
 
+
+5) Generator Score
+
+- combines all the information from KGE model of generator + feature functions
+Option1: minimum and maximum of all triples
+- min.score: minimum score of all triples (-> should be a positive one)
+- max.score: maximum score of all triples (-> should be a negative one)
+Option2: left and right boundary of the uncertain range for positives and negatives
+- min.score: left boundary of the negative triples (if they are higher than the positive ones)
+- max.score: right boundary of the positive triples (if they are lower than the negative ones)
 
 Calculate $Generator\_Score$ (equation (2)) for all positive triples $(h, r, t) \in \mathcal{T}_{batch}$.
 \begin{equation}

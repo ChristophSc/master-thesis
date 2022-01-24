@@ -2,7 +2,27 @@
 \label{sec:relatedwork}
 
 % CITE THE MOST IMPORTANT PAPERS for this thesis
-% -> mention all the different areas we need information about
-\cite{cai2017kbgan}
 
+% EMBEDDING MODELS
+The history of \acp{KG} goes back several years, but in recent years there has been a lot of research in this area, especially in the context of \acp{KGE}.  
+To get an overview of the different embedding models, their approaches and application possibilities, they were summarized and compared in \cite{electronics9050750}.
+Among the many different embedding models, the distance-based models \transe \cite{TransE} and \transd   \cite{TransD}can be highlighted, which will also take a more important part in the course of our work.
+Other embedding models represent \distmult \cite{DistMult} and \complex \cite{ComplEx}, but these are based on semantic matching. 
 
+% NEGATIVE SAMPLING
+Due to the importance of sampling good negative triples, much research has also been done in this area in recent years.
+However, standard techniques continue to be Uniform Random Sampling \cite{TransE} and Bernoulli sampling \cite{TransH}, which do not produce high quality negative triples, but are used in many models due to their simplicity and high performance.  
+A more complex approach to generate negative samples is, for example, domain sampling \cite{domainSampling}, which samples only entities from a subset of the entities of a \ac{KG}.
+Pioneers of dynamic negative sampling are \kbgan \cite{cai2017kbgan} and \igan \cite{IGAN}, which attempt to estimate the distribution of negative triples by constructing a \ac{GAN}.
+Inspired by \acp{GAN}, which were proposed for generating samples in a continuous space such as images, pretrained models are improved through an adversarial learning process.
+An overview over all the different Negative Sampling techniques is given for example in \cite{qiannegative} or \cite{MCNS}.
+
+% ACTIVE LEARNING + UNCERTAINTY SAMPLING
+In addition to this topic of \acp{KGE}, our approach includes other work in the literature regarding Uncertainty Sampling.
+Originally Uncertainty Sampling comes from Active Learning which supports supervised learning systems where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled instances \cite{Settles2009ActiveLL}.
+Several different approaches are available to select the instances to be labeled.
+Uncertainty Sampling is one of them and uses a classifier to identify unlabeled examples with the least confidence \cite{5272205}.
+Therefore, the most informative unlabeled examples are selected for human annotation.
+In turn, in the Uncertainty Sampling, several measures are available on how to obtain the uncertain cases of the classifier \cite{nguyen2021howtomeasure}.
+
+% TODO: ADD years and cite authors of important papers

@@ -1,0 +1,24 @@
+\subsection{Custom Cluster-Based Sampling}
+\label{subsec:custom_cluster_based_sampling}
+
+
+Custom Cluster-Based Sampling samples negative triples from small clusters which are based on closeness between entities.
+Instead of sampling from the whole set of entities, they a are divided into a number of groups and randomly sampled to create negative triples. Examples are TransE-\ac{SNS} \cite{TransE-SNS} or \ac{NSCaching} \cite{zhang2019nscaching} which are based on K-Means clustering algorithm or caching techniques. 
+
+
+\textbf{Evaluation}:\\
+% CUSTOM CLUSTER-BASED SAMPLING
+To get more efficiency in the training process and to search for suitable entities in a more targeted way is aimed with  \textit{Custom Cluster-Based Sampling} methods (\autoref{sec:negativesamplingmethods}).
+By selecting negative samples only from a handful of candidates and not from the entire entity set, a better correlation between the positive and corresponding negative triple is expected.
+This negative triple should be closer to the original positive triple and thus provide more valuable information for the \ac{KGE} model.
+For example, Domain Sampling \cite{domainSampling} is to sample from the same domain.
+For example, if it is recognized that 'Germany' is a country and that 'France' is a nearby country, the much more valuable negative triple (Paderborn, locatedIn, France) could be sampled from the  positive triple (Paderborn, locatedIn, Germany).
+However, as \acp{KG} grow rapidly and are updated frequently, continuous renewing custom clusters is essential and difficult \cite{qianunderstanding}.
+
+With these approaches of Negative Sampling from a fixed distribution two more different problems arise:
+Since they ignore changes in the distribution of negative triples, they suffer from the vanishing gradient and biased estimation problem \cite{zhang2021efficient}.
+The scoring functions tend to give observed (positive) triplets large values and most of the non-observed (probably negative) triplets will have smaller values during the training.
+Therefore, if negative triplets are uniformly sampled, it is very likely to pick up one with zero gradients.
+This leads to the following main challenges for Negative Sampling \cite{zhang2021efficient}: 
+(i) The negative triple's dynamic distribution has to be captured and 
+(ii) triples have to be effectively sampled from this distribution.

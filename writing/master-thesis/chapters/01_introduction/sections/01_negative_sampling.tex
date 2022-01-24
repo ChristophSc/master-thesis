@@ -1,12 +1,23 @@
 \section{Negative Sampling}
 \label{sec:negative_sampling}
 
-% -> WE NEED NEGATIVE SAMPLING
-Negative Sampling represents a non-trivial step in \ac{KG} embedding, as the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
+Now that Negative Sampling is needed for generating negative triples for subsequent embedding:
+How and under what circumstances can Negative Sampling be performed?
 
-% -> WHERE DOES NEGATIVE SAMPLING COME FROM?
-As described from \cite{qianunderstanding}, the idea if Negative Sampling was firstly raised in probabilistic neural language models and called importance sampling. 
-To benefit the training of word2vec, it was emphasized as a simplified version of \ac{NCE}  and wanted to overcome the computational difficulty which was associated with probabilistic language models.
+% CIRCUMSTANCES of Negative Sampling
+Since there are only positive facts in the graph, there are two different ways of looking at or assumptions about the \ac{KG} at hand in Negative Sampling.
+On the one hand there is the \ac{CWA} and on the other hand the \ac{OWA} under which the \ac{KRL} takes place.
+While the former assumes that unobserved facts which are not in a \ac{KG} are false, the latter states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
+Negative sampling under the simplified \ac{CWA} does not present much difficulty, as it is easy to generate a large number of triples that are not in the \ac{KG}.
+However, the quality of the negative triples may suffer if it is indeed a false negative triple.
+The \ac{OWA}, on the other hand has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.
+Therefore, generating qualitative negative triples by Negative Sampling with good performance represents a non-trivial step in \ac{KGE} learning.
+Especially, because the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
+Therefore, embeddings need to contain as much information as possible in a graph representation of a low-dimensional vector space.
+
+% HISTORY OF NEGATIVE SAMPLING
+If we look at the history of Negative Sampling, the idea was firstly raised in probabilistic neural language models and called importance sampling \cite{qianunderstanding}. 
+To benefit the training of word2vec, it was emphasized as a simplified version of \ac{NCE} and wanted to overcome the computational difficulty which was associated with probabilistic language models.
 Due to their partition functions which sum over all words which is expensive if the amount of vocabularies is high.
 Negative Sampling in comparison, transforms the difficult this density estimation problem into a binary classification problem where true samples are distinguished from noise samples.
 This transformations simplifies the computation as well as accelerates the training.
@@ -15,34 +26,17 @@ If we consider nodes as words and neighbors of nodes as the context of a word, \
 Therefore, the idea was applied to \ac{KGE} learning and has become common practice over the past several years.
 Instead of discriminating true samples from noise samples, in \acp{KG} positive triples are descriminated from negative ones.
 
-Usually, Knowledge representation learning models are trained under the \ac{OWA} or the \ac{CWA}.
-While the \ac{CWA} assumes that unobserved facts which are not in a \ac{KG} are false, the \ac{OWA} states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
-Due to the incomplete nature of \acp{KG}, most models prefer the \ac{OWA}, which, however, has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.
+% DESCIBE HOW NEGATIVE SAMPLING WORKS IN GENERAL
+Overall, there are several variants for Negative Sampling and subsequent use of sampled negative triples in the literature.
+However, they have the following steps in common:
+At first, the Negative Sampling process generates negative triples by, for example, perturbing positive ones.
+This can be done either randomly or by including more information about entities, relations of the \ac{KG} or even the whole \ac{KG}.
+Subsequently, the generated negative triples is given to the embedding model, which distinguishes the positive from the negative sample.
+Accordingly, the embedding learns particularly many from good negative samples, since its differentiation from the positive is difficult and thus the learning factor, i.e. the gradient of the model is particularly high.
+
+% TRANSITION TO NEXT SECTION
+However, effective generation of negative triples to improve embedding involves some problems, which are analyzed in more detail in the following section.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-\cite{zhang2021efficient}:
-- find a good representation for entities and relations is a fundamental problem
--> early works in statistical relational learning by using the symbolic triplet data
-- embedding based models:
-    - have better generalization ability
-    - better inference efficiency
-    - scalable
-    - shown promising performance in basic KG tasks
-\cite{qianunderstanding}:
-- One-hot encoding is broadly used to convert features or instances into vectors,
--> great interpretability but incapable of capturing latent semantics
