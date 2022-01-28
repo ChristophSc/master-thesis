@@ -20,18 +20,17 @@ class DistMultModule(BaseModule):
         self.ent_embed = nn.Embedding(n_ent, config.dim)
         self.ent_embed.weight.data.div_((config.dim / sigma ** 2) ** (1 / 6))
 
-
-    def forward(self, head, rel, tail):        
-        # (1) Real embeddings of head entities
+    def forward(self, head, rel, tail):
+        # (1)
+        # (1.1) Real embeddings of head entities
         emb_head_real = self.ent_embed(head)
-        # (2) Real embeddings of relations
+        # (1.2) Real embeddings of relations
         emb_rel_real = self.rel_embed(rel)
-         # (3) Real embeddings of tails
+         # (1.3) Real embeddings of tails
         emb_tail_real = self.ent_embed(tail)
-        x = t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)   
-        return x   
+        return t.sum(emb_tail_real * emb_head_real * emb_rel_real, dim=-1)  
 
-    def score(self, heads, rels, tails):
+    def score(self, head, rel, tail):
         """ Score function of DistMult.
             Indicates the plausability of a triple to be true 
             -> the higher the score to more likely the triple is true
@@ -45,10 +44,9 @@ class DistMultModule(BaseModule):
         Returns:
             torch.tensor: scores of each triple (h, r, t) * (-1)
         """
-        
         # low scores indicate a low probability of a triple to be true and vice versa
         # => *(-1) to use the same evaluation function test_link as it is used for TransE/TransD
-        return -self.forward(heads, rels, tails)
+        return -self.forward(head, rel, tail)
 
     def prob_logit(self, head, rel, tail):
         return self.forward(head, rel, tail)
@@ -86,7 +84,7 @@ class DistMult(BaseModel):
                 # zero gradients
                 self.mdl.zero_grad()
                 if t.cuda.is_available():
-                    label = t.zeros(len(h_neg)).type(t.LongTensor).cuda()     # since DistMult is working with negatives, their label should be 0 = negative, and not 1 = positive
+                    label = t.zeros(len(h_neg)).type(t.LongTensor).cuda()
                 else:
                     label = t.zeros(len(h_neg)).type(t.LongTensor)
                 # forward pass

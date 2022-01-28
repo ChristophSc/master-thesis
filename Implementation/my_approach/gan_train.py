@@ -3,11 +3,10 @@ import logging
 import datetime
 import torch
 import matplotlib.pyplot as plt
-import numpy as np
-import random
+from random import sample, random
 from config import config, overwrite_config_with_args, dump_config
 from read_data import index_ent_rel, graph_size, read_data
-from data_utils import filter_heads_tails, inplace_shuffle, batch_by_num, get_statistics, head_tail_counter
+from data_utils import filter_heads_tails, inplace_shuffle, batch_by_num, head_tail_counter, get_statistics
 from config_utils import load_sampler
 from trans_e import TransE
 from trans_d import TransD
@@ -28,7 +27,7 @@ from TrainingProcessLogger import TrainingProcessLogger
 # random.seed(0)
 # np.random.seed(0)
 # torch.use_deterministic_algorithms(True)
- 
+
 # load config and logger, overwrite config with args
 config()
 overwrite_config_with_args()
@@ -36,7 +35,7 @@ timestamp = datetime.datetime.now().strftime("%m%d%H%M%S")
 log_dir = logger_init("gan_train")
 device_name = "cuda:" + str(select_gpu()) if torch.cuda.is_available()  else "cpu"
 device = torch.device(device_name)
-    
+
 dump_config()
 
 task_dir = config().task.dir
@@ -64,47 +63,47 @@ heads_filt, tails_filt = filter_heads_tails(n_ent, train_data, valid_data, test_
 
 head_count, tail_count = head_tail_counter(train_data, valid_data, test_data)
 
-
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
 # test link prediction of discriminator model with pretrained model only (not adverarial training)
-dis.test_link(test_data, n_ent, heads_filt, tails_filt)
+# dis.test_link(test_data, n_ent, heads_filt, tails_filt)
 
 # load Corrupter which creates set of negatives (Neg) from positive triples in KG
 corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, config().adv.n_sample)
-heads, rels, tails = train_data
-n_train = len(heads)
+head, rel, tail = train_data
+n_train = len(head)
 n_epoch = config().adv.n_epoch
 n_batch = config().adv.n_batch
 sampler = load_sampler(config().adv.sample_type)
 mdl_name = 'gan_dis_' + timestamp + '.mdl'
-        
+
 # init variables for training
+max_score = -1e30
+min_score = +1e30
 best_mrr = 0
 avg_reward = 0
 tp_logger = TrainingProcessLogger('gan_train', n_epoch, config().adv.epoch_per_test) 
 
-max_score = -1e30
-min_score = +1e30
 for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
     # create set Neg of negative triples 
-    head_cand, rel_cand, tail_cand = corrupter.corrupt(heads, rels, tails, keep_truth=True)         
+    head_cand, rel_cand, tail_cand = corrupter.corrupt(head, rel, tail, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
+    
+    # get statistics
     pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None # get_statistics(gen, dis, heads, rels, tails, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
-        
-    # logging.info('Positives: (%f, %f), Negatives: (%f, %f)', pos_min_score, pos_max_score, neg_min_score, neg_max_score)
-    for h_pos, r_pos, t_pos, h_neg, r_neg, t_neg in batch_by_num(n_batch, heads, rels, tails, head_cand, rel_cand, tail_cand, n_sample=n_train):
-        # h_pos, r_pos, t_pos = indices of heads, relations and tails of positive triples in batch
+     
+    for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_cand, rel_cand, tail_cand, n_sample=n_train):
+        # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
         # send corrupted triples from Neg of size "n_batch" to generator
-        gen_step = gen.gen_step(head_count, rels, tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = pos_max_score, max_score = neg_min_score)
+        gen_step = gen.gen_step(h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler)
         # randomly sample from probability distribution of current negative triple set 
         head_smpl, tail_smpl = next(gen_step)
         # send sampled negative triple "tail_smpl" and its ground truth triple "head_smpl" to discriminator 
-        losses, rewards = dis.dis_step(h_pos, r_pos, t_pos, head_smpl.squeeze(), tail_smpl.squeeze())
+        losses, rewards = dis.dis_step(h, r, t, head_smpl.squeeze(), tail_smpl.squeeze())
         epoch_reward += torch.sum(rewards)        
         rewards = rewards - avg_reward
         # send reward to generator

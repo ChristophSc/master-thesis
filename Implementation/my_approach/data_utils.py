@@ -15,21 +15,21 @@ def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
     Returns:
         [type]: [description]
     """
-    train_heads, train_rel, train_tails = train_data
+    train_head, train_rel, train_tail = train_data
     if valid_data:
-        valid_heads, valid_rel, valid_tails = valid_data
+        valid_head, valid_rel, valid_tail = valid_data
     else:
-        valid_heads = valid_rel = valid_tails = []
+        valid_head = valid_rel = valid_ = []
     if test_data:
-        test_heads, test_rel, test_tails = test_data
+        test_head, test_rel, test_tail = test_data
     else:
-        test_heads = test_rel = test_tails = []
-    all_heads = train_heads + valid_heads + test_heads
+        test_head = test_rel = test_tail = []
+    all_head = train_head + valid_head + test_head
     all_rel = train_rel + valid_rel + test_rel
-    all_tails = train_tails + valid_tails + test_tails
+    all_tail = train_tail + valid_tail + test_tail
     heads = defaultdict(lambda: set())
     tails = defaultdict(lambda: set())
-    for h, r, t in zip(all_heads, all_rel, all_tails):
+    for h, r, t in zip(all_head, all_rel, all_tail):
         tails[(h, r)].add(t)
         heads[(t, r)].add(h)
     heads_sp = {}
@@ -41,7 +41,6 @@ def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
         heads_sp[k] = torch.sparse.FloatTensor(torch.LongTensor([list(heads[k])]),
                                                torch.ones(len(heads[k])), torch.Size([n_ent]))
     return heads_sp, tails_sp
-
 
 def head_tail_counter(train_data, valid_data, test_data):
     """Counts appearence of (h, t, ?) and (?, r, t) for all triples from training, validation and test data
@@ -69,7 +68,6 @@ def head_tail_counter(train_data, valid_data, test_data):
         rel_tail_count[(r, t)] += 1
     return head_rel_count, rel_tail_count
 
-
 def filter_negatives(heads_neg, relations_neg, tails_neg, true_heads, true_tails):
     heads_neg_filt, rel_neg_filt, tails_neg_filt = [], [], []
     for batch_h, batch_r, batch_t in zip(heads_neg, relations_neg, tails_neg):
@@ -90,7 +88,6 @@ def filter_negatives(heads_neg, relations_neg, tails_neg, true_heads, true_tails
     rel_neg_filt =  torch.tensor(rel_neg_filt)
     tails_neg_filt =  torch.tensor(tails_neg_filt)
     return heads_neg_filt, rel_neg_filt, tails_neg_filt 
-    
 
 def get_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, heads_filt, tails_filt, print_statistics = False):    
     
@@ -130,7 +127,6 @@ def get_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, 
             print('')
         return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
-
 def inplace_shuffle(*lists):
     idx = []
     for i in range(len(lists[0])):

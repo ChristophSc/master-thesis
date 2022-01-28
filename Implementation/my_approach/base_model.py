@@ -15,19 +15,19 @@ class BaseModule(nn.Module):
     def __init__(self):
         super(BaseModule, self).__init__()
 
-    def score(self, heads, rels, tails):
+    def score(self, head, rel, tail):
         raise NotImplementedError
 
-    def dist(self, heads, rels, tails):
+    def dist(self, head, rel, tail):
         raise NotImplementedError
 
-    def prob_logit(self, heads, rels, tails):
+    def prob_logit(self, head, rel, tail):
         raise NotImplementedError
 
     def constraint(self):
         pass
     
-    def prob(self, heads, rels, tails):
+    def prob(self, head, rel, tail):
         """Returns probability distribution over given triples of (head, rel, tail)
 
         Args:
@@ -39,7 +39,7 @@ class BaseModule(nn.Module):
             torch.tensor: probability of each triple to be sampled in [0, 1]
                           sum is equals to 1
         """
-        return nnf.softmax(self.prob_logit(heads, rels, tails), dim=-1)
+        return nnf.softmax(self.prob_logit(head, rel, tail),  dim=1)
 
     def pair_loss(self, head, rel, tail, head_corr, tail_corr):
         """ Calculates the pair loss between score of positive and score of negative triple.
@@ -61,7 +61,7 @@ class BaseModule(nn.Module):
         score_neg = self.score(head_corr, rel, tail_corr) 
         return nnf.relu(self.margin + score_pos - score_neg)
 
-    def softmax_loss(self, head_neg, rel_neg, tail_neg, truth):
+    def softmax_loss(self, head, rel, tail, truth):
         """ Calculates the softmax log-loss between score of corrupted triple and the actual truth (all 0s for negative triples)
 
         Args:
@@ -73,13 +73,13 @@ class BaseModule(nn.Module):
         Returns:
             torch.tensor: probability distribution for all negative triples to be sampled
         """
-        probs = self.prob(head_neg, rel_neg, tail_neg)
+        probs = self.prob(head, rel, tail)
         n = probs.size(0)
         if torch.cuda.is_available():
             truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor).cuda(), truth])   # + 1e-30
         else:
             truth_probs = torch.log(probs[torch.arange(0, n).type(torch.LongTensor), truth])   # + 1e-30
-        return -truth_probs   # log(x) returns values < 0 for x < 1 => *(-1) to have probabilities between [0, 1]
+        return -truth_probs    # log(x) returns values < 0 for x < 1 => *(-1) to have probabilities between [0, 1]
 
 
 class BaseModel(object):
@@ -99,52 +99,43 @@ class BaseModel(object):
         else:
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
             
-    def gen_step(self, head_rel_count, rels, rel_tail_count, h_neg, r_neg, t_neg, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler(), min_score = None, max_score = None):
+            
+    def gen_step(self, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
         """One learning step of the Generator component in Adversarial Learning Process.
         
         Args:
-            h_neg (torch.tensor): corrupted head entities from Neg (from negative triple)
-            r_neg (torch.tensor): relations
-            t_neg (torch.tensor): corrupted tail entities from Neg (from negative triple)
+            head (torch.tensor): corrupted head entities from Neg (from negative triple)
+            rel (torch.tensor): relations
+            tail (torch.tensor): corrupted tail entities from Neg (from negative triple)
             n_sample (int, optional): Number of negatives to be sampled from Neg. Defaults to 1.
             temperature (float, optional): dividant of the logits. Defaults to 1.0.
             train (bool, optional): train the Generator?. Defaults to True.
-            sampler (BaseSampler, optional): Sampler which samples negative triples from set Neg. Defaults to UncertaintySampler().
+            sampler (BaseSampler, optional): Sampler which samples negative triples from set Neg. Defaults to RandomSampler().
 
         Yields:
             sample_heads, sample_tails (torch.tensor, torch.tensor): sampled negative heads and tails
         """
         if not hasattr(self, 'opt'):
             self.opt = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
-        n, m = t_neg.size() # tail.size() same as h_neg.size and rel_neg.size()
+        n, m = tail.size() # tail.size() same as head.size and rel.size()
         if torch.cuda.is_available():
-            h_neg = h_neg.cuda()
-            r_neg = r_neg.cuda()           
-            t_neg = t_neg.cuda()
-        h_neg_var = Variable(h_neg)
-        r_neg_var = Variable(r_neg)        
-        t_neg_var = Variable(t_neg)
-        
-        if type(sampler) == UncertaintySampler_Advanced:
-            scores = self.mdl.score(h_neg_var, r_neg_var, t_neg_var)
-        
-            # call sampler to retrieve n_sample from negative triple set Neg
-            row_idx, sample_idx, logits = sampler.sample(head_rel_count, rels, rel_tail_count, h_neg, r_neg, t_neg, n_sample, scores, min_score, max_score)
-            # probs = nnf.softmax(logits, dim=-1)
-            # sample_idx = torch.multinomial(probs, n_sample, replacement=True)            
-        else:   
-            # original random Sampler            
-            logits = self.mdl.prob_logit(h_neg_var, r_neg_var, t_neg_var) / temperature
+            head = head.cuda()
+            rel = rel.cuda()           
+            tail = tail.cuda()
+        head_var = Variable(head)
+        rel_var = Variable(rel)        
+        tail_var = Variable(tail)
 
-            # calculate probabilities for each negative triple to be sampled =             
-            probs = nnf.softmax(logits, dim=-1)
-   
-            # call sampler to retrieve n_sample from negative triple set Neg            
-            row_idx, sample_idx = sampler.sample(head_rel_count, rels, rel_tail_count, h_neg, r_neg, t_neg, n_sample, probs)
+        logits = self.mdl.prob_logit(head_var, rel_var, tail_var) / temperature
         
+        # calculate probabilities for each negative triple to be sampled = 
+        probs = nnf.softmax(logits, dim=-1)
+        # call sampler to retrieve n_sample from negative triple set Neg
+        row_idx, sample_idx = sampler.sample(head, rel, tail, n_sample, probs)
+    
         # get head and tail of negative triple by sampled index
-        sample_heads = h_neg[row_idx, sample_idx.data.cpu()]
-        sample_tails = h_neg[row_idx, sample_idx.data.cpu()]        
+        sample_heads = head[row_idx, sample_idx.data.cpu()]
+        sample_tails = tail[row_idx, sample_idx.data.cpu()]        
                 
         rewards = yield sample_heads, sample_tails
         if train:
@@ -152,7 +143,7 @@ class BaseModel(object):
             log_probs = nnf.log_softmax(logits, dim=-1)
             if torch.cuda.is_available():
                 row_idx = row_idx.cuda()
-
+                
             reinforce_loss = -torch.sum(Variable(rewards) * log_probs[row_idx, sample_idx.data])
             reinforce_loss.backward()
             self.opt.step()
@@ -238,42 +229,42 @@ class BaseModel(object):
                    
             # Scoring functions measure the plausibility of triplets in knowledge graph (KG), 
             # high scores = high probability to be in the KG
-            batch_head_scores = self.mdl.score(all_var, rel_var, tail_var).data   # includes scores for all head entities for relation r and tail t that exist in data (?,r,t)
-            batch_tail_scores = self.mdl.score(head_var, rel_var, all_var).data   # includes scores for all tail entities for head entity h and relation r that exist in data (h,r,?)     
-                
+            batch_head_scores = self.mdl.score(all_var, rel_var, tail_var).data
+            batch_tail_scores = self.mdl.score(head_var, rel_var, all_var).data   
+            
             # compute head andn tail scores for each positive  
             for h_tensor, r_tensor, t_tensor, head_scores, tail_scores in zip(batch_h, batch_r, batch_t, batch_head_scores, batch_tail_scores):
                 # head_scores/tail_scores: scores for predicted heads/tails
                 
                 # indices of head, relation and tail in the KG
-                h_i = int(h_tensor.data.cpu().numpy())
-                r_i = int(r_tensor.data.cpu().numpy())
-                t_i = int(t_tensor.data.cpu().numpy())
+                h = int(h_tensor.data.cpu().numpy())
+                r = int(r_tensor.data.cpu().numpy())
+                t = int(t_tensor.data.cpu().numpy())
                 
-                # filter triples which are already in the data -> set their score very low
+                # filter triples which are already in the training data -> set their score very low
                 if filt:      
                     # (h, r): key h=head, r=relation
                     # tails: dict indicates which tails t are connected with current (h,r) in ther KG
                     # -> spare tensor, only indices with value != 0 and their value is stored, here only binary \in {0,1} 0 = no connection, 1 = connection               
-                    if tails[(h_i, r_i)]._nnz() > 1:    # nnz = number of non zeroes => there are tails t which are connected to head h and tail t in triple (h,r,t) in KG
+                    if tails[(h, r)]._nnz() > 1:    # nnz = number of non zeroes => there are tails t which are connected to head h and tail t in triple (h,r,t) in KG
                         #print(tail_scores)
-                        tmp = tail_scores[t_i].item()   # save score for current predicted
-                        idx = tails[(h_i, r_i)]._indices()
+                        tmp = tail_scores[t].item()   # save score for current predicted
+                        idx = tails[(h, r)]._indices()
                          # since we know all other triples (including tails) and that they exist in the KG, we can set score very high
                         tail_scores[idx] = 1e20 
-                        # reset score of current tripl
-                        tail_scores[t_i] = tmp
+                        # reset score of current triple
+                        tail_scores[t] = tmp
                         #print(tail_scores)
-                    if heads[(t_i, r_i)]._nnz() > 1:
-                        tmp = head_scores[h_i].item()
-                        idx = heads[(t_i, r_i)]._indices()
+                    if heads[(t, r)]._nnz() > 1:
+                        tmp = head_scores[h].item()
+                        idx = heads[(t, r)]._indices()
                         head_scores[idx] = 1e20  # since we know all other triples (including heads) and that they exist in the KG, we can set score very high
-                        head_scores[h_i] = tmp
-                mrr, mr, hits = mrr_mr_hitk(tail_scores, t_i)       # tail t_i is in test data, therefore it needs to have a low energy/small dissimilarities or high score       
+                        head_scores[h] = tmp
+                mrr, mr, hits = mrr_mr_hitk(tail_scores, t)               
                 mrr_tot += mrr
                 mr_tot += mr
                 hits_tot += hits                
-                mrr, mr, hits = mrr_mr_hitk(head_scores, h_i)
+                mrr, mr, hits = mrr_mr_hitk(head_scores, h)
                 mrr_tot += mrr
                 mr_tot += mr
                 hits_tot += hits

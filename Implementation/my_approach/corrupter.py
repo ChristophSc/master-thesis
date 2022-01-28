@@ -49,8 +49,6 @@ class BernCorrupterMulti(object):
         tail_out = np.tile(tail.numpy(), (self.n_sample, 1)).transpose()        
         if keep_truth:
             ent_random = choice(self.n_ent, (n, self.n_sample - 1))
-            x =  head_out[selection, 0] 
-            y = tail_out[~selection, 0]
             head_out[selection, 1:] = ent_random[selection]
             tail_out[~selection, 1:] = ent_random[~selection]
         else:
