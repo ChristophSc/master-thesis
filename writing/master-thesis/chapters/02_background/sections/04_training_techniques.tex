@@ -14,6 +14,7 @@ Among all of there \ac{KGE} models, three commonly used approaches are used for 
     
     \item \textbf{KvsAll}:
     The KvsAll training type is divided into two different steps:
-    At first, instead of constructing negatives from individual positive triples, KvsAll constructs batches from non-empty rows $(h,r,*)$ or $(*,r,t)$.
+    At first, triples are created from non-empty rows $(h,r,t)$.
+    Therefore, a pair $(h,r)$ is taken and scored against all entities $t \in \entities$.
     Secondly, all of these generated triples are labeled as either positive or negative.
 \end{enumerate}

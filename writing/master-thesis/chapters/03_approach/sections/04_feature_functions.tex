@@ -6,8 +6,8 @@
 
 - present all different feature functions\\
 -> depending on option 1 or 2: they have to return same order of positive and negative triple scores\\
-- a) (h,r,?) number of appearances in KG
-- b) (?,r,t) number of appearances in KG
+- a)  number of appearances of pair $(h,r)$ with $h \in \entities$ and $r \in \relations$ in the KG
+- b) number of appearances of $(r,t)$ with $t \in \entities$ and $r \in \relations$ in KG
 - c) ...
 
 
@@ -20,21 +20,21 @@ Then the $Generator\_Score$ function contains the following features from \cite{
     \emph{\ac{PEER}:} 
     Relative frequency of peers within a peer group that is related to different objects, e.g. 0.9 of persons are married. 
     \begin{equation}
-        PEER(h,r) = \frac{|\{p | p \in peergroup(h), (p, r, \_) \in \mathcal{T}\}|}{|peergroup(h)|}
+        PEER(h,r) = \frac{|\{p | p \in peergroup(h), (h, r, t) \in \mathcal{T}\}|}{|peergroup(h)|}
     \end{equation}
 
     \item
     \emph{\ac{POP}:} 
     The popularity of the tail entity $t$ in $\mathcal{T}$. 
     \begin{equation}
-        POP(t) = \frac{|\{t | (\_, t, \_) \in \mathcal{T}\}|}{|\mathcal{T}|}
+        POP(t) = \frac{|\{t | (h, r , t) \in \mathcal{T}\}|}{|\mathcal{T}|}
     \end{equation}
 
     \item 
     \emph{\ac{FRQ}:} 
     Frequency of a relation/predicate $r$ in $\mathcal{T}$. 
     \begin{equation}
-        FRQ(r) = \frac{|\{r | (\_, r, \_) \in \mathcal{T}\}|}{|\mathcal{T}|}
+        FRQ(r) = \frac{|\{r | (h, r, t) \in \mathcal{T}\}|}{|\mathcal{T}|}
     \end{equation}
     
     \item 

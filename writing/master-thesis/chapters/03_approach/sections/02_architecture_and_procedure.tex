@@ -6,16 +6,17 @@
 % - general procedure for placement in the overall context 
 % - comparison between original KBGAN approach and my approach
 % - references to the following sections an why these are described
-
-
-
-In the original \ac{KBGAN} approach, as shown in \autoref{fig:architecture}, the sampling process from a negative triple set $Neg$ is replaced by Uncertainty Sampling.
+The procedure of the original KBGAN approach was described in \autoref{sec:kbgan}.
+For our approach, the random sampling from negative triple set $Neg$ is replaced by sampling by uncertainty in our approach.
+This causes a change in the adversarial learning procedure, so the adapted version is explained in more detail here.
+This procedure is depicted in \autoref{fig:uncertainty_sampling_architecture}.
 \begin{figure*}[t]
   \centering
     \includegraphics[width=0.90\textwidth]{figures/architecture.png}
   \caption{Uncertainty Sampling replaces the original Random Sampling technique in \ac{KBGAN}.}
-  \label{fig:architecture}
+  \label{fig:uncertainty_sampling_architecture}
 \end{figure*}
+
 After the set of negative triples $Neg$ is formed, different scores are calculated for all triples in the set.
 Based on this calculated value, the uncertainty of the model in the classification is calculated and then the example with the highest score is sampled. 
 
