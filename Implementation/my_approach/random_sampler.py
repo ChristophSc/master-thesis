@@ -6,8 +6,8 @@ class RandomSampler(BaseSampler):
     pass
   
   
-  def sample(self, src, rel, dst, n_sample, *args):
-    n, m = dst.size()
+  def sample(self, head_rel_count, rel_tail_count, head, rel, tail, n_sample, *args):
+    n, m = tail.size()
     
     if len(args) != 1:
       raise ValueError()

@@ -19,7 +19,7 @@ from random_sampler import RandomSampler
 from graph_utils import create_figure
 from base_model import BaseModel
 from random_sampler import RandomSampler
-from uncertainty_sampler import UncertaintySampler_Basic, UncertaintySampler_Advanced
+from uncertainty_sampler import *
 from TrainingProcessLogger import TrainingProcessLogger
 
 # set seeds
@@ -61,7 +61,7 @@ test_data = read_data(os.path.join('data', task_dir, 'test.txt'), kb_index)
 heads_filt, tails_filt = filter_heads_tails(n_ent, train_data, valid_data, test_data)
 
 
-head_count, tail_count = head_tail_counter(train_data, valid_data, test_data)
+head_rel_count, rel_tail_count = head_tail_counter(train_data, valid_data, test_data)
 
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
@@ -99,13 +99,13 @@ for epoch in range(n_epoch):
     head_cand, rel_cand, tail_cand = corrupter.corrupt(head, rel, tail, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
     
     # get statistics
-    pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None # get_statistics(gen, dis, heads, rels, tails, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
+    pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_statistics(gen, dis, head, rel, tail, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
      
     for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_cand, rel_cand, tail_cand, n_sample=n_train):
         # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
         # send corrupted triples from Neg of size "n_batch" to generator
-        gen_step = gen.gen_step(h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler)
+        gen_step = gen.gen_step(head_rel_count, rel_tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = pos_max_score, max_score = neg_min_score)
         # randomly sample from probability distribution of current negative triple set 
         head_smpl, tail_smpl = next(gen_step)
         # send sampled negative triple "tail_smpl" and its ground truth triple "head_smpl" to discriminator 

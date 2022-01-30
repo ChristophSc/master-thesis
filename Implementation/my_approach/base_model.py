@@ -9,7 +9,7 @@ from data_utils import batch_by_size
 import logging
 
 from random_sampler import RandomSampler
-from uncertainty_sampler import UncertaintySampler_Basic, UncertaintySampler_Advanced
+from uncertainty_sampler import *
 
 class BaseModule(nn.Module):
     def __init__(self):
@@ -100,7 +100,7 @@ class BaseModel(object):
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
             
             
-    def gen_step(self, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler()):
+    def gen_step(self, head_rel_count, rel_tail_count, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler(), min_score = None, max_score = None):
         """One learning step of the Generator component in Adversarial Learning Process.
         
         Args:
@@ -131,7 +131,7 @@ class BaseModel(object):
         # calculate probabilities for each negative triple to be sampled = 
         probs = nnf.softmax(logits, dim=-1)
         # call sampler to retrieve n_sample from negative triple set Neg
-        row_idx, sample_idx = sampler.sample(head, rel, tail, n_sample, probs)
+        row_idx, sample_idx = sampler.sample(head_rel_count, rel_tail_count, head, rel, tail, n_sample, probs, min_score, max_score)
     
         # get head and tail of negative triple by sampled index
         sample_heads = head[row_idx, sample_idx.data.cpu()]
