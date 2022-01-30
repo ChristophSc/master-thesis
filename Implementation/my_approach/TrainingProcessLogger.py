@@ -6,12 +6,12 @@ import logging
 class TrainingProcessLogger():
   
   def __init__(self, type, n_epochs, epoch_per_test):
-    self.rewards = [0,]
-    self.losses = [0,]
-    self.mrrs = [0,]
-    self.hit3s = [0,]
-    self.hit5s = [0,]
-    self.hit10s = [0,]
+    self.rewards = []
+    self.losses = []
+    self.mrrs = []
+    self.hit3s = []
+    self.hit5s = []
+    self.hit10s = []
     self.n_epochs = n_epochs
     self.type = type
     self.epoch_per_test = epoch_per_test
@@ -20,8 +20,8 @@ class TrainingProcessLogger():
   def log_loss_reward(self, epoch, loss, reward = None):
     if epoch % config().log.graph_every_nth_epoch == 0:   
       self.losses.append(loss)
-      if reward:
-        self.rewards.append(reward.item())
+      if reward != None:
+        self.rewards.append(reward)
       
   def log_performance(self, mrr, hits):
     self.mrrs.append(mrr)
@@ -39,11 +39,28 @@ class TrainingProcessLogger():
     plt.grid(True)  
     return plt
 
+  def write_lists_to_file(self, log_dir, losses, mrrs, hits10s, hits5s, hits3s, rewards = None):  
+    losses_str = "losses = [" + ",".join([str(element) for element in losses]) + "]" 
+    rewards_str = "[]" if rewards is None else  "rewards = [" + ",".join([str(element) for element in rewards]) + "]"    
+    mrrs_str = "MRRs = [" if mrrs == None else  ",".join([str(elem) for elem in mrrs]) + "]"   
+    hits10s_str =   "hits10s = [" + ",".join([str(elem) for elem in hits10s]) + "]"   
+    hits5s_str =   "hits5s = [" + ",".join([str(elem) for elem in hits5s]) + "]"   
+    hits3s_str =   "hits3s = [" + ",".join([str(elem) for elem in hits3s])  + "]"   
+    
+    with open(os.path.join(log_dir, "logged_lists.txt"), "w") as text_file:
+      text_file.write("%s\n%s\n%s\n%s\n%s\n%s" % (losses_str, rewards_str,  mrrs_str, hits10s_str, hits5s_str, hits3s_str))
+  
+    
+
+
   def create_and_save_figures(self, log_dir):
     graph_dir = os.path.join(log_dir, "graphs")
     os.mkdir(graph_dir) 
     logging.getLogger('matplotlib.font_manager').disabled = True
       
+    # log all lists in a separate file -> recreate graphs afterward
+    self.write_lists_to_file(log_dir, self.losses, self.mrrs, self.hit10s, self.hit5s, self.hit3s, self.rewards)
+    
     filename = os.path.join(graph_dir, self.type + '_' + config().task.dir)
     n_points = [x for x in range(0, self.n_epochs+1, config().log.graph_every_nth_epoch)]
     if len(self.rewards) > 1:

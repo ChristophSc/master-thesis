@@ -67,8 +67,7 @@ valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
-# test link prediction of discriminator model with pretrained model only (not adverarial training)
-# dis.test_link(test_data, n_ent, heads_filt, tails_filt)
+
 
 # load Corrupter which creates set of negatives (Neg) from positive triples in KG
 corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, config().adv.n_sample)
@@ -84,7 +83,14 @@ max_score = -1e30
 min_score = +1e30
 best_mrr = 0
 avg_reward = 0
+avg_loss = 0
+
 tp_logger = TrainingProcessLogger('gan_train', n_epoch, config().adv.epoch_per_test) 
+
+# test link prediction of discriminator model with pretrained model only (not adverarial training)
+mrr, hits = dis.test_link(test_data, n_ent, heads_filt, tails_filt)
+tp_logger.log_loss_reward(0, avg_loss, avg_reward)     
+tp_logger.log_performance(mrr, hits)
 
 for epoch in range(n_epoch):
     epoch_d_loss = 0
@@ -112,7 +118,7 @@ for epoch in range(n_epoch):
 
     avg_loss = epoch_d_loss / n_train
     avg_reward = epoch_reward / n_train
-    tp_logger.log_loss_reward(epoch, avg_loss, avg_reward)     
+    tp_logger.log_loss_reward(epoch, avg_loss.item(), avg_reward.item())     
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
     if (epoch + 1) % config().adv.epoch_per_test == 0:
         #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
@@ -123,7 +129,7 @@ for epoch in range(n_epoch):
             dis.save(os.path.join('models', config().task.dir, mdl_name))
       
 if config().log.log_pretrain_graph:
-            tp_logger.create_and_save_figures(log_dir)   
+    tp_logger.create_and_save_figures(log_dir)   
 
 dis.load(os.path.join('models', config().task.dir, mdl_name))
 logging.info('Best Performance:')

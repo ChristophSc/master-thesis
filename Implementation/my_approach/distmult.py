@@ -67,7 +67,10 @@ class DistMult(BaseModel):
         n_batch = self.config.n_batch
         optimizer = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         best_perf = 0
-        tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test)            
+        tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test) 
+        tp_logger.log_loss_reward(0, 0)     
+        tp_logger.log_performance(0, 0)
+                   
         for epoch in range(n_epoch):
             epoch_loss = 0
             if epoch % self.config.sample_freq == 0:
