@@ -35,6 +35,12 @@ In \autoref{fig:informativeinstances} the distinction between informative and ha
   \caption{Example of Uncertainty Sampling for positive and negative instances. Simplified to two-dimensional embedding space d1 and d2 and borders b1 and b2 between positive and negative instances.}
   \label{fig:informativeinstances}
 \end{figure*}
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/uncertainty_in_svm.PNG}
+  \caption{Uncertainty in SVM (based on \cite{human-in-the-loop}).}
+  \label{fig:uncertainty_in_svm}
+\end{figure*}
 For simplicity, positive and negative instances are shown here in two-dimensional embedding space with dimensions d1 and d2.
 The embedding models sets the border between positive and negative triples at b1.
 For the approach of sampling hard negatives the embedding model would choose negative instance n1 because it is the closest one to the border b1 and therefore, it is the most difficult one to classify as positive or negative.

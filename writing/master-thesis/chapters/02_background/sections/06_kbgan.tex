@@ -19,7 +19,8 @@ This process of \ac{KBGAN} is depicted in \autoref{fig:overview} and described a
     Negative triples from $Neg$ are given to the generator G as input.
     
     \item 
-    G is a \ac{KGE} model with a softmax function to provide  probabilities of being sampled for each given negative triple, which gives us a probability distribution $p_G(h',r,t'|h,r,t)$.
+    $G$ is a \ac{KGE} model with a softmax function to provide  probabilities of being sampled for each given negative triple, which gives us a probability distribution $p_G(h',r,t'|h,r,t)$.
+    Other models are also possible at this point, but the approach would then have to be adapted, so that it outputs a probability distribution over all negative triples of the set $Neg$ as well.
 
     \item 
     Afterwards, one of these triples is sampled as output of G according to $p_G$, while high quality triples should have a high probability to be sampled.

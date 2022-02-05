@@ -11,6 +11,11 @@
 - min.score: P(y=1)=0, P(y=0)=1 
 - max.score: P(y=1)=1, P(y=0)=0
 
+- we need different classifiers, which indicate with which probability a given triple is positive or negative.
+- Either a classifier with its uncertainty, i.e. a probability around 0.5 of being either positive or negative.
+- or several classifiers, where the uncertainty can be recognized by a different classification of triples. 
+- Consequently, we need probabilities instead of simple scores to be able to calculate uncertainty.
+- 
 
 Therefore, we need probabilities $\mathds{P}(y_i | x; \theta)$ for the classes $y_i \in \{0, 1\}$.
 
