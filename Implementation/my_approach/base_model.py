@@ -126,12 +126,10 @@ class BaseModel(object):
         rel_var = Variable(rel)        
         tail_var = Variable(tail)
 
-        logits = self.mdl.prob_logit(head_var, rel_var, tail_var) / temperature
+        logits = self.mdl.prob_logit(head_var, rel_var, tail_var) / temperature    
         
-        # calculate probabilities for each negative triple to be sampled = 
-        probs = nnf.softmax(logits, dim=-1)
         # call sampler to retrieve n_sample from negative triple set Neg
-        row_idx, sample_idx = sampler.sample(head_rel_count, rel_tail_count, head, rel, tail, n_sample, probs, min_score, max_score)
+        row_idx, sample_idx = sampler.sample(head_rel_count, rel_tail_count, head, rel, tail, n_sample, logits, min_score, max_score)
     
         # get head and tail of negative triple by sampled index
         sample_heads = head[row_idx, sample_idx.data.cpu()]

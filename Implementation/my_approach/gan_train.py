@@ -67,15 +67,13 @@ valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]
 train_data = [torch.LongTensor(vec) for vec in train_data]
 
-
-
 # load Corrupter which creates set of negatives (Neg) from positive triples in KG
 corrupter = BernCorrupterMulti(train_data, n_ent, n_rel, config().adv.n_sample)
 head, rel, tail = train_data
 n_train = len(head)
 n_epoch = config().adv.n_epoch
 n_batch = config().adv.n_batch
-sampler = load_sampler(config().adv.sample_type)
+sampler = load_sampler()
 mdl_name = 'gan_dis_' + timestamp + '.mdl'
 
 # init variables for training
@@ -92,6 +90,7 @@ mrr, hits = dis.test_link(test_data, n_ent, heads_filt, tails_filt)
 tp_logger.log_loss_reward(0, avg_loss, avg_reward)     
 tp_logger.log_performance(mrr, hits)
 
+
 for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
@@ -100,12 +99,12 @@ for epoch in range(n_epoch):
     
     # get statistics
     pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_statistics(gen, dis, head, rel, tail, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
-     
+    logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
     for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_cand, rel_cand, tail_cand, n_sample=n_train):
         # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
         # send corrupted triples from Neg of size "n_batch" to generator
-        gen_step = gen.gen_step(head_rel_count, rel_tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = pos_max_score, max_score = neg_min_score)
+        gen_step = gen.gen_step(head_rel_count, rel_tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = neg_min_score, max_score = pos_max_score)
         # randomly sample from probability distribution of current negative triple set 
         head_smpl, tail_smpl = next(gen_step)
         # send sampled negative triple "tail_smpl" and its ground truth triple "head_smpl" to discriminator 
