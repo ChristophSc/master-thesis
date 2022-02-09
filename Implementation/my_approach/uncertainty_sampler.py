@@ -95,16 +95,11 @@ class UncertaintySampler_Distribution(UncertaintySampler):
     is_positive_probs[is_positive_probs >= 1] = 0.9999
     
     uncertainty_scores = self.measure.measure_uncertainty(is_positive_probs)    
-    sampling_probs = torch.softmax(uncertainty_scores, dim = -1)
-    
-    sample_idx_uncertainty = None
-    try:
-      # sampling according to distribution of uncertainty scores
-      sample_idx_uncertainty = torch.multinomial(sampling_probs, n_sample, replacement=True)
-    except:
-      print(generator_logits)
-      print(sampling_probs)
-      
+    sampling_probs = torch.softmax(uncertainty_scores, dim = -1)    
+
+    # sampling according to distribution of uncertainty scores
+    sample_idx_uncertainty = torch.multinomial(sampling_probs, n_sample, replacement=True)
+
     row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)      
     return row_idx, sample_idx_uncertainty
   
