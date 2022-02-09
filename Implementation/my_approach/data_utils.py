@@ -92,7 +92,7 @@ def filter_negatives(heads_neg, relations_neg, tails_neg, true_heads, true_tails
 def get_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, heads_filt, tails_filt, print_statistics = False):    
     
     def get_statistics(case, model, head_entities, relations, tail_entities):
-        scores = model.mdl.score(head_entities, relations, tail_entities)            
+        scores = model.mdl.forward(head_entities, relations, tail_entities)            
         min_score = torch.min(scores, dim = -1)
         min_score = torch.min(min_score.values, dim = -1).values.item()
         max_score = torch.max(scores, dim = -1)

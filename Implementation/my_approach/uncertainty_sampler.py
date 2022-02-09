@@ -60,13 +60,13 @@ class UncertaintySampler_Max(UncertaintySampler):
     generator_logits = args[0]
     min_score =  args[1]
     max_score = args[2] 
+        
+    is_positive_probs = abs(generator_logits - min_score) / abs(max_score - min_score) 
+
+    is_positive_probs[is_positive_probs <= 0] = 0.0001
+    is_positive_probs[is_positive_probs >= 1] = 0.9999
     
-    generator_logits[generator_logits <= min_score] = -1e30
-    generator_logits[generator_logits >= max_score] = -1e30
-    
-    is_positive_probs = nnf.softmax(generator_logits, dim = -1) / 2
-    is_negative_probs = 1 - is_positive_probs
-    uncertainty_scores = self.measure.measure_uncertainty(is_negative_probs)
+    uncertainty_scores = self.measure.measure_uncertainty(is_positive_probs)
 
     max = torch.max(uncertainty_scores, 1) 
     sample_idx_uncertainty = max.indices.unsqueeze(1)  
@@ -77,9 +77,7 @@ class UncertaintySampler_Max(UncertaintySampler):
   
 class UncertaintySampler_Distribution(UncertaintySampler):  
   def __init__(self, measure):
-     super().__init__(measure)   
-   
-  
+     super().__init__(measure)     
     
   def sample(self, head_rel_count, rel_tail_count, h_neg, r_neg, t_neg, n_sample, *args):
     n, m = t_neg.size()
@@ -87,39 +85,26 @@ class UncertaintySampler_Distribution(UncertaintySampler):
     if len(args) != 3:
       raise ValueError()
     
-    scores = args[0]
-    summe = torch.sum(scores[0], dim = -1)
+    generator_logits = args[0]
     min_score =  args[1]
-    max_score = args[2]
+    max_score = args[2] 
     
-    batch_entropies = []
-    torch.set_printoptions(threshold=10_000) 
-     
-    #print(batch_probs)
-    lambda_1 = lambda_2 = lambda_3 = 1
-    # head_rel_score = - self.rel_tail_frq(h_neg, r_neg, t_neg, rel_tail_count)
-    # rel_tail_score = - self.head_rel_frq(h_neg, r_neg, t_neg, head_rel_count)  
-    generator_score = lambda_1 * scores # + lambda_2 * head_rel_score + lambda_3 * rel_tail_score       # TODO: change and add more information to generator_score
+    is_positive_probs = abs(generator_logits - min_score) / abs(max_score - min_score) 
+
+    is_positive_probs[is_positive_probs <= 0] = 0.0001
+    is_positive_probs[is_positive_probs >= 1] = 0.9999
     
-    # print(generator_score)
-    is_positive_probs = scores / 2
-    # is_positive_probs = (generator_score - min_score) / (max_score - min_score)
-    # avoid nan values if there is a score < min_score or a score > max_score
-    # is_positive_probs[is_positive_probs <= 0] = 0.00001
-    # is_positive_probs[is_positive_probs >= 1] = 0.99999
-    print(torch.sum(scores[0], dim = -1))
-    print(torch.sum(is_positive_probs[0], dim = -1))
+    uncertainty_scores = self.measure.measure_uncertainty(is_positive_probs)    
+    sampling_probs = torch.softmax(uncertainty_scores, dim = -1)
     
-    print(is_positive_probs) 
+    sample_idx_uncertainty = None
+    try:
+      # sampling according to distribution of uncertainty scores
+      sample_idx_uncertainty = torch.multinomial(sampling_probs, n_sample, replacement=True)
+    except:
+      print(generator_logits)
+      print(sampling_probs)
       
-    is_negative_probs = 1 - is_positive_probs
-    
-    entropies = - (is_negative_probs * torch.log2(is_negative_probs)) - ((1 - is_negative_probs) * torch.log2(1 - is_negative_probs)) 
-    sm = torch.softmax(entropies, dim = -1)
-    print(torch.sum(sm[0], dim = -1))
-    # max = torch.max(entropies, 1) 
-    # print(entropies[0])
-    sample_idx_uncertainty = torch.multinomial(sm, n_sample, replacement=True)
-    row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)       
+    row_idx = torch.arange(0, n).type(torch.LongTensor).unsqueeze(1).expand(n, n_sample)      
     return row_idx, sample_idx_uncertainty
   
