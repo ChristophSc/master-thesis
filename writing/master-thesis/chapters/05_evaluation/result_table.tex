@@ -8,7 +8,7 @@
         \multicolumn{2}{c}{\bf WN18RR}\\
         
         \cmidrule{2-6} \cmidrule{7-7} \\
-        {} & MRR & H\@10 & MRR & H\@10 & MRR & H\@10 \\
+        {} & MRR & H@10 & MRR & H@10 & MRR & H@10 \\
         
         \midrule
         
@@ -26,6 +26,9 @@
 
         \midrule
         
+        \textsc{Results according to paper} 
+          &  &  &  &  &  & \\
+          
         \textsc{TransE} (pre-trained)                         & 24.2    & 42.2  & 43.3   & 91.5 & 18.6 & 45.9 \\
         
         \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  & 27.4  & 45.0 & 71.0 & \textbf{\underline{94.9}} & 21.3 & \underline{48.1} \\
@@ -44,8 +47,15 @@
         
          \midrule
          
+         \textsc{my results} 
+          &  &  &  &  &  & \\
+          
+          \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  & -  & - & - & - & 17.7 & 43.9 \\
+          
+          \midrule
+         
           \textsc{ucgan} (\textsc{TransE} + \textsc{DistMult}) 
-          & -  & - & - & - & - & - \\
+          & -  & - & - & - & 17.8 & 44.0\\
          
          \textsc{ucgan} (\textsc{TransE} + \textsc{ComplEx}) 
           & -  & - & - & - & - & - \\
@@ -58,6 +68,9 @@
           
         \bottomrule
     \end{tabular}
-    \caption{Experimental results. Results of \textsc{kbgan} are results of its discriminator (on the left of the ``+'' sign). Underlined results are the best ones among our implementations. Results marked with $\dag$ are produced by running Fast-TransX \cite{lin2015learning} with its default parameters. Results marked with $\ddag$ are copied from \cite{conve}. All other baseline results are copied from their original papers.}
+    \caption{Experimental results.
+    Results copied from the original paper \cite{cai2017kbgan} from pretraining and adversarial training with \kbgan. 
+    Additional row with my results from adversarial training of \kbgan and our approach with sampling by uncertainty.
+    The training only took place for 1000 epochs on our local computer instead of the original KBGAN 5000 epochs due to the long training time.}
 \label{tab:results}
 \end{table}

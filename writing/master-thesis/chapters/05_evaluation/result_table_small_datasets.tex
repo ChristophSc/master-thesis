@@ -1,0 +1,63 @@
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        \multirow{Method} &
+        \multicolumn{2}{c}{\bf UMLS} & 
+        \multicolumn{2}{c}{\bf KINSHIP} \\
+        
+        \cmidrule{2-4} \cmidrule{5-5} \\
+        {} & MRR & H@10 & MRR & H@10 \\
+        
+        \midrule
+        
+        \textsc{TransE}    
+        & 80.05 & 98.2 & - & -  \\
+        
+        \textsc{TransD}    
+        & - & - & - & - \\ 
+        
+        \textsc{DistMult}  
+        &  71.5 & 84.5 & - & - \\
+        
+        \textsc{ComplEx}   
+        & -  & - & - & - \\
+
+        \midrule
+        
+        \textsc{TransE} (pre-trained)   
+        & 80.05 & 98.2 & - & - \\
+        
+        \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  
+        & 59 & 79 & - & - \\
+        
+        \textsc{kbgan} (\textsc{TransE} + \textsc{ComplEx})   
+        & - & - & - & - \\
+        
+        \textsc{TransD} (pre-trained)                         
+        & - & - & - & - \\
+        
+        \textsc{kbgan} (\textsc{TransD} + \textsc{DistMult})  
+        & - & - & - & -\\
+        
+        \textsc{kbgan} (\textsc{TransD} + \textsc{ComplEx})   
+        & - & - & - & -\\
+        
+         \midrule
+         
+          \textsc{ucgan} (\textsc{TransE} + \textsc{DistMult}) 
+          & 79.8 & 99.02 & - & - \\
+         
+         \textsc{ucgan} (\textsc{TransE} + \textsc{ComplEx}) 
+          & -  & - & - & -\\
+          
+          \textsc{ucgan} (\textsc{TransD} + \textsc{DistMult}) 
+          & -  & - & - & - \\
+        
+        \textsc{ucgan} (\textsc{TransD} + \textsc{ComplEx}) 
+          & -  & - & - & - \\
+        \bottomrule
+    \end{tabular}
+    \caption{}
+\label{tab:results}
+\end{table}

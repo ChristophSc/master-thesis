@@ -31,24 +31,7 @@ Background:
 -> depending on the, also the feature functions need to reflect the same score for positives/negatives
 
 
-To distinguish between positive and negative triples, a scoring function is defined for each \ac{KGE} model which assigns a score to each triple.
-Depending on the model this score must be low or high to reflect a positive triple.
-Therefore, the score is in indicator how likely a triple is positive.
 
-Since the score plays a central role in the sampling process by uncertainty later on and and the uncertainty of a model is reflected in the underlying score for triples, we want to go into a bit more detail about the score at this point.
-In the KBGAN approach the score is calculated by the generator \ac{KGE} model, which provide the logits for the subsequent calculation of sampling probability.
-One example of scores for positive and negative triples is illustrated in \autoref{fig:uncertainty}.
-\ref{fig:uncertainty}
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.75\textwidth]{figures/uncertainty.PNG}
-  \caption{Score range of positive and negative triples.
-  The uncertainty of the model is in the scoring range where the model found scores of both positive and negative triples.}
-  \label{fig:uncertainty}
-\end{figure*}
-It can be recognized that positive as well as negative triples have a different range of scores.
-While positive triples achieve a score between -12 and 4, negative scores are higher in range between -3 and 12.
-While in the outer areas triples can be classified more easily as positives or negatives, there is also an overlap of both score areas where triples can belong either to class "positive" or to class "negative".
 
 
 
