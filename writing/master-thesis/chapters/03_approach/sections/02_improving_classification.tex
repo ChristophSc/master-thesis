@@ -1,0 +1,61 @@
+\section{Improving Classification by Adding More Information} 
+\label{sec:feature_functions}
+
+Until now, only information of the scoring function of the generator is used for the classification of the triple as either positive or negative.
+However, since this only contains implicit information about, for example, the structure of the \ac{KG} and its entities and relations, the idea is to supplement this classification with further, explicit information.
+Therefore, the idea is to include additional functions for classification in the form of the following functions: 
+
+Assuming we have the function $peergroup(e) \subseteq \mathcal{KG}$ which returns a set of peers for given entity $e \in \entities_{\mathcal{T}}$ by its embedding. 
+Then the $Generator\_Score$ function contains the following features from \cite{arnaout2020enriching}:
+\begin{itemize}
+    \item 
+    \emph{\ac{PEER}:} 
+    Relative frequency of peers within a peer group that is related to different objects, e.g. 0.9 of persons are married. 
+    \begin{equation}
+        PEER(h,r) = \frac{|\{p | p \in peergroup(h), (h, r, t) \in \mathcal{T}\}|}{|peergroup(h)|}
+    \end{equation}
+
+    \item
+    \emph{\ac{POP}:} 
+    The popularity of the tail entity $t$ in $\mathcal{T}$. 
+    \begin{equation}
+        POP(t) = \frac{|\{t | (h, r , t) \in \mathcal{T}\}|}{|\mathcal{T}|}
+    \end{equation}
+
+    \item 
+    \emph{\ac{FRQ}:} 
+    Frequency of a relation/predicate $r$ in $\mathcal{T}$. 
+    \begin{equation}
+        FRQ(r) = \frac{|\{r | (h, r, t) \in \mathcal{T}\}|}{|\mathcal{T}|}
+    \end{equation}
+    
+    \item 
+    \emph{\ac{PIVO}:} 
+    Textual background information about an entities $h$ and $t$ and is a pivoting classifier like in \cite{arnaout2020enriching}.
+    
+    \item 
+    \emph{$f_G$:} 
+    $Generator\_Score$ function of the \ac{KGE} model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
+\end{itemize}
+
+
+To incorporate these information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by several information about entities and relations in the \ac{KG}.
+Therefore, our new score function $Classification\_Score$ is defined as follows:
+\begin{equation}
+    Classification\_Score(h, r, t)=
+    \begin{cases}
+         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{POP(\textit{t})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(\textit{h, r, t})
+         \\ \ \ 
+         if\ \ \ \neg(\textit{h, r, t})
+         \\ \\
+         \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{FRQ(\textit{r})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(h, r, t)
+         \\ \ \ 
+         if\ \ \ \neg \exists (\textit{h, r, \_})
+         \\
+    \end{cases}
+\end{equation}
+where $\lambda_i \in [0, 1]$ for $i \in [1,4]$ are hyperparameters and are set to randomly generated values at the beginning but can be optimized at a later stage.
+Furthermore, $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.
+\textit{PEER}, \textit{POP}, \textit{PIVO} and \textit{FRQ} are functions that provide additional information about the \ac{KG}, its entities and relations such that the $Generator\_Score$ can make more reliable statements about whether the given triple $(h, r, t)$ is positive or not.
+However, these components of the function can also be replaced or extended by further components known from for example Cluster-Based Sampling methods that give more information about a \ac{KG} and its structure.
+For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling or Near miss Sampling can be considered \cite{kotnis2017analysis}.

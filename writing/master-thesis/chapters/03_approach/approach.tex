@@ -3,53 +3,10 @@
 
 In this chapter our approach of Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty is described.
 At first, in \autoref{sec:idea} the general idea of Sampling by Uncertainty is described and how this idea came about.
-Subsequently, 
-Since the implementation of Uncertainty Sampling is initially based on the \ac{KBGAN} approach, the architecture and the corresponding procedure of our approach is described in \autoref{sec:architectureandprocedure}.
-From this procedure and the required information within the steps of the procedure and Uncertainty Sampling, the following sections result.
-First, we introduce the various feature functions (\autoref{sec:featurefunctions}) that provide additional information about the graph and contribute for measuring the "uncertainty" of our model.
-Subsequently, these feature functions are combined an weighted within our Generator Score which is described in more detail in \autoref{sec:generatorscore}.
-From this Generator Score, which gives information about the plausibility of triples, the probabilities of triples whether they are positive or negative can be calculated (\autoref{sec:probabilities}). 
-Finally, these probabilities are used to sample negative triples by the uncertainty of the model which is described in \autoref{sec:uncertaintysampling approach}.
-
-%Option1: downward description/ big to small
-%Uncertainty Sampling -> needs probabilities -> probability of being a positive/negative triple -> calculation of probabilities -> Generator Score -> features for Generator score
-
-%Option 2: upward description -> small to big (current approach)
-%(everything is understandable because it was described in section before
-%features -> generator score -> probabilities -> uncertainty Sampling
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 \input{chapters/03_approach/sections/01_idea}
 
-\input{chapters/03_approach/sections/02_architecture_and_procedure}
+\input{chapters/03_approach/sections/02_improving_classification}
 
-\input{chapters/03_approach/sections/03_scoring_of_triples}
-
-\input{chapters/03_approach/sections/04_feature_functions}
-
-\input{chapters/03_approach/sections/05_generator_score}
-
-\input{chapters/03_approach/sections/06_probabilities}
-
-\input{chapters/03_approach/sections/07_uncertainty}
-
-\input{chapters/03_approach/sections/08_sampling_by_uncertainty}

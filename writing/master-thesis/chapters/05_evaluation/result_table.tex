@@ -46,11 +46,14 @@
         & 94.8 & \underline{21.5} & 46.9\\
         
          \midrule
-         
-         \textsc{my results} 
-          &  &  &  &  &  & \\
           
-          \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  & -  & - & - & - & 17.7 & 43.9 \\
+          \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  & -  & - & - & - & 18.3 & 44.5 \\
+          
+          \textsc{kbgan} (\textsc{TransE} + \textsc{ComplEx})  & -  & - & - & - & - & - \\
+          
+          \textsc{kbgan} (\textsc{TransD} + \textsc{DistMult})  & -  & - & - & - & - & - \\
+          
+          \textsc{kbgan} (\textsc{TransD} + \textsc{ComplEx})  & -  & - & - & - & - & - \\
           
           \midrule
          
@@ -69,8 +72,9 @@
         \bottomrule
     \end{tabular}
     \caption{Experimental results.
-    Results copied from the original paper \cite{cai2017kbgan} from pretraining and adversarial training with \kbgan. 
-    Additional row with my results from adversarial training of \kbgan and our approach with sampling by uncertainty.
-    The training only took place for 1000 epochs on our local computer instead of the original KBGAN 5000 epochs due to the long training time.}
+    Section 1 and 2 are results copied from the original paper \cite{cai2017kbgan} from pretraining and adversarial training with \kbgan. 
+    Third section lists our results achieven with original \kbgan on different datasets.
+    Fourth and last section includes results achieved with Sampling by Uncertainty which is called \textsc{ucgan} at this point.
+    The training only took place for 1000 epochs on our local computer instead of the original \kbgan 5000 epochs due to the long training time.}
 \label{tab:results}
 \end{table}

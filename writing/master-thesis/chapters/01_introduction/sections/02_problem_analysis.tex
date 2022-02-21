@@ -34,32 +34,28 @@ Due to the rapid growth and frequent updating of \acp{KG}, the constant renewal 
 However, the creation of subsets of entities leads to a degradation of sampling performance.
 In addition, the information needed for this is not always available or is very difficult to derive from a \ac{KG}.
 
-However, this insight about constantly updating the graph and making negative sampling dependent on the underlying KG provides the basis for further approaches.
-These attempt to estimate the distribution of negative triples and follow a dynamic sampling approach. 
+%However, this insight about constantly updating the graph and making negative sampling dependent on the underlying KG provides the basis for further approaches.
+%These attempt to estimate the distribution of negative triples and follow a dynamic sampling approach. 
 
-Many of these approaches aim to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process.
-
-
+%Many of these approaches aim to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process.
 
 
-In addition, a distinction must be made for which \ac{KGE} models the Negative Sampling is used.
-For example, the problem of too easy negative examples is less severe to models using log-softmax loss function since they sample tens or hundreds of negative triples for one positive triple.
-By sampling so many negatives for just one positive it is very likely to have a few good ones which help the model to learn the embedding \cite{cai2017kbgan}.
-On the other hand, the problem is more severe for KGE models with marginal loss function, because they use a one-to-one ratio for positive and sampled negatives and therefore, bad negatives seriously damage their performance \cite{cai2017kbgan}.
+%In addition, a distinction must be made for which \ac{KGE} models the Negative Sampling is used.
+%For example, the problem of too easy negative examples is less severe to models using log-softmax loss function since they sample tens or hundreds of negative triples for one positive triple.
+%By sampling so many negatives for just one positive it is very likely to have a few good ones which help the model to learn the embedding \cite{cai2017kbgan}.
+%On the other hand, the problem is more severe for KGE models with marginal loss function, because they use a one-to-one ratio for positive and sampled negatives and therefore, bad negatives seriously damage their performance \cite{cai2017kbgan}.
 
 
 
 
 
+%Most of graph representation learning methods can be unified within a \ac{SampledNCE} framework comprising an encoder that generates node embeddings by learning to distinguish pairs of a positive and a negative triple \cite{MCNS}.
+%Therefore, we need negative triples for embedding learning which are not available in most \acp{KG}. 
 
-
-Most of graph representation learning methods can be unified within a \ac{SampledNCE} framework comprising an encoder that generates node embeddings by learning to distinguish pairs of a positive and a negative triple \cite{MCNS}.
-Therefore, we need negative triples for embedding learning which are not available in most \acp{KG}. 
-
-For this reason, we are left with two options to collect them \cite{safavi2021negater}: 
-On one hand they can be obtained by human annotation which is very cost-prohibitive at scale, but leads to very informative and useful examples. 
-On the other, they can be generated ad-hoc, which in turn does not represent a great effort, but also leads to uninformative and useless negative examples.
-For this reason, we need to find a way between these two extreme approaches.
+%For this reason, we are left with two options to collect them \cite{safavi2021negater}: 
+%On one hand they can be obtained by human annotation which is very cost-prohibitive at scale, but leads to very informative and useful examples. 
+%On the other, they can be generated ad-hoc, which in turn does not represent a great effort, but also leads to uninformative and useless negative examples.
+%For this reason, we need to find a way between these two extreme approaches.
 
 
 
