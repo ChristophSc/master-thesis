@@ -89,40 +89,47 @@ def filter_negatives(heads_neg, relations_neg, tails_neg, true_heads, true_tails
     tails_neg_filt =  torch.tensor(tails_neg_filt)
     return heads_neg_filt, rel_neg_filt, tails_neg_filt 
 
-def get_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, heads_filt, tails_filt, print_statistics = False):    
+def get_statistics(case, model, head_entities, relations, tail_entities, print_statistics):
+    scores = model.mdl.forward(head_entities, relations, tail_entities)            
+    min_score = torch.min(scores, dim = -1)
+    min_score = torch.min(min_score.values, dim = -1).values.item()
+    max_score = torch.max(scores, dim = -1)
+    max_score =  torch.max(max_score.values, dim = -1).values.item()
+    mean_score = torch.mean(scores).item()
     
-    def get_statistics(case, model, head_entities, relations, tail_entities):
-        scores = model.mdl.forward(head_entities, relations, tail_entities)            
-        min_score = torch.min(scores, dim = -1)
-        min_score = torch.min(min_score.values, dim = -1).values.item()
-        max_score = torch.max(scores, dim = -1)
-        max_score =  torch.max(max_score.values, dim = -1).values.item()
-        mean_score = torch.mean(scores).item()
+    if print_statistics:
+        print('-----', case, '-----')
+        print('min', min_score)
+        print('max', max_score)
+        print('mean', mean_score)
+    return min_score, max_score, mean_score
+    
+    
+def get_model_statistics(model, pos_head_entities, pos_relations, pos_tail_entities, neg_head_enitities, neg_relations, neg_tail_entities, print_statistics):
+    neg_min_score, neg_max_score, neg_mean_score = get_statistics('Negatives', model, neg_head_enitities, neg_relations, neg_tail_entities, print_statistics)
+    pos_min_score, pos_max_score, pos_mean_score = get_statistics('Positives', model, pos_head_entities, pos_relations, pos_tail_entities, print_statistics)        
+    if print_statistics:
+        print('')
+    return pos_min_score, pos_max_score, neg_min_score, neg_max_score
+    
+def get_scoring_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, heads_filt, tails_filt, print_statistics = False):    
+    if torch.cuda.is_available():
+        heads = heads.cuda()
+        relations = relations.cuda()           
+        tails = tails.cuda()
+        heads_neg  = heads_neg.cuda()
+        relations_neg  = relations_neg.cuda()
+        tails_neg = tails_neg.cuda()
         
-        if print_statistics:
-            print('-----', case, '-----')
-            print('min', min_score)
-            print('max', max_score)
-            print('mean', mean_score)
-        return min_score, max_score, mean_score
-    
-    
-    def get_model_statistics(model, pos_head_entities, pos_relations, pos_tail_entities, neg_head_enitities, neg_relations, neg_tail_entities):
-        neg_min_score, neg_max_score, neg_mean_score = get_statistics('Negatives', model, neg_head_enitities, neg_relations, neg_tail_entities)
-        pos_min_score, pos_max_score, pos_mean_score = get_statistics('Positives', model, pos_head_entities, pos_relations, pos_tail_entities)        
-        if print_statistics:
-            print('')
-        return pos_min_score, pos_max_score, neg_min_score, neg_max_score
-    
     with torch.no_grad():
         # High scores indicate a low probability if a triple to be true               
         heads_neg_filt, rel_neg_filt, tails_neg_filt = filter_negatives(heads_neg, relations_neg, tails_neg, heads_filt, tails_filt)
         if print_statistics:
             print('----------', 'Generator statistics:', '----------')  
-        pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen,  heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt)  
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen,  heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics)  
         if print_statistics:
             print('----------', 'Discriminator statistics:', '----------')  
-        get_model_statistics(dis, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt)   
+        get_model_statistics(dis, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics)   
         if print_statistics:
             print('')
         return pos_min_score, pos_max_score, neg_min_score, neg_max_score

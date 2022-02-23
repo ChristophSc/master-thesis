@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from random import sample, random
 from config import config, overwrite_config_with_args, dump_config
 from read_data import index_ent_rel, graph_size, read_data
-from data_utils import filter_heads_tails, inplace_shuffle, batch_by_num, head_tail_counter, get_statistics
+from data_utils import filter_heads_tails, get_scoring_statistics, inplace_shuffle, batch_by_num, head_tail_counter, get_statistics
 from config_utils import load_sampler
 from trans_e import TransE
 from trans_d import TransD
@@ -98,8 +98,11 @@ for epoch in range(n_epoch):
     head_cand, rel_cand, tail_cand = corrupter.corrupt(head, rel, tail, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
     
     # get statistics
-    pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_statistics(gen, dis, head, rel, tail, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
-    logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
+    if type(sampler) == RandomSampler:
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None
+    else:
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, head_cand, rel_cand, tail_cand, heads_filt, tails_filt, print_statistics = False)
+        logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
     for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_cand, rel_cand, tail_cand, n_sample=n_train):
         # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
