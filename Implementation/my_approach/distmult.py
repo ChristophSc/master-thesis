@@ -69,7 +69,7 @@ class DistMult(BaseModel):
         best_perf = 0
         tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test) 
         tp_logger.log_loss_reward(0, 0)     
-        tp_logger.log_performance(0, 0)
+        tp_logger.log_performance(0, [0, 0, 0])
                    
         for epoch in range(n_epoch):
             epoch_loss = 0

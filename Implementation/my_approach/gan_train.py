@@ -33,7 +33,7 @@ config()
 overwrite_config_with_args()
 timestamp = datetime.datetime.now().strftime("%m%d%H%M%S")
 log_dir = logger_init("gan_train")
-device_name = "cuda:" + str(select_gpu()) if torch.cuda.is_available()  else "cpu"
+device_name = "cuda:0" if torch.cuda.is_available()  else "cpu" # "cuda:" + str(select_gpu()) if torch.cuda.is_available()  else "cpu"
 device = torch.device(device_name)
 
 dump_config()

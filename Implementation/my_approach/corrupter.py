@@ -25,13 +25,13 @@ class BernCorrupter(object):
         self.bern_prob = get_bern_prob(data, n_ent, n_rel)
         self.n_ent = n_ent
 
-    def corrupt(self, src, rel, dst):
+    def corrupt(self, head, rel, tail):
         prob = self.bern_prob[rel]
         selection = torch.bernoulli(prob).numpy().astype('int64')
-        ent_random = choice(self.n_ent, len(src))
-        src_out = (1 - selection) * src.numpy() + selection * ent_random
-        dst_out = selection * dst.numpy() + (1 - selection) * ent_random
-        return torch.from_numpy(src_out), torch.from_numpy(dst_out)
+        ent_random = choice(self.n_ent, len(head))
+        head_out = (1 - selection) * head.cpu().numpy() + selection * ent_random
+        tail_out = selection * tail.cpu().numpy() + (1 - selection) * ent_random
+        return torch.from_numpy(head_out), torch.from_numpy(tail_out)
 
 
 class BernCorrupterMulti(object):

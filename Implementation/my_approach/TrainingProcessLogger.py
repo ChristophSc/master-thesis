@@ -41,8 +41,8 @@ class TrainingProcessLogger():
 
   def write_lists_to_file(self, log_dir, losses, mrrs, hits10s, hits5s, hits3s, rewards = None):  
     losses_str = "losses = [" + ",".join([str(element) for element in losses]) + "]" 
-    rewards_str = "[]" if rewards is None else  "rewards = [" + ",".join([str(element) for element in rewards]) + "]"    
-    mrrs_str = "[]" if mrrs == None else "MRRs = ["  + ",".join([str(elem) for elem in mrrs]) + "]"   
+    rewards_str = "rewards = []" if rewards is None else  "rewards = [" + ",".join([str(element) for element in rewards]) + "]"    
+    mrrs_str = "mrrs = []" if mrrs == None else "mrrs = ["  + ",".join([str(elem) for elem in mrrs]) + "]"   
     hits10s_str =   "hits10s = [" + ",".join([str(elem) for elem in hits10s]) + "]"   
     hits5s_str =   "hits5s = [" + ",".join([str(elem) for elem in hits5s]) + "]"   
     hits3s_str =   "hits3s = [" + ",".join([str(elem) for elem in hits3s])  + "]"   
