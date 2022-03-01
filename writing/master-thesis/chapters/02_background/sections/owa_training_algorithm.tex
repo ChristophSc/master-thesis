@@ -1,0 +1,20 @@
+\begin{algorithm*}[t]
+\small
+ \KwIn{Observed facts $\mathbb{D}^+ = \{((h,r,t)\}$; Loss function $\mathcal{L}$}
+ \KwOut{Embeddings of Entities and relations}
+ \Repeat{convergence}{
+      $\mathbb{P} \longleftarrow$ a small set of positive facts sampled from $\mathbb{D}^+$\;
+      $\mathbb{B}^+ \longleftarrow \emptyset$;
+      $\mathbb{B}^- \longleftarrow \emptyset$\;
+     
+      \For{$\tau^+ = (h,r,t)\in \mathcal{P}$}{
+          Generate negative triple fact $\tau^- = (h',r',t')$ \;
+          $\mathbb{B}^+ \longleftarrow \mathbb{B}^+ \cup \{\tau^+\} $\;
+          $\mathbb{B}^- \longleftarrow \mathbb{B}^- \cup \{\tau^-\} $\;
+      }
+      Update entity and relation embeddings w.r.t the gradients of loss function $\mathcal{L}$\;
+      Handle additional constraints and regularization terms
+}
+\caption{Training Under Open World Assumption}
+\label{alg:ucgan}
+\end{algorithm*}

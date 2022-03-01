@@ -50,8 +50,7 @@ These methods for calculating uncertainty are based on different viewpoints, but
 In \ac{EBU} we consider the uncertainty within a model by looking at the individual features of a model and if they provide evidence for the classes.
 This can be either very many (\textit{conflicting-evidence}) or only a few features (\textit{insufficient-evidence}) which are indicative for the respective classes.
 In contrast, \ac{EAU} considers \textit{epistemic uncertainty} within a single model’s prediction, and \textit{aleatoric uncertainty} across multiple model predictions \cite{human-in-the-loop}.
-Since \textit{credal uncertainty} differentiates between the
-reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other, we calculate uncertainty among multiple models as well.
+Since \textit{credal uncertainty} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other, we calculate uncertainty among multiple models as well.
 % for this model again have conflicting evidence or insufficient evidence for one class
 % -> Firstly we focus on uncertainty within one model (generator kge model) -> can be insufficient or conflicting evidence
 The \kbgan approach does not provide any additional features for the sampling process, only the scores of all negative triples from $Neg$ and their corresponding sampling probabilities.
@@ -67,15 +66,15 @@ If we add further models for a classification between negative and positive trip
 % 1) good <-> bad negative triple (like original approach)
 % 2) provide prob of triple to be true 
 Next, since Uncertainty Sampling needs a classification problem, there are two options available for the definition:
-First, like in the original \kbgan approach, we could distinguish between "good" and "bad" negative triples and try to provide the best ones to the discriminator.
+First, like in the original \kbgan approach, we could distinguish between \textit{good} and \textit{bad} negative triples and try to provide the best ones to the discriminator.
 Since the generator of the adversarial training is a tensor factorization-based model, it provides scores which indicate plausibility of a triple.
 According to this plausibility scores a sampling distribution among all negative triples is created. 
 This has the advantage that we only have to calculate the scores of negative triples, but we lose the information about positive triples and their scores.
-Therefore, negative triples are sampled according to their calculated scores with either linearly increasing probability or as in \cite{UKGE} with logistic function or a bounded rectifier.
-To follow the open-world assumption and reduces the probability of sampling false-negatives,
+Therefore, negative triples are sampled according to their calculated scores with either linearly increasing probability as in \cite{cai2017kbgan} or as in \cite{UKGE} with logistic function or a bounded rectifier.
+To follow the open-world assumption and reduce the probability of sampling false-negatives,
 \kbgan limits the number of negative triples to twenty \cite{cai2017kbgan}.
 
-Another approach is to not only negative triples, but instead distinguish between negative and positive triples and their scores.
+Another approach is to not only look at the quality of a negative triple, but instead distinguish between negative and positive triples and their scores.
 In contrast to the first option in this one also information about positive triples and their scores is preserved.
 If we define the classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
 Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
@@ -97,13 +96,83 @@ Therefore, for entities within the overlap of positive and negative scoring valu
 The original sampling approach of \kbgan assigns now ascending probabilities for increasing scoring values.
 Therefore, it is most likely to sample $t'_3$, because the negative triple $(h,r,t'_3)$ achieves the highest score and, accordingly, has the highest probability to be positive.
 Although, the entities $t'_1$ and $t'_2$ are also very interesting for the model, because a classification based on the achieved scoring values is not easy.
-Consequently, instead of only including negative triple scoring information by differentiating between "good" and "bad" negative triples, the second approach incorporates information of positive triples.
+Consequently, instead of only including negative triple scoring information by differentiating between \textit{good} and \textit{bad} negative triples, the second approach incorporates information of positive triples.
 Thus, this more detailed distinction allows us to avoid sampling false negative triples, since, for example, sampling $t'_3$ can be particularly problematic if it yields an even higher score and should actually be classified as a positive triple because it is a false negative triple.
 
+\section{Calculation of Probabilities for Triple Classification}
+\label{sec:calculation_of_probabilitie_for_triple_Classification}
+% how to measure the probability of a triple to be positive
+Before we can calculate and sample negative triples from Neg by Uncertainty, we have to calculate the probability of a triple being positive.
+Based on \autoref{fig:uncertainty} with ranges of positive and negative triple scores, we want to determine two bounds: 
+First, $score_{min}$ which defines at which scoring value a triple has the probability 0 to be a positive triple ($\mathds{P}(y = 1 | l = (h,r,t)) = 0$) and second $score_{max}$ at which scoring value a triple has the probability 1 to be positive one ($\mathds{P}(y = 1 | (h,r,t)) = 1$) . 
+All scores lower than $score_{min}$ get the probability 0 and all scores higher than $score_{max}$ get the probability 1.
+
+% use borders of negatives/positives for classification
+First option to define these borders is depicted in \autoref{fig:positives_negatives1}.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.PNG}
+  \caption{First option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | (h,r,t))$ ) or negative ($\mathds{P}(y = 0 | (h,r,t))$). 
+  $score_{min}$ at the left border of all negative triple scores and $score_{max}$ at the right border of all positive triples.}
+  \label{fig:positives_negatives1}
+\end{figure*}
+The advantage of this option is, that almost every negative triple is assigned a probability between 0 and 1 and therefore, an uncertainty score higher 0.
+This results in a probability for almost all negative triples to be sampled.
+The disadvantage is that depending on the shift of the positive and negative triple scoring ranges this would result in bad negative triples or too good negative triples being sampled.
+With $f_G$ the scoring function of the generator, the first option results in the following definitions:
+\begin{equation} \label{eqn:opt1_score_min}
+    score_{min} := \argmin_{(h',r,t') \in Neg}{f_G(h',r,t')}
+\end{equation}
+\begin{equation} \label{eqn:opt1_score_max}
+    score_{max} := \argmax_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
+\end{equation}
+
+The other option is showed in \autoref{fig:positives_negatives2}.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.PNG}
+  \caption{Second option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | (h,r,t))$) or negative ($\mathds{P}(y = 0 | (h,r,t))$). 
+  $score_{min}$ at the left border of all positive triple scores and $score_{max}$ at the right border of all negative.}
+  \label{fig:positives_negatives2}
+\end{figure*}
+In comparison to the first option, this one has the advantage of focusing only on the overlapping part of the model's prediction.
+However, the drawback is that this static view becomes problematic when the scoring range of positive and negative triples does not overlap.
+This option results in the following definitions:
+\begin{equation} \label{eqn:opt2_score_min}
+    score_{min} := \argmin_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
+\end{equation}
+\begin{equation} \label{eqn:opt2_score_max}
+    score_{max} := \argmax_{(h',r,t') \in Neg}{f_G(h',r,t')}
+\end{equation}
+
+Since $score_{min}$ and $score_{max}$ are now defined either with first option of 
+\autoref{eqn:opt1_score_min} and \ref{eqn:opt1_score_max} or according the second option with 
+\autoref{eqn:opt2_score_min} and \ref{eqn:opt2_score_max}, the probability of a triple to be positive ($y = 1$) can be calculated with the following \autoref{eqn:positive_probability}
+\begin{equation}  \label{eqn:positive_probability}
+    \mathds{P}(y = 1|(h, r, t)) =
+    \begin{cases}
+        0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  
+        if \  f_G(h,r,t) < score_{min}
+         
+        \\ \\
+        1 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+        if \ f_G(h,r,t) > score_{max}
+         
+        \\ \\
+        \frac{f_G(h,r,t) - score_{min}}{score_{max} - score_{min}}
+        \ \ \ \ \ \ \ 
+        else
+        \\
+    \end{cases}  \in [0, 1]
+\end{equation}
+and accordingly, since we have a binary classification problem for positive and negative triples, the probability of a triple to be negative ($y=0$) is
+\begin{equation} \label{eqn:negative_probability}
+    \mathds{P}(y = 0|(h, r, t)) := 1 - \mathds{P}(y = 1|(h, r, t)) \in [0,1]
+\end{equation}
 
 \section{Calculation of Uncertainty Scores}
 \label{sec:calculation_of_uncertainty_scores}
-To calculate the uncertainty scores based on the calculated probabilities happens only in the following steps:
+The calculation of uncertainty scores based on the calculated probabilities takes place in the following steps.
 At first, for each triple $l = (h, r, t)$ a plausibility score $f_G(l)$ is calculated by the generator embedding model. 
 Subsequently, the uncertainty scores are needed to perform the Negative Sampling by uncertainty.
 For this a transformation function $\phi$ is needed which maps $f_G(l)$ to an uncertainty score $u(l)$ .
@@ -186,75 +255,6 @@ Therefore, negative triples with a high probability of being a positive triple a
 This also reduces the probability that false negative triples in the negative triple set $Neg$ will be sampled.
 Accordingly, it is possible to generate a larger set than twenty negative triples in the negative triple set $Neg$.
 
-% how to measure the probability of a triple to be positive
-Now that we have defined how to calculate the uncertainty score based on the probability of a triple being positive, we need to define how to calculate this probability.
-Based on \autoref{fig:uncertainty} with ranges of positive and negative triple scores, we want to determine two bounds: 
-First, $score_{min}$ which defines at which scoring value a triple has the probability 0 to be a positive triple ($\mathds{P}(y = 1 | l = (h,r,t)) = 0$) and second $score_{max}$ at which scoring value a triple has the probability 1 to be positive one ($\mathds{P}(y = 1 | (h,r,t)) = 1$) . 
-All scores lower than $score_{min}$ get the probability 0 and all scores higher than $score_{max}$ get the probability 1.
-
-% use borders of negatives/positives for classification
-First option to define these borders is depicted in \autoref{fig:positives_negatives1}.
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.PNG}
-  \caption{First option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | (h,r,t))$ ) or negative ($\mathds{P}(y = 0 | (h,r,t))$). 
-  $score_{min}$ at the left border of all negative triple scores and $score_{max}$ at the right border of all positive triples.}
-  \label{fig:positives_negatives1}
-\end{figure*}
-The advantage of this option is, that almost every negative triple is assigned a probability between 0 and 1 and therefore, an uncertainty score higher 0.
-This results in a probability for almost all negative triples to be sampled.
-The disadvantage is that depending on the shift of the positive and negative triple scoring ranges this would result in bad negative triples or too good negative triples being sampled.
-The first option results in the following definitions of $score_{min}$ and $score_{max}$:
-\begin{equation} \label{eqn:opt1_score_min}
-    score_{min} := \argmin_{(h',r,t') \in \mathcal{Neg}}{f_G(h',r,t')}
-\end{equation}
-\begin{equation} \label{eqn:opt1_score_max}
-    score_{max} := \argmax_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
-\end{equation}
-
-The other option is showed in \autoref{fig:positives_negatives2}.
-\autoref{fig:positives_negatives2}
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.PNG}
-  \caption{Second option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | (h,r,t))$) or negative ($\mathds{P}(y = 0 | (h,r,t))$). 
-  $score_{min}$ at the left border of all positive triple scores and $score_{max}$ at the right border of all negative.}
-  \label{fig:positives_negatives2}
-\end{figure*}
-In comparison to the first option, this one has the advantage of focusing only on the overlapping part of the model's prediction.
-However, the drawback is that this static view becomes problematic when the scoring range of positive and negative triples does not overlap.
-This option results in the following definitions of $score_{min}$ and $score_{max}$:
-\begin{equation} \label{eqn:opt2_score_min}
-    score_{min} := \argmin_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
-\end{equation}
-\begin{equation} \label{eqn:opt2_score_max}
-    score_{max} := \argmax_{(h',r,t') \in \mathcal{Neg}}{f_G(h',r,t')}
-\end{equation}
-
-Since $score_{min}$ and $score_{max}$ are now defined either with first option of 
-\autoref{eqn:opt1_score_min} and \ref{eqn:opt1_score_max} or according the second option with 
-\autoref{eqn:opt2_score_min} and \ref{eqn:opt2_score_max}, the probability of a triple to be positive ($y = 1$) can be calculated with the following \autoref{eqn:positive_probability}
-\begin{equation}  \label{eqn:positive_probability}
-    \mathds{P}(y = 1|(h, r, t)) =
-    \begin{cases}
-        0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  
-        if \  f_G(h,r,t) < score_{min}
-         
-        \\ \\
-        1 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
-        if \ f_G(h,r,t) > score_{max}
-         
-        \\ \\
-        \frac{f_G(h,r,t) - score_{min}}{score_{max} - score_{min}}
-        \ \ \ \ \ \ \ 
-        else
-        \\
-    \end{cases}  \in [0, 1]
-\end{equation}
-and accordingly, since we have a binary classification problem for positive and negative triples, the probability of a triple to be negative ($y=0$) is
-\begin{equation} \label{eqn:negative_probability}
-    \mathds{P}(y = 0|(h, r, t)) := 1 - \mathds{P}(y = 1|(h, r, t)) \in [0,1]
-\end{equation}
 
 \section{Procedure of the Adversarial Training with Sampling by Uncertainty}
 \label{sec:procedure}
@@ -288,8 +288,6 @@ The training process can be described in the following steps:
     All of these calculates scores from generator are handed to the Uncertainty Sampler to calculate the uncertainty of the model.
     For this, each negative triple in $Neg$ is classified first by assigning a probability $\mathds{P}(y = 1 | (h,r,t)) \forall (h,r,t) \in Neg$ with \autoref{eqn:positive_probability}.
     These probabilities are used to calculate uncertainty scores using function $u(l)$ defined in \autoref{eqn:uncertainty_function}.
-    Accordingly, either the negative triple
-
 
     \item Subsequently, negative triples are sampled according to the calculated uncertainty scores, either the one with maximum uncertainty score or its distribution 
     and given to the discriminator.

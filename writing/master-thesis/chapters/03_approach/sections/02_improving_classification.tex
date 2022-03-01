@@ -54,7 +54,8 @@ Therefore, our new score function $Classification\_Score$ is defined as follows:
          \\
     \end{cases}
 \end{equation}
-where $\lambda_i \in [0, 1]$ for $i \in [1,4]$ are hyperparameters and are set to randomly generated values at the beginning but can be optimized at a later stage.
+where $\lambda_i \in [0, 1]$ for $i \in [1,4]$  are hyperparameters and $\sum_{i=1}^{4}\lambda_i = 1$.
+Initially they are set to randomly generated values but can be optimized at a later stage.
 Furthermore, $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.
 \textit{PEER}, \textit{POP}, \textit{PIVO} and \textit{FRQ} are functions that provide additional information about the \ac{KG}, its entities and relations such that the $Generator\_Score$ can make more reliable statements about whether the given triple $(h, r, t)$ is positive or not.
 However, these components of the function can also be replaced or extended by further components known from for example Cluster-Based Sampling methods that give more information about a \ac{KG} and its structure.

@@ -4,12 +4,12 @@
 % PROBLEMS OF NEGATIVE SAMPLING
 % GENERAL
 First of all, it can be said that while many Negative Sampling methods currently demonstrate high performance, the sampled negatives are often too simple and represent a trivial solution. 
-The embedding models do not learn from the provided negative triples and therefore, they do not improve the embedding and suffer from the vanishing gradient or biased estimation problem \cite{zhang2021efficient}.
+As a result, embedding models do not learn or learn less from the provided negative triples and therefore, they do not improve the embedding and suffer from the vanishing gradient or biased estimation problem \cite{zhang2021efficient}.
 The vanishing gradient problem is present when the gradients of the loss functions approach zero and consequently, the model is unable to learn during the training process.
 This results from the fact that most \ac{KGE} models, due to simplicity and efficiency, use \textsc{Uniform Negative Random Sampling}.
 
 % UNIFORM RANDOM SAMPLING
-In this standard technique of Negative Sampling either the head or the tail entity in a given positive triple \triple{h}{r}{t} is replaced by any other entity of the \ac{KG} which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
+In this common technique of Negative Sampling either the head or the tail entity in a given positive triple \triple{h}{r}{t} is replaced by any other entity of the \ac{KG} which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
 Therefore, it is very likely to pick an entity which results in a zero gradient because the negative triple can be easily discriminated from the positive one \cite{cai2017kbgan}.
 For example, by replacing the head entity of the positive triple \triple{h}{r}{t} = \triple{Joe Biden}{bornIn}{USA} with head entity $h' = Paderborn$ would result in the negative triple \triple{Paderborn}{bornIn}{USA} which is not very informative for the embedding.
 By simply replacing the randomly selected head or tail entity of an again randomly selected entity of the \ac{KG} does not use any further information.

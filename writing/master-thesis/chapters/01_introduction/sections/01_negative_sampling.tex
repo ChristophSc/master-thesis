@@ -1,32 +1,31 @@
 \section{Negative Sampling}
 \label{sec:negative_sampling}
 
-Now that Negative Sampling is needed for generating negative triples for subsequent embedding:
-How and under what circumstances can Negative Sampling be performed?
+Now that Negative Sampling is needed for generating negative triples for subsequent embedding, the Negative Sampling process and its circumstances are discussed.
 
 % CIRCUMSTANCES of Negative Sampling
-Since there are only positive facts in the graph, there are two different ways of looking at or assumptions about the \ac{KG} at hand in Negative Sampling.
-On the one hand there is the \ac{CWA} and on the other hand the \ac{OWA} under which the \ac{KRL} takes place.
+Since there are only positive facts in the graph, there are two different ways of looking at or assumptions about a \ac{KG} at hand in Negative Sampling.
+\ac{KRL} takes place either under the \ac{CWA} or the \ac{OWA} \cite{qiannegative}.
 While the former assumes that unobserved facts which are not in a \ac{KG} are false, the latter states that asserted statements are true, while the missing ones are simply unknown \cite{arnaout2020enriching, qiannegative}.
 Negative sampling under the simplified \ac{CWA} does not present much difficulty, as it is easy to generate a large number of triples that are not in the \ac{KG}.
 However, the quality of the negative triples may suffer if it is indeed a false negative triple.
-The \ac{OWA}, on the other hand has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative samples \cite{qiannegative}.
+The \ac{OWA}, on the other hand has the two main drawbacks of worse performance in downstream tasks and scalability issues due to the enormous number of negative examples \cite{qiannegative}.
 Therefore, generating qualitative negative triples by Negative Sampling with good performance represents a non-trivial step in \ac{KGE} learning.
 Especially, because the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
 Therefore, embeddings need to contain as much information as possible in a graph representation of a low-dimensional vector space.
 
 % HISTORY OF NEGATIVE SAMPLING
 If we look at the history of Negative Sampling, the idea was firstly raised in probabilistic neural language models and called importance sampling \cite{qianunderstanding}. 
-To benefit the training of word2vec, it was emphasized as a simplified version of \ac{NCE} and wanted to overcome the computational difficulty which was associated with probabilistic language models.
-Due to their partition functions which sum over all words which is expensive if the amount of vocabularies is high.
+To benefit the training of \textsc{word2vec}, it was emphasized as a simplified version of \ac{NCE} and wanted to overcome the computational difficulty which was associated with probabilistic language models.
+This was due to their partition functions which sum over all words which is expensive if the amount of vocabularies is high.
 Negative Sampling in comparison, transforms the difficult this density estimation problem into a binary classification problem where true samples are distinguished from noise samples.
 This transformations simplifies the computation as well as accelerates the training.
 Asymptotically estimating the “true” distribution by separating true from noise samples leads to high efficiency and low computational cost.
 If we consider nodes as words and neighbors of nodes as the context of a word, \acp{KG} are similar to modeling languages.
 Therefore, the idea was applied to \ac{KGE} learning and has become common practice over the past several years.
-Instead of discriminating true samples from noise samples, in \acp{KG} positive triples are descriminated from negative ones.
+Instead of discriminating true samples from noise samples, in \acp{KG} positive triples are discriminated from negative ones.
 
-% DESCIBE HOW NEGATIVE SAMPLING WORKS IN GENERAL
+% DESCRIBE HOW NEGATIVE SAMPLING WORKS IN GENERAL
 Overall, there are several variants for Negative Sampling and subsequent use of sampled negative triples in the literature.
 However, they have the following steps in common:
 At first, the Negative Sampling process generates negative triples by, for example, perturbing positive ones.
