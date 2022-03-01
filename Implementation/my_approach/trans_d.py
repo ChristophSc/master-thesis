@@ -28,21 +28,21 @@ class TransDModule(BaseModule):
             param.data.normal_(1 / param.size(1) ** 0.5)
             param.data.renorm_(2, 0, 1)
 
-    def forward(self, src, rel, dst):
-        src_proj = self.ent_embed(src) +\
-                   t.sum(self.proj_ent_embed(src) * self.ent_embed(src), dim=-1, keepdim=True) * self.proj_rel_embed(rel)
-        dst_proj = self.ent_embed(dst) +\
-                   t.sum(self.proj_ent_embed(dst) * self.ent_embed(dst), dim=-1, keepdim=True) * self.proj_rel_embed(rel)
-        return t.norm(dst_proj - self.rel_embed(rel) - src_proj + 1e-30, p=self.p, dim=-1)
+    def forward(self, head, rel, tail):
+        head_proj = self.ent_embed(head) +\
+                   t.sum(self.proj_ent_embed(head) * self.ent_embed(head), dim=-1, keepdim=True) * self.proj_rel_embed(rel)
+        tail_proj = self.ent_embed(tail) +\
+                   t.sum(self.proj_ent_embed(tail) * self.ent_embed(tail), dim=-1, keepdim=True) * self.proj_rel_embed(rel)
+        return t.norm(tail_proj - self.rel_embed(rel) - head_proj + 1e-30, p=self.p, dim=-1)
 
-    def dist(self, src, rel, dst):
-        return self.forward(src, rel, dst)
+    def dist(self, head, rel, tail):
+        return self.forward(head, rel, tail)
 
-    def score(self, src, rel, dst):
-        return self.forward(src, rel, dst)
+    def score(self, head, rel, tail):
+        return self.forward(head, rel, tail)
 
-    def prob_logit(self, src, rel, dst):
-        return -self.forward(src, rel ,dst) / self.temp
+    def prob_logit(self, head, rel, tail):
+        return -self.forward(head, rel, tail) / self.temp
 
     def constraint(self):
         for param in self.parameters():
@@ -69,28 +69,31 @@ class TransD(BaseModel):
             self.mdl.cuda()
 
     def pretrain(self, train_data, corrupter, tester, log_dir):
-        src, rel, dst = train_data
-        n_train = len(src)
+        head, rel, tail = train_data
+        n_train = len(head)
         optimizer = Adam(self.mdl.parameters())
         #optimizer = SGD(self.mdl.parameters(), lr=1e-4)
         n_epoch = self.config.n_epoch
         n_batch = self.config.n_batch
         best_perf = 0
         tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test)
+        tp_logger.log_loss_reward(0, 0)     
+        tp_logger.log_performance(0, [0, 0, 0])
+        
         for epoch in range(n_epoch):
             epoch_loss = 0
             rand_idx = t.randperm(n_train)
-            src = src[rand_idx]
+            head = head[rand_idx]
             rel = rel[rand_idx]
-            dst = dst[rand_idx]
-            src_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
+            tail = tail[rand_idx]
+            head_corrupted, tail_corrupted = corrupter.corrupt(head, rel, tail)
             if t.cuda.is_available():
-                src = src.cuda()
+                head = head.cuda()
                 rel = rel.cuda()
-                dst = dst.cuda()
-                src_corrupted = src_corrupted.cuda()
-                dst_corrupted = dst_corrupted.cuda()
-            for h_pos, r, t_pos, h_neg, t_neg in batch_by_num(n_batch, src, rel, dst, src_corrupted, dst_corrupted,
+                tail = tail.cuda()
+                head_corrupted = head_corrupted.cuda()
+                tail_corrupted = tail_corrupted.cuda()
+            for h_pos, r, t_pos, h_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_corrupted, tail_corrupted,
                                                   n_sample=n_train):
                 self.mdl.zero_grad()
                 loss = t.sum(self.mdl.pair_loss(Variable(h_pos), Variable(r), Variable(t_pos), Variable(h_neg), Variable(t_neg)))

@@ -1,13 +1,13 @@
-pretrain_config: TransE
-g_config: DistMult
-d_config: TransE
+pretrain_config: TransD # DistMult, ComplEx, TransE, TransD
+g_config: DistMult # DistMult, ComplEx
+d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
-  dir: fb15k237  # umls, wn18rr, wn18, fb15k237
+  dir: umls  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
   n_sample: 20 #   20
-  sample_type: random      # random, uncertainty_max, uncertainty_distribution
+  sample_type: uncertainty_max      # random, uncertainty_max, uncertainty_distribution
   measure_type: entropy   # entropy, least_confidence, confidence_margin, confidence_ratio
   n_epoch: 1000  # 5000
   n_batch: 100 # 100
@@ -27,7 +27,7 @@ TransD:
   p: 1
   n_epoch: 1000  # 5000
   n_batch: 100 # 100
-  epoch_per_test: 1 # 50
+  epoch_per_test: 50 # 50
   model_file: transd.mdl
 DistMult:
   dim: 50
@@ -45,7 +45,7 @@ ComplEx:
   sample_freq: 1
   n_epoch: 1000 # 5000
   n_batch: 100 # 100
-  epoch_per_test: 1 # 50
+  epoch_per_test: 50 # 50
   model_file: complex.mdl
 log:
   dump_config: false

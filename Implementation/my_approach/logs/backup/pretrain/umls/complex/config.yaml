@@ -1,4 +1,4 @@
-pretrain_config: TransD # DistMult, ComplEx, TransE, TransD
+pretrain_config: ComplEx # DistMult, ComplEx, TransE, TransD
 g_config: DistMult # DistMult, ComplEx
 d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100

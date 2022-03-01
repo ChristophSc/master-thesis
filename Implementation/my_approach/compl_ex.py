@@ -21,20 +21,20 @@ class ComplExModule(BaseModule):
         for param in self.parameters():
             param.data.div_((config.dim / sigma ** 2) ** (1 / 6))
 
-    def forward(self, src, rel, dst):
-        return t.sum(self.rel_re_embed(rel) * self.ent_re_embed(src) * self.ent_re_embed(dst), dim=-1) \
-            + t.sum(self.rel_re_embed(rel) * self.ent_im_embed(src) * self.ent_im_embed(dst), dim=-1) \
-            + t.sum(self.rel_im_embed(rel) * self.ent_re_embed(src) * self.ent_im_embed(dst), dim=-1) \
-            - t.sum(self.rel_im_embed(rel) * self.ent_im_embed(src) * self.ent_re_embed(dst), dim=-1)
+    def forward(self, head, rel, tail):
+        return t.sum(self.rel_re_embed(rel) * self.ent_re_embed(head) * self.ent_re_embed(tail), dim=-1) \
+            + t.sum(self.rel_re_embed(rel) * self.ent_im_embed(head) * self.ent_im_embed(tail), dim=-1) \
+            + t.sum(self.rel_im_embed(rel) * self.ent_re_embed(head) * self.ent_im_embed(tail), dim=-1) \
+            - t.sum(self.rel_im_embed(rel) * self.ent_im_embed(head) * self.ent_re_embed(tail), dim=-1)
 
-    def score(self, src, rel, dst):
-        return -self.forward(src, rel, dst)
+    def score(self, head, rel, tail):
+        return -self.forward(head, rel, tail)
 
-    def dist(self, src, rel, dst):
-        return -self.forward(src, rel, dst)
+    def dist(self, head, rel, tail):
+        return -self.forward(head, rel, tail)
 
-    def prob_logit(self, src, rel, dst):
-        return self.forward(src, rel, dst)
+    def prob_logit(self, head, rel, tail):
+        return self.forward(head, rel, tail)
 
 class ComplEx(BaseModel):
     def __init__(self, n_ent, n_rel, config):
@@ -46,26 +46,29 @@ class ComplEx(BaseModel):
         self.weight_decay = config.lam / config.n_batch
 
     def pretrain(self, train_data, corrupter, tester, log_dir):
-        src, rel, dst = train_data
-        n_train = len(src)
+        head, rel, tail = train_data
+        n_train = len(head)
         n_epoch = self.config.n_epoch
         n_batch = self.config.n_batch
         optimizer = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         best_perf = 0
         tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test)
+        tp_logger.log_loss_reward(0, 0)     
+        tp_logger.log_performance(0, [0, 0, 0])
+        
         for epoch in range(n_epoch):
             epoch_loss = 0
             if epoch % self.config.sample_freq == 0:
                 rand_idx = t.randperm(n_train)
-                src = src[rand_idx]
+                head = head[rand_idx]
                 rel = rel[rand_idx]
-                dst = dst[rand_idx]
-                src_corrupted, rel_corrupted, dst_corrupted = corrupter.corrupt(src, rel, dst)
+                tail = tail[rand_idx]
+                head_corrupted, rel_corrupted, tail_corrupted = corrupter.corrupt(head, rel, tail)
                 if t.cuda.is_available():
-                    src_corrupted = src_corrupted.cuda()
+                    head_corrupted = head_corrupted.cuda()
                     rel_corrupted = rel_corrupted.cuda()
-                    dst_corrupted = dst_corrupted.cuda()
-            for ss, rs, ts in batch_by_num(n_batch, src_corrupted, rel_corrupted, dst_corrupted, n_sample=n_train):
+                    tail_corrupted = tail_corrupted.cuda()
+            for ss, rs, ts in batch_by_num(n_batch, head_corrupted, rel_corrupted, tail_corrupted, n_sample=n_train):
                 self.mdl.zero_grad()                
                 label = t.zeros(len(ss)).type(t.LongTensor)
                 if t.cuda.is_available():
