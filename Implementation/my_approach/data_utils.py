@@ -70,9 +70,9 @@ def head_tail_counter(train_data, valid_data, test_data):
         rel_tail_count[(r, t)] += 1
     return head_rel_count, rel_tail_count
 
-def filter_negatives(neg_set, heads_neg, relations_neg, tails_neg, true_heads, true_tails):
+def filter_negatives(neg_set, heads_neg, rel_neg, tails_neg, true_heads, true_tails):
     #print(heads_neg.size())
-    heads_neg, relations_neg, tails_neg = torch.flatten(heads_neg), torch.flatten(relations_neg), torch.flatten(tails_neg)
+    heads_neg, rel_neg, tails_neg = torch.flatten(heads_neg), torch.flatten(rel_neg), torch.flatten(tails_neg)
     # if torch.cuda.is_available():
     #     x = torch.zeros(len(heads_neg)).type(torch.LongTensor).cuda()
     # else:
@@ -82,21 +82,20 @@ def filter_negatives(neg_set, heads_neg, relations_neg, tails_neg, true_heads, t
     heads_neg_filt, rel_neg_filt, tails_neg_filt = [], [], []
 
     #print(len(heads_neg_filt))
-    for head, rel, tail in zip(heads_neg, relations_neg, tails_neg):
+    for head, rel, tail in zip(heads_neg, rel_neg, tails_neg):
 #     # head_scores/tail_scores: scores for predicted heads/tails
         h = int(head.data.cpu().numpy())
         r = int(rel.data.cpu().numpy())
         t = int(tail.data.cpu().numpy())
 
-        head_exists = (t, r) in true_heads and true_heads[(t, r)]._nnz() > 1
-        tail_exists = (h, r) in true_tails and true_tails[(h, r)]._nnz() > 1
+        head_exists = lambda t, r:  (t, r) in true_heads and true_heads[(t, r)]._nnz() > 1
+        tail_exists = lambda h,r: (h, r) in true_tails and true_tails[(h, r)]._nnz() > 1
 
-        if not head_exists and not tail_exists:  
+        if not head_exists(t,r) and not tail_exists(h, r):  
             # index == 1 indicates a triple which does not appear in the KG
             # if (h,r,t) not in neg_set.keys():
             #     neg_set[(h,r,t)] = 0
             # neg_set[(h,r,t)] += 1
-
             #heads_neg_filt[h] = 1
             #rel_neg_filt[r] = 1
             #tails_neg_filt[t] = 1
@@ -108,14 +107,17 @@ def filter_negatives(neg_set, heads_neg, relations_neg, tails_neg, true_heads, t
     # heads_neg_filt = torch.masked_select(heads_neg, heads_neg_filt == 1)
     # rel_neg_filt = torch.masked_select(relations_neg, rel_neg_filt == 1)
     # tails_neg_filt = torch.masked_select(tails_neg, tails_neg_filt == 1)
-    
     heads_neg_filt =  torch.tensor(heads_neg_filt)
     rel_neg_filt =  torch.tensor(rel_neg_filt)
     tails_neg_filt =  torch.tensor(tails_neg_filt)
-    if torch.cuda.is_available():
-        heads_neg_filt = heads_neg_filt.cuda()
-        rel_neg_filt = rel_neg_filt.cuda()
-        tails_neg_filt = tails_neg_filt.cuda()
+
+    # heads_neg_filt =  torch.tensor(heads_neg_filt)
+    # rel_neg_filt =  torch.tensor(rel_neg_filt)
+    # tails_neg_filt =  torch.tensor(tails_neg_filt)
+    # if torch.cuda.is_available():
+    #     heads_neg_filt = heads_neg_filt.cuda()
+    #     rel_neg_filt = rel_neg_filt.cuda()
+    #     tails_neg_filt = tails_neg_filt.cuda()
 
     return neg_set, heads_neg_filt, rel_neg_filt, tails_neg_filt
 
