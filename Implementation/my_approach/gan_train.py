@@ -50,8 +50,9 @@ gen_config = config()[config().g_config]
 dis_config = config()[config().d_config]
 gen = models[config().g_config](n_ent, n_rel, gen_config)
 dis = models[config().d_config](n_ent, n_rel, dis_config)
-gen.load(os.path.join('models', task_dir, gen_config.model_file))
-dis.load(os.path.join('models', task_dir, dis_config.model_file))
+if config().adv.use_pretrained_models:        
+    gen.load(os.path.join('models', task_dir, gen_config.model_file))
+    dis.load(os.path.join('models', task_dir, dis_config.model_file))
 
 # load train-, valid- and testdata
 train_data = read_data(os.path.join('data', task_dir, 'train.txt'), kb_index)
@@ -118,7 +119,7 @@ for epoch in range(n_epoch):
             # negatives should be always the same, only init and score them once
             # TODO: update with cache like in NSCaching with efficient method to replace negatives in Neg
         
-        neg_set, neg_heads_filt, neg_rel_filt, neg_tails_filt = filter_negatives(neg_set, head_cand, rel_cand, tail_cand, heads_filt, tails_filt)
+        neg_set, neg_heads_filt, neg_rel_filt, neg_tails_filt = neg_set, head_cand, rel_cand, tail_cand # filter_negatives(neg_set, head_cand, rel_cand, tail_cand, heads_filt, tails_filt)
         logging.info(len(neg_heads_filt))
         #logging.info(len(neg_set))
         # logging.info(neg_set)
