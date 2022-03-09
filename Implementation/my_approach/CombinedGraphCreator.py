@@ -1,12 +1,25 @@
 import matplotlib.pyplot as plt
+from os import path
 
 class CombinedGraphCreator():
-  def __init__(self, dataset, models, n_epochs, train_type, sampling_type = ""):
-    self.dataset = dataset
+  def __init__(self, dataset, models, n_epochs, train_type, 
+               pretrained = "", 
+               sampling_type = "", 
+               uncertainty_sampling_type = "",
+               uncertainty_measure = ""):
+    
+    self.dataset = dataset    
     self.models = models # list with models, pretrain: list of models, gan_train: list of lists with models of generator and discriminator
+    self.n_epochs = n_epochs  
     self.train_type = train_type
+    
+    # only for gan_train: 
+    self.pretrained = pretrained
     self.sampling_type = sampling_type
-    self.n_epochs = n_epochs
+    
+    # only for uncertainty sampling
+    self.uncertainty_sampling_type = uncertainty_sampling_type
+    self.uncertainty_measure = uncertainty_measure
     
    
   def create_figure(self, title, logged_values, y_label):
@@ -36,18 +49,21 @@ class CombinedGraphCreator():
     # read all files
     for i in range(len(self.models)):
       models = self.models[i]
-      dir = "logs/backup/"
+      dir = path.join("logs", "backup")
       model_name = None
       if self.train_type == "pretrain":
-        dir += self.train_type + "/" +  self.dataset + "/" + models.lower() 
+        dir = path.join(dir, self.train_type,  self.dataset, models.lower())
         model_name = models.lower()
       elif self.train_type == "gan_train":
-        dir += self.train_type + "/" + self.sampling_type  + "/" + self.dataset + "/" + models[0].lower() +  "_" + models[1].lower()
+        dir = path.join(dir, self.train_type, self.pretrained, self.sampling_type)
+        if self.sampling_type == "uncertainty":
+          dir = path.join(dir, self.uncertainty_sampling_type, self.uncertainty_measure)
+        dir = path.join(dir, self.dataset, models[0].lower() +"_"+ models[1].lower())
         model_name = models[0].lower() + " + " + models[1].lower()
         
       mrrs, hits10s, rewards, losses = [], [], [], []      
       try:
-        f = open(dir + '/logged_lists.txt')
+        f = open(path.join(dir, 'logged_lists.txt'))
       except IOError:
         print("Could not find 'logged_lists.txt' in " + dir)
         return
@@ -71,28 +87,37 @@ class CombinedGraphCreator():
          
     
     if self.train_type == "pretrain":
-      dir = 'combined_figures/' + self.train_type + '/' + self.dataset + '/' 
+      dir = path.join('combined_figures', self.train_type, self.dataset)
       filename = self.train_type + '_' + self.dataset + '_'
-      training_type = "GAN Training" 
-    elif self.train_type == "gan_train":    
-      dir = 'combined_figures/' + self.train_type + '/' + self.sampling_type + '/' + self.dataset + '/'
+      training_type = "Pretraining"     
+    elif self.train_type == "gan_train":   
+      dir = path.join('combined_figures', self.train_type, self.pretrained, self.sampling_type)
+      if self.sampling_type == "uncertainty":
+        dir = path.join(dir, self.uncertainty_sampling_type, self.uncertainty_measure)
+      dir = path.join(dir, self.dataset)
       filename = self.train_type + '_' + self.sampling_type.replace('/', '_') + '_' + self.dataset + '_' 
       training_type = "Pretraining" 
+      
+    sampling_name = ""    
+    if self.sampling_type == "random":
+      sampling_name = "- Random Sampling"
+    elif self.sampling_type == "uncertainty":      
+      sampling_name = ("- Uncertainty Sampling " + self.uncertainty_sampling_type.replace("_", " ") + " - " + self.uncertainty_measure).title()
     
-    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Validation MRR - " + self.sampling_type, 
-                       logged_values = logged_mrrs, 
-                       y_label = "MRR").savefig(dir + filename + 'mrrs')
-    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Validation H@10 - " + self.sampling_type, 
-                       logged_values = logged_hits10s, 
-                       y_label ="H@10").savefig(dir + filename + 'hit10s')   
-    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Training Losses - " + self.sampling_type, 
-                       logged_values = logged_losses, 
-                       y_label ="Losses").savefig(dir + filename + 'losses')
+    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Validation MRR " + sampling_name, 
+                      logged_values = logged_mrrs, 
+                      y_label = "MRR").savefig(path.join(dir, filename + 'mrrs'))
+    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Validation H@10 " + sampling_name, 
+                      logged_values = logged_hits10s, 
+                      y_label ="H@10").savefig(path.join(dir,filename + 'hit10s'))
+    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Training Losses " + sampling_name, 
+                      logged_values = logged_losses, 
+                      y_label ="Losses").savefig(path.join(dir, filename + 'losses'))
     
     if self.train_type != "pretrain":
-      self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Training Rewards - " + self.sampling_type, 
+      self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Training Rewards " + sampling_name, 
                         logged_values = logged_rewards, 
-                        y_label ="Rewards").savefig(dir + filename + 'rewards')
+                        y_label ="Rewards").savefig(path.join(dir,filename + 'rewards'))
     print("Successfully created figures in " + dir)
   
   def create_compare_graph(self):
@@ -100,7 +125,7 @@ class CombinedGraphCreator():
     '''
     logged_mrrs, logged_hits10s, logged_rewards, logged_losses = dict(), dict(), dict(), dict()
 
-    dir = 'combined_figures/compared/' + self.dataset + '/' + 'RandomVsUncertainty' + '_' 
+    dir = path.join('combined_figures', 'compared', self.dataset, 'RandomVsUncertainty') + '_' 
     filename = 'RandomVsUncertainty_' + self.dataset + '_' 
     self.create_figure(title = self.train_type + " - " + self.dataset.upper() + " - Random vs Uncertainty Sampling Validation MRR - " + self.sampling_type, 
                        logged_values = logged_mrrs, 
@@ -124,7 +149,10 @@ datasets = ["umls", "wn18rr", "wn18", "fb15k237"]
 gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
-sampling_types = ["random", "uncertainty/max/entropy"]
+pretraining_cases = ["pretrained"]  # "not_pretrained"
+sampling_types = ["random", "uncertainty"]
+uncertainty_sampling_types = ["max"] # "max_distribution"
+uncertainty_measures = ["entropy"] # 
 
 
 for dataset in datasets:
@@ -134,12 +162,18 @@ for dataset in datasets:
                          train_type = "pretrain").create_combined_graph()
     model_pairs =[ [gen_model, dis_model] for gen_model in gen_models for dis_model in dis_models]
     
-    for sampling_type in sampling_types:
-      CombinedGraphCreator(dataset = dataset, 
-                           models = model_pairs, 
-                           n_epochs= 5000,
-                           train_type = "gan_train", 
-                           sampling_type = sampling_type).create_combined_graph()
+    for pretrained in pretraining_cases:      
+      for sampling_type in sampling_types:
+        for uncertainty_sampling_type in uncertainty_sampling_types:
+          for uncertainty_measure in uncertainty_measures:
+              CombinedGraphCreator(dataset = dataset, 
+                                  models = model_pairs, 
+                                  n_epochs= 5000,
+                                  train_type = "gan_train", 
+                                  pretrained = pretrained,
+                                  sampling_type = sampling_type,
+                                  uncertainty_sampling_type = uncertainty_sampling_type,
+                                  uncertainty_measure = uncertainty_measure).create_combined_graph()
 
     # compare best uncertainty vs random sampling approach in one graph for each dataset
     # CombinedGraphCreator(dataset = dataset, 
