@@ -1,11 +1,12 @@
 pretrain_config: TransE # DistMult, ComplEx, TransE, TransD
 g_config: DistMult # DistMult, ComplEx
-d_config: TransD  # TransE, TransD
+d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
   dir: wn18rr  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
+  use_pretrained_models: true
   n_sample: 20 #   20
   sample_type: random      # random, uncertainty_max, uncertainty_distribution
   measure_type: entropy   # entropy, least_confidence, confidence_margin, confidence_ratio
@@ -54,4 +55,4 @@ log:
   dir: ./logs
   log_advtrain_graphs: true
   log_pretrain_graph: true
-  graph_every_nth_epoch: 5
+  graph_every_nth_epoch: 10
