@@ -3,7 +3,7 @@ g_config: DistMult # DistMult, ComplEx
 d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
-  dir: umls  # umls, wn18rr, wn18, fb15k237
+  dir: wn18rr  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
   n_sample: 20 #   20
@@ -54,4 +54,4 @@ log:
   dir: ./logs
   log_advtrain_graphs: true
   log_pretrain_graph: true
-  graph_every_nth_epoch: 5
+  graph_every_nth_epoch: 10
