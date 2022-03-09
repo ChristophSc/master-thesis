@@ -1,6 +1,8 @@
 from random import randint
 from collections import defaultdict
 import torch
+from time import time
+import logging
 
 def filter_heads_tails(n_ent, train_data, valid_data=None, test_data=None):
     """ Creates filtered set of heads and tails: Returns 2 sparse Tensors for heads and tails with values
@@ -68,26 +70,55 @@ def head_tail_counter(train_data, valid_data, test_data):
         rel_tail_count[(r, t)] += 1
     return head_rel_count, rel_tail_count
 
-def filter_negatives(heads_neg, relations_neg, tails_neg, true_heads, true_tails):
+def filter_negatives(neg_set, heads_neg, relations_neg, tails_neg, true_heads, true_tails):
+    #print(heads_neg.size())
+    heads_neg, relations_neg, tails_neg = torch.flatten(heads_neg), torch.flatten(relations_neg), torch.flatten(tails_neg)
+    # if torch.cuda.is_available():
+    #     x = torch.zeros(len(heads_neg)).type(torch.LongTensor).cuda()
+    # else:
+    #     x = torch.zeros(len(heads_neg)).type(torch.LongTensor)
+
+    # heads_neg_filt, rel_neg_filt, tails_neg_filt = x, x, x
     heads_neg_filt, rel_neg_filt, tails_neg_filt = [], [], []
-    for batch_h, batch_r, batch_t in zip(heads_neg, relations_neg, tails_neg):
-        for head, rel, tail in zip(batch_h, batch_r, batch_t):
-            h_i = int(head.data.cpu().numpy())
-            r_i = int(rel.data.cpu().numpy())
-            t_i = int(tail.data.cpu().numpy())
-            
-            head_exists = (t_i, r_i) in true_heads and true_heads[(t_i, r_i)]._nnz() > 1
-            tail_exists = (h_i, r_i) in true_tails and true_tails[(h_i, r_i)]._nnz() > 1
+
+    #print(len(heads_neg_filt))
+    for head, rel, tail in zip(heads_neg, relations_neg, tails_neg):
+#     # head_scores/tail_scores: scores for predicted heads/tails
+        h = int(head.data.cpu().numpy())
+        r = int(rel.data.cpu().numpy())
+        t = int(tail.data.cpu().numpy())
+
+        head_exists = (t, r) in true_heads and true_heads[(t, r)]._nnz() > 1
+        tail_exists = (h, r) in true_tails and true_tails[(h, r)]._nnz() > 1
+
+        if not head_exists and not tail_exists:  
+            # index == 1 indicates a triple which does not appear in the KG
+            # if (h,r,t) not in neg_set.keys():
+            #     neg_set[(h,r,t)] = 0
+            # neg_set[(h,r,t)] += 1
+
+            #heads_neg_filt[h] = 1
+            #rel_neg_filt[r] = 1
+            #tails_neg_filt[t] = 1
+            heads_neg_filt.append(h)
+            rel_neg_filt.append(r)
+            tails_neg_filt.append(t)
+
+
+    # heads_neg_filt = torch.masked_select(heads_neg, heads_neg_filt == 1)
+    # rel_neg_filt = torch.masked_select(relations_neg, rel_neg_filt == 1)
+    # tails_neg_filt = torch.masked_select(tails_neg, tails_neg_filt == 1)
     
-            if not head_exists and not tail_exists:
-                heads_neg_filt.append(h_i)
-                rel_neg_filt.append(r_i)
-                tails_neg_filt.append(t_i)
-        
     heads_neg_filt =  torch.tensor(heads_neg_filt)
     rel_neg_filt =  torch.tensor(rel_neg_filt)
     tails_neg_filt =  torch.tensor(tails_neg_filt)
-    return heads_neg_filt, rel_neg_filt, tails_neg_filt 
+    if torch.cuda.is_available():
+        heads_neg_filt = heads_neg_filt.cuda()
+        rel_neg_filt = rel_neg_filt.cuda()
+        tails_neg_filt = tails_neg_filt.cuda()
+
+    return neg_set, heads_neg_filt, rel_neg_filt, tails_neg_filt
+
 
 def get_statistics(case, model, head_entities, relations, tail_entities, print_statistics):
     scores = model.mdl.forward(head_entities, relations, tail_entities)            
@@ -112,26 +143,17 @@ def get_model_statistics(model, pos_head_entities, pos_relations, pos_tail_entit
         print('')
     return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
-def get_scoring_statistics(gen, dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, heads_filt, tails_filt, print_statistics = False):    
-    if torch.cuda.is_available():
-        heads = heads.cuda()
-        relations = relations.cuda()           
-        tails = tails.cuda()
-        heads_neg  = heads_neg.cuda()
-        relations_neg  = relations_neg.cuda()
-        tails_neg = tails_neg.cuda()
-        
+def get_scoring_statistics(gen, dis, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics = False):
     with torch.no_grad():
-        # High scores indicate a low probability if a triple to be true               
-        heads_neg_filt, rel_neg_filt, tails_neg_filt = filter_negatives(heads_neg, relations_neg, tails_neg, heads_filt, tails_filt)
+        # High scores indicate a low probability if a triple to be true  
         if print_statistics:
             print('----------', 'Generator statistics:', '----------')  
-        pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen,  heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics)  
-        if print_statistics:
-            print('----------', 'Discriminator statistics:', '----------')  
-        get_model_statistics(dis, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics)   
-        if print_statistics:
-            print('')
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics) 
+        #if print_statistics:
+        #    print('----------', 'Discriminator statistics:', '----------')  
+        #get_model_statistics(dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, print_statistics)   
+        #if print_statistics:
+        #    print('')
         return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
 def inplace_shuffle(*lists):

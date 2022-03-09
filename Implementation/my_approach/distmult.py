@@ -68,9 +68,8 @@ class DistMult(BaseModel):
         optimizer = Adam(self.mdl.parameters(), weight_decay=self.weight_decay)
         best_perf = 0
         tp_logger = TrainingProcessLogger('pretrain', n_epoch, self.config.epoch_per_test) 
-        tp_logger.log_loss_reward(0, 0)     
-        tp_logger.log_performance(0, [0, 0, 0])
-                   
+        tp_logger.log_performance(0, [0,0,0])  
+
         for epoch in range(n_epoch):
             epoch_loss = 0
             if epoch % self.config.sample_freq == 0:
@@ -101,14 +100,16 @@ class DistMult(BaseModel):
                 epoch_loss += loss.item()                
            
             avg_epoch_loss = epoch_loss / n_train
-            tp_logger.log_loss_reward(epoch, avg_epoch_loss)     
+            if epoch % config().log.graph_every_nth_epoch == 0:  
+                tp_logger.log_loss_reward(epoch, avg_epoch_loss)     
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, avg_epoch_loss)
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 mrr, hits = tester()
                 tp_logger.log_performance(mrr, hits)
                 if mrr > best_perf:
                     self.save(os.path.join('models', config().task.dir, self.config.model_file))
-                    best_perf = mrr                    
+                    best_perf = mrr     
+        tp_logger.log_loss_reward(avg_epoch_loss)                   
         if config().log.log_pretrain_graph:
             tp_logger.create_and_save_figures(log_dir)
         return best_perf
