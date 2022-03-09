@@ -120,7 +120,7 @@ for epoch in range(n_epoch):
             # TODO: update with cache like in NSCaching with efficient method to replace negatives in Neg
         
         neg_set, neg_heads_filt, neg_rel_filt, neg_tails_filt = neg_set, head_cand, rel_cand, tail_cand # filter_negatives(neg_set, head_cand, rel_cand, tail_cand, heads_filt, tails_filt)
-        logging.info(len(neg_heads_filt))
+        # logging.info(len(neg_heads_filt))
         #logging.info(len(neg_set))
         # logging.info(neg_set)
         pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, neg_heads_filt, neg_rel_filt, neg_tails_filt, print_statistics = False)
