@@ -1,11 +1,12 @@
 pretrain_config: TransE # DistMult, ComplEx, TransE, TransD
 g_config: DistMult # DistMult, ComplEx
-d_config: TransD  # TransE, TransD
+d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
   dir: umls  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
+  use_pretrained_models: true
   n_sample: 20 #   20
   sample_type: uncertainty_max      # random, uncertainty_max, uncertainty_distribution
   measure_type: entropy   # entropy, least_confidence, confidence_margin, confidence_ratio
