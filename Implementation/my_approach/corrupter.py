@@ -43,10 +43,10 @@ class BernCorrupterMulti(object):
     def corrupt(self, head, rel, tail, keep_truth=True):
         n = len(head)
         prob = self.bern_prob[rel]
-        selection = torch.bernoulli(prob).numpy().astype('bool')
-        head_out = np.tile(head.numpy(), (self.n_sample, 1)).transpose()
-        rel_out = rel.unsqueeze(1).expand(n, self.n_sample)
-        tail_out = np.tile(tail.numpy(), (self.n_sample, 1)).transpose()        
+        selection = torch.bernoulli(prob).cpu().numpy().astype('bool')
+        head_out = np.tile(head.cpu().numpy(), (self.n_sample, 1)).transpose()
+        rel_out = rel.cpu().unsqueeze(1).expand(n, self.n_sample)
+        tail_out = np.tile(tail.cpu().numpy(), (self.n_sample, 1)).transpose()        
         if keep_truth:
             ent_random = choice(self.n_ent, (n, self.n_sample - 1))
             head_out[selection, 1:] = ent_random[selection]

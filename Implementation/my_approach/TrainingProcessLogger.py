@@ -17,11 +17,10 @@ class TrainingProcessLogger():
     self.epoch_per_test = epoch_per_test
    
     
-  def log_loss_reward(self, epoch, loss, reward = None):
-    if epoch % config().log.graph_every_nth_epoch == 0:   
-      self.losses.append(loss)
-      if reward != None:
-        self.rewards.append(reward)
+  def log_loss_reward(self, loss, reward = None):  
+    self.losses.append(loss)
+    if reward != None:
+      self.rewards.append(reward)
       
   def log_performance(self, mrr, hits):
     self.mrrs.append(mrr)
@@ -36,6 +35,7 @@ class TrainingProcessLogger():
     plt.title(title, fontsize=14)
     plt.xlabel(x_label, fontsize=14)
     plt.ylabel(y_label, fontsize=14)
+    plt.xlim([0, self.n_epochs])
     plt.grid(True)  
     return plt
 
@@ -68,6 +68,7 @@ class TrainingProcessLogger():
       
     self.create_figure(config().task.dir.upper() + ' Losses', n_points, self.losses, 'Epochs', 'Losses', 'red').savefig(filename + '_losses')
     n_points = [x for x in range(0, self.n_epochs+1, self.epoch_per_test)]
+    print(n_points)
     self.create_figure(config().task.dir.upper() + ' Validation MRR', n_points, self.mrrs,'Epochs', 'MRR',  'green').savefig(filename + '_mrr')
     
     self.create_figure(config().task.dir.upper() + ' Validation H@3', n_points, self.hit3s, 'Epochs', 'H@3', 'orange').savefig(filename + '_hit3')
