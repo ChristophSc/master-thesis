@@ -5,3 +5,14 @@
 
 FUTURE WORK:
 - combine Uncertainty Sampling with other approaches
+- increase performance of uncertainty sampling
+- filter negatives by removing al negative triples from set $Neg$ which appear in the KG
+- optimize approach by using state of the art PyTorch methods, since KBGAN is based on very old version
+- this might increase performance
+- extend approach with cache like in approach NSCaching 
+-> especially in smaller datasets like UMLS  there are a several duplicates and each epoch the same negative triples are sampled
+-> create statistics on Negative set how many times each triple was sampled (uncertainty <-> random) for UMLS dataset
+create figure (bar chart) and save plot
+
+
+

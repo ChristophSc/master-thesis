@@ -51,6 +51,32 @@
   \endgroup%
 }
 
+
+\newcommand{\ganevaluation}[5]{%
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/#1}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/#2}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/#3}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/#4}
+    \end{minipage}%
+    \caption{#5}
+    \label{fig:test}
+\end{figure}
+}
+
+
 %%%%%%%%%
 % Color-Definitions
 %%%%%%%%%
