@@ -149,9 +149,9 @@ datasets = ["umls", "wn18rr", "wn18", "fb15k237"]
 gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
-pretraining_cases = ["pretrained"]  # "not_pretrained"
+pretraining_cases = ["pretrained", "not_pretrained"]  # "not_pretrained"
 sampling_types = ["random", "uncertainty"]
-uncertainty_sampling_types = ["max"] # "max_distribution"
+uncertainty_sampling_types = ["max", "max_distribution"] # "max_distribution"
 uncertainty_measures = ["entropy"] # 
 
 
