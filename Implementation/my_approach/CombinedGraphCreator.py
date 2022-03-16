@@ -88,34 +88,28 @@ class CombinedGraphCreator():
     
     if self.train_type == "pretrain":
       dir = path.join('combined_figures', self.train_type, self.dataset)
-      filename = self.train_type + '_' + self.dataset + '_'
-      training_type = "Pretraining"     
+      filename = self.train_type + '_' + self.dataset + '_'  
     elif self.train_type == "gan_train":   
       dir = path.join('combined_figures', self.train_type, self.pretrained, self.sampling_type)
       if self.sampling_type == "uncertainty":
         dir = path.join(dir, self.uncertainty_sampling_type, self.uncertainty_measure)
       dir = path.join(dir, self.dataset)
       filename = self.train_type + '_' + self.sampling_type.replace('/', '_') + '_' + self.dataset + '_' 
-      training_type = "Pretraining" 
-      
-    sampling_name = ""    
-    if self.sampling_type == "random":
-      sampling_name = "- Random Sampling"
-    elif self.sampling_type == "uncertainty":      
-      sampling_name = ("- Uncertainty Sampling " + self.uncertainty_sampling_type.replace("_", " ") + " - " + self.uncertainty_measure).title()
+
     
-    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Validation MRR " + sampling_name, 
+    
+    self.create_figure(title = self.dataset.upper() + " - Validation MRR ", 
                       logged_values = logged_mrrs, 
                       y_label = "MRR").savefig(path.join(dir, filename + 'mrrs'))
-    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Validation H@10 " + sampling_name, 
+    self.create_figure(title = self.dataset.upper() + " - Validation H@10 ", 
                       logged_values = logged_hits10s, 
                       y_label ="H@10").savefig(path.join(dir,filename + 'hit10s'))
-    self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Training Losses " + sampling_name, 
+    self.create_figure(title = self.dataset.upper() + " - Training Losses ", 
                       logged_values = logged_losses, 
                       y_label ="Losses").savefig(path.join(dir, filename + 'losses'))
     
     if self.train_type != "pretrain":
-      self.create_figure(title = training_type + " - " + self.dataset.upper() + " - Training Rewards " + sampling_name, 
+      self.create_figure(title = self.dataset.upper() + " - Training Rewards ", 
                         logged_values = logged_rewards, 
                         y_label ="Rewards").savefig(path.join(dir,filename + 'rewards'))
     print("Successfully created figures in " + dir)
