@@ -1,5 +1,22 @@
+% !TEX root = ../my-thesis.tex
+%
+\chapter{Appendix}
+\label{sec:appendix}
 
-\chapter{List of Figures} \label{ch:appendix_diagrams}
+\section{Original KBGAN Results}
+\label{sec:appendix:originalkbganresults}
+
+\begin{sidewaysfigure}[t]
+  \centering
+    \includegraphics[width=0.95\textwidth]{appendices/original_results.png}
+  \caption{MRR and Hit@10 for original KBGAN approach \cite{cai2017kbgan} (Adversarial Learning)}
+  \label{fig:originalkbganresults}
+\end{sidewaysfigure}
+
+\clearpage
+
+\section{Classdiagrams}
+\label{sec:appendix:classdiagrams}
 
 \begin{sidewaysfigure}[t]
   \centering
@@ -22,95 +39,6 @@
   \label{fig:overview}
 \end{sidewaysfigure}
 
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.95\textwidth]{appendices/gan_train_sequencediagram.png}
-  \caption{Sequence diagram with communication between components}
-  \label{fig:overview}
-\end{figure*}
-
-
-\subsection{Original KBGAN Results}
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.95\textwidth]{appendices/original/original_results.png}
-  \caption{MRR and Hit@10 for original KBGAN approach (Adversarial Learning)}
-  \label{fig:overview}
-\end{figure*}
-
-
-\subsection{WN18RR Dataset}
-\begin{figure}
-    \centering
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/wn18rr/gan_train_wn18rr_rewards.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/wn18rr/gan_train_wn18rr_losses.png}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/wn18rr/gan_train_wn18rr_mrr.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/wn18rr/gan_train_wn18rr_hit10.png}
-    \end{minipage}
-    \caption{Evaluation figures with Discriminator rewards, losses, \ac{MRR} and Hit\@10 for 500 epochs. \textbf{Random Sampling}  }
-    \label{fig:test}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/random/gan_train_umls_rewards.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/random/gan_train_umls_losses.png}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/random/gan_train_umls_mrr.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/random/gan_train_umls_hit10.png}
-    \end{minipage}
-    \caption{Evaluation figures with Discriminator rewards, losses, \ac{MRR} and Hit\@10 for 2500 epochs with \textbf{Random Sampling}}
-    \label{fig:test}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/uncertainty/gan_train_umls_rewards.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/uncertainty/gan_train_umls_losses.png}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/uncertainty/gan_train_umls_mrr.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{appendices/umls/uncertainty/gan_train_umls_hit10.png}
-    \end{minipage}
-    \caption{Evaluation figures with Discriminator rewards, losses, \ac{MRR} and Hit\@10 for 2500 epochs with \textbf{Uncertainty Sampling}}
-    \label{fig:test}
-\end{figure}
- 
-
-\pagebreak
 
 
 
-
-\chapter{List of Tables} \label{ch:appendix_tables}

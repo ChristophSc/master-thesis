@@ -1,0 +1,80 @@
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lllllll}
+        \toprule
+        \multirow{Method} &
+        \multicolumn{2}{c}{\textbf{FB15k-237}} & 
+        \multicolumn{2}{c}{\textbf{WN18}} & 
+        \multicolumn{2}{c}{\textbf{WN18RR}}\\
+        
+        \cmidrule{2-6} \cmidrule{7-7} \\
+        {} & MRR & H@10 & MRR & H@10 & MRR & H@10 \\
+        
+        \midrule
+        
+        \textsc{TransE}    
+        & - & 42.8$^{\dag}$ & - & 89.2 & -    & 43.2$^{\dag}$ \\
+        
+        \textsc{TransD}    
+        & - & 45.3$^{\dag}$ & - & 92.2 & -    & 42.8$^{\dag}$ \\ 
+        
+        \textsc{DistMult}  
+        & 24.1$^{\ddag}$  & 41.9$^{\ddag}$ & 82.2 & 93.6 & 42.5$^{\ddag}$ & 49.1$^{\ddag}$ \\
+        
+        \textsc{ComplEx}   
+        & 24.0$^{\ddag}$  & 41.9$^{\ddag}$ & \textbf{94.1} & 94.7 & \textbf{44.4}$^{\ddag}$ & \textbf{50.7}$^{\ddag}$ \\
+
+        \midrule
+        
+        \textsc{Results according to paper} 
+          &  &  &  &  &  & \\
+          
+        \textsc{TransE} (pre-trained)                         & 24.2    & 42.2  & 43.3   & 91.5 & 18.6 & 45.9 \\
+        
+        \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  & 27.4  & 45.0 & 71.0 & \textbf{\underline{94.9}} & 21.3 & \underline{48.1} \\
+        \textsc{kbgan} (\textsc{TransE} + \textsc{ComplEx})   
+        & \textbf{\underline{27.8}} & 45.3 & 70.5  & \textbf{\underline{94.9}} & 21.0 & 47.9 \\
+        
+        \textsc{TransD} (pre-trained)                         & 24.5 & 42.7 & 49.4  & 92.8 & 19.2 & 46.5 \\
+        
+        \textsc{kbgan} (\textsc{TransD} + \textsc{DistMult})  
+        & \textbf{\underline{27.8}} & \textbf{\underline{45.8}} 
+        & 77.2 & 94.8 & 21.4 & 47.2\\
+        
+        \textsc{kbgan} (\textsc{TransD} + \textsc{ComplEx})   
+        & 27.7 & \textbf{\underline{45.8}} & \underline{77.9}
+        & 94.8 & \underline{21.5} & 46.9\\
+        
+         \midrule
+          
+          \textsc{kbgan} (\textsc{TransE} + \textsc{DistMult})  & -  & - & - & - & 18.3 & 44.5 \\
+          
+          \textsc{kbgan} (\textsc{TransE} + \textsc{ComplEx})  & -  & - & - & - & - & - \\
+          
+          \textsc{kbgan} (\textsc{TransD} + \textsc{DistMult})  & -  & - & - & - & - & - \\
+          
+          \textsc{kbgan} (\textsc{TransD} + \textsc{ComplEx})  & -  & - & - & - & - & - \\
+          
+          \midrule
+         
+          \textsc{ucgan} (\textsc{TransE} + \textsc{DistMult}) 
+          & -  & - & - & - & 17.8 & 44.0\\
+         
+         \textsc{ucgan} (\textsc{TransE} + \textsc{ComplEx}) 
+          & -  & - & - & - & - & - \\
+          
+          \textsc{ucgan} (\textsc{TransD} + \textsc{DistMult}) 
+          & -  & - & - & - & - & - \\
+        
+        \textsc{ucgan} (\textsc{TransD} + \textsc{ComplEx}) 
+          & -  & - & - & - & - & - \\
+          
+        \bottomrule
+    \end{tabular}
+    \caption{Experimental results.
+    Section 1 and 2 are results copied from the original paper \cite{cai2017kbgan} from pretraining and adversarial training with \kbgan. 
+    Third section lists our results achieven with original \kbgan on different datasets.
+    Fourth and last section includes results achieved with Sampling by Uncertainty which is called \textsc{ucgan} at this point.
+    The training only took place for 1000 epochs on our local computer instead of the original \kbgan 5000 epochs due to the long training time.}
+\label{tab:results}
+\end{table}

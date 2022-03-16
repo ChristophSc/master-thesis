@@ -1,0 +1,45 @@
+\chapter{Background}
+\label{ch:background}
+
+To ensure a uniform understanding of the methods and technologies used, important definitions of terms are given in this chapter.
+Furthermore, various contents are presented, which underlie our approach and are important for its understanding.
+Since our approach deals exclusively with \acp{KG}, a more precise definition of the term is first given in \Autoref{sec:knowledge_graphs}.
+Another important part is the \acp{KGE}, which map the information in the form of entities and relations of the KG in a low-dimensional vector space.
+Therefore, different embedding models and their differences are presented in \Autoref{sec:knowledge_graph_embeddings}.
+All of them have different training objectives which can mathematically represented by different loss-function which have to be optimized during the training time.
+Their definition is given in \Autoref{sec:training_objective_types}.
+Besides Negative Sampling, there are other methods for training \ac{KGE} models.
+For their differentiation, these are first introduced in \Autoref{sec:training_techniques} and in the course of this, an exact definition of Negative Sampling is given. 
+Subsequently, different Negative Sampling methods from the literature and their categories described in \Autoref{sec:negativesamplingmethods}  and in particular one approach is presented in more detail (\Autoref{sec:kbgan}, which provides the basis for our later approach.
+In \Autoref{sec:evaluating_knowledge_graph_embeddings}, different methods are presented how to measure the accuracy of the learned embeddings.
+Finally, Uncertainty Sampling and its different approaches and measurements are presented in the end of this chapter (\Autoref{sec:uncertaintysampling}).
+
+
+\input{content/chapters/02_background/sections/01_knowledge_graphs}
+
+\input{content/chapters/02_background/sections/02_knowledge_graph_embeddings}
+
+\input{content/chapters/02_background/sections/03_training_objective_types}
+
+\input{content/chapters/02_background/sections/04_training_techniques}
+
+\input{content/chapters/02_background/sections/05_negative_sampling_methods}
+
+\input{content/chapters/02_background/sections/06_kbgan}
+
+\input{content/chapters/02_background/sections/07_evaluating_knowledge_graph_embeddings}
+
+\input{content/chapters/02_background/sections/08_uncertainty_sampling}
+
+
+
+
+
+
+
+
+
+
+
+
+

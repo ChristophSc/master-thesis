@@ -1,0 +1,78 @@
+% !TEX root = my-thesis.tex
+
+
+% **************************************************
+% Files' Character Encoding
+% **************************************************
+\PassOptionsToPackage{utf8}{inputenc}
+\usepackage{inputenc}
+
+
+% **************************************************
+% Information and Commands for Reuse
+% **************************************************
+\newcommand{\thesisTitle}{Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty}
+\newcommand{\thesisName}{Christoph Schäfer}
+\newcommand{\thesisSubject}{Master Thesis}
+\newcommand{\thesisDate}{\today{}}
+
+
+
+
+\newcommand{\thesisFirstReviewer}{Prof. Dr. Axel-Cyrille Ngonga Ngomo}
+\newcommand{\thesisFirstReviewerUniversity}{\protect{Universität Paderborn}}
+\newcommand{\thesisFirstReviewerDepartment}{Department of Computer Science}
+
+\newcommand{\thesisSecondReviewer}{Jun.-Prof. Dr. Sebastian Peitz}
+\newcommand{\thesisSecondReviewerUniversity}{\protect{Universität Paderborn}}
+\newcommand{\thesisSecondReviewerDepartment}{Department of Computer Science}
+
+\newcommand{\thesisFirstSupervisor}{Caglar Demir}
+
+\newcommand{\thesisUniversity}{\protect{Universität Paderborn}}
+\newcommand{\thesisUniversityDepartment}{Department of Computer Science}
+\newcommand{\thesisUniversityInstitute}{Faculty for Computer Science, Electrical Engineering and Mathematics}
+\newcommand{\thesisUniversityGroup}{Data Science}
+\newcommand{\thesisUniversityCity}{Paderborn}
+\newcommand{\thesisUniversityStreetAddress}{Warburger Str. 100}
+\newcommand{\thesisUniversityPostalCode}{33098}
+
+	
+% **************************************************
+% Debug LaTeX Information
+% **************************************************
+%\listfiles
+
+
+% **************************************************
+% Load and Configure Packages
+% **************************************************
+\usepackage[english]{babel} % babel system, adjust the language of the content
+\PassOptionsToPackage{% setup clean thesis style
+    figuresep=colon,%
+    hangfigurecaption=false,%
+    hangsection=true,%
+    hangsubsection=true,%
+    sansserif=false,%
+    configurelistings=true,%
+    colorize=full,%
+    colortheme=bluemagenta,%
+    configurebiblatex=true,%
+    bibsys=biber,%
+    bibfile=bib-refs,%
+    bibstyle=alphabetic,%
+    bibsorting=nty,%
+}{cleanthesis}
+\usepackage{cleanthesis}
+
+\hypersetup{% setup the hyperref-package options
+    pdftitle={\thesisTitle},    %   - title (PDF meta)
+    pdfsubject={\thesisSubject},%   - subject (PDF meta)
+    pdfauthor={\thesisName},    %   - author (PDF meta)
+    plainpages=false,           %   -
+    colorlinks=false,           %   - colorize links?
+    pdfborder={0 0 0},          %   -
+    breaklinks=true,            %   - allow line break inside links
+    bookmarksnumbered=true,     %
+    bookmarksopen=true          %
+}

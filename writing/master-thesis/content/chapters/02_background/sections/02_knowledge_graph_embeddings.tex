@@ -1,0 +1,21 @@
+\section{Knowledge Graph Embeddings} 
+\label{sec:knowledge_graph_embeddings}
+
+
+\acp{KGE} are low-dimensional representations of entities and relations in a \ac{KG}. 
+Numerous methods have been developed in the last few years to tackle various problems such as defining a different score function to measure the distance between entities relative to their relation.
+Depending on the dimensionality of the embedding space and which types of relations should be embedded, a different embedding can be chosen.
+While some of them support only symmetric relations, others support antisymmetric ones as well. 
+Besides this, the types of relations in a \ac{KG} differ from each other.
+We can differentiate between 1-to-1, 1-to-N, N-to-1, and N-to-N relations.
+Overall, all the embedding methods can be separated by three different aspects \cite{electronics9050750}:
+(i) How they represent entities and relations, (ii) how they define the scoring function and (iii) how they optimize the ranking criterion.
+On the basis of this, two different categories are derived:
+\textit{Triplet Fact-Based Representation Learning Models} \Autoref{subsec:triplet_fact_based_representation_learning_models} and \textit{Description-Based Representation Learning Models} \Autoref{subsec:description_based_representation_learning_models} \cite{electronics9050750}.
+
+\input{content/chapters/02_background/sections/02_knowledge_graph_embeddings/01_triplet_fact_based_representation_learning_models}
+
+\input{content/chapters/02_background/sections/02_knowledge_graph_embeddings/02_description_based_representation_learning_models}
+
+
+

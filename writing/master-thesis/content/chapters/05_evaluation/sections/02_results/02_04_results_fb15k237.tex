@@ -1,0 +1,48 @@
+\subsection{FB15k237 Dataset}
+
+\textbf{Pretraining}\\
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/pretrain/fb15k237/pretrain_fb15k237_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/pretrain/fb15k237/pretrain_fb15k237_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/pretrain/fb15k237/pretrain_fb15k237_hit10s.png}
+    \end{minipage}%
+    \caption{Pretraining of all models on \textsc{FB15k237} Dataset}
+    \label{fig:test}
+\end{figure}
+
+\pagebreak
+
+\textbf{Adversarial Training - Random}\\
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_rewards.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_hit10s.png}
+    \end{minipage}%
+    \caption{Adversarial Training with Random Sampling on \textsc{FB15k237} Dataset}
+    \label{fig:test}
+\end{figure}
+
+\pagebreak
