@@ -1,0 +1,58 @@
+\subsection{FB15k237 Dataset}
+
+\subsubsection{Uncertainty Sampling Max}
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k237/gan_train_uncertainty_fb15k237_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k237/gan_train_uncertainty_fb15k237_rewards.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k237/gan_train_uncertainty_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k237/gan_train_uncertainty_fb15k237_hit10s.png}
+    \end{minipage}%
+    \caption{Adversarial training without Pretraining on \textsc{FB15k237} dataset. 
+    Negative Triples are sampled by Uncertainty Max.
+    Shown are the training losses and rewards and validation H@10 and MRRs for 5000 epochs.}
+    \label{fig:advtrain_fb15k237_not_pretrained_uncertainty_max}
+\end{figure}
+
+\subsubsection{Uncertainty Sampling Distribution}
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/gan_train_uncertainty_fb15k237_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/gan_train_uncertainty_fb15k237_rewards.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/gan_train_uncertainty_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/gan_train_uncertainty_fb15k237_hit10s.png}
+    \end{minipage}%
+    \caption{Adversarial Training without Pretraining on \textsc{WN18} dataset. 
+    Negative Triples are sampled by Uncertainty Distribution.
+    Shown are the training losses and rewards and validation H@10 and MRRs for 5000 epochs.}
+    \label{fig:advtrain_not_pretrained_fb15k237_pretrained}
+\end{figure}
+
+
+
+
+

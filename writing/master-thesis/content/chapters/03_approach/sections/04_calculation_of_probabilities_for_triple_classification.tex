@@ -1,0 +1,70 @@
+\section{Calculation of Probabilities for Triple Classification}
+\label{sec:calculation_of_probabilitie_for_triple_Classification}
+% how to measure the probability of a triple to be positive
+Before we can calculate and sample negative triples from Neg by Uncertainty, we have to calculate the probability of a triple being positive.
+Based on \autoref{fig:uncertainty} with ranges of positive and negative triple scores, we want to determine two bounds: 
+First, $score_{min}$ which defines at which scoring value a triple has the probability 0 to be a positive triple ($\mathds{P}(y = 1 | l = (h,r,t)) = 0$) and second $score_{max}$ at which scoring value a triple has the probability 1 to be positive one ($\mathds{P}(y = 1 | (h,r,t)) = 1$) . 
+All scores lower than $score_{min}$ get the probability 0 and all scores higher than $score_{max}$ get the probability 1.
+
+% use borders of negatives/positives for classification
+First option to define these borders is depicted in \autoref{fig:positives_negatives1}.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.PNG}
+  \caption{First option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | (h,r,t))$ ) or negative ($\mathds{P}(y = 0 | (h,r,t))$). 
+  $score_{min}$ at the left border of all negative triple scores and $score_{max}$ at the right border of all positive triples.}
+  \label{fig:positives_negatives1}
+\end{figure*}
+The advantage of this option is, that almost every negative triple is assigned a probability between 0 and 1 and therefore, an uncertainty score higher 0.
+This results in a probability for almost all negative triples to be sampled.
+The disadvantage is that depending on the shift of the positive and negative triple scoring ranges this would result in bad negative triples or too good negative triples being sampled.
+With $f_G$ the scoring function of the generator, the first option results in the following definitions:
+\begin{equation} \label{eqn:opt1_score_min}
+    score_{min} := \argmin_{(h',r,t') \in Neg}{f_G(h',r,t')}
+\end{equation}
+\begin{equation} \label{eqn:opt1_score_max}
+    score_{max} := \argmax_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
+\end{equation}
+
+The other option is showed in \autoref{fig:positives_negatives2}.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.PNG}
+  \caption{Second option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | (h,r,t))$) or negative ($\mathds{P}(y = 0 | (h,r,t))$). 
+  $score_{min}$ at the left border of all positive triple scores and $score_{max}$ at the right border of all negative.}
+  \label{fig:positives_negatives2}
+\end{figure*}
+In comparison to the first option, this one has the advantage of focusing only on the overlapping part of the model's prediction.
+However, the drawback is that this static view becomes problematic when the scoring range of positive and negative triples does not overlap.
+This option results in the following definitions:
+\begin{equation} \label{eqn:opt2_score_min}
+    score_{min} := \argmin_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
+\end{equation}
+\begin{equation} \label{eqn:opt2_score_max}
+    score_{max} := \argmax_{(h',r,t') \in Neg}{f_G(h',r,t')}
+\end{equation}
+
+Since $score_{min}$ and $score_{max}$ are now defined either with first option of 
+\autoref{eqn:opt1_score_min} and \ref{eqn:opt1_score_max} or according the second option with 
+\autoref{eqn:opt2_score_min} and \ref{eqn:opt2_score_max}, the probability of a triple to be positive ($y = 1$) can be calculated with the following \autoref{eqn:positive_probability}
+\begin{equation}  \label{eqn:positive_probability}
+    \mathds{P}(y = 1|(h, r, t)) =
+    \begin{cases}
+        0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  
+        if \  f_G(h,r,t) < score_{min}
+         
+        \\ \\
+        1 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+        if \ f_G(h,r,t) > score_{max}
+         
+        \\ \\
+        \frac{f_G(h,r,t) - score_{min}}{score_{max} - score_{min}}
+        \ \ \ \ \ \ \ 
+        else
+        \\
+    \end{cases}  \in [0, 1]
+\end{equation}
+and accordingly, since we have a binary classification problem for positive and negative triples, the probability of a triple to be negative ($y=0$) is
+\begin{equation} \label{eqn:negative_probability}
+    \mathds{P}(y = 0|(h, r, t)) := 1 - \mathds{P}(y = 1|(h, r, t)) \in [0,1]
+\end{equation}

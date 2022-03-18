@@ -1,7 +1,23 @@
 \chapter{Evaluation}
 \label{ch:evaluation}
 
+To validate all approaches of Uncertainty Sampling presented in \autoref{ch:approach}, this chapter evaluates them.
+For this purpose, \autoref{ch:evaluation:sec:experimental_setup} first explains the experimental setup under which conditions and settings our evaluations were conducted.
+Subsequently, the different Uncertainty Sampling methods Uncertainty Sampling Max and Uncertainty Sampling Distribution are first evaluated in \autoref{ch:evaluation:sec:evaluation_methods}.
+Depending on which Uncertainty Metric the Uncertainty Sampling Distribution is based on, different probability distributions are calculated.
+For this reason, an evaluation of these takes place in \autoref{ch:evaluation:sec:evaluation_metrics}.
+A final evaluation of the best Sampling by Uncertainty approach is made in \autoref{ch:evaluation:sec:evaluation_uncertainty} to compare it to the original sampling of the \kbgan approach.
+
 \input{content/chapters/05_evaluation/sections/01_experimental_setup}
 
-\input{content/chapters/05_evaluation/sections/02_results}
+\newpage
 
+\input{content/chapters/05_evaluation/sections/02_evaluation_methods}
+
+\newpage
+
+\input{content/chapters/05_evaluation/sections/03_evaluation_metrics}
+
+\newpage
+
+\input{content/chapters/05_evaluation/sections/04_evaluation_uncertainty}

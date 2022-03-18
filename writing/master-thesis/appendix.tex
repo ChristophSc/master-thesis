@@ -8,7 +8,7 @@
 
 \begin{sidewaysfigure}[t]
   \centering
-    \includegraphics[width=0.95\textwidth]{appendices/original_results.png}
+    \includegraphics[width=0.95\textwidth]{appendices/figures/original_results.png}
   \caption{MRR and Hit@10 for original KBGAN approach \cite{cai2017kbgan} (Adversarial Learning)}
   \label{fig:originalkbganresults}
 \end{sidewaysfigure}
@@ -20,21 +20,20 @@
 
 \begin{sidewaysfigure}[t]
   \centering
-    \includegraphics[width=\textwidth]{appendices/kbgan_classdiagram.png}
   \caption{Class diagram of the original \ac{KBGAN} approach}
   \label{fig:overview}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}[t]
   \centering
-    \includegraphics[width=0.95\textwidth]{appendices/NewClassDiagram.png}
+    \includegraphics[width=0.95\textwidth]{appendices/figures/NewClassDiagram.png}
   \caption{New class diagram of our approach with Sampler, Generator, Discriminator classes)}
   \label{fig:overview}
 \end{sidewaysfigure}
 
 \begin{sidewaysfigure}[t]
   \centering
-    \includegraphics[width=0.95\textwidth]{appendices/NewClassDiagram.drawio.png}
+    \includegraphics[width=0.95\textwidth]{appendices/figures/NewClassDiagram.drawio.png}
   \caption{New class diagram of the new approach created on drawio (online tool)}
   \label{fig:overview}
 \end{sidewaysfigure}
@@ -42,3 +41,16 @@
 
 
 
+\section{Pretraining}
+\label{app:sec:pretraining}
+
+\input{appendices/pretraining}
+
+\section{Adversarial Training with Pretraining}
+\label{app:sec:adv_training}
+
+\input{appendices/gan_train_pretrained_random}
+
+\input{appendices/gan_train_pretrained_uncertainty_max}
+
+\input{appendices/gan_train_pretrained_uncertainty_max_distribution}

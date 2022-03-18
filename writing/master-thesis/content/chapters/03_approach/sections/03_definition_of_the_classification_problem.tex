@@ -1,0 +1,39 @@
+\section{Definition of the Classification Problem}
+\label{sec:definition_of_the_classification_problem}
+% uncertainty sampling approaches require a classification problem
+% we can either: 
+% 1) good <-> bad negative triple (like original approach)
+% 2) provide prob of triple to be true 
+Next, since Uncertainty Sampling needs a classification problem, there are two options available for the definition:
+First, like in the original \kbgan approach, we could distinguish between \textit{good} and \textit{bad} negative triples and try to provide the best ones to the discriminator.
+Since the generator of the adversarial training is a tensor factorization-based model, it provides scores which indicate plausibility of a triple.
+According to this plausibility scores a sampling distribution among all negative triples is created. 
+This has the advantage that we only have to calculate the scores of negative triples, but we lose the information about positive triples and their scores.
+Therefore, negative triples are sampled according to their calculated scores with either linearly increasing probability as in \cite{cai2017kbgan} or as in \cite{UKGE} with logistic function or a bounded rectifier.
+To follow the open-world assumption and reduce the probability of sampling false-negatives,
+\kbgan limits the number of negative triples to twenty \cite{cai2017kbgan}.
+
+Another approach is to not only look at the quality of a negative triple, but instead distinguish between negative and positive triples and their scores.
+In contrast to the first option in this one also information about positive triples and their scores is preserved.
+If we define the classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
+Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
+Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, we look for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
+Since this means the triple can be assigned to both the positive and the negative class, 
+the model is uncertain how to classify the triple.
+
+The difference between the two approaches can be explained by the following example and \autoref{fig:uncertainty}, which illustrates scoring values of positive and negative triples and the uncertainty of a model´s prediction.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/uncertainty.PNG}
+  \caption{Score range of positive and negative triples.
+  The uncertainty of a model is in the scoring range where the model found scores of both positive and negative triples.}
+  \label{fig:uncertainty}
+\end{figure*}
+Suppose we have the positive triple $l_p=(h,r,t)$ (t marked as blue dot) in our KG and some other entities $t^* \in \entities$ (green dots) from positive triples $(h,r,t^*)$ from the \ac{KG} .
+After we obtain the negative triple set $Neg$ through the Negative Sampling process and scored them by the generator embedding model, also a range of scoring values for negative triples exists. 
+Therefore, for entities within the overlap of positive and negative scoring values, the model is uncertain whether they are positive or negative.
+The original sampling approach of \kbgan assigns now ascending probabilities for increasing scoring values.
+Therefore, it is most likely to sample $t'_3$, because the negative triple $(h,r,t'_3)$ achieves the highest score and, accordingly, has the highest probability to be positive.
+Although, the entities $t'_1$ and $t'_2$ are also very interesting for the model, because a classification based on the achieved scoring values is not easy.
+Consequently, instead of only including negative triple scoring information by differentiating between \textit{good} and \textit{bad} negative triples, the second approach incorporates information of positive triples.
+Thus, this more detailed distinction allows us to avoid sampling false negative triples, since, for example, sampling $t'_3$ can be particularly problematic if it yields an even higher score and should actually be classified as a positive triple because it is a false negative triple.

@@ -1,0 +1,49 @@
+\section{Procedure of the Adversarial Training with Sampling by Uncertainty}
+\label{sec:procedure}
+In the original \kbgan approach two embedding models are available in form of the generator and discriminator.
+Therefore, we could either sample by the uncertainty of the generator or the discriminator embedding model.
+In \kbgan approach the negative triple set Ne is created before they are given to the generator.
+Subsequently they are sampled by probability distribution and given to discriminator.
+Therefore, since it corresponds to the original course, we choose the uncertainty in the prediction of the generator and the original sampling by probabilities calculated by the scores of the generator is replaced by sampling from uncertainty (see \autoref{fig:uncertainty_sampling_architecture}).
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.90\textwidth]{figures/architecture.png}
+  \caption{Uncertainty Sampling replaces the original Random Sampling in \ac{KBGAN}. 
+  New Uncertainty Sampling component is highlighted in green color.}
+  \label{fig:uncertainty_sampling_architecture}
+\end{figure*}
+Accordingly, the causes a change in the adversarial learning procedure.
+The input of the algorithm of our approach is like in original \ac{KBGAN} a pre-trained generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$ and a pre-trained discriminator D with parameters $\theta_D$ and score function $f_D(h,r,t)$.
+The training process can be described in the following steps:
+\begin{enumerate}
+    \item For each epoch in the training process a set of negative triples is created.
+    This set, which is defined by $Neg(h,r,t)=\{(h_i',r,t_i')\}_{i=1\dots N_s}$, is created by uniformly randomly sampling $N_s$ negative triples by replacing head $h$ or tail entity $t$ for given positive triple $(h, r, t)$.
+    
+    \item 
+    It receives all negative triples from $Neg$ set and the pretrained model calculates a score with score function $f_G$ for each of these negative triples.
+    Based on the calculated score, negative triples can be distinguished from positive ones. Since the generator is a Tensor Factorization-Based Model, a higher score represents a higher likelihood to be a positive triple.
+    
+    \item 
+    Based on the pretrained generator model, scores are calculated in the generator with scoring function $f_G$ for each negative triple $(h',r,t') \in Neg$.
+    
+    \item 
+    All of these calculates scores from generator are handed to the Uncertainty Sampler to calculate the uncertainty of the model.
+    For this, each negative triple in $Neg$ is classified first by assigning a probability $\mathds{P}(y = 1 | (h,r,t)) \forall (h,r,t) \in Neg$ with \autoref{eqn:positive_probability}.
+    These probabilities are used to calculate uncertainty scores using function $u(l)$ defined in \autoref{eqn:uncertainty_function}.
+
+    \item Subsequently, negative triples are sampled according to the calculated uncertainty scores, either the one with maximum uncertainty score or its distribution 
+    and given to the discriminator.
+    
+    \item 
+    From this step on, everything is the same as the original \ac{KBGAN} approach:
+    The generated negative triple $(h',r,t')$ as well as the positive triple $(h, r, t)$ are sent to the discriminator.
+    
+    \item 
+    The discriminator distinguishes both triples by given scoring function $f_D$, which is usually a translation-based \ac{KGE} model like \textsc{TransE} or \textsc{TransD}.
+    
+    \item 
+    The reward defined by $r = - f_D(h',r,t')$ of the current negative triple is calculated and returned to the Generator and the next training iteration begins.
+\end{enumerate}
+These adversarial training steps are repeated until convergence, such that the generator improves the quality of sampled negative triples and discriminator improves embedding over time.
+Output of our algorithm is the adversarially trained discriminator and its embedding.
+By incorporating additional information from the graph and Sampling triples by uncertainty that have the most added value to the embedding model, we expect promising results.

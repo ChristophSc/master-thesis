@@ -1,0 +1,19 @@
+\section{Selection of a Uncertainty Sampling Metric} 
+\label{sec:selection_of_a_uncertainty_sampling_metric}
+% caption: (???)
+% what uncertainty?
+% Option1: EBU: conflicting vs insufficient evidence (within one model)
+% Option2: EAU epistemic <-> aleatoric uncertainty (among multiple models)
+% CU: reducible and irreducible part of uncertainty in a prediction
+In the literature we have several types of uncertainty at our disposal, based on which Negative Sampling can be performed.
+As described in \autoref{sec:uncertaintysampling}, there are three different approaches of \ac{EBU}, \ac{EAU} and \ac{CU}.
+These methods for calculating uncertainty are based on different viewpoints, but all of them are based on a classification problem of two or more classes.
+In \ac{EBU} we consider the uncertainty within a model by looking at the individual features of a model and if they provide evidence for the classes.
+This can be either very many (\textit{conflicting-evidence}) or only a few features (\textit{insufficient-evidence}) which are indicative for the respective classes.
+In contrast, \ac{EAU} considers \textit{epistemic uncertainty} within a single model’s prediction, and \textit{aleatoric uncertainty} across multiple model predictions \cite{human-in-the-loop}.
+Since \textit{credal uncertainty} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other, we calculate uncertainty among multiple models as well.
+% for this model again have conflicting evidence or insufficient evidence for one class
+% -> Firstly we focus on uncertainty within one model (generator kge model) -> can be insufficient or conflicting evidence
+The \kbgan approach does not provide any additional features for the sampling process, only the scores of all negative triples from $Neg$ and their corresponding sampling probabilities.
+For this reason, we will first take the point of view of epistemic uncertainty from \ac{EAU}.
+If we add further models for a classification between negative and positive triples in the later process or add additional features, the other viewpoints aleatoric uncertainty, \ac{EAU} and \ac{CU} can be taken as well.
