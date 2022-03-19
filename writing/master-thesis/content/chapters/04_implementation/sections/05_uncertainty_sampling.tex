@@ -1,0 +1,34 @@
+ \section{Sampling by Uncertainty}
+ \label{sec:sampling_by_uncertainty}
+ 
+ 
+ 
+Sampling
+- BaseSampler
+- RandomSampler
+- UncertaintySampler
+    - UncertaintySamplerMax
+    - UncertaintySamplerDistribution
+- UncertaintyMeasures
+    - 
+
+BAseModule: dis\_step
+
+\Autoref{fig:sampling_classdiagramm}
+
+
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.95\textwidth]{figures/classdiagrams/SamplingClasses.png}
+  \caption{\ac{UML}-Classdiagram of Sampling Classes which includes the base class \texttt{BaseSampler} and inherited classes \texttt{RandomSampler} and \texttt{UncertaintySampler}.
+  Inherited class \texttt{UncertaintySamplerMax} implements functionality to always the negative triple with maximum according to \textsc{Uncertainty Max} and \texttt{UncertaintySamplerDistribution} implements functionality to sample a negative triple by probability distribution based on an uncertainty measure according to \textsc{Uncertainty Distribution}.}
+  \label{fig:sampling_classdiagramm}
+\end{figure*}
+
+
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.95\textwidth]{figures/classdiagrams/UncertaintyMeasures.png}
+  \caption{Loss functions of \acp{KGE} (based on \cite{9207513})}
+  \label{fig:uncertainty_measures}
+\end{figure*}
