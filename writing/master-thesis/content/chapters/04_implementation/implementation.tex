@@ -1,16 +1,25 @@
 \chapter{Implementation}
 \label{ch:implementation}
 
-\input{content/chapters/04_implementation/sections/01_data_set_analysis}
 
-\input{content/chapters/04_implementation/sections/02_model}
-
-\input{content/chapters/04_implementation/sections/03_used_knowledge_graph_embeddings}
-
-\input{content/chapters/04_implementation/sections/04_algorithm}
-
-\input{content/chapters/04_implementation/sections/05_hyperparameter_optimization}
-
-\input{content/chapters/04_implementation/sections/06_processing_on_pc2}
+After explaining our approach, we will now go into more detail about the implementation of \ucgan.
+For this purpose, \autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo code.
+Then, in the following \autoref{sec:creation_of_a_negative_triple_set} to \ref{sec:discriminator}, the individual components and classes that provide the functionalities for the training are presented.
+At the end of this chapter hyperparameter optimization is described in \autoref{sec:hyperparameter_optimization} and configurations to run training on $PC^2$ is reported in \autoref{sec:processing_on_pc2}.
 
 
+\input{content/chapters/04_implementation/sections/01_algorithm}
+
+\input{content/chapters/04_implementation/sections/02_creation_of_neg}
+
+\input{content/chapters/04_implementation/sections/03_generator}
+
+\input{content/chapters/04_implementation/sections/04_classification}
+
+\input{content/chapters/04_implementation/sections/05_uncertainty_sampling}
+
+\input{content/chapters/04_implementation/sections/06_discriminator}
+
+\input{content/chapters/04_implementation/sections/07_hyperparameter_optimization}
+
+\input{content/chapters/04_implementation/sections/08_processing_on_pc2}
