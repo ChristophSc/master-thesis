@@ -1,0 +1,40 @@
+\begin{table}[h]
+    \centering
+    \begin{tabular}{llllll}
+        \toprule
+        
+        \textbf{Tail entities}
+        & \textbf{$t_1$} & \textbf{$t_2$} & \textbf{$t_3$} & \textbf{$t_4$} & \textbf{$t_5$} \\
+         
+        & Florida
+        & China
+        & BarackObama
+        & StarTrek
+        & Google  \\
+
+        \midrule
+        
+        \textbf{Generator scores}
+        & -5.916 
+        & -2.249  
+        & 3.719 
+        & -0.761 
+        & -6.942 \\
+        
+         \midrule
+        
+        \textbf{Probabilities}
+        & 1.05\%
+        & 0.25\% 
+        & 98.62\%  
+        & 0.01\% 
+        & 0.07\%
+        \\
+        \bottomrule
+    \end{tabular}
+    \caption{Example: For a given positive triple $(h,r,t)$ five different negative triples were created by replacing the tail entities to obtain negative triple set 
+    $Neg = \{(h,r,t_i')\}$ for $i \in [1,5]$.
+    For all negative triples a score $s_i$ in calculated by generator G scoring function $s_G$: $s_G(h,r,t_i') = s_i$.
+    Therefore, tail entities $t_i$ for negative triples $(h_i, r_i, t_i)$ with $i \in [0,5]$ given by the generator model G with scoring function $s_G$ }
+\label{tab:generator_scores}
+\end{table}
