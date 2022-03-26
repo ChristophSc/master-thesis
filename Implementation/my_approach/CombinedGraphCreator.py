@@ -94,7 +94,7 @@ class CombinedGraphCreator():
       if self.sampling_type == "uncertainty":
         dir = path.join(dir, self.uncertainty_sampling_type, self.uncertainty_measure)
       dir = path.join(dir, self.dataset)
-      filename = self.train_type + '_' + self.sampling_type.replace('/', '_') + '_' + self.dataset + '_' 
+      filename = self.sampling_type.replace('/', '_') + '_' + self.dataset + '_' 
 
     
     
@@ -103,7 +103,7 @@ class CombinedGraphCreator():
                       y_label = "MRR").savefig(path.join(dir, filename + 'mrrs'))
     self.create_figure(title = self.dataset.upper() + " - Validation H@10 ", 
                       logged_values = logged_hits10s, 
-                      y_label ="H@10").savefig(path.join(dir,filename + 'hit10s'))
+                      y_label ="H@10").savefig(path.join(dir,filename + 'hit10'))
     self.create_figure(title = self.dataset.upper() + " - Training Losses ", 
                       logged_values = logged_losses, 
                       y_label ="Losses").savefig(path.join(dir, filename + 'losses'))
@@ -111,7 +111,7 @@ class CombinedGraphCreator():
     if self.train_type != "pretrain":
       self.create_figure(title = self.dataset.upper() + " - Training Rewards ", 
                         logged_values = logged_rewards, 
-                        y_label ="Rewards").savefig(path.join(dir,filename + 'rewards'))
+                        y_label ="Rewards").savefig(path.join(dir,filename + 'rew'))
     print("Successfully created figures in " + dir)
   
   def create_compare_graph(self):
@@ -143,10 +143,10 @@ datasets = ["umls", "wn18rr", "wn18", "fb15k237"]
 gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
-pretraining_cases = ["pretrained", "not_pretrained"]  # "not_pretrained"
-sampling_types = ["random", "uncertainty"]
-uncertainty_sampling_types = ["max", "max_distribution"] # "max_distribution"
-uncertainty_measures = ["entropy"] # 
+pretraining_cases = [ "not_pretrained"]  # "not_pretrained"
+sampling_types = ["uncertainty"]
+uncertainty_sampling_types = ["max_distribution"] # "max_distribution"
+uncertainty_measures = ["confidence_ratio"] # "entropy", "least_confidence", "confidence_margin", "confidence_ratio"] # 
 
 
 for dataset in datasets:
