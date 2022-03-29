@@ -1,55 +1,29 @@
 \subsection{UMLS Dataset}
 
-\subsubsection{Uncertainty Sampling Max}
+\subsubsection{Uncertainty Sampling Max vs.Uncertainty Sampling Distribution}
 
 \begin{figure}
     \centering
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_losses.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_rewards.png}
-    \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_mrrs.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_hit10s.png}
-    \end{minipage}%
-    \caption{Adversarial training without Pretraining on \umls dataset. 
-    Negative Triples are sampled by Uncertainty Max.
-    Shown are the training losses and rewards and validation H@10 and MRRs for 5000 epochs.}
-    \label{fig:advtrain_umls_not_pretrained_uncertainty_max}
-\end{figure}
-
-\subsubsection{Uncertainty Sampling Distribution}
-
-\begin{figure}
-    \centering
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/gan_train_uncertainty_umls_losses.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
-      \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/gan_train_uncertainty_umls_rewards.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/gan_train_uncertainty_umls_mrrs.png}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/gan_train_uncertainty_umls_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_hit10s.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/gan_train_uncertainty_umls_hit10s.png}
     \end{minipage}%
-    \caption{Adversarial training without Pretraining on \umls dataset. 
-    Negative Triples are sampled by Uncertainty Distribution.
-    Shown are the training losses and rewards and validation H\@10 and MRRs for 5000 epochs.}
-    \label{fig:advtrain_not_pretrained_umls_pretrained}
+    \caption{Adversarial training on \umls dataset. 
+    Left Figures shows Sampling Negative triples with Uncertainty Max, Right Figures shows Sampling by Uncertainty Distribution.
+    Shown are validation H@10 and MRRs for 5000 epochs.}
+    \label{fig:advtrain_umls_not_pretrained_uncertainty_max}
 \end{figure}
 
 

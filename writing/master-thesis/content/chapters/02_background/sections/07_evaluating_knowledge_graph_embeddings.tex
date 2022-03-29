@@ -1,31 +1,27 @@
 \section{Evaluating Knowledge Graph Embeddings} 
 \label{sec:evaluating_knowledge_graph_embeddings}
 
-The most common Evaluation protocol for is the ranking procedure as in \cite{TransE}.
-At first, the head of each triplet in the test data is replaced by each other entity from the \ac{KG}.
-Subsequently, all scores of those corrupted triplets are computed and sorted depending on of a high or low score indicates a higher probability of the triplet to be true.
-Finally, the rank of the correct entity is stored.
-This process is repeated for the tail entities as well.
-The rank can then be used for the following most commonly used metrics to evaluate the accuracy of the model \cite{kotnis2017analysis}:
-\begin{itemize}
-    \item 
-    \ac{MRR} which is defined as
-    \begin{equation}
-        MRR = \frac{1}{N} \sum_{i=1}^{N}\frac{1}{rank_i}
-    \end{equation}
-    computes the average of the reciprocal ranks \cite{zhang2021efficient}
-    
-    \item 
-    hits@k which calculates the percentage of appearance in the top-10 ranking \cite{zhang2021efficient}.
-    \begin{equation}
-        hits@K = \frac{|\{i | rank_i < K\}|}{N}
-    \end{equation}
-    where $rank_i$ is the rank of the positive instance $i$ predicted by a model with respect to the negative examples.
-    Usually $K \in \{1, 3, 5, 10\}$.
-\end{itemize}
-Since in many \ac{KGE} models either the head or the tail entity is randomly replaced by other entities of the KG, these corrupted triples may be true facts.
+The most common evaluation protocol for \acp{KGE} is a form of question answering and called \textit{entity ranking} \cite{Ruffinelli2020You}.
+After separating available data into training, validation and test sets, for a given test triple $(i,k,j)$ the task is to determine missing entities j and i.
+In the sense of question answering we find the missing tail entity $(i,k,?)$ as well as the missing head entity $(?,k,j)$.
+For this purpose, potential triples are ranked 
+by their model score $s(i, k, j)$ in descending order, which is a collection of all pseudo-negative object scores and defined as
+$$\{ s(i, k, j') : j' \in \entities \text{ and } (i, k, j') \text{ does not occur in training, validation, or test data}\}$$
+Since in many \ac{KGE} models either the head or the tail entity is randomly replaced by other entities of the \ac{KG}, these corrupted triples may be true facts.
 For this reason, many approaches distinguish between \textit{raw} and \textit{filtered}, where for corrupted triples it is looked whether these occur in the train, test or validation set \cite{TransE}.
-Therefore, true corrupted triples are removed from the list before they are scored (except the test triplet of interest) and the collection of all pseudo-negative object scores in filtered setting can be defined as \cite{Ruffinelli2020You}:
-$$
-\{s(i,k,j'): j' \in \entities \text{ and $(i,k,j')$ does not occur in training, validation, or test data}\}
-$$
+Therefore, true corrupted triples are removed from the list before they are scored (except the test triplet of interest) and the collection of all pseudo-negative object scores in a filtered settings \cite{Ruffinelli2020You}.
+
+Therefore, we obtain the filtered rank $rank(j|i, k)$ of object j and given head entity i and relation k, and $rank(i|k, j)$ for object i and given relation k and tail entity j.
+Subsequently, metrics like the \ac{MRR} or the average HITS@k are computed.
+There are defined as follows \cite{Ruffinelli2020You}:
+\begin{equation}
+    MRR = \frac{1}{2 |\mathcal{K}^{test}|} \sum_{(i,k,j) \in  \mathcal{K}^{test}} \left( \frac{1}{rank(i |k,j)} + \frac{1}{rank(j|i,k)} \right)
+\end{equation}
+    
+\begin{equation}
+    Hits@K = \frac{1}{2|\mathcal{K}^{test}|} \sum_{(i,k,j) \in  \mathcal{K}^{test}} \left( \mathds{1} (rank(i |k,j) \leq K + \mathds{1}  (rank(j|i,k) \leq K \right)
+\end{equation}
+where $\mathcal{K}^{test}$ is the set of test triples and indicator $\mathds{1}(E)$ is 1 if condition E is true, else 0.
+
+
+

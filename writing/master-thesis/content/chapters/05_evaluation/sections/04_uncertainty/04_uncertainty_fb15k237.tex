@@ -1,0 +1,28 @@
+\subsection{FB15k237 Dataset}
+
+\subsubsection{Random Sampling vs Best Uncertainty Sampling}
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/gan_train_random_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/gan_train_uncertainty_fb15k237_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/gan_train_random_fb15k237_hit10s.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/gan_train_uncertainty_fb15k237_hit10s.png}
+    \end{minipage}%
+    \caption{Adversarial training on \textsc{FB15k237} dataset. 
+    Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
+    Shown are validation H@10 and MRRs for 5000 epochs.}
+    \label{fig:advtrain_fb15k237_random_vs_uncertainty}
+\end{figure}

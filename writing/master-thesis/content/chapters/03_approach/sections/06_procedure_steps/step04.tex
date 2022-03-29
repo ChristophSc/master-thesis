@@ -1,0 +1,62 @@
+\textbf{4. Sampling of One Most Uncertain Negative Triple}\\
+All of these calculates scores from generator are handed to the Uncertainty Sampler to calculate the uncertainty of the model.
+For this, each negative triple in $Neg$ is classified first by assigning a probability $\mathds{P}(y = 1 | (h,r,t)) \forall (h,r,t) \in Neg$ with \autoref{eqn:positive_probability}.
+These probabilities are used to calculate uncertainty scores using function $u(l)$ defined in \autoref{eqn:uncertainty_function}.
+
+
+\input{content/chapters/03_approach/uncertainty_sampling_component}
+
+\textbf{Classifier} \\
+Input: Scores of generator
+scores = logits, which can very low and ver high values
+Output: Probabilities of being true
+
+\textbf{Uncertainty Scorer}  \\
+Input: Positive Probabilities
+Output: uncertainty scores which are between 0 and 1
+0 is not uncertain, 1 is very uncertain
+
+\textbf{Uncertainty Sampler} \\
+input: uncertainty scores
+Output: Either 1) Uncertainty Max with triple with highest uncertainty score or 2) triple sampled by probability distribution based on probability scores
+-> highest uncertainty = highest probability and vice versa
+
+
+
+
+
+
+
+
+
+
+% --------> 
+
+% example 
+% illustrates that sampling the negative triple with maximum uncertainty score results in same triple for all uncertainty measures:
+The different Uncertainty Sampling methods based on the different Uncertainty Metrics can be illustrated by the following example which is depicted in \Autoref{tab:uncertainty_metrics_example_max}.
+\input{content/chapters/03_approach/sections/table_uncertainty_metrics_example_max}
+Suppose we have five different negative triples $l_i = (h_i, r_i, t_i)$ where $i \in [1,5]$.
+At first, for each of them probabilities of being a positive triple is calculated.
+As you can see from the example, $t_4$ has a probability of 0.6207 which is closest to 0.5.
+For each triple the  uncertainty scores are calculated for all uncertainty metrics and the highest score is marked in bold.
+As you can see, although the uncertainty scores are different, $t_4$ receives the highest value for all four uncertainty metrics.
+For this reason, when sampling the triple with maximum uncertainty score in a binary classification, the same triple is chosen for all metrics.
+
+On the other hand, sampling can be done using a probability distribution based on the uncertainty scores.
+In the following we refer to this Uncertainty Sampling Method as \textbf{Uncertainty Sampling Distribution}.
+By normalizing the Least Confident function, this results in an equal distribution only for this and Margin of Confidence.    
+Due to the stronger drop in the direction of $\mathds{P}(y = 1 | (h,r,t)) = 0$ and $\mathds{P}(y = 1 | (h,r,t)) = 1$ respectively, this causes an increase of the sampling probability of triples close to an uncertainty score of 1 and vice versa.
+Therefore, negative triples with a high probability of being a positive triple are assigned a low uncertainty score according to this principle.
+This also reduces the probability that false negative triples in the negative triple set $Neg$ will be sampled.
+Accordingly, it is possible to generate a larger set than twenty negative triples in the negative triple set $Neg$.\\
+An example is depicted in \autoref{fig:uncertainty_metrics_example_distribution}.
+\input{content/chapters/03_approach/sections/table_uncertainty_metrics_example_distribution}
+For all different metrics $t_4$ is still the most probable one to be sampled, but the uncertainty sampling metrics differ in their probability to sample $t_4$.
+E.g. while based on confidence ratio, $t_4$ is sampled with a probability of 31.39\% it is only sampled with probability of 23.71\% for entropy uncertainty metrics.
+The more negative triples $t_i$ exist, the more these sampling probabilities differ.
+
+
+
+
+

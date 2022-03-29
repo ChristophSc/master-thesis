@@ -1,0 +1,28 @@
+\subsection{WN18 Dataset}
+
+\subsubsection{Random Sampling vs Best Uncertainty Sampling}
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18/gan_train_random_wn18_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/gan_train_uncertainty_wn18_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18/gan_train_random_wn18_hit10s.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/gan_train_uncertainty_wn18_hit10s.png}
+    \end{minipage}%
+    \caption{Adversarial training on \textsc{WN18} dataset. 
+    Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
+    Shown are validation H@10 and MRRs for 5000 epochs.}
+    \label{fig:advtrain_wn18_random_vs_uncertainty}
+\end{figure}

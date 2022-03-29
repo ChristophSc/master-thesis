@@ -26,21 +26,27 @@ They provide different strategies to obtain informative instances from the unlab
 
 In Uncertainty Sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of the unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$.
 Subsequently, the instance with the highest score will be sampled.
-Popular examples of measures for utility score include
-\begin{itemize}
-    \item the entropy:
-     $$s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}$$
-
-    \item the least confidence:
-    $$s(\theta, x) = 1 - \max_{y \in \mathcal{Y}}{p_{\theta}(y | x)}$$
-    
-    \item the smallest margin:
-    $$s(\theta, x) = p_{\theta}(y_m | x) - p_{\theta}(y_n|x)$$
-    where
-    $y_m = \argmax_{y \in \mathcal{Y}} p_{\theta}(y | x)$ 
-    and 
-    $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$
-\end{itemize}
+Popular examples of measures for utility score include \cite{human-in-the-loop}
+\begin{equation}
+    \text{Entropy-based:}\hspace{15mm}
+     s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}
+\end{equation}
+\begin{equation}
+    \text{Least confidence:}\hspace{27mm}
+     s(\theta, x) = 1 - \max_{y \in \mathcal{Y}}{p_{\theta}(y | x)}
+\end{equation}
+\begin{equation}
+    \text{Margin of confidence:}\hspace{12mm}
+    s(\theta, x) = p_{\theta}(y_m | x) - p_{\theta}(y_n|x)
+\end{equation}
+\begin{equation}
+    \text{Ratio of confidence:}\hspace{33mm}
+    s(\theta, x) = \frac{p_{\theta}(y_m | x)}{p_{\theta}(y_n|x)}
+\end{equation}
+where
+$y_m = \argmax_{y \in \mathcal{Y}} p_{\theta}(y | x)$ 
+and 
+$y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$.
 Following three different frameworks for measuring the  uncertainty of a learner can be separated \cite{nguyen2021howtomeasure}.
 While the first one has been specifically developed for the purpose of active learning, the others are more general approaches for machine learning \cite{nguyen2021howtomeasure}.
 

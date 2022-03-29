@@ -1,49 +1,66 @@
 \section{Procedure of the Adversarial Training with Sampling by Uncertainty}
 \label{sec:procedure}
+
 In the original \kbgan approach two embedding models are available in form of the generator and discriminator.
 Therefore, we could either sample by the uncertainty of the generator or the discriminator embedding model.
-In \kbgan approach the negative triple set Ne is created before they are given to the generator.
+In \kbgan approach the negative triple set $Neg$ is created before they are given to the generator.
 Subsequently they are sampled by probability distribution and given to discriminator.
-Therefore, since it corresponds to the original course, we choose the uncertainty in the prediction of the generator and the original sampling by probabilities calculated by the scores of the generator is replaced by sampling from uncertainty (see \autoref{fig:uncertainty_sampling_architecture}).
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.90\textwidth]{figures/architecture.png}
-  \caption{Uncertainty Sampling replaces the original Random Sampling in \ac{KBGAN}. 
-  New Uncertainty Sampling component is highlighted in green color.}
-  \label{fig:uncertainty_sampling_architecture}
-\end{figure*}
-Accordingly, the causes a change in the adversarial learning procedure.
-The input of the algorithm of our approach is like in original \ac{KBGAN} a pre-trained generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$ and a pre-trained discriminator D with parameters $\theta_D$ and score function $f_D(h,r,t)$.
-The training process can be described in the following steps:
-\begin{enumerate}
-    \item For each epoch in the training process a set of negative triples is created.
-    This set, which is defined by $Neg(h,r,t)=\{(h_i',r,t_i')\}_{i=1\dots N_s}$, is created by uniformly randomly sampling $N_s$ negative triples by replacing head $h$ or tail entity $t$ for given positive triple $(h, r, t)$.
-    
-    \item 
-    It receives all negative triples from $Neg$ set and the pretrained model calculates a score with score function $f_G$ for each of these negative triples.
-    Based on the calculated score, negative triples can be distinguished from positive ones. Since the generator is a Tensor Factorization-Based Model, a higher score represents a higher likelihood to be a positive triple.
-    
-    \item 
-    Based on the pretrained generator model, scores are calculated in the generator with scoring function $f_G$ for each negative triple $(h',r,t') \in Neg$.
-    
-    \item 
-    All of these calculates scores from generator are handed to the Uncertainty Sampler to calculate the uncertainty of the model.
-    For this, each negative triple in $Neg$ is classified first by assigning a probability $\mathds{P}(y = 1 | (h,r,t)) \forall (h,r,t) \in Neg$ with \autoref{eqn:positive_probability}.
-    These probabilities are used to calculate uncertainty scores using function $u(l)$ defined in \autoref{eqn:uncertainty_function}.
+Therefore, since it corresponds to the original course, we choose the uncertainty in the prediction of the generator and the original sampling by probabilities calculated by the scores of the generator is replaced by sampling from uncertainty.
+The correspondingly modified architecture and the sequence of the sampling process is shown in \Autoref{fig:uncertainty_sampling_architecture}.
+\input{content/chapters/03_approach/uncertainty_samping_architecture}
+The changed elements are marked in green.
+Accordingly, these elements change the adversarial learning procedure.
+As in the original \kbgan our approach includes two components of a generator and a discriminator which are \ac{KGE} models that can be either pre-trained or not.
+In \Autoref{fig:uncertainty_sampling_architecture} steps 1 to 8 are marked which will be described in the following 
+The training process can be described in the following steps
+which are described in more detail below.
+To make the difference between the original model and our approach clear, we will use an example to explain this process.
 
-    \item Subsequently, negative triples are sampled according to the calculated uncertainty scores, either the one with maximum uncertainty score or its distribution 
-    and given to the discriminator.
-    
-    \item 
-    From this step on, everything is the same as the original \ac{KBGAN} approach:
-    The generated negative triple $(h',r,t')$ as well as the positive triple $(h, r, t)$ are sent to the discriminator.
-    
-    \item 
-    The discriminator distinguishes both triples by given scoring function $f_D$, which is usually a translation-based \ac{KGE} model like \textsc{TransE} or \textsc{TransD}.
-    
-    \item 
-    The reward defined by $r = - f_D(h',r,t')$ of the current negative triple is calculated and returned to the Generator and the next training iteration begins.
-\end{enumerate}
-These adversarial training steps are repeated until convergence, such that the generator improves the quality of sampled negative triples and discriminator improves embedding over time.
+\input{content/chapters/03_approach/sections/06_procedure_steps/step01}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step02}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step03}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step04}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step05}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step06}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step07}
+
+\input{content/chapters/03_approach/sections/06_procedure_steps/step08}
+
+These adversarial training steps are repeated until determined number of epochs is reached, such that the generator improves the quality of sampled negative triples and discriminator improves embedding over time.
 Output of our algorithm is the adversarially trained discriminator and its embedding.
-By incorporating additional information from the graph and Sampling triples by uncertainty that have the most added value to the embedding model, we expect promising results.
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+After we obtain the negative triple set $Neg$ through the Negative Sampling process and scored them by the generator embedding model, also a range of scoring values for negative triples exists. 
+Therefore, for entities within the overlap of positive and negative scoring values, the model is uncertain whether they are positive or negative.
+The original sampling approach of \kbgan assigns now ascending probabilities for increasing scoring values.
+Therefore, it is most likely to sample $t'_3$, because the negative triple $(h,r,t'_3)$ achieves the highest score and, accordingly, has the highest probability to be positive.
+Although, the entities $t'_1$ and $t'_2$ are also very interesting for the model, because a classification based on the achieved scoring values is not easy.
+Consequently, instead of only including negative triple scoring information by differentiating between \textit{good} and \textit{bad} negative triples, the second approach incorporates information of positive triples.
+Thus, this more detailed distinction allows us to avoid sampling false negative triples, since, for example, sampling $t'_3$ can be particularly problematic if it yields an even higher score and should actually be classified as a positive triple because it is a false negative triple.
+
+
+
+
+provides scores which indicate plausibility of a triple.
+According to this plausibility scores a sampling distribution among all negative triples is created. 
+This has the advantage that we only have to calculate the scores of negative triples, but we lose the information about positive triples and their scores.
+Therefore, negative triples are sampled according to their calculated scores with either linearly increasing probability as in \cite{cai2017kbgan} or as in \cite{UKGE} with logistic function or a bounded rectifier.
+To follow the open-world assumption and reduce the probability of sampling false-negatives,
+\kbgan limits the number of negative triples to twenty \cite{cai2017kbgan}.
+
+
+

@@ -1,32 +1,27 @@
 \subsection{WN18 Dataset}
 
-Entropy 
-vs 
-Least Confidence 
-vs 
-Confidence Margin 
-vs 
-Confidence Ration
-
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/wn18/gan_train_uncertainty_wn18_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/gan_train_uncertainty_wn18_mrrs.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/least_confidence/wn18/gan_train_uncertainty_wn18_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/least_confidence/wn18/uncertainty_wn18_mrrs.png}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/confidence_margin/wn18/gan_train_uncertainty_wn18_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_margin/wn18/uncertainty_wn18_mrrs.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/confidence_ratio/wn18/gan_train_uncertainty_wn18_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_ratio/wn18/uncertainty_wn18_mrrs.png}
     \end{minipage}%
-    \caption{}
+    \caption{Evaluation of Adversarial training on \textsc{WN18} dataset. 
+    Figures show validation MRRs for 5000 epochs with Uncertainty Sampling Distribution with different uncertainty metrics.
+    Top left shows entropy, top right least confidence, 
+    bottom left confidence margin and bottom right confidence ratio.}
     \label{fig:advtrain_metrics_wn18}
 \end{figure}
 

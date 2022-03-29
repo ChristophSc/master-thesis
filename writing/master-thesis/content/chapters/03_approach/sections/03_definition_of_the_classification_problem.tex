@@ -1,39 +1,62 @@
 \section{Definition of a Classification Problem}
 \label{sec:definition_of_a_classification_problem}
+
 % uncertainty sampling approaches require a classification problem
 % we can either: 
 % 1) good <-> bad negative triple (like original approach)
 % 2) provide prob of triple to be true 
-Next, since Uncertainty Sampling needs a classification problem, there are two options available for the definition:
-First, like in the original \kbgan approach, we could distinguish between \textit{good} and \textit{bad} negative triples and try to provide the best ones to the discriminator.
-Since the generator of the adversarial training is a tensor factorization-based model, it provides scores which indicate plausibility of a triple.
-According to this plausibility scores a sampling distribution among all negative triples is created. 
-This has the advantage that we only have to calculate the scores of negative triples, but we lose the information about positive triples and their scores.
-Therefore, negative triples are sampled according to their calculated scores with either linearly increasing probability as in \cite{cai2017kbgan} or as in \cite{UKGE} with logistic function or a bounded rectifier.
-To follow the open-world assumption and reduce the probability of sampling false-negatives,
-\kbgan limits the number of negative triples to twenty \cite{cai2017kbgan}.
-
-Another approach is to not only look at the quality of a negative triple, but instead distinguish between negative and positive triples and their scores.
-In contrast to the first option in this one also information about positive triples and their scores is preserved.
-If we define the classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
-Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
-Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, we look for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
-Since this means the triple can be assigned to both the positive and the negative class, 
-the model is uncertain how to classify the triple.
-
-The difference between the two approaches can be explained by the following example and \autoref{fig:uncertainty}, which illustrates scoring values of positive and negative triples and the uncertainty of a model´s prediction.
+Before we come to the calculation of uncertainty and the subsequent sampling, a classification problem must first be defined.
+This definition can be used to determine what the uncertainty of the model is and how it can be calculated.
+To do this, we first look at the example of \Autoref{fig:svm} Uncertainty Sampling in an \ac{SVM} (based on \cite{human-in-the-loop}).
+The figure shows a binary classification of label A and label B in  a two-dimensional space.
+Instances of class A and B are separated as best as possible by a boundary.
+Some of the instances are still unlabelled.
+Now the instances that are most informative for the model and most helpful in defining the boundary between instances of class A and class B are sampled by Uncertainty Sampling.
 \begin{figure*}[t]
   \centering
-    \includegraphics[width=0.75\textwidth]{figures/uncertainty.PNG}
-  \caption{Score range of positive and negative triples.
-  The uncertainty of a model is in the scoring range where the model found scores of both positive and negative triples.}
-  \label{fig:uncertainty}
+    \includegraphics[width=0.75\textwidth]{figures/SVM.pdf}
+  \caption{Example of Uncertainty Sampling in a \ac{SVM} classification. Instances with least distance to linear plane are sampled. Width of boundary is maximized.}
+  \label{fig:svm}
 \end{figure*}
-Suppose we have the positive triple $l_p=(h,r,t)$ (t marked as blue dot) in our KG and some other entities $t^* \in \entities$ (green dots) from positive triples $(h,r,t^*)$ from the \ac{KG} .
-After we obtain the negative triple set $Neg$ through the Negative Sampling process and scored them by the generator embedding model, also a range of scoring values for negative triples exists. 
-Therefore, for entities within the overlap of positive and negative scoring values, the model is uncertain whether they are positive or negative.
-The original sampling approach of \kbgan assigns now ascending probabilities for increasing scoring values.
-Therefore, it is most likely to sample $t'_3$, because the negative triple $(h,r,t'_3)$ achieves the highest score and, accordingly, has the highest probability to be positive.
-Although, the entities $t'_1$ and $t'_2$ are also very interesting for the model, because a classification based on the achieved scoring values is not easy.
-Consequently, instead of only including negative triple scoring information by differentiating between \textit{good} and \textit{bad} negative triples, the second approach incorporates information of positive triples.
-Thus, this more detailed distinction allows us to avoid sampling false negative triples, since, for example, sampling $t'_3$ can be particularly problematic if it yields an even higher score and should actually be classified as a positive triple because it is a false negative triple.
+In contrast to \acp{SVM}, \ac{KGE} models try to find the best possible embedding for a given set of entities and relations.
+According to the scoring function of the model, the embedding should be adjusted in such a way that, in the case of tensor factorisation-based models, true triples achieve the highest possible score and negative triples the lowest possible score.
+So what the boundary between labels in a \ac{SVM} is, is in a way the separation between positive and negative triples in a \ac{KGE}.
+Therefore, an optimal embedding would be able to perfectly distinct between positive and negative triples and semantically connected entities/relations would have a very similar embedding.
+However, since such embedding does not exist, instances, i.e. triples, are close to the decision boundary like in a \acp{SVM} classification problem.
+The goal for \ucgan should also be to set up the classification problem in such a way that our sampling passes  exactly those triples for which the model is unsure whether it is positive or negative.
+If the embedding model is not uncertain about the classification of any triple anymore, it is able to perfectly distinguish between positive and negative triples and, therefore, perfectly embeds all triples of a \ac{KG}.
+
+As previously described, in the original \kbgan model, a set of negative triples is scored and the one with highest score is most likely sampled.
+Thus, if Uncertainty Sampling were used to select instances based on the classification of high and low scores, the sampling of one of the instances would end up in the area shown in \Autoref{fig:badVsGoodApproach}.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/badVsGoodApproach.pdf}
+  \caption{Illustration of the sampled instances by Uncertainty Sampling according to negative scores.
+  Range of negative triple scores is in $[a, b]$ and range of positive triple scores is in  $[c, d]$ with $a,b,c,d \in \mathbb{R}$
+  If uncertainty is only measured by negative triple scores, sampled instanced would be too easy too distinguish them from positive ones.}
+  \label{fig:badVsGoodApproach}
+\end{figure*}
+Since the generator is a tensor factorization based model and their score indicates the plausability of a triple to be true, the range of positive triple scores should be slightly higher than the range of negative scores.
+Nevertheless, since we do not have a perfect embedding model, there is an overlap of positive and negative triple scores.
+As can be seen from \Autoref{fig:badVsGoodApproach}, if the classification is based only on low and high negative triple scores, this would lead to sampling of instances that are easily distinguishable from the model and therefore, less helpful to learn a good embedding.
+For this reason, we need to include information about positive triple scores, so that a classification between positive and negative triples is possible.
+
+
+Instead of comparing only negative triple scores, our classification should distinguish between negative and positive triples and their scores.
+Therefore, including positive triple scoring information would result in sampling triples from a different scoring area illustrated in \Autoref{Fig:positiveVsNegativeApproach}
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.75\textwidth]{figures/positiveVsNegativeApproach.pdf}
+  \caption{Illustration of the sampled instances by Uncertainty Sampling according to negative and positive triple scores.
+  Range of negative triple scores is in $[a, b]$ and range of positive triple scores is in  $[c, d]$ with $a,b,c,d \in \mathbb{R}$
+  Now Uncertainty Sampling measures high uncertainty for triples which are close to positive ones, so which could be either a negative or a positive one.}
+  \label{fig:positiveVsNegativeApproach}
+\end{figure*}
+According to this approach, if we define classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
+Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
+Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, we look for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
+Since this means the triple can be assigned to both the positive and the negative class, the model is uncertain how to classify the triple.
+
+
+
+

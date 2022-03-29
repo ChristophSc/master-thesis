@@ -2,17 +2,14 @@
 \label{ch:approach}
 
 In this chapter our approach of Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty is described.
-At first, in \autoref{sec:idea} the general idea of Sampling by Uncertainty is described and how this idea came about.
-
-\textcolor{red}{TODO: WHEN SECTIONS ARE FINALIZED, ADD DESCRIPTION + REF TO ALL SECTIONS}
-
-\autoref{sec:idea}
-\autoref{sec:selection_of_an_uncertainty_sampling_metric}
-\autoref{sec:definition_of_a_classification_problem}
-\autoref{sec:calculation_of_probabilitie_for_triple_classification}
-\autoref{sec:calculation_of_uncertainty_scores}
-\autoref{sec:procedure}
-\autoref{sec:improving_classification}
+At first, in \Autoref{sec:idea} the general idea of Sampling by Uncertainty is described and how this idea came about.
+First of all, as described in \Autoref{sec:uncertaintysampling}, we have various metrics available for Uncertainty Sampling.
+These are discussed in \Autoref{sec:selection_of_an_uncertainty_sampling_metric} and a suitable metric for our problem is determined.
+Subsequently, to measure uncertainty and sample negative triples a classification problem needs to be defined which takes place in \Autoref{sec:definition_of_a_classification_problem}.
+In \Autoref{sec:calculation_of_probabilitie_for_triple_classification}, different possibilities to calculate the individual probabilities of whether a given triple is positive or negative can be calculated.
+From these probabilities uncertainty scores can be derived to finally sample negative triples by uncertainty (\Autoref{sec:calculation_of_uncertainty_scores}).
+The individual steps are then reflected in the modified procedure of our approach (\Autoref{sec:procedure}).
+At the end of the chapter, various possibilities for improving the classification are listed (\Autoref{sec:improving_classification}).
 
 \input{content/chapters/03_approach/sections/01_idea}
 
