@@ -1,5 +1,33 @@
 \textbf{8. Passing Reward to Discriminator based on Distance of Negative Triple}\\
-The reward defined by $r = - f_D(h',r,t')$ of the current negative triple is calculated and returned to the Generator and the next training iteration begins.
 
-- reward is used for training of Generator
-- 
+
+The reward defined by $r = - f_D(h',r,t')$ of the current negative triple is calculated and returned to the Generator.
+Therefore, it is the negative value of the negative triple distance.
+The negative triple distance calculated is high, if it was easy for the discriminator to recognise the triple as negative one.
+Since our approach is based on a \ac{GAN}, the generator tries to trick the discriminator to pass negative triples that are recognized as positive ones.
+Therefore, the lower the distance of the sampled negative triple calculated by the discriminator, the more likely it is that this was mistaken for a positive triple.
+Therefore, this results in maximizing the reward passed to the generator.
+The objective of the generator is to maximize the following expectation of negative distances \cite{cai2017kbgan}:
+\begin{multline}
+    R_G = \sum_{(h,r,t) \mathcal{T}}{\mathbb{E}[-f_D(h',r,t'|h,r,t)]}\\
+    (h',r,t') \sim p_G(h,r,t|h,r,t) 
+\end{multline}
+while $p_G(h', r, t'|h, r, t)$ is the probability distribution on negative triples.
+
+With simple differentiation the gradient of $R_G$ cannot be found, therefore a special case of Policy Gradient Theorem has to be used \cite{cai2017kbgan}.
+\begin{multline}
+    \nabla_G R_G=\sum_{(h,r,t)\in\mathcal{T}}\mathbb{E}_{(h',r,t')\sim p_G(h',r,t'|h,r,t)}
+    [-f_D(h',r,t')\nabla_G \log p_G(h',r,t'|h,r,t)] \\
+    \simeq \sum_{(h,r,t)\in\mathcal{T}}\frac{1}{N}\sum_{(h_i',r,t_i')\sim p_G(h',r,t'|h,r,t), i=1\dots N} \\
+    [-f_D(h',r,t')\nabla_G \log p_G(h',r,t'|h,r,t)]
+\end{multline}
+With this Theorem, a gradient with respect to the parameters of the discriminator can be used.
+It is from \ac{RL}.
+Therefore, the \textit{agent} is the generator which performs \textit{actions} in form of sampling negative triples to interact with the \textit{environment} which is the discriminator in our case.
+The objective is to improve by maximizing the \textit{reward} $-f_D(h',r,t')$ returned by the environment.
+The actions are determined by the \textit{state}, which are represented as our given positive triple $(h,r,t)$.
+And finally, the actions are performed based on the \textit{policy} which is the probability distribution of negative triples $p_G(h',r,t'|h,r,t)$.
+While in a typical \ac{RL} scenario several actions are performed, in our case in each iteration only one action is performed in form of sampling a negative triple.
+Therefore, it is called one-step \ac{RL}.
+
+

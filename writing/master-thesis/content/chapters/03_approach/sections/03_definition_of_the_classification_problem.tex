@@ -36,7 +36,7 @@ Thus, if Uncertainty Sampling were used to select instances based on the classif
   If uncertainty is only measured by negative triple scores, sampled instanced would be too easy too distinguish them from positive ones.}
   \label{fig:badVsGoodApproach}
 \end{figure*}
-Since the generator is a tensor factorization based model and their score indicates the plausability of a triple to be true, the range of positive triple scores should be slightly higher than the range of negative scores.
+Since the generator is a tensor factorization based model and their score indicates the plausibility of a triple to be true, the range of positive triple scores should be slightly higher than the range of negative scores.
 Nevertheless, since we do not have a perfect embedding model, there is an overlap of positive and negative triple scores.
 As can be seen from \Autoref{fig:badVsGoodApproach}, if the classification is based only on low and high negative triple scores, this would lead to sampling of instances that are easily distinguishable from the model and therefore, less helpful to learn a good embedding.
 For this reason, we need to include information about positive triple scores, so that a classification between positive and negative triples is possible.

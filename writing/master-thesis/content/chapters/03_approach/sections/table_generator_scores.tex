@@ -14,27 +14,33 @@
 
         \midrule
         
-        \textbf{Generator scores for $l_i = (h_i, r_i, t_i)$}
+        \textbf{Generator scores for}
         & -5.916 
         & -2.249  
         & 3.719 
         & -0.761 
         & -6.942 \\
+       
+        
+        \textbf{$l_i = (h_i, r_i, t_i)$}
+         & & & & &  \\
         
          \midrule
         
-        \textbf{Original probabilities of $l_i$ to be sampled}
-        & 1.05\%
+        \textbf{Original sampling}
+         & 1.05\%
         & 0.25\% 
         & 98.62\%  
         & 0.01\% 
-        & 0.07\%
-        \\
+        & 0.07\% \\
+        
+       \textbf{probabilities} 
+       & & &  & &  \\
         \bottomrule
     \end{tabular}
     \caption{Example: For a given positive triple $(h,r,t)$ five different negative triples were created by replacing the tail entities to obtain negative triple set 
     $Neg = \{(h,r,t_i')\}$ for $i \in [1,5]$.
-    For all negative triples a score $s_i$ in calculated by generator G scoring function $s_G$: $s_G(h,r,t_i') = s_i$.
-    Therefore, tail entities $t_i$ for negative triples $(h_i, r_i, t_i)$ with $i \in [0,5]$ given by the generator model G with scoring function $s_G$ }
+    For all negative triples a score $s_i$ in calculated by generator G scoring function $f_G$: $f_G(h_i,r_i,t_i) = f_i$.
+    Therefore, tail entities $t_i$ for negative triples $(h_i, r_i, t_i)$ with $i \in [0,5]$ given by the generator model G with scoring function $f_G$ }
 \label{tab:generator_scores}
 \end{table}

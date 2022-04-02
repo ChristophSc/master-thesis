@@ -3,3 +3,13 @@
 
 
 
+
+
+The adversarial training runs via the \texttt{BaseModel} class depicted in \Autoref{fig:basemodel_classdiagram}.
+This implements the methods \texttt{gen\_step} and \texttt{dis\_step}, which represent an iteration step of the generator and the discriminator respectively.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.95\textwidth]{figures/BaseModel.png}
+  \caption{\ac{UML}-Classdiagram of \texttt{BaseModel} and inherited Models  \texttt{DistMult},  \texttt{ComplEx},  \texttt{TransE} and  \texttt{TransD}}
+  \label{fig:basemodel_classdiagram}
+\end{figure*}

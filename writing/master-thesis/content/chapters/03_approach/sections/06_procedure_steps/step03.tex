@@ -3,22 +3,24 @@
 At this point, the adversarial training between generator and discriminator starts.
 In this training, the negative triples from the set Neg are passed on to the generator model G.
 Since the generator is a tensor factorisation-based model, the score and thus the plausibility of each triple $l$ is calculated with the scoring function $f_G$.
-Therefore, With this step a score $s_i$ for each triple $l_i = (h',r,t') \in Neg$ is calculated.
+Therefore, with this step a score $s_i$ for each triple $l_i = (h',r,t') \in Neg$ is calculated.
+
 In the original \kbgan approach the sampling probabilities are directly calculated from scores and given to the Sampler.
-
-According to 
-.
-Since our approach needs the scores to classify the triples, instead the output of the generator are scores for each negative triple in $Neg$.
-
-
-Softmax Function which is defined as 
+Since score $s_i \in \mathbb{R}$, sampling probabilities are calculated which sum up to 1 for all 
+With the softmax function, the individual negative triples of the set Neg are assigned such sampling probabilities that their sum is 1.
+The softmax Function which is defined as 
 \begin{equation}
     s(x_i) = \frac{x_i}{\sum_{j=1}^{n}{e^{x_j}}}
 \end{equation}
-and therefore, for the original sampling probability $p_i$ to sample negative triple $l_i$ we obtain 
+and therefore, in the  original approach we obtain sampling probability $p_i$ for each negative triple $l_i$:
 \begin{equation}
     p_i = s(f_G(l_i)) = \frac{f_G(l_i)}{\sum_{j=1}^{N_s}{e^{f_G(l_j)}}}
 \end{equation}
-
-\Autoref{fig:generator_scores}.
+Therefore, we obtain high probabilities to sample negative triples with high scores.
+In the example, this results in the values shown in \Autoref{tab:generator_scores}.
 \input{content/chapters/03_approach/sections/table_generator_scores}
+
+Since our approach needs the scores to classify the triples, instead the output of generator G are scores $s_i \in \mathbb{R}$ for each negative triple in $Neg$.
+Therefore, the original Sampling technique is replaced by an Uncertainty Sampler which samples one triple based on the model´s uncertainty.
+
+

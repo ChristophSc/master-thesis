@@ -4,9 +4,13 @@
 
 After explaining our approach, we will now go into more detail about the implementation of \ucgan.
 For this purpose, \autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo code.
-Then, in the following \autoref{sec:creation_of_a_negative_triple_set} to \ref{sec:discriminator}, the individual components and classes that provide the functionalities for the training are presented.
-At the end of this chapter hyperparameter optimization is described in \autoref{sec:hyperparameter_optimization} and configurations to run training on $PC^2$ is reported in \autoref{sec:processing_on_pc2}.
-
+Since some components were already implemented in the original \kbgan approach, in this chapter we focus on the differences between the new \ucgan and the original approach.
+Already implemented components are only discussed to the extent that the adversarial training can be understood.
+We also focus on describing the implementation of Adversarial Training.
+The pre-training takes place separately, but does not differ from the basic training of the original individual models like \distmult, \complex, \transe and \transd.
+Nevertheless, some methods for pre-training can be found in the individual class diagrams.
+Therefore, in \Autoref{sec:creation_of_a_negative_triple_set} to \ref{sec:discriminator}, the individual components and classes that provide the functionalities for the training are presented.
+At the end of this chapter a hyperparameter optimization is described in \Autoref{sec:hyperparameter_optimization} and configurations to run training on $PC^2$ is reported in \Autoref{sec:processing_on_pc2}.
 
 \input{content/chapters/04_implementation/sections/01_algorithm}
 

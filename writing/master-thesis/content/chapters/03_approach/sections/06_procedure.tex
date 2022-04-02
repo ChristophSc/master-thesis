@@ -33,34 +33,7 @@ To make the difference between the original model and our approach clear, we wil
 \input{content/chapters/03_approach/sections/06_procedure_steps/step08}
 
 These adversarial training steps are repeated until determined number of epochs is reached, such that the generator improves the quality of sampled negative triples and discriminator improves embedding over time.
-Output of our algorithm is the adversarially trained discriminator and its embedding.
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-After we obtain the negative triple set $Neg$ through the Negative Sampling process and scored them by the generator embedding model, also a range of scoring values for negative triples exists. 
-Therefore, for entities within the overlap of positive and negative scoring values, the model is uncertain whether they are positive or negative.
-The original sampling approach of \kbgan assigns now ascending probabilities for increasing scoring values.
-Therefore, it is most likely to sample $t'_3$, because the negative triple $(h,r,t'_3)$ achieves the highest score and, accordingly, has the highest probability to be positive.
-Although, the entities $t'_1$ and $t'_2$ are also very interesting for the model, because a classification based on the achieved scoring values is not easy.
-Consequently, instead of only including negative triple scoring information by differentiating between \textit{good} and \textit{bad} negative triples, the second approach incorporates information of positive triples.
-Thus, this more detailed distinction allows us to avoid sampling false negative triples, since, for example, sampling $t'_3$ can be particularly problematic if it yields an even higher score and should actually be classified as a positive triple because it is a false negative triple.
-
-
-
-
-provides scores which indicate plausibility of a triple.
-According to this plausibility scores a sampling distribution among all negative triples is created. 
-This has the advantage that we only have to calculate the scores of negative triples, but we lose the information about positive triples and their scores.
-Therefore, negative triples are sampled according to their calculated scores with either linearly increasing probability as in \cite{cai2017kbgan} or as in \cite{UKGE} with logistic function or a bounded rectifier.
-To follow the open-world assumption and reduce the probability of sampling false-negatives,
-\kbgan limits the number of negative triples to twenty \cite{cai2017kbgan}.
+Output of our algorithm is the adversarial trained discriminator and its embedding.
 
 
 

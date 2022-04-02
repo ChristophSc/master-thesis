@@ -20,7 +20,7 @@ Triplet Fact-Based Representation Learning Models are separated into three group
     \end{figure*}
     Therefore, head entity $h$, tail entity $t$ and relation $r$ are in the same vector space and the model tries to create the embeddings so that $h+r$ map to $t$ as closely as possible, which leads to the scoring function
     \begin{equation}
-        f_r(h,t) = || h + r - t ||_{l_1, l_2}
+        f_r(h,r,t) = || h + r - t ||_{l_1, l_2}
         \label{eq:transescoringfunction}
     \end{equation}
     \transd on the other hand works with two vectors for each entity and relation.

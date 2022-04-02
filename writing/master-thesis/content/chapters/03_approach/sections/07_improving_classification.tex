@@ -1,6 +1,7 @@
 \section{Improving Classification by Adding More Information} 
 \label{sec:improving_classification}
 
+\textbf{Providing further information of the graph}\\
 Until now, only information of the scoring function of the generator is used for the classification of the triple as either positive or negative.
 However, since this only contains implicit information about, for example, the structure of the \ac{KG} and its entities and relations, the idea is to supplement this classification with further, explicit information.
 Therefore, the idea is to include additional functions for classification in the form of the following functions: 
@@ -62,9 +63,13 @@ However, these components of the function can also be replaced or extended by fu
 For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling or Near miss Sampling can be considered \cite{kotnis2017analysis}.
 
 
+\textbf{Filtered setting}\\
 
+Another idea was to remove the false negative triples from the negative triple set Neg by filtering all triples that appear in the KG after creating Neg.
+We hoped that this would lead to a more precise definition of the scoring ranges for negative and positive triples and thus make the classification based on them more accurate.
+However, it has turned out that this setting takes a very long time and is also detrimental to the model.
+It turns out that some noise in the data helps and contributes to label smoothing.
+Therefore, this setting was removed again, so that false negative triples can still appear in the negative triple set neg, but this does not lead to a deterioration of the training and the model.
 
-\textcolor{red}{TODO: filtered negatives which appear in the KG}\\
-
-\textcolor{red}{TODO: add new classdiagram with filtering component after creation of Neg}
+\textcolor{red}{CITE PAPERS}\\
 
