@@ -29,9 +29,10 @@ class CombinedGraphCreator():
     plt.xlabel("Epochs", fontsize=14)
     plt.ylabel(y_label, fontsize=14)
     for model_name in logged_values.keys():
-      x =  int(self.n_epochs / (len(logged_values[model_name])-1))
+      x =  50 # int(self.n_epochs / (len(logged_values[model_name])-1))
       n_points = [x for x in range(0, self.n_epochs+1, x)]
-      plt.plot(n_points, logged_values[model_name], label = model_name)
+      logged_list = logged_values[model_name][:21]
+      plt.plot(n_points, logged_list, label = model_name)
     plt.legend()
     
     plt.grid(True)  
@@ -53,13 +54,13 @@ class CombinedGraphCreator():
       model_name = None
       if self.train_type == "pretrain":
         dir = path.join(dir, self.train_type,  self.dataset, models.lower())
-        model_name = models.lower()
+        model_name = models # .lower()
       elif self.train_type == "gan_train":
         dir = path.join(dir, self.train_type, self.pretrained, self.sampling_type)
         if self.sampling_type == "uncertainty":
           dir = path.join(dir, self.uncertainty_sampling_type, self.uncertainty_measure)
         dir = path.join(dir, self.dataset, models[0].lower() +"_"+ models[1].lower())
-        model_name = models[0].lower() + " + " + models[1].lower()
+        model_name = models[0] + " + " + models[1]
         
       mrrs, hits10s, rewards, losses = [], [], [], []      
       try:
@@ -144,16 +145,16 @@ gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
 pretraining_cases = [ "not_pretrained"]  # "not_pretrained"
-sampling_types = ["uncertainty"]
+sampling_types = ["random", "uncertainty"]
 uncertainty_sampling_types = ["max_distribution"] # "max_distribution"
-uncertainty_measures = ["confidence_ratio"] # "entropy", "least_confidence", "confidence_margin", "confidence_ratio"] # 
+uncertainty_measures = ["entropy", "least_confidence", "confidence_margin", "confidence_ratio"] # 
 
 
 for dataset in datasets:
-    CombinedGraphCreator(dataset = dataset, 
-                         models = all_models, 
-                         n_epochs= 1000,
-                         train_type = "pretrain").create_combined_graph()
+    # CombinedGraphCreator(dataset = dataset, 
+    #                      models = all_models, 
+    #                      n_epochs= 1000,
+    #                      train_type = "pretrain").create_combined_graph()
     model_pairs =[ [gen_model, dis_model] for gen_model in gen_models for dis_model in dis_models]
     
     for pretrained in pretraining_cases:      
@@ -162,7 +163,7 @@ for dataset in datasets:
           for uncertainty_measure in uncertainty_measures:
               CombinedGraphCreator(dataset = dataset, 
                                   models = model_pairs, 
-                                  n_epochs= 5000,
+                                  n_epochs= 1000,
                                   train_type = "gan_train", 
                                   pretrained = pretrained,
                                   sampling_type = sampling_type,

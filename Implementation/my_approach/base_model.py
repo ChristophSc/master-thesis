@@ -8,7 +8,7 @@ from metrics import mrr_mr_hitk
 from data_utils import batch_by_size
 import logging
 
-from random_sampler import RandomSampler
+from original_sampler import OriginalSampler
 from uncertainty_sampler import *
 
 class BaseModule(nn.Module):
@@ -100,7 +100,7 @@ class BaseModel(object):
             self.mdl.load_state_dict(torch.load(filename, map_location=lambda storage, location: storage))
             
             
-    def gen_step(self, head_rel_count, rel_tail_count, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=RandomSampler(), min_score = None, max_score = None):
+    def gen_step(self, head, rel, tail, n_sample=1, temperature=1.0, train=True, sampler=OriginalSampler(), min_score = None, max_score = None):
         """One learning step of the Generator component in Adversarial Learning Process.
         
         Args:
@@ -129,7 +129,7 @@ class BaseModel(object):
         logits = self.mdl.prob_logit(head_var, rel_var, tail_var) / temperature    
         
         # call sampler to retrieve n_sample from negative triple set Neg
-        row_idx, sample_idx = sampler.sample(head_rel_count, rel_tail_count, head, rel, tail, n_sample, logits, min_score, max_score)
+        row_idx, sample_idx = sampler.sample(n, n_sample, logits, min_score, max_score)
     
         # get head and tail of negative triple by sampled index
         sample_heads = head[row_idx, sample_idx.data.cpu()]

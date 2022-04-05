@@ -1,5 +1,5 @@
-from uncertainty_sampler import UncertaintySampler_Max, UncertaintySampler_Distribution
-from random_sampler import RandomSampler
+from uncertainty_sampler import UncertaintySampler, UncertaintySampler_Max, UncertaintySampler_Softmax
+from original_sampler import ConfidenceSampler, OriginalSampler
 from config import config
 
 def load_sampler():
@@ -9,8 +9,10 @@ def load_sampler():
     sampler = None
     if sample_type == "uncertainty_max":
         sampler = UncertaintySampler_Max(measure_type)
-    elif sample_type == "uncertainty_distribution":
-        sampler = UncertaintySampler_Distribution(measure_type)
-    elif sample_type == "random":
-        sampler = RandomSampler()
+    elif sample_type == "uncertainty_softmax":
+        sampler = UncertaintySampler_Softmax(measure_type)
+    elif sample_type == "original":
+        sampler = OriginalSampler()
+    elif sample_type == "confidence":
+        sampler = ConfidenceSampler()
     return sampler

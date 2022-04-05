@@ -1,6 +1,5 @@
-class BaseSampler(object):
-  def __init__(self):
-    pass
-  
-  def sample(src, rel, dst, n_sample, *args):
-    raise NotImplementedError()
+import torch 
+
+class BaseSampler:  
+  def sample(self, n, n_sample, logits, min_score, max_score): 
+    return NotImplementedError

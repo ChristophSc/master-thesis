@@ -15,10 +15,9 @@ from compl_ex import ComplEx
 from logger_init import logger_init
 from select_gpu import select_gpu
 from corrupter import BernCorrupterMulti
-from random_sampler import RandomSampler
+from original_sampler import OriginalSampler
 from graph_utils import create_figure
 from base_model import BaseModel
-from random_sampler import RandomSampler
 from uncertainty_sampler import *
 from TrainingProcessLogger import TrainingProcessLogger
 from time import time
@@ -112,7 +111,7 @@ for epoch in range(n_epoch):
         tail_cand = tail_cand.cuda()
 
     # get statistics
-    if type(sampler) == RandomSampler:
+    if type(sampler) == OriginalSampler:
         pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None
     else:
         # if neg_heads_filt == None:
@@ -133,7 +132,7 @@ for epoch in range(n_epoch):
         # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
         # send corrupted triples from Neg of size "n_batch" to generator
-        gen_step = gen.gen_step(head_rel_count, rel_tail_count, h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = neg_min_score, max_score = pos_max_score)
+        gen_step = gen.gen_step(h_neg, r_neg, t_neg, n_sample = 1, temperature=config().adv.temperature, train = True, sampler = sampler, min_score = neg_min_score, max_score = pos_max_score)
         # randomly sample from probability distribution of current negative triple set 
         head_smpl, tail_smpl = next(gen_step)
         # send sampled negative triple "tail_smpl" and its ground truth triple "head_smpl" to discriminator 
