@@ -9,21 +9,17 @@ Already implemented components are only discussed to the extent that the adversa
 We also focus on describing the implementation of Adversarial Training.
 The pre-training takes place separately, but does not differ from the basic training of the original individual models like \distmult, \complex, \transe and \transd.
 Nevertheless, some methods for pre-training can be found in the individual class diagrams.
-Therefore, in \Autoref{sec:creation_of_a_negative_triple_set} to \ref{sec:discriminator}, the individual components and classes that provide the functionalities for the training are presented.
+\Autoref{sec:adv_training}  first introduces the most important classes and methods for the functionality of Adversarial Training.
+This also includes information on how to start the training and how and which configurations can be made.
+In the following \Autoref{sec:sampling_by_uncertainty}, the new changes in the implementation for the new sampling method based on uncertainty are presented.
 At the end of this chapter a hyperparameter optimization is described in \Autoref{sec:hyperparameter_optimization} and configurations to run training on $PC^2$ is reported in \Autoref{sec:processing_on_pc2}.
 
 \input{content/chapters/04_implementation/sections/01_algorithm}
 
-\input{content/chapters/04_implementation/sections/02_creation_of_neg}
+\input{content/chapters/04_implementation/sections/02_adv_training}
 
-\input{content/chapters/04_implementation/sections/03_generator}
+\input{content/chapters/04_implementation/sections/03_uncertainty_sampling}
 
-\input{content/chapters/04_implementation/sections/04_classification}
+\input{content/chapters/04_implementation/sections/04_hyperparameter_optimization}
 
-\input{content/chapters/04_implementation/sections/05_uncertainty_sampling}
-
-\input{content/chapters/04_implementation/sections/06_discriminator}
-
-\input{content/chapters/04_implementation/sections/07_hyperparameter_optimization}
-
-\input{content/chapters/04_implementation/sections/08_processing_on_pc2}
+\input{content/chapters/04_implementation/sections/05_processing_on_pc2}

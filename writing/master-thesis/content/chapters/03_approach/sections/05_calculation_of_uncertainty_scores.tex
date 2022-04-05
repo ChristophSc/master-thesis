@@ -36,15 +36,38 @@ For this transformation function we have several uncertainty metrics at our disp
 
 % describe sampling methods
 % 1) always sample maximum uncertainty score
-% 2) sample according to distribution
+
 Based on these distribution functions, two different \textbf{Uncertainty Sampling Methods} can be derived.
 On the one hand, the triple with the maximum uncertainty score can always be sampled, which we refer to in the following as \textbf{Uncertainty Sampling Max}.
-As can be seen from the \autoref{fig:sampling_distributions} all metrics have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1, the closest triple is assigned the highest uncertainty score and is therefore sampled.
-Therefore, always sampling the triple with maximum uncertainty results in sampling the same triple for all uncertainty metrics \cite{nguyen2021howtomeasure, human-in-the-loop}.
+As can be seen from the \autoref{fig:sampling_distributions} all metrics have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1, the closest triple is assigned the highest uncertainty score.
+If only one negative triple reaches this maximum uncertainty score, it will be sampled.
+If there are several triples with a maximum uncertainty score, one of the triples is sampled using a uniform distribution.
+This results in the definition of Uncertainty Sampling Max with the following sampling probabilities:
+\begin{equation} 
+    p_{sampled}(h, r, t)=
+    \begin{cases}
+         0 \ \ \ \ \ \  \ \ \ \ \ \ \ \  \ \ 
+         \text{if}\ \ \ u(h, r, t) < \max_{(h,r,t) \in Neg}(u(h, r, t)) 
+         \\ \\
+        \frac{1}{|\{(h,r,t) | u(h,r,t) = \max_{(h,r,t) \in Neg}(u(h, r, t)\}|} 
+        \ \ \ \ \
+        \text{else} 
+         \\
+    \end{cases}
+     \label{eq:uncertainty_max}
+\end{equation}
 
+% 2) sample according to distribution
 On the other hand triples can be sampled according to a probability distribution based on uncertainty scores.
 This method is referred to as \textbf{Uncertainty Distribution}.
 Thus, triples close to $P(y = 1 | f_G(l)) = 0.5$ still have the highest probability of being sampled, but other triples for which the model is more certain are also assigned a probability in the classification.
+Uncertainty Sampling Distribution is defined as the softmax of all uncertainty scores:
+\begin{equation}
+    \label{eq:uncertainty_distribution}
+    p_{sampled}(h,r,t) = \frac{e^{u(h,r,t)}}{\sum_{(h,r,t) \in Neg}{e^{u(h,r,t)}}}
+\end{equation}
+
+
 For the individual uncertainty metrics, the following definitions for $\phi$ and considerations for the two sampling methods result \cite{human-in-the-loop}:
 
 \textbf{Entropy} considers the differences between all the predictions.

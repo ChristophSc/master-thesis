@@ -46,12 +46,12 @@ Therefore, our new score function $Classification\_Score$ is defined as follows:
     Classification\_Score(h, r, t)=
     \begin{cases}
          \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{POP(\textit{t})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(\textit{h, r, t})
-         \\ \ \ 
-         if\ \ \ \neg(\textit{h, r, t})
+         \\ \ \ \ \ \ \ 
+         \text{if}\ \ \ \neg(\textit{h, r, t})
          \\ \\
          \lambda_1 \text{PEER(\textit{h, r})} + \lambda_2 \text{FRQ(\textit{r})} + \lambda_3 \text{PIVO(\textit{h, t})} + \lambda_4 f_G(h, r, t)
-         \\ \ \ 
-         if\ \ \ \neg \exists (\textit{h, r, \_})
+         \\ \ \ \ \ \ \ 
+         \text{if}\ \ \ \neg \exists (\textit{h, r, \_})
          \\
     \end{cases}
 \end{equation}

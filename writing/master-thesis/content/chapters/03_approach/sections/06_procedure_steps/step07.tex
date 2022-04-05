@@ -12,6 +12,7 @@ while $p_G(h', r, t'|h, r, t)$ is the probability distribution on negative tripl
     p_G(h',r,t'|h,r,t)=\frac{\exp f_G(h',r,t')}{\sum\exp f_G(h^*,r,t^*)} \\
     (h^*,r,t^*)\in Neg(h,r,t)
 \end{multline}
+\textcolor{red}{UPDATE: EITHER UNCERTAINTY MAX OR UNCERTAINTY DISTRIBUTION PROBABILITY DISTRIBUTION}
 Therefore, discriminator loss is minimized if difference between positive and negative triple score is low and in optimal case zero.
 The sampled negative triple $(h',r,t')$ was picked based on the uncertainty of the generator model.
 By sampling such an uncertain negative triple from generator, we hope to catch an uncertain triple for the discriminator as well.
