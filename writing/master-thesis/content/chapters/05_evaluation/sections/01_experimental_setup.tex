@@ -26,27 +26,65 @@ In addition, the size of the training, validation and test set are given.
         
 \textbf{Evaluation Protocols}\\
 As described in \cite{Ruffinelli2020You},
-\ac{KGE} models are usually evaluated by a multi-relational link prediction for \acp{KG}.
+\ac{KGE} models are usually training and evaluated by a multi-relational link prediction for \acp{KG}.
 Based on the information in a \ac{KG}, its goal is to predict true but unobserved triples.
-
-evaluation task: entity ranking
-kind of question answering
-potential answers are ranked by their score in descending order.
-since some triples might already be seen in training, validation or test set, they are filtered out from ranking.
-with this ranking, evaluation metrics MRR and Hit@10 are used which return values $\in [0,1]$ where is the worst and 1 is the best result.
+For this evaluation task, entity ranking is typically used.
+After partitioning data into a set of training, validation, and test, for a given triple $(h,r,t)$ which is unseen during training potential answers for either missing head or missing tail are ranked by their score in descending order.
+Additionally, since some triples might already be seen in training, validation or test set, a filtering option is applied.
+Therefore, triples which have be seen in training, validation or test set are filtered out from ranking.
+Subsequently, common evaluation metrics MRR and Hit@10 are used which return values $\in [0,1]$ where is the worst and 1 is the best result.
 Therefore, current learning process and embeddings can be evaluated and compared to other embedding models.
-
-
 
 \textbf{Implementation Details}
 In the original \kbgan approach, the models are first pre-trained individually over 1000 epochs on the corresponding data set before the actual \ac{GAN} training takes place.
 In the course of our tests, we found that the adversarial training learns quickly and achieves good results even without pre-training the individual models.
-For this reason, in the following sections we will present the evaluation without pre-training, i.e. training from scratch.
-If you want to compare the results of this with the pre-training and the adversarial training after the pre-training, you will find corresponding results in the appendix (\autoref{app:sec:pretraining} and \ref{app:sec:adv_training}).
 
-% In addition, the training was enforced in \textsc{KBGAN's} original approach for 5000 epochs.
-% However, the first and most important changes in the metrics can already be seen in the first 1000 epochs, especially when this takes place without pre-training.
-% For this reason, in our evaluation we will focus and display only on first 1000 epochs.
+As example, \Autoref{fig:original_pretrained_advtrain} shows adversarial training process of \textsc{FB15k-237} for 5000 epochs with the original sampling approach from \kbgan and pre-trained  generator and discriminator models.
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_hit10s.png}
+    \end{minipage}
+    \caption{Evaluation of Adversarial training on \textsc{FB15k-237} dataset.
+    All models for generator as well as discriminator are pre-trained.
+    Figures show validation MRRs and Hit@10s for 5000 epochs with Original Sampling.}
+    \label{fig:original_pretrained_advtrain}
+\end{figure}
+In this and many other learning processes on other data sets, it can be seen that evaluation metrics MRR and Hit@10 often drop at the beginning and then rise again.
+This can be explained by the fact that during pre-training, the models are trained separated and independently.
+In adversarial training, however, they learn together, so that the models first have to understand each other.
+Only when this has happened the evaluation metrics rise again.
+
+For comparison, an identical training was performed in \Autoref{fig:original_not_pretrained_advtrain}, where the only difference was that the models were not pre-trained.
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/epochs5000/gan_train_random_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/epochs5000/gan_train_random_fb15k237_hit10s.png}
+    \end{minipage}
+    \caption{Evaluation of Adversarial training on \textsc{FB15k-237} dataset without pre-trained models.
+    Figures show validation MRRs and Hit@10s for 5000 epochs with Original Sampling.}
+    \label{fig:original_not_pretrained_advtrain}
+\end{figure}
+As can be seen, both training courses achieve MRRs of around 27\% and Hit@10s of around 45\%.
+Although all model combinations in the second case were not pre-trained, they also achieve an MRR of approximately 26\% and a Hit@10 of about 44\% after 1000 epochs, just like the pre-trained models.
+In addition, especially the training of first 1000 epochs without pre-training seem to be more constant than adversarial training with pre-trained models.
+For this reason, in the following sections we will present the evaluation without pre-training, i.e. training from scratch.
+Nevertheless, results of pre-training and the subsequent adversarial training on pre-trained models can be found in the appendix (\autoref{app:sec:pretraining} and \ref{app:sec:adv_training}).
+
+Additionally, in the original approach adversarial training takes place for 5000 epochs.
+However, during the evaluation it was found that in the case of adversarial training, the first 1000 epochs produced the greatest improvements in the discriminator model.
+This was especially the case for training without pre-trained models.
+For this reason, in our evaluation we will focus on first 1000 epochs.
 
 For the evaluation, the parameters shown in \autoref{tab:evaluation_parameter} were defined.
 \begin{table}[h]
@@ -59,7 +97,7 @@ For the evaluation, the parameters shown in \autoref{tab:evaluation_parameter} w
         \textbf{Description} \\
     
         \midrule
-         n\_epoch & 5000 & Number of epochs for adversarial training\\
+         n\_epoch & 1000 & Number of epochs for adversarial training\\
          n\_batch & 100 & Number of batches for training \\
          
          valid\_batch\_size & 100 & Size of each batch for validation and test set\\

@@ -7,22 +7,54 @@
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/gan_train_random_wn18rr_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/random_wn18rr_mrrs.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/gan_train_uncertainty_wn18rr_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_mrrs.png}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/gan_train_random_wn18rr_hit10s.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/random_wn18rr_hit10.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/gan_train_uncertainty_wn18rr_hit10s.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \textsc{WN18RR} dataset. 
     Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
-    Shown are validation H@10 and MRRs for 5000 epochs.}
+    Shown are validation H@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_wn18rr_random_vs_uncertainty}
+\end{figure}
+
+
+
+
+
+Compare 
+- training losses
+- training rewards
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/random_wn18rr_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_losses.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/random_wn18rr_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_rew.png}
+    \end{minipage}%
+    \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{WN18RR} dataset.
+    Left Figures show losses and rewards of \textsc{OriginalSampling} and right Figures show losses and rewards of \textsc{UncertaintySamplingSoftmax}.}
+    \label{fig:advtrain_wn18rr_losses_rewards}
 \end{figure}
