@@ -1,5 +1,8 @@
-\subsection{FB15k237 Dataset}
+\subsection{FB15k-237 Dataset}
+\label{subsec:methods_fb15k237}
 
+Since the two data sets WN18 and WN18RR are very similar in terms of data and represent a subset of the WordNet, an evaluation now also follows on a large data set in which the data differ from the WordNet.
+Evaluation Metrics of \usmax and \ussoftmax trained on \textsc{FB15k-237} are depicted in \Autoref{fig:advtrain_fb15k237_usmax_ussoftmax}.
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
@@ -18,12 +21,47 @@
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_hit10.png}
     \end{minipage}%
-    \caption{Adversarial training on \textsc{FB15k237} dataset. 
+    \caption{Adversarial training on \textsc{FB15k-237} dataset. 
     Left Figures shows Sampling Negative triples with Uncertainty Max, Right Figures shows Sampling by Uncertainty Distribution.
     Shown are validation H@10 and MRRs for 1000 epochs.}
-    \label{fig:advtrain_not_pretrained_fb15k237_pretrained}
+    \label{fig:advtrain_fb15k237_usmax_ussoftmax}
 \end{figure}
+With \usmax and \ussoftmax MRR evaluation metric reach their maximum at 100 epochs. 
+Thus, with \usmax MRR for most model pairs decrease, just for \complex + \transe it stays on the same level.
+In comparison, with \ussoftmax all model pairs stay at the same MRR over all epochs.
+Regarding Hit@10 evaluation metric all model pairs perform equally, only the model pair \complex + \transe the value increases over time.
+The other model pairs decrease after a maximum Hit@10 of about 37\% after 100 epochs.
+Additionally, it can be seen that \usmax increases Hit@10 over time for \complex + \transe but not for the other model pairs.
+Its maximum is reached after 100 epochs with about 40\% Hit@10.
+In comparison, with \ussoftmax this maximum is already reached after 100 epochs and it slightly increases Hit@10 as well as MRR over time.
+\textcolor{red}{ADD REASON}
 
 
-
-
+If we compare training losses and rewards of \usmax and \usmax on \textsc{FB15k-237} we see a similar behaviour as on \textsc{WN18} and \textsc{WN18RR} (\Autoref{fig:advtrain_fb15k237_usmax_ussoftmax_losses_rewards}).
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k237/uncertainty_fb15k237_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_losses.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k237/uncertainty_fb15k237_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_rew.png}
+    \end{minipage}%
+    \caption{Losses and rewards during adversarial training on \textsc{FB15k-237} dataset. 
+    Left figures show Sampling Negative triples with \usmax, right figures show \ussoftmax.
+    Shown are validation Hit@10 and MRRs for 1000 epochs.}
+    \label{fig:advtrain_fb15k237_usmax_ussoftmax_losses_rewards}
+\end{figure}
+The losses of all model pairs in \usmax as well as \ussoftmax decrease over time.
+Surprisingly just \complex + \transe increase again after 400 epochs, since this model pair also increases MRR and Hit@10 but not for the other model pairs over time.
+Interestingly, in \usmax and \ussoftmax rewards for model pairs of with \transe in discriminator are higher than for the other model pairs.
+\textcolor{red}{ADD REASON}

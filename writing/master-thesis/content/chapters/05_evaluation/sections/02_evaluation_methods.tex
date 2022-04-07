@@ -1,8 +1,8 @@
-\section{Evaluation of the Uncertainty Sampling Methods}
+\section{Evaluation of Uncertainty Sampling Methods}
 \label{ch:evaluation:sec:evaluation_methods}
 
-
-
+To determine the best approach of sampling by uncertainty, we first compare the two methods \textsc{UncertaintySamplingMax} and \textsc{UncertaintySamplingSoftmax}.
+For this purpose, we compare the course of the validation metrics of the two methods in the different data sets in \Autoref{subsec:methods_umls} to \ref{subsec:methods_fb15k237}.
 
 \input{content/chapters/05_evaluation/sections/02_methods/01_methods_umls}
 
@@ -12,7 +12,10 @@
 
 \input{content/chapters/05_evaluation/sections/02_methods/04_methods_fb15k237}
 
-
-
+\textbf{Conclusion}:\\
+In conclusion, \usmax and \ussoftmax perform equally for many embedding model pairs and datasets.
+Just in some cases \ussoftmax performs better and increase MRR and Hit@10 metrics slightly over time and in addition, performance does never not decrease, it always stays on same level even if it does not increase either.
+Additionally, especially for some model pairs \usmax performs bad.
+Furthermore, it can be seen that adversarial training performs better with larger data sets, because the course of losses and rewards for smaller datasets is very different than normal courses of losses and rewards.
 
 

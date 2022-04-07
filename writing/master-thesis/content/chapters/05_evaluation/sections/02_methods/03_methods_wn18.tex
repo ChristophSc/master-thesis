@@ -1,5 +1,9 @@
 \subsection{WN18 Dataset}
+\label{subsec:methods_wn18}
 
+
+The courses of evaluation metrics on \textsc{WN18} dataset are very similar to that on \textsc{WN18RR} dataset.
+Interestingly, the model pairs with a \transd model in the discriminator also show a significantly worse performance as can be seen in \Autoref{fig:advtrain_wn18_usmax_ussoftmax}.
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
@@ -21,10 +25,40 @@
     \caption{Adversarial training on \textsc{WN18} dataset. 
     Left Figures shows Sampling Negative triples with Uncertainty Max, Right Figures shows Sampling by Uncertainty Distribution.
     Shown are validation H@10 and MRRs for 1000 epochs.}
-    \label{fig:advtrain_not_pretrained_wn18_pretrained}
+    \label{fig:advtrain_wn18_usmax_ussoftmax}
 \end{figure}
+The maximum of the metrics is already reached after about 100 epochs.
+But unlike learning on the \textsc{WN18RR} dataset, the discriminator does not achieve better Hit@10 values over time on \textsc{WN18} dataset.
+Furthermore, \ussoftmax shows an even clearer difference in the models where \transd is the discriminator for the course of validation MRR.
+This also shows that adversarial training with a \transd discriminator is worse for \usmax but better for \ussoftmax.
+At Hit@10, no differences between the model pairs can be seen in the \ussoftmax.
+\textcolor{red}{ADD REASON}
 
-
-
+The progression of losses and rewards is also similar to the \textsc{WN18RR} dataset (\Autoref{fig:advtrain_wn18_usmax_ussoftmax_losses_rewards}).
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/wn18/uncertainty_wn18_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/uncertainty_wn18_losses.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/wn18/uncertainty_wn18_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/uncertainty_wn18_rew.png}
+    \end{minipage}%
+    \caption{Losses and rewards during adversarial training on \textsc{WN18} dataset. 
+    Left figures show Sampling Negative triples with \usmax, right figures show \ussoftmax.
+    Shown are validation Hit@10 and MRRs for 1000 epochs.}
+    \label{fig:advtrain_wn18_usmax_ussoftmax_losses_rewards}
+\end{figure}
+However, it is striking that the model pair \dismult + \transd have a considerable drop in rewards after 700 epochs.
+\textcolor{red}{ADD REASON}
 
 
