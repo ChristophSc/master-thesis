@@ -13,19 +13,22 @@ class Entropy(UncertaintyMeasure):
 
 class LeastConfidence(UncertaintyMeasure):
   def measure_uncertainty(self, is_positive_probs):
-    least_confidence = None
+    n = 2
+    least_confidence = (1-torch.max(is_positive_probs, 1-is_positive_probs))*(n/(n-1)) # normilization to values in [0,1]
     return least_confidence
     
     
 class ConfidenceMargin(UncertaintyMeasure):
   def measure_uncertainty(self, is_positive_probs):
-    confidence_margin = None
+    # only works for binary classification like this, otherwise the second max has to be find
+    confidence_margin = 1-(torch.max(is_positive_probs, 1-is_positive_probs) - torch.min(is_positive_probs, 1-is_positive_probs))
     return confidence_margin
 
 
 class ConfidenceRatio(UncertaintyMeasure):
   def measure_uncertainty(self, is_positive_probs):
-    confidence_ratio = None
+     # only works for binary classification like this, otherwise the second max has to be find
+    confidence_ratio = torch.min(is_positive_probs, 1-is_positive_probs) / torch.min(is_positive_probs, 1-is_positive_probs)
     return confidence_ratio
   
   
