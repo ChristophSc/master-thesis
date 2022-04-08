@@ -146,7 +146,7 @@ dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
 pretraining_cases = [ "not_pretrained"]  # "not_pretrained"
 sampling_types = ["random", "uncertainty"]
-uncertainty_sampling_types = ["max_distribution"] # "max_distribution"
+uncertainty_sampling_types = ["max", "max_distribution"] # "max_distribution"
 uncertainty_measures = ["entropy", "least_confidence", "confidence_margin", "confidence_ratio"] # 
 
 
