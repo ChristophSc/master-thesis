@@ -103,32 +103,21 @@ for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
     # create set Neg of negative triples 
-    head_cand, rel_cand, tail_cand = corrupter.corrupt(head, rel, tail, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
+    neg_head, neg_rel, neg_tail = corrupter.corrupt(head, rel, tail, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
     
     if torch.cuda.is_available():
-        head_cand  = head_cand.cuda()
-        rel_cand  = rel_cand.cuda()
-        tail_cand = tail_cand.cuda()
+        neg_head  = neg_head.cuda()
+        neg_rel  = neg_rel.cuda()
+        neg_tail = neg_tail.cuda()
 
     # get statistics
-    if type(sampler) == OriginalSampler:
-        pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None
-    else:
-        # if neg_heads_filt == None:
-            # negatives should be always the same, only init and score them once
-            # TODO: update with cache like in NSCaching with efficient method to replace negatives in Neg
+    pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, neg_head, neg_rel, neg_tail, print_statistics = False)
+    #t1 = time()    
+    #print('get_scoring_statistics all takes %f' %(t1-t0))
+    #logging.info('Score ranges for all positives:')
+    logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
         
-        neg_set, neg_heads_filt, neg_rel_filt, neg_tails_filt = neg_set, head_cand, rel_cand, tail_cand # filter_negatives(neg_set, head_cand, rel_cand, tail_cand, heads_filt, tails_filt)
-        # logging.info(len(neg_heads_filt))
-        #logging.info(len(neg_set))
-        # logging.info(neg_set)
-        pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, neg_heads_filt, neg_rel_filt, neg_tails_filt, print_statistics = False)
-        #t1 = time()    
-        #print('get_scoring_statistics all takes %f' %(t1-t0))
-        #logging.info('Score ranges for all positives:')
-        logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
-        
-    for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, head_cand, rel_cand, tail_cand, n_sample=n_train):
+    for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, neg_head, neg_rel, neg_tail, n_sample=n_train):
         # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
         # send corrupted triples from Neg of size "n_batch" to generator
@@ -150,11 +139,11 @@ for epoch in range(n_epoch):
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
     if (epoch + 1) % config().adv.epoch_per_test == 0:
         #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
-        mrr, hits = dis.test_link(valid_data, n_ent, heads_filt, tails_filt)
+        mrr, hits = dis.test_link(valid_data, n_ent, heads_filt, tails_filt) 
         tp_logger.log_performance(mrr, hits)
         if mrr > best_mrr:
             best_mrr = mrr
-            dis.save(os.path.join('models', config().task.dir, mdl_name))
+            dis.save(os.path.join('models', config().task.dir, mdl_name))   
 tp_logger.log_loss_reward(avg_loss.item(), avg_reward.item())        
 if config().log.log_pretrain_graph:
     tp_logger.create_and_save_figures(log_dir)   
