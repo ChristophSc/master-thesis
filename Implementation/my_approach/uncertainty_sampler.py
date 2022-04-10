@@ -85,7 +85,7 @@ class UncertaintySampler_Softmax(UncertaintySampler):
   def sample(self, n, n_sample, logits, min_score, max_score):     
     is_positive_probs = self.classifier.classify(generator_logits = logits, min_score = min_score, max_score = max_score)  
     
-    uncertainty_scores = self.scorer.measure_uncertainty(is_positive_probs)    
+    uncertainty_scores = self.scorer.measure_uncertainty(is_positive_probs)   
     sampling_probs = torch.softmax(uncertainty_scores, dim = -1)    
 
     # sampling according to distribution of uncertainty scores

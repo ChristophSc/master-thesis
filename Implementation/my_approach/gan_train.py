@@ -103,19 +103,24 @@ for epoch in range(n_epoch):
     epoch_d_loss = 0
     epoch_reward = 0
     # create set Neg of negative triples 
-    neg_head, neg_rel, neg_tail = corrupter.corrupt(head, rel, tail, keep_truth=False)   # TODO: use different technique to corrupt triples -> e.g. Bernoulli Sampling
-    
+    neg_head, neg_rel, neg_tail = corrupter.corrupt(head, rel, tail, keep_truth=False)
     if torch.cuda.is_available():
         neg_head  = neg_head.cuda()
         neg_rel  = neg_rel.cuda()
         neg_tail = neg_tail.cuda()
 
     # get statistics
+    print(head.requires_grad)
+    print(rel.requires_grad)
+    print(tail.requires_grad)
+    print(neg_head.requires_grad)
+    print(neg_tail.requires_grad)
+    
     pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, neg_head, neg_rel, neg_tail, print_statistics = False)
+    logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
     #t1 = time()    
     #print('get_scoring_statistics all takes %f' %(t1-t0))
-    #logging.info('Score ranges for all positives:')
-    logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
+    #logging.info('Score ranges for all positives:')  
         
     for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, neg_head, neg_rel, neg_tail, n_sample=n_train):
         # h,r,t = indices of heads, relations and tails in batch
@@ -138,7 +143,7 @@ for epoch in range(n_epoch):
         tp_logger.log_loss_reward(avg_loss.item(), avg_reward.item())     
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
     if (epoch + 1) % config().adv.epoch_per_test == 0:
-        #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
+        #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)    
         mrr, hits = dis.test_link(valid_data, n_ent, heads_filt, tails_filt) 
         tp_logger.log_performance(mrr, hits)
         if mrr > best_mrr:

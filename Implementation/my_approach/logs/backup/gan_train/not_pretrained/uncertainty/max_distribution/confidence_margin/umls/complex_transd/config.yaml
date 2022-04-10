@@ -3,16 +3,16 @@ g_config: DistMult # DistMult, ComplEx
 d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
-  dir: wn18rr  # umls, wn18rr, wn18, fb15k237
+  dir: umls  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
   use_pretrained_models: false
   n_sample: 20 #   20
-  sample_type: uncertainty_distribution      # random, uncertainty_max, uncertainty_distribution
-  measure_type: entropy   # entropy, least_confidence, confidence_margin, confidence_ratio
-  n_epoch: 5000  # 5000
+  sample_type: uncertainty_softmax      # original, uncertainty_max, uncertainty_softmax, confidence
+  measure_type: confidence_margin   # entropy, least_confidence, confidence_margin, confidence_ratio
+  n_epoch: 1000  # 5000
   n_batch: 100 # 100
-  epoch_per_test: 50 # 100
+  epoch_per_test: 10 # 100
   temperature: 1.0  # 1.0
 TransE:
   dim: 50

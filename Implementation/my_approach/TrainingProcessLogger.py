@@ -68,16 +68,9 @@ class TrainingProcessLogger():
       
     self.create_figure(config().task.dir.upper() + ' Losses', n_points, self.losses, 'Epochs', 'Losses', 'red').savefig(filename + '_losses')
     n_points = [x for x in range(0, self.n_epochs+1, self.epoch_per_test)]
-    print(n_points)
     self.create_figure(config().task.dir.upper() + ' Validation MRR', n_points, self.mrrs,'Epochs', 'MRR',  'green').savefig(filename + '_mrr')
     
     self.create_figure(config().task.dir.upper() + ' Validation H@3', n_points, self.hit3s, 'Epochs', 'H@3', 'orange').savefig(filename + '_hit3')
     self.create_figure(config().task.dir.upper() + ' Validation H@5', n_points, self.hit5s, 'Epochs', 'H@5', 'orange').savefig(filename + '_hit5')
     self.create_figure(config().task.dir.upper() + ' Validation H@10', n_points, self.hit10s, 'Epochs', 'H@10', 'orange').savefig(filename + '_hit10')
-    
-
-  # TODO: load plots from original KBGAN approach an compare them 
-  #   -> for each model
-  #   -> for each dataset
-  # TODO: combine plots of my approach for each model and each dataset
     
