@@ -1,6 +1,13 @@
 \subsection{UMLS Dataset}
 \label{subsec:uncertainty_umls}
 
+\Autoref{fig:advtrain_umls_random_vs_uncertainty}
+
+- \origsampling reaches maximum of about 72\% at 200 epochs
+- \ussoftmax with entropy metrics reaches slower its maximimum at the end of the training with about 80\% MRR
+- MRR values of adversarial training with \origsampling decreases after reaching maximum, \ussoftmax slowly increases MRR value
+- \ussoftmax also reaches MRR value of 72\% at about 200 epochs
+
 
 \begin{figure}
     \centering
@@ -21,16 +28,18 @@
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/uncertainty_umls_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \umls dataset. 
-    Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
-    Shown are validation H@10 and MRRs for 1000 epochs.}
+    Left Figures show sampling negative triples with \origsampling, right figures show \ussoftmax with entropy uncertainty metrics.
+    Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_umls_random_vs_uncertainty}
 \end{figure}
 
-
-
-Compare 
-- training losses
-- training rewards
+\Autoref{fig:advtrain_umls_losses_rewards}
+- \origsampling and \ussoftmax losses decrease quickly in the beginning
+- in \origsampling global minimum is reachter at about 100 epochs an loss increases afterwards again
+- with\ussoftmax same losses are reached after 100 epochs but constantly decreases losses afterwards
+- for rewards, again model pairs with a \transd discriminator model distinguish from training with \transe discriminator model
+- \origsampling and \ussoftmax almost reach the same rewards after 50 epochs for different model pairs
+- in comparison, rewards with \ussoftmax decrease constantly afterwards while with \origsampling they still increase
 
 
 \begin{figure}
@@ -52,6 +61,6 @@ Compare
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/uncertainty_umls_rew.png}
     \end{minipage}%
     \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{UMLS} dataset.
-    Left Figures show losses and rewards of \textsc{OriginalSampling} and right Figures show losses and rewards of \textsc{UncertaintySamplingSoftmax}.}
+    Left Figures show losses and rewards of \origsamplingand right Figures show losses and rewards of \ussoftmax.}
     \label{fig:advtrain_umls_losses_rewards}
 \end{figure}

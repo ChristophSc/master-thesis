@@ -1,7 +1,10 @@
 \subsection{WN18 Dataset}
 \label{subsec:uncertainty_wn18}
 
-
+\Autoref{fig:advtrain_wn18_random_vs_uncertainty}
+- course of MRR values on \textsc{WN18} datasets strongly differ for both sampling methods
+- while \ussoftmax reaches a maximum MRR value at 400 epochs with 44\%, this value is reached by \origsampling at already 200  epochs and a further increase continues
+- with \origsampling a 
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
@@ -21,7 +24,7 @@
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/uncertainty_wn18_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \textsc{WN18} dataset. 
-    Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
+    Left Figures show Sampling Negative triples with \origsampling, right figures show \ussoftmax with entropy metrics.
     Shown are validation H@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_wn18_random_vs_uncertainty}
 \end{figure}
@@ -30,11 +33,7 @@
 
 
 
-
-Compare 
-- training losses
-- training rewards
-
+\Autoref{fig:advtrain_wn18_losses_rewards}
 
 \begin{figure}
     \centering
@@ -55,6 +54,6 @@ Compare
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/uncertainty_wn18_rew.png}
     \end{minipage}%
     \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{WN18} dataset.
-    Left Figures show losses and rewards of \textsc{OriginalSampling} and right Figures show losses and rewards of \textsc{UncertaintySamplingSoftmax}.}
+    Left Figures show losses and rewards of \origsampling and right Figures show losses and rewards of \ussoftmax.}
     \label{fig:advtrain_wn18_losses_rewards}
 \end{figure}

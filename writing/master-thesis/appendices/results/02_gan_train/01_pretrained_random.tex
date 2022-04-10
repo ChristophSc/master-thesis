@@ -1,0 +1,33 @@
+\subsubsection{OriginalSampling}
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/wn18/gan_train_random_wn18_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/wn18rr/gan_train_random_wn18rr_mrrs.png}
+    \end{minipage}%\\
+    
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/fb15k237/gan_train_random_fb15k237_hit10s.png}
+    \end{minipage}%
+     \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/wn18/gan_train_random_wn18_hit10s.png}
+    \end{minipage}%
+     \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/wn18rr/gan_train_random_wn18rr_hit10s.png}
+    \end{minipage}%
+    \caption{Reproduced results from adversarial training with \origsampling on datasets \textsc{WN18RR}, \textsc{Wn18} and \textsc{FB15k-237} like in original \kbgan paper \cite{cai2017kbgan}.
+    Figures show course of MRR and Hit@10 values for 5000 epochs with pre-trained models.}
+    \label{fig:test}
+\end{figure}

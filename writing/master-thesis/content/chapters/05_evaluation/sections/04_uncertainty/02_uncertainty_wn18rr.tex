@@ -1,6 +1,11 @@
 \subsection{WN18RR Dataset}
 \label{subsec:uncertainty_wn18rr}
 
+\Autoref{fig:advtrain_wn18rr_random_vs_uncertainty}
+- course of MRR values on \textsc{WN18RR} dataset looks similar for both sampling methods \origsampling and \ussoftmax 
+- in both sampling methods maximum MRR value is reached after about 200 epochs of MRR of 17.5\%.
+- in comparison Hit@10 values constantly increase for both sampling methods such that maximum of about 42\% is reached at 1000 epochs
+-> further learning with more epochs can be expected
 
 \begin{figure}
     \centering
@@ -21,8 +26,8 @@
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \textsc{WN18RR} dataset. 
-    Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
-    Shown are validation H@10 and MRRs for 1000 epochs.}
+    Left Figures show Sampling Negative triples with \origsampling, right Figures show \ussoftmax with entropy metrics.
+    Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_wn18rr_random_vs_uncertainty}
 \end{figure}
 
@@ -30,10 +35,11 @@
 
 
 
-Compare 
-- training losses
-- training rewards
-
+\Autoref{fig:advtrain_wn18rr_losses_rewards}
+- for both sampling methods losses constantly decrease loss
+- both graphs look similar
+- also course of rewards look similar, even difference between model pairs with \transe and \transd exists in both sampling methods
+- \origsampling has a decrease of rewards after local maximum as well
 
 \begin{figure}
     \centering
@@ -54,6 +60,6 @@ Compare
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_rew.png}
     \end{minipage}%
     \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{WN18RR} dataset.
-    Left Figures show losses and rewards of \textsc{OriginalSampling} and right Figures show losses and rewards of \textsc{UncertaintySamplingSoftmax}.}
+    Left Figures show losses and rewards of \origsampling and right Figures show losses and rewards of \ussoftmax.}
     \label{fig:advtrain_wn18rr_losses_rewards}
 \end{figure}
