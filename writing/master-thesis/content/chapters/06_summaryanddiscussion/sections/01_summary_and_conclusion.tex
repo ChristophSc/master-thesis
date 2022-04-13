@@ -23,9 +23,14 @@ To analyse all sampling methods and uncertainty metrics in \ucgan, we evaluated 
 In conclusion, our evaluation of \ucgan with different uncertainty metrics, sampling methods and on different datasets shows that it is possible to learn embeddings with uncertainty sampling method.
 \textcolor{red}{CHECK AGAIN:} In most cases, adding additional uncertainty information to negative sampling process leads to an improvement of original \ac{KGE} models.
 For some cases \ucgan increased the learning curve of MRR and Hit@10 values for some data sets and seem to perform well especially on smaller datasets like \umls and outperforms \kbgan. \textcolor{red}{CHECK AGAIN}.
-Additionally it was established that \ucgan is very dependent on underlying dataset and hyperparameter tuning, since the training sometimes behaves completely differently.
+Additionally it was established that \ucgan is very dependent on underlying dataset and hyperparameter tuning, since training sometimes behaves completely differently.
 For example, on \textsc{WN18} rewards are slightly increasing over time, but in contrast on \textsc{FB15k-237} they are decreasing.
-Thus, it can be said that in most cases the results are still not as good as those of original sampling in \kbgan which might have several reasons which are marked for future work explained in  \Autoref{sec:futurework}.
+Further research on generator score during training showed that MRR and Hit@10 values are increasing, but are far away from accuracy of model alone on current dataset.
+This results from the fact, that the goal of the generator model is not to find a good embedding anymore, but to find negative triples which are hard to distinguish from positive ones for discriminator model.
+Therefore, high scores for negative triples does not necessarily indicate high plausibility for a positive triple.
+Consequently, this effects ranges of positive and negative triple scores and leads to inaccuracy of classification which is based on generator scores.
+
+Thus, it can be said that in most cases the results are still not as good as those of original sampling in \kbgan which might have several reasons which are marked for future work explained in \Autoref{sec:futurework}.
 
 
 

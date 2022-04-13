@@ -1,56 +1,35 @@
-\section{Future work} 
+\section{Future Work} 
 \label{sec:futurework}
 
-At first, uncertainty scores are currently calculated based on a classification of positives and negative which is motivated by uncertainty sampling in active learning.
-In turn, the classification is only based on generator scores which might not be accurate enough.
-Therefore, im
+In some cases, the enrichment of negative sampling process with uncertainty information in \kbgan has proven to be promising and thus represents another alternative.
+Nevertheless, there is some room for improvement, which we leave to future work.
+These can be separated in following aspects.
+
+\subsubsection{Extend \ucgan with other Approaches}
+
+\ucgan is based on \kbgan which is one of the pioneer works in dynamic distribution-based and presented in 2017.
+Therefore, other approaches based on \kbgan were already presented which e.g. extending the approach with a cache like in \textsc{NSCaching} \cite{zhang2019nscaching}.
+The idea of extending negative sampling by uncertainty information can also be applied for these approaches.
 
 
+\subsubsection{Improve Classification}
+Uncertainty scores are currently calculated based on a classification of positives and negative which is motivated by uncertainty sampling in active learning.
+In turn, the classification is only based of generator model scores which might not be accurate enough.
+Therefore, improving classification with several information about \ac{KG} structure, entities and relations of a \ac{KG} might improve classification of positive and negative examples and, therefore, uncertainty sampling.
+\textcolor{red}{delete section 'improve classification' in chapter approach and summarise ideas here?} 
 
+\subsubsection{Edit Definition of Uncertainty}
+Currently, motivated by uncertainty sampling from active learning, uncertainty is based on classification of triples as positive or negative ones.
+Since there are several types of uncertainty available, an alternative definition of uncertainty might lead to further improvements and more effective negative sampling.
+For example, the uncertainty can also be defined in sampling, i.e. how uncertain the sampler is whether sampling a triple will lead to good results.
+Therefore, for a big set of negative triples uncertainty scores are assigned and if a triple was sampled in the past, uncertainty score can be decreased.
 
-\subsection{Improve Classification}
+This idea can be extended by combining calculated uncertainty score with original sampling probability based on generator model scores.
+Then, the combination of both leads leads to a new sampling probability distribution.
+Sampling using this combination would lead to an amplification of the sampling variation.
+Since in the original approach the sampling probability is based on generator score, it is very unlikely to ever sampling a negative triples which achieves a low score in the beginning.
+Therefore, even if it might lead to a low distance in discriminator and consequently small marginal loss, it will never be sampled.
+If uncertainties and probabilities based on scores are combined, i.e. in a multiplicative way, never sampled triples get a low generator score but high uncertainty score, triples which are sampled very often achieve a high generator score but a low uncertainty.
+Therefore, both of them have the chance to be sampled.
 
-
-
-\subsection{Edit Definition of Uncertainty}
-
--> further reasearch: create one big set of negative triples in the beginning and apply an uncertainty score \in [0,1] for all of them
--> uncertainty is not uncertainty of classification
--> uncertainty = uncertainty if this negative triple is a good one to be sampled
--> uncertainty is decreased if triple was sampled
--> uncertainty score is combined with generator score
-=> combination of both scores leads to sampling probability distribution
--> result: generator model tries more negative triples
--> in original approach a probability to be sampled is applied to each negative triple, therefore, if generator score is low in the beginning, probability to be sampled is low as well and therefore, maybe will never be sampled even if it might be a good one.
--> further research on generator score during training showed that MRR and Hit@10 values are increasing, but are far away from accuracy of model alone on current dataset
--> goal of generator is not anymore to find a good embedding, but to find negative triples which are hard to distinguish from positive ones for discriminator model.
-
-
-\subsection{Extend UCGAN with other Approaches}
-
-FUTURE WORK:
-- combine Uncertainty Sampling with other approaches
-- increase performance of uncertainty sampling
-- filter negatives by removing al negative triples from set $Neg$ which appear in the KG
-- optimize approach by using state of the art PyTorch methods, since \kbgan is based on very old version
-- this might increase performance
-- extend approach with cache like in approach \textsc{NSCaching} 
--> especially in smaller datasets like \umls  there are a several duplicates and each epoch the same negative triples are sampled
--> create statistics on Negative set how many times each triple was sampled (uncertainty <-> random) for \umls dataset
-create figure (bar chart) and save plot
-
-
-
-
-
-further reasearch of generator performance 
--> show also validation MRR and Hit@10 of Generator during training
--> results:
-both MRR and Hit@10 increases, but very slow + slower than discriminator model
-best performance is worse than original model (pre-trained, without adversarial training, only the model)
-reason:
--> goal of generator is not to find good embeddings but to provide good negative samples for discriminator
--> this may effect the ranges of positive and negative triple scores
--> might be more accurate with traditional generator goal to find a good embedding
-->  
 
