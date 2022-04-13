@@ -1,19 +1,12 @@
 \subsection{UMLS Dataset}
 \label{subsec:uncertainty_umls}
 
-\Autoref{fig:advtrain_umls_random_vs_uncertainty}
-
-- \origsampling reaches maximum of about 72\% at 200 epochs
-- \ussoftmax with entropy metrics reaches slower its maximimum at the end of the training with about 80\% MRR
-- MRR values of adversarial training with \origsampling decreases after reaching maximum, \ussoftmax slowly increases MRR value
-- \ussoftmax also reaches MRR value of 72\% at about 200 epochs
-
-
+First of all datasets, the learning curves on \umls dataset between \ussoftmax with entropy metrics and \origsampling depicted in \Autoref{fig:advtrain_umls_random_vs_uncertainty} are compared.
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/random_umls_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/epochs1000/random_umls_mrrs.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
@@ -21,7 +14,7 @@
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/random_umls_hit10.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/epochs1000/random_umls_hit10.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
@@ -32,21 +25,19 @@
     Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_umls_random_vs_uncertainty}
 \end{figure}
+As can be seen from the graphs, while \origsampling reaches maximum of about 74\% at 100 epochs, \ussoftmax with entropy metrics reaches slower its maximum at about 150 epochs with 75 to 80 \% depending on the model pair.
+In addition it is noticeable, that MRR values with \origsampling decreases after reaching maximum while \ussoftmax stays on the same value.
+This applies to MRR values as well as Hit@10 values.
+Furthermore, in \origsampling a difference between MRR values for \distmult and \complex generators can be noticed.
+While model pairs with \distmult reach a local minimum of 0.5, \model pairs with \complex go down to about 37\%.
+Subsequently in \origisampling a renewed increase in MRR and Hit@10 values can be seen after reaching the local minimum.
 
-\Autoref{fig:advtrain_umls_losses_rewards}
-- \origsampling and \ussoftmax losses decrease quickly in the beginning
-- in \origsampling global minimum is reachter at about 100 epochs an loss increases afterwards again
-- with\ussoftmax same losses are reached after 100 epochs but constantly decreases losses afterwards
-- for rewards, again model pairs with a \transd discriminator model distinguish from training with \transe discriminator model
-- \origsampling and \ussoftmax almost reach the same rewards after 50 epochs for different model pairs
-- in comparison, rewards with \ussoftmax decrease constantly afterwards while with \origsampling they still increase
-
-
+The learning curves can be explained by taking a closer look to losses and rewards during training depicted in \Autoref{fig:advtrain_umls_losses_rewards}.
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/random_umls_losses.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/epochs1000/random_umls_losses.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
@@ -54,7 +45,7 @@
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/random_umls_rew.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/umls/epochs1000/random_umls_rew.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
@@ -64,3 +55,9 @@
     Left Figures show losses and rewards of \origsamplingand right Figures show losses and rewards of \ussoftmax.}
     \label{fig:advtrain_umls_losses_rewards}
 \end{figure}
+Both, losses in \origsampling and \ussoftmax decrease quickly in the beginning, but in comparison, losses in \origsampling increase again after reaching global minimum at about 40 epochs while \ussoftmax further decreasses losses.
+Therefore, \origsampling does not improve results, but in turn worsens them.
+Thus, \kbgan with \origsampling seems to have a problem with small data sets.
+In turn, \ussoftmax further decreases losses after 40 epochs slightly until a loss of about 0.5.
+By taking a closer look to rewards in \Autoref{fig:advtrain_umls_losses_rewards} it can be determined that with \origsampling rewards continue to slightly increase the value , while with \ussoftmax rewards decrease after reaching global minumum in the beginning of training. 
+And for rewards of \ussoftmax, again model pairs with a \transd discriminator model distinguish from training with \transe discriminator model while in \origisampling the curves are more similar.

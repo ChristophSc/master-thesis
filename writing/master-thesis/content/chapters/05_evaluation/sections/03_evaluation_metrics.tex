@@ -13,10 +13,11 @@ These are also analysed for the four different data sets in \Autoref{subsec:metr
 
 \input{content/chapters/05_evaluation/sections/03_metrics/04_metrics_fb15k237}
 
-\textbf{Conclusion}:\\
+\subsubsection{Conclusion of Uncertainty Sampling Metrics}
+\label{subsubsec:evaluation_metrics_conclusion}
 
-- no significant difference between uncertainty metrics
-- in some cases MMR stagnates after about 300 epochs
-- sometimes small difference between other discriminator models
--> best sampling by uncertainty with sampling method \ussoftmax and any uncertainty metrics -> we choose entropy
-in next section
+On all datasets there is no significant difference between uncertainty metrics entropy, least confidence, confidence margin and confidence ratio.
+In most cases maximum is almost reached after 100 to 150 epochs, after this learning stagnates or improves slowly.
+Regarding rewards all uncertainty metrics have tje same curves, but rewards are different between model pairs with \transe and \transe discriminator model.
+Since none of the uncertainty metrics achieves a significant better result than the other ones, we choose standard uncertainty metrics entropy.
+Therefore, \ussoft with entropy metrics is compared to \origsampling in next section.

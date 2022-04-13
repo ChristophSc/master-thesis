@@ -3,22 +3,32 @@
 
 \begin{figure}
     \centering
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.3\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_losses.png}
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/fb15k237/gan_train_uncertainty_fb15k237_mrrs.png}
     \end{minipage}%
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.3\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_rewards.png}
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/wn18/gan_train_uncertainty_wn18_mrrs.png}
     \end{minipage}
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.3\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_mrrs.png}
-    \end{minipage}%
-    \begin{minipage}{.5\textwidth}
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/wn18rr/gan_train_uncertainty_wn18rr_mrrs.png}
+    \end{minipage}%\\
+    
+    \begin{minipage}{.3\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/umls/gan_train_uncertainty_umls_hit10s.png}
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/fb15k237/gan_train_uncertainty_fb15k237_hit10s.png}
     \end{minipage}%
-    \caption{Adversarial Training with Uncertainty Sampling Max Entropy on \textsc{UMLS} Dataset}
-    \label{fig:test}
+     \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/wn18/gan_train_uncertainty_wn18_hit10s.png}
+    \end{minipage}%
+     \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/pretrained/uncertainty/max/entropy/wn18rr/gan_train_uncertainty_wn18rr_hit10s.png}
+    \end{minipage}%
+    \caption{Adversarial training with \usmax on datasets \textsc{WN18RR}, \textsc{WN18} and \textsc{FB15k-237} like in original \kbgan paper \cite{cai2017kbgan}.
+    Figures show learning curves of MRR and Hit@10 values for 5000 epochs with pre-trained models.}
+    \label{fig:gan_train_pretrained_max}
 \end{figure}

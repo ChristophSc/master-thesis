@@ -1,8 +1,8 @@
 \section{Evaluation of Uncertainty Sampling}
 \label{ch:evaluation:sec:evaluation_uncertainty}
 
-Finally, the best sampling by uncertainty sampling method \ussoftmax with entropy uncertainty metric is evaluated by comparing it to the original sampling method ofm\kbgan.
-This is done for the four different data sets in following \Autoref{subsec:uncertainty_umls} to \ref{subsec:uncertainty_fb15k237}.
+Finally, the best sampling by uncertainty sampling method \ussoftmax with entropy uncertainty metric is evaluated by comparing it to the original sampling method \origsampling of \kbgan.
+The evaluation takes place on all four data sets in following \Autoref{subsec:uncertainty_umls} to \ref{subsec:uncertainty_fb15k237}.
 
 \input{content/chapters/05_evaluation/sections/04_uncertainty/01_uncertainty_umls}
 
@@ -12,5 +12,21 @@ This is done for the four different data sets in following \Autoref{subsec:uncer
 
 \input{content/chapters/05_evaluation/sections/04_uncertainty/04_uncertainty_fb15k237}
 
+\subsection{Result Tables}
 
-\textbf{Conclusion}:\\
+\input{content/chapters/05_evaluation/result_table_small_datasets}
+
+\input{content/chapters/05_evaluation/result_table}
+
+\subsection{Conclusion of Uncertainty Sampling}
+In some cases like training on \textsc{FB15k-237} adversarial training with \ussoftmax seem to work and on small datasets like \umls even better than \origsampling.
+Additionally, it is noticeable that training looks very different for different datasets.
+Nevertheless, in most cases adversarial training with \origsampling still performs better and reaches higher MRR and Hit@10 values.
+Therefore, measuring and sampling by uncertainty of generator to classify triples as positives and negatives does not necessarily imply uncertainty of the discriminator model.
+Even if the generator model might be uncertain if a given triple is positive or negative, discriminator can be more certain about this classification.
+Another reason might be that classification is not accurate enough.
+During training we have observed that even if negative triples scoring ranges are lower than positive triple scoring ranges, this sometimes changes over training time.
+Therefore, the overlap of both ranges increases.
+In addition, uncertainty is currently only measured based on generators uncertainty score and does not include any further information about the \ac{KG}, its relations and entities.
+
+

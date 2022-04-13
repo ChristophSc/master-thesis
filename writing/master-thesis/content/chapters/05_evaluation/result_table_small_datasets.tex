@@ -12,50 +12,81 @@
         \midrule
         
         \textsc{TransE}    
-        & 80.05 & 98.2 & - & -  \\
+        & 77.5 & 98.4 & - & -  \\
         
         \textsc{TransD}    
-        & - & - & - & - \\ 
+        & 79.6 & 98.7 & - & - \\ 
         
         \textsc{DistMult}  
-        &  71.5 & 84.5 & - & - \\
+        & 70.4 & 89.1 & - & - \\
         
         \textsc{ComplEx}   
-        & -  & - & - & - \\
+        & 85.6 & 97.7 & - & - \\
 
         \midrule
         
-        \textsc{TransE} (pre-trained)   
-        & 80.05 & 98.2 & - & - \\
+        pre-trained  (5k epochs)
+        & & &  &  \\
         
-        \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  
-        & 59 & 79 & - & - \\
-        
-        \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})   
+        \kbgan (\textsc{DistMult} + \textsc{TransE})  
         & - & - & - & - \\
         
-        \textsc{TransD} (pre-trained)                         
+       \kbgan (\textsc{ComplEx} + \textsc{TransE})   
         & - & - & - & - \\
         
-        \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  
+        \kbgan (\textsc{DistMult} + \textsc{TransD})  
         & - & - & - & -\\
         
-        \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})   
+        \kbgan (\textsc{ComplEx} + \textsc{TransD})   
         & - & - & - & -\\
+
+         \midrule
+         
+         \ucgan (\textsc{DistMult} + \textsc{TransE}) 
+          & - & - & - & - \\
+         
+        \ucgan (\textsc{ComplEx} + \textsc{TransE}) 
+          & -  & - & - & -\\
+          
+         \ucgan (\textsc{DistMult} + \textsc{TransD}) 
+          & -  & - & - & - \\
+        
+          \ucgan (\textsc{ComplEx} + \textsc{TransD}) 
+          & -  & - & - & - \\
+          
+          
+          \midrule
+        
+        Not pre-trained  (1k epochs)
+        & & &  &  \\
+        
+        \kbgan (\textsc{DistMult} + \textsc{TransE})  
+        & 72.7 & 94.0 & - & - \\
+        
+        \kbgan (\textsc{ComplEx} + \textsc{TransE})   
+        & 72.4 & 95.1 & - & - \\
+        
+        \kbgan (\textsc{DistMult} + \textsc{TransD})  
+        & 73.8 & 95.7 & - & -\\
+        
+       \kbgan (\textsc{ComplEx} + \textsc{TransD})   
+        & 71.4 & 94.8 & - & -\\
         
          \midrule
          
-          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE}) 
-          & 79.8 & 99.02 & - & - \\
+        \ucgan (\textsc{DistMult} + \textsc{TransE}) 
+         & 78.4 & 98.7 & - & - \\
          
-         \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE}) 
-          & -  & - & - & -\\
+        \ucgan (\textsc{ComplEx} + \textsc{TransE}) 
+          & 79.5  & 99.0 & - & -\\
           
-          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD}) 
-          & -  & - & - & - \\
+        \ucgan (\textsc{DistMult} + \textsc{TransD}) 
+         & 80.3 & 99.0 & - & - \\
         
-        \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD}) 
-          & -  & - & - & - \\
+        \ucgan (\textsc{ComplEx} + \textsc{TransD}) 
+          & 80.6  & 99.1 & - & - \\
+          
+          
         \bottomrule
     \end{tabular}
     \caption{Result table for smaller Datasets \textsc{UMLS} and \textsc{KINSHIP}.

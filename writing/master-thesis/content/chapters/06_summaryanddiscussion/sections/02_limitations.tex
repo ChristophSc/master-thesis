@@ -1,2 +1,29 @@
-\section{Limitations}  \label{sec:limitations}
+\section{Limitations}  
+\label{sec:limitations}
+
+% datasets
+Our approach of \ucgan is based on \kbgan and works with all datasets from original approach.
+Even if it was not tested on other datasets, it should work with all \acp{KG} which have stored triples in form of $(h,r,t)$..
+
+% other negative sampling types
+Furthermore, the idea of extending negative sampling by uncertainty information should work with other negative sampling approaches as well, but need to be adjusted then.
+\kbgan originally generated a set of negative triples where one is sampled and given to discriminator.
+Since we already have this set available, our approach extends negative triples with uncertainty scores.
+Otherwise, if this set of negative triples does not exist in other approaches, it has to be created.
+Therefore, extending negative sampling with uncertainty infortion is not only possible for Dynamic Distribution-based Negative Sampling methods like \kbgan, it should work with other approaches from Static Distribution-Based or Custom Cluster-Based Sampling as well.
+
+% kge models
+As in \kbgan the generator and discriminator can theoretically be any \ac{KGE} model, but since our approach is based on \kbgan, the generator needs to be a tensor-factorization \ac{KGE} model where a high score indicates a high probability of a triple to be true and the discriminator needs to be a distance-based \ac{KGE} model.
+Otherwise, our approach as well as \kban has to be adjusted.
+
+% uncertainty types
+For providing uncertainty information in negative sample, we used most common uncertainty metrics from uncertainty sampling of active learning:
+entropy, least confidence, margin of confidence and ratio of confidence.
+Other approaches which work with uncertainty conduct additional, other uncertainty metrics.
+For example, \cite{UKGE} uses a logistic function and bounded rectifier which map scores from \ac{KGE} models to confidence scores.
+Depending on how many models and which information are available, also other approaches of uncertainty sampling from active learning like Credal Uncertainty or \ac{EBU} can be taken into account.
+
+Therefore, further research on including uncertainty information in negative sampling process is required.
+
+
 

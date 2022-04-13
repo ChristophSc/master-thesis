@@ -1,21 +1,33 @@
 \section{Summary and Conclusion}  
 \label{sec:summary_and_conclusion}
 
-summary
+% summary
+\acp{KG} contain a large collection of information which is stored in the form of triples of entities and relations.
+To get around the problem of sparseness of data, \ac{KGE} were proposed to embed entities and relations in a low-dimensional vector space which contains all semantic information.
+To learn these embeddings, positive and negative instances are contrasted.
+Thus, for the sake of space efficiency, \acp{KG} contain only positive information which leads to a variety of options to select negative ones.
+Most of negative sampling methods are trivial and, for example, randomly replace head or tail entity in a given positive triple.
+These sampling methods usually result in sampled negative triples which are easy to distinguish from positive ones and thus do not help the \ac{KGE} model much in learning the embeddings. 
+Therefore, new and more promising negative sampling methods are required.
+
+% summary -> uncertainty 
+Since including uncertainty information produces promising results in other machine learning areas like uncertainty sampling in active learning, we included uncertainty information in a negative sampling process.
+Our approach of \ucgan is based in \kbgan, which dynamically captures distribution of negative samples and samples one negative triple from a given negative triple set.
+\ucgan extends this sampling process by adding uncertainty information to each negative triple.
+Therefore, we implemented four different uncertainty metrics: entropy, least confidence, confidence margin and confidence ratio.
+Based on a classification between positive and negative triples, an uncertainty score is calculated for each negative triple and sampled according to probability distribution given by sampling method \ussoftmax or \usmax.
+To analyse all sampling methods and uncertainty metrics in \ucgan, we evaluated them on on four different datasets and compared the results with original \kbgan sampling approach 
 
 
+% conclusion
+In conclusion, our evaluation of \ucgan with different uncertainty metrics, sampling methods and on different datasets shows that it is possible to learn embeddings with uncertainty sampling method.
+\textcolor{red}{CHECK AGAIN:} In most cases, adding additional uncertainty information to negative sampling process leads to an improvement of original \ac{KGE} models.
+For some cases \ucgan increased the learning curve of MRR and Hit@10 values for some data sets and seem to perform well especially on smaller datasets like \umls and outperforms \kbgan. \textcolor{red}{CHECK AGAIN}.
+Additionally it was established that \ucgan is very dependent on underlying dataset and hyperparameter tuning, since the training sometimes behaves completely differently.
+For example, on \textsc{WN18} rewards are slightly increasing over time, but in contrast on \textsc{FB15k-237} they are decreasing.
+Thus, it can be said that in most cases the results are still not as good as those of original sampling in \kbgan which might have several reasons which are marked for future work explained in  \Autoref{sec:futurework}.
 
-conclusion
-further reasearch of generator performance 
--> show also validation MRR and Hit@10 of Generator during training
--> results:
-both MRR and Hit@10 increases, but very slow + slower than discriminator model
-best performance is worse than original model (pre-trained, without adversarial training, only the model)
-reason:
--> goal of generator is not to find good embeddings but to provide good negative samples for discriminator
--> this may effect the ranges of positive and negative triple scores
--> might be more accurate with traditional generator goal to find a good embedding
-->  
+
 
 
 

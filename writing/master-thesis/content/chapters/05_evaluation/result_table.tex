@@ -47,27 +47,58 @@
         
          \midrule
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  & -  & - & - & - & 18.3 & 44.5 \\
+          \textsc{Results with 5000 epochs + pre-trained} 
+          &  &  &  &  &  & \\
           
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  & -  & - & - & - & - & - \\
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  & 27.1  & 45.2 & - & - & 18.3 & 44.5 \\
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  & -  & - & - & - & - & - \\
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  & 27.1  & 45.4 & - & - & - & - \\
           
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  & -  & - & - & - & - & - \\
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  & 25.9  & 44.3 & - & - & - & - \\
+
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  & 26.6 & 45.2 & - & - & - & - \\
+          
+          \midrule
+          
+          \textsc{Results with 5000 epochs + pre-trained} 
+          &  &  &  &  &  & \\
+          
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE})  & - & - & - & - & 18.3 & 44.5 \\
+          
+          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE})  & -  & - & - & - & - & - \\
+          
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD})  & -  & - & - & - & - & - \\
+
+          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD})  & -  & - & - & - & - & - \\
+          
+          \midrule
+        \textsc{Results with 1000 epochs + not pre-trained} 
+          &  &  &  &  &  & \\
+          
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  & 25.7 & 43.9 & - & - & 18.3 & 44.5 \\
+          
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  & 25.7 & 43.5 & - & - & - & - \\
+          
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  & 25.8 & 43.8 & - & - & - & - \\
+
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  & 25.8 & 43.8 & - & - & - & - \\
           
           \midrule
          
-          \textsc{ucgan} (\textsc{TransE} + \textsc{DistMult}) 
-          & -  & - & - & - & 17.8 & 44.0\\
-         
-         \textsc{ucgan} (\textsc{TransE} + \textsc{ComplEx}) 
-          & -  & - & - & - & - & - \\
+         \textsc{Results with 1000 epochs + not pre-trained} 
+          &  &  &  &  &  & \\
           
-          \textsc{ucgan} (\textsc{TransD} + \textsc{DistMult}) 
-          & -  & - & - & - & - & - \\
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE}) 
+          & 23.4  & 40.9 & - & - & 17.8 & 44.0\\
+         
+         \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE}) 
+          & 23.2  & 40.8 & - & - & - & - \\
+          
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD}) 
+          & 23.3 & 40.9 & - & - & - & - \\
         
-        \textsc{ucgan} (\textsc{TransD} + \textsc{ComplEx}) 
-          & -  & - & - & - & - & - \\
+        \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD}) 
+          & 23.0  & 41.1 & - & - & - & - \\
           
         \bottomrule
     \end{tabular}

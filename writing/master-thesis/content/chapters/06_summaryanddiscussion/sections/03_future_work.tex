@@ -1,18 +1,56 @@
 \section{Future work} 
 \label{sec:futurework}
 
+At first, uncertainty scores are currently calculated based on a classification of positives and negative which is motivated by uncertainty sampling in active learning.
+In turn, the classification is only based on generator scores which might not be accurate enough.
+Therefore, im
 
+
+
+
+\subsection{Improve Classification}
+
+
+
+\subsection{Edit Definition of Uncertainty}
+
+-> further reasearch: create one big set of negative triples in the beginning and apply an uncertainty score \in [0,1] for all of them
+-> uncertainty is not uncertainty of classification
+-> uncertainty = uncertainty if this negative triple is a good one to be sampled
+-> uncertainty is decreased if triple was sampled
+-> uncertainty score is combined with generator score
+=> combination of both scores leads to sampling probability distribution
+-> result: generator model tries more negative triples
+-> in original approach a probability to be sampled is applied to each negative triple, therefore, if generator score is low in the beginning, probability to be sampled is low as well and therefore, maybe will never be sampled even if it might be a good one.
+-> further research on generator score during training showed that MRR and Hit@10 values are increasing, but are far away from accuracy of model alone on current dataset
+-> goal of generator is not anymore to find a good embedding, but to find negative triples which are hard to distinguish from positive ones for discriminator model.
+
+
+\subsection{Extend UCGAN with other Approaches}
 
 FUTURE WORK:
 - combine Uncertainty Sampling with other approaches
 - increase performance of uncertainty sampling
 - filter negatives by removing al negative triples from set $Neg$ which appear in the KG
-- optimize approach by using state of the art PyTorch methods, since KBGAN is based on very old version
+- optimize approach by using state of the art PyTorch methods, since \kbgan is based on very old version
 - this might increase performance
-- extend approach with cache like in approach NSCaching 
--> especially in smaller datasets like UMLS  there are a several duplicates and each epoch the same negative triples are sampled
--> create statistics on Negative set how many times each triple was sampled (uncertainty <-> random) for UMLS dataset
+- extend approach with cache like in approach \textsc{NSCaching} 
+-> especially in smaller datasets like \umls  there are a several duplicates and each epoch the same negative triples are sampled
+-> create statistics on Negative set how many times each triple was sampled (uncertainty <-> random) for \umls dataset
 create figure (bar chart) and save plot
 
 
+
+
+
+further reasearch of generator performance 
+-> show also validation MRR and Hit@10 of Generator during training
+-> results:
+both MRR and Hit@10 increases, but very slow + slower than discriminator model
+best performance is worse than original model (pre-trained, without adversarial training, only the model)
+reason:
+-> goal of generator is not to find good embeddings but to provide good negative samples for discriminator
+-> this may effect the ranges of positive and negative triple scores
+-> might be more accurate with traditional generator goal to find a good embedding
+->  
 

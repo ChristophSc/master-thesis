@@ -1,0 +1,34 @@
+\subsubsection{Uncertainty Sampling Softmax}
+
+
+\begin{figure}
+    \centering
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/uncertainty_wn18_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_mrrs.png}
+    \end{minipage}%\\
+    
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_hit10.png}
+    \end{minipage}%
+     \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18/uncertainty_wn18_hit10.png}
+    \end{minipage}%
+     \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/uncertainty_wn18rr_hit10.png}
+    \end{minipage}%
+    \caption{Adversarial training with \ussoftmax on datasets \textsc{WN18RR}, \textsc{WN18} and \textsc{FB15k-237} like in original \kbgan paper \cite{cai2017kbgan}.
+    Figures show learning curves of MRR and Hit@10 values for 5000 epochs without pre-training.}
+    \label{fig:gan_train_not_pretrained_max_distribution}
+\end{figure}
