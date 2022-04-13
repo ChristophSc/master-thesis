@@ -153,8 +153,6 @@ tp_logger.log_loss_reward(avg_loss.item(), avg_reward.item())
 if config().log.log_pretrain_graph:
     tp_logger.create_and_save_figures(log_dir)   
 
-logging.info(datetime.now())
-
 dis.load(os.path.join('models', config().task.dir, mdl_name))
 logging.info('Best Performance:')
 dis.test_link(test_data, n_ent, heads_filt, tails_filt)

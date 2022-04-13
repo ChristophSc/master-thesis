@@ -79,7 +79,7 @@ class ComplEx(BaseModel):
                 
             avg_epoch_loss = epoch_loss / n_train
             if epoch % config().log.graph_every_nth_epoch == 0:  
-                tp_logger.log_loss_reward(epoch, avg_epoch_loss)     
+                tp_logger.log_loss_reward(avg_epoch_loss)     
             logging.info('Epoch %d/%d, Loss=%f', epoch + 1, n_epoch, avg_epoch_loss)
             if (epoch + 1) % self.config.epoch_per_test == 0:
                 mrr, hits = tester()
