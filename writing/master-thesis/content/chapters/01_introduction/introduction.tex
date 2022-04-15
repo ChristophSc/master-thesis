@@ -2,46 +2,23 @@
 \label{ch:introduction}
 
 % general introduction to the topic, definition of important terms
-\acp{KG} represent structured collections of facts describing the world   \cite{hogan2020knowledge}.
-These collections of facts have been used in a wide range of application, e.g., question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
+\acp{KG} represent structured collections of facts describing the world  \cite{hogan2020knowledge}.
+These collections of facts have been used in a wide range of application, like question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
 In recent years, numerous \acp{KG} such as \textsc{FB15K}, \textsc{WN18}, \textsc{YAGO} \cite{ConEx} and \textsc{WikiData} \cite{arnaoutwikinegata} have been released.
-% TODO: Why are there several ones, which kind of data to they contain?
-% TODO: Mention RDF and other format of triples?
-Within a \ac{KG}, entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
-Facts are represented as a triple in the form of (head entity, relation, tail entity), denoted as \triple{h}{r}{t}.
+A \ac{KG} is a multi-relational graph where entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
+Facts are represented as a triple in the form of (head entity, relation, tail entity), denoted as \hrt.
 These triples indicate that the head entity \texttt{h} (subject) is connected with the tail entity \texttt{t} (object) by a specific relation \texttt{r} (predicate) \cite{zhang2019nscaching, Alam2020AffinityDN}.
-% TODO: advantages and possibilities of KG graphs in comparison to (relational) databases
-% https://www.ontotext.com/knowledgehub/fundamentals/what-is-a-knowledge-graph/
-One of the main challenges for \acp{KG} is to find a Knowledge Graph Representation which encodes similarities and differences among  entities and relations. 
-\ac{KRL} is a critical research issue and forms the basis for many knowledge acquisition tasks and applications.
-For this reason, for example, simple approaches like one-hot encoding does not provide promising results.
-Early works in this area used the symbolic triplet data for statistical relational learning, but this approach neither has good generalization performance, nor it can be applied for large scale \acp{KG} \cite{zhang2021efficient}.
-However, \ac{KGE} is a renowned area of research in recent years which transforms a \acp{KG} into a low-dimensional vector space using embedding models \cite{Alam2020AffinityDN}.
-Many approaches learn vector representations for \acp{KG} while learning a parametrized scoring function that assigns scores to input triples.
-A score of a triple is expected to reflect the likelihood that the input triple is true \cite{ConvE, qiannegative}.
-To learn these low-dimensional \acp{KGE} for entities and relations, several training approaches are available \cite{Ruffinelli2020You}.
-During the training process of these approaches positive and negative triples are discriminated.
-However, most known \acp{KG} contain only positive instances for space efficiency \cite{qiannegative} and not all positive information are represented in \acp{KG} either.
-Accordingly, \acp{KG} are an incomplete picture of the reality.
-Nevertheless, missing negative examples are needed to learn the \ac{KGE}.
-Thus, different \ac{KGE} models have developed which are using different methods to generate the negative triples by Negative Sampling.
-It is an essential part of distinguishing the models \cite{Ruffinelli2020You} and impacts the \ac{KGRL} and the performance of subsequent tasks which are using \acp{KGE}. 
-Therefore, generating negative examples by Negative Sampling is an essential and important part of learning \acp{KGE}.
-
-
-
-
-
-%- embedding based models:
-%    - have better generalization ability
-%    - better inference efficiency
-%    - scalable
-%    - shown promising performance in basic KG tasks
-%\cite{qianunderstanding}:
-%- One-hot encoding is broadly used to convert features or instances into vectors,
-%-> great interpretability but incapable of capturing latent semantics
-
-
+\acp{KG} are an effective way of representing structured data, but it is difficult to manipulate the underlying symbolic nature of these triples \cite{8047276}.
+A renowned area of research are \acp{KGE} which tackle this issue by embedding entities and relations into continuous, low-dimensional vector spaces using embedding models \cite{Alam2020AffinityDN}.
+These embeddings simplify the manipulation while preserving the inherent structure of a \ac{KG} \cite{8047276}. 
+For this purpose, various embedding models present a scoring function which measure the plausibility for each fact \cite{8047276, ConvE, qiannegative}.
+To learn these low-dimensional \acp{KGE} for entities and relations, the embedding models present several different training approaches \cite{Ruffinelli2020You}.
+They differ by introducing new training types, defining new loss functions, other forms of regularization or reciprocal relations \cite{Ruffinelli2020You}.
+While in the beginning of \ac{KGE} learning there were some one-class classification solutions proposed, in turned out that using negative instances lead to better \ac{KGE} models \cite{kotnis2017analysis}.
+Thus, \acp{KG} represent an incomplete picture of the reality, since for the sake of space efficiency they contain only positive instances \cite{qiannegative} and not all positive information are represented in \acp{KG} either.
+Therefore, training types of embedding models mainly differ in the way 
+how negative examples are generated \cite{Ruffinelli2020You}. 
+One of these training types is called Negative Sampling.
 
 \input{content/chapters/01_introduction/sections/01_negative_sampling}
 

@@ -12,7 +12,7 @@ As depicted in \Autoref{fig:advtrain_fb15k237_random_vs_uncertainty}, with \orig
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/1k_epochs/uncertainty_fb15k237_mrrs.png}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
@@ -20,7 +20,7 @@ As depicted in \Autoref{fig:advtrain_fb15k237_random_vs_uncertainty}, with \orig
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_hit10.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/1k_epochs/uncertainty_fb15k237_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \textsc{FB15k237} dataset. 
     Left Figures show Sampling Negative triples with original Random Sampling, right Figures show Best Uncertainty Sampling (Uncertainty Distribution Entropy).
@@ -40,7 +40,7 @@ With \ussoftmax, a global maximum is reached in the beginning of training and su
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_losses.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/1k_epochs/uncertainty_fb15k237_losses.png}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
@@ -48,12 +48,12 @@ With \ussoftmax, a global maximum is reached in the beginning of training and su
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/uncertainty_fb15k237_rew.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k237/1k_epochs/uncertainty_fb15k237_rew.png}
     \end{minipage}%
     \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{FB15k-237} dataset.
     Left Figures show losses and rewards of \textsc{OriginalSampling} and right Figures show losses and rewards of \textsc{UncertaintySamplingSoftmax}.}
     \label{fig:advtrain_fb15k237_losses_rewards}
 \end{figure}
-Suprisingly, training losses with \origssampling look even very different to losses on other datasets.
+Surprisingly, training losses with \origssampling look even very different to losses on other datasets.
 After a global minimum is reached after 50 epochs, losses slightly increase and stagnate at a loss of about 0.8.
 With \ussoftmax, losses continue decreasing until the end of training.
