@@ -1,17 +1,18 @@
-pretrain_config: TransE
-g_config: DistMult
-d_config: TransE
+pretrain_config: TransE # DistMult, ComplEx, TransE, TransD
+g_config: DistMult # DistMult, ComplEx
+d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
-  dir: wn18rr  # umls, wn18rr, wn18, fb15k237
+  dir: umls  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
+  use_pretrained_models: false
   n_sample: 20 #   20
-  sample_type: random      # random, uncertainty_max, uncertainty_distribution
+  sample_type: uncertainty_softmax      # original, uncertainty_max, uncertainty_softmax, confidence
   measure_type: entropy   # entropy, least_confidence, confidence_margin, confidence_ratio
-  n_epoch: 1000  # 5000
+  n_epoch: 5000  # 5000
   n_batch: 100 # 100
-  epoch_per_test: 50 # 100
+  epoch_per_test: 50 # 50
   temperature: 1.0  # 1.0
 TransE:
   dim: 50
@@ -19,7 +20,7 @@ TransE:
   p: 1
   n_epoch: 1000 # 5000
   n_batch: 100 # 100
-  epoch_per_test: 50 # 50   k
+  epoch_per_test: 10 # 50
   model_file: transe.mdl
 TransD:
   dim: 50
@@ -27,7 +28,7 @@ TransD:
   p: 1
   n_epoch: 1000  # 5000
   n_batch: 100 # 100
-  epoch_per_test: 1 # 50
+  epoch_per_test: 10 # 50
   model_file: transd.mdl
 DistMult:
   dim: 50
@@ -36,7 +37,7 @@ DistMult:
   sample_freq: 1
   n_epoch: 1000 # 5000
   n_batch: 100 # 100   # size of
-  epoch_per_test: 50 # 50
+  epoch_per_test: 10 # 50
   model_file: distmult.mdl
 ComplEx:
   dim: 25
@@ -45,7 +46,7 @@ ComplEx:
   sample_freq: 1
   n_epoch: 1000 # 5000
   n_batch: 100 # 100
-  epoch_per_test: 1 # 50
+  epoch_per_test: 10 # 50
   model_file: complex.mdl
 log:
   dump_config: false
@@ -54,4 +55,4 @@ log:
   dir: ./logs
   log_advtrain_graphs: true
   log_pretrain_graph: true
-  graph_every_nth_epoch: 5
+  graph_every_nth_epoch: 10
