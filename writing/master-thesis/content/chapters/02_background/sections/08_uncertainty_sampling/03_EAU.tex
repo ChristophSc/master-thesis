@@ -1,0 +1,40 @@
+\subsection{Epistemic and Aleatoric Uncertainty}
+\label{subsec:epistemic_and_alreatoric_uncertainty}
+
+\ac{EAU} are based on the use of relative likelihoods. 
+\ac{EU} samples instance for which both the positive and the negative class appear to be plausible, while \ac{AU} samples instances where none of the classes is supported.
+For a given instance x, the degrees of support or plausibility of the two classes are defined as \cite{nguyen2021howtomeasure}:
+\begin{equation}
+\pi(1 | x) = \sup_{\theta \in \Theta} \min \bigg[ \pi_{\Theta}(\theta), p_{\theta}(1 | x) - p_{\theta}(0 | x)\bigg]
+\end{equation} 
+\begin{equation}
+\pi(0 | x) = \sup_{\theta \in \Theta} \min \bigg[ \pi_{\Theta}(\theta), p_{\theta}(0 | x) - p_{\theta}(1 | x)\bigg]
+\end{equation} 
+Accordingly, $\pi(1 | x)$ is high if and only if a highly plausible model supports the positive class much stronger as the negative class and vice versa for $\pi(0 | x)$.
+Therefore, the uncertainty due to either influence of the classes or lack of knowledge. 
+
+With this definition for degrees of support for positive and negative classes, epistemic uncertainty $u_e$ and aleatoric uncertainty $u_a$ are defined as \cite{nguyen2021howtomeasure}:
+\begin{equation}
+u_e = \min \bigg[ \pi(1 | x), \pi(0 | x) \bigg]
+\end{equation}
+\begin{equation}
+u_a = 1 - \max \bigg[ \pi(1 | x), \pi(0 | x) \bigg]
+\end{equation}
+
+In general, it can be said that epistemic uncertainty returns uncertainty within a single model's prediction and aleatoric uncertainty the uncertainty across multiple predictions.
+An example is illustrated in \Autoref{fig:differences_aleatoric_epistemic}.
+\begin{figure*}[t]
+  \centering
+    \includegraphics[width=0.90\textwidth]{figures/uncertainty_differences.PNG}
+  \caption{Difference between aleatoric and epistemic uncertainty (obtained from \cite{human-in-the-loop}).}
+  \label{fig:differences_aleatoric_epistemic}
+\end{figure*}
+Two different classes with label A and label B are shown in the figure.
+Some of the instances have already been labelled, others not yet.
+Furthermore, a total of five different decision boundaries from five different predictions can be identified.
+The first marked instances is close to decision boundaries of all five predictions.
+Therefore, we have high epistemic uncertainty since all models are uncertain how to label the first instance.
+Thus, we have low aleatoric uncertainty since decision boundaries of all models are close together.
+For second instance all models are certain how to label it so epistemic uncertainty is low.
+In contrast, the variance of distance to decision boundaries is very high, which results in high aleatoric uncertainty.
+Consequently, for third instance both, aleatoric and epistemic uncertainty is high.

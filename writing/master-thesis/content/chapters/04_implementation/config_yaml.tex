@@ -1,38 +1,24 @@
 \begin{longlisting}
   \begin{minted}[gobble=4, frame=single, linenos]{yaml}
-    pretrain_config: TransE
-    g_config: DistMult
-    d_config: TransE 
+    # general settings
+    pretrain_config: DistMult | ComplEx | TransE | TransD
+    g_config: DistMult | ComplEx
+    d_config: TransE | TransD
     test_batch_size: 100 
-    task:
-      dir: umls 
+    task:  # settings of dataset and evaluation type
+      dir: umls | wn18rr | wn18 | fb15k237
       type: link
-    adv:
+    adv:   # settings for adversarial training
       use_pretrained_models: false
       n_sample: 20 
-      sample_type: uncertainty_distribution
-      measure_type: entropy   
+      sample_type: original | us_max |  us_softmax
+      measure_type: entropy | least_confidence | confidence_margin | 
+                    confidence_ratio  
       n_epoch: 5000
       n_batch: 100 
       epoch_per_test: 50
       temperature: 1.0
-    TransE:
-      dim: 50
-      margin: 3
-      p: 1
-      n_epoch: 1000 
-      n_batch: 100 
-      epoch_per_test: 50
-      model_file: transe.mdl
-    TransD:
-      dim: 50
-      margin: 3
-      p: 1
-      n_epoch: 1000 
-      n_batch: 100
-      epoch_per_test: 50
-      model_file: transd.mdl
-    DistMult:
+    DistMult:  # settings for DistMult pre-training
       dim: 50
       lam: 0.1
       n_sample: 20
@@ -41,7 +27,7 @@
       n_batch: 100
       epoch_per_test: 50
       model_file: distmult.mdl
-    ComplEx:
+    ComplEx:  # settings for ComplEx pre-training
       dim: 25
       lam: 0.1
       n_sample: 20
@@ -50,7 +36,23 @@
       n_batch: 100 
       epoch_per_test: 50
       model_file: complex.mdl
-    log:
+    TransE:  # settings for TransE pre-training
+      dim: 50
+      margin: 3
+      p: 1
+      n_epoch: 1000 
+      n_batch: 100 
+      epoch_per_test: 50
+      model_file: transe.mdl
+    TransD:  # settings for TransD pre-training
+      dim: 50
+      margin: 3
+      p: 1
+      n_epoch: 1000 
+      n_batch: 100
+      epoch_per_test: 50
+      model_file: transd.mdl
+    log:   # settings for logging graphs
       dump_config: false
       log_train: true
       log_config: true

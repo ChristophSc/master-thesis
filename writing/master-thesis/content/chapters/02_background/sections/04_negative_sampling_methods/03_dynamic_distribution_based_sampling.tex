@@ -25,16 +25,16 @@ Randomly selecting one of the negative triples does not ensure that a useful one
 For embedding, the distinction between negative and positive triples from areas of a \ac{KG} about which no or incomplete information are available could be particularly important.
 
 % DYNAMIC DISTRIBUTION-BASED NEGATIVE SAMPLING
-KBGAN
-\cite{zhang2021efficient}:
-- avoid vanishing gradient problem 
--> but more complex and harder to train
-- waste time on additional parameters to fit the full distribution of negative triplets
-Problems: - increases the number of parameters
-- learning suffers from instability and degeneracy
--> REINFORCE gradient has high variance
-- only a few negatives with high gradient -> a lot of effort find them (model distribution of negatives)
--> instable performance
-- pretraining necessary
-- other approaches like Self adversarual sampling (Self-Adv) tried to solve this problem by using a self embedding model for the generator
--> disadvantage: can not guarantee to sample enough negative triplets with large gradients 
+%KBGAN
+%\cite{zhang2021efficient}:
+%- avoid vanishing gradient problem 
+%-> but more complex and harder to train
+%- waste time on additional parameters to fit the full distribution %of negative triplets
+%Problems: - increases the number of parameters
+%- learning suffers from instability and degeneracy
+%-> REINFORCE gradient has high variance
+%- only a few negatives with high gradient -> a lot of effort find %them (model distribution of negatives)
+%-> instable performance
+%- pretraining necessary
+%- other approaches like Self adversarual sampling (Self-Adv) tried to solve this problem by using a self embedding model for the generator
+%-> disadvantage: can not guarantee to sample enough negative triplets with large gradients 

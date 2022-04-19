@@ -5,13 +5,13 @@
 Triplet Fact-Based Representation Learning Models are separated into three groups:
 \begin{enumerate}
     \item 
-    \textbf{Translation-Based Models}  which are based on word embedding algorithms: 
-    \textsc{TransE} \cite{TransE}, \textsc{TransH} \cite{TransH}, \textsc{TransR} \cite{TransR}, \textsc{TransD} \cite{TransD}
+    \textbf{Translation-Based Models} are based on word embedding algorithms and inspired by \textit{word2vec} \cite{electronics9050750}.
+    Examples for \ac{KGE} models of this group are \textsc{TransE} \cite{TransE}, \textsc{TransH} \cite{TransH}, \textsc{TransR} \cite{TransR}, \textsc{TransD} \cite{TransD}
     and 
-    \textsc{RotatE} \cite{RotatE}
-    The basic idea of \transe is that a functional relation $r$ corresponds to a translation of the embeddings, i.e. $h + r \thickapprox t$ when (h,r,t) holds.
+    \textsc{RotatE} \cite{RotatE}.
+    The basic idea of \transe is that a functional relation $r$ corresponds to a translation of embeddings, i.e. $h + r \thickapprox t$ when $(h,r,t)$ holds.
     If it does not hold, $t$ should be far away from $h + r$ which lead to a energy-based framework $d(h+r, t)$ for some dissimilarity measure $d$ ($L_1$ or $L_2$ norm) \cite{TransE}.
-    The idea of \transe is depicted in \autoref{fig:translationbasedmodels} (a).
+    The idea of \transe is depicted in \Autoref{fig:translationbasedmodels} (a).
     \begin{figure*}[t]
       \centering
         \includegraphics[width=0.95\textwidth]{figures/Transe+TransD.pdf}
@@ -25,13 +25,12 @@ Triplet Fact-Based Representation Learning Models are separated into three group
     \end{equation}
     \transd on the other hand works with two vectors for each entity and relation.
     The first one captures the meaning and the second one is used to construct the mapping matrices \cite{TransD}.
-
-    \item 
-    \textbf{Tensor Factorization-Based Models}:
-    \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, \textsc{HolE} \cite{HolE}
-
+    It is illustrated in \Autoref{fig:translationbasedmodels} (b).
     
-    \distmult \cite{DistMult} simplifies the computational complexity of \rescal and restricts matrix $M_r$ to be a diagonal matrices, i.e. $M_r = diag(r), r \in \mathbb{R}^d$ \cite{electronics9050750}. 
+    \item 
+    \textbf{Tensor Factorization-Based Models} transforms triple facts into a 3D binary tensor $\mathcal{X} \in \mathbb{R}^{n \times n \times m}$ where $n$ and $m$ denote the number of entities and relations \cite{electronics9050750}.
+    Examples of this group are \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, \textsc{HolE} \cite{HolE}.
+    \distmult \cite{DistMult} simplifies the computational complexity of \rescal and restricts matrix $M_r$ to be a diagonal matrix, i.e. $M_r = diag(r), r \in \mathbb{R}^d$ \cite{electronics9050750}. 
     Therefore, its scoring function is transformed to
     \begin{equation}
         f_r(h,r) = h^{\top}diag(r)t\label{eq:distmultscoringfunction}
@@ -43,8 +42,8 @@ Triplet Fact-Based Representation Learning Models are separated into three group
     \end{equation}
     where $Re(\dot)$ denotes the real part of a complex value and $\bar{t}$ is the complex conjugate of t.
     
-    
     \item 
-    \textbf{Neural Network-Based Models}: 
-    \textsc{ConvE} \cite{ConvE}, \textsc{HypER} \cite{HypER}, \textsc{ConEx} \cite{ConEx}, \textsc{ConvQ} and  \textsc{ConvO} \cite{demir2021convolutional}
+    \textbf{Neural Network-Based Models} use deep learning and its representation and generalization capabilities to embed a knowledge graph by a neural network \cite{electronics9050750}.
+    \textsc{ConvE} \cite{ConvE}, \textsc{HypER} \cite{HypER}, \textsc{ConEx} \cite{ConEx}, \textsc{ConvQ} and  \textsc{ConvO} \cite{demir2021convolutional} are examples for this group.
+    
 \end{enumerate}

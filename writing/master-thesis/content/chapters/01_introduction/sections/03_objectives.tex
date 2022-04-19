@@ -1,37 +1,21 @@
 \section{Objectives}
 \label{sec:objectives}
 
-As can be seen, several approaches to negative sampling are already available, but they all have different problems and can be further optimized.
-For this reason, we want to present another approach of Negative Sampling in this thesis:
-
-% OBJECTIVE
-Inspired by Uncertainty Sampling in Active Learning, we want to combine this approach with Negative Sampling from Embedding learning.
-We promise to generate more informative negative triples for the embedding model.
-Unlike previous approaches, we thus do not try to sample the negative triple that is most difficult to distinguish from a positive one, but which one currently gives the embedding model the greatest benefit, i.e., the greatest learning factor.
-Thereby we expect to accelerate the learning process.
+% OBJECTIVE + HYPHOTETHESIS
+Inspired by uncertainty sampling in active learning, we want to incorporate uncertainty information in an existing negative sampling process from embedding learning.
+Unlike previous approaches, we thus do not sample a negative triple which is closest to a positive one, but the one where the embedding model is most uncertain about.
 Therefore, the sampled instances can be hard negative examples, but also other negative triples which are valuable for the embedding model.
+By implementing a new sampling method, we expect to generate more informative negative triples and therefore, have a positive impact on a negative sampling process.
+This could be an acceleration of learning process like achieving same accuracies with less epochs, same accuracies with less training time or achieving a better overall accuracy.
 
 % CONTRIBUTIONS
-Therefore, in this thesis we want to incorporate Uncertainty Sampling into existing KGE learning processes and support them by more informative instances.
-By implementing this new sampling method, we promise to improve the adversarial learning process, i.e., either achieve the same accuracies with less epochs, the same accuracies with less training time or by achieving a better overall accuracy as the original \ac{KBGAN} approach.
-To achieve this goal, our thesis will make the following contributions:
-First, we will look at existing approaches and analyze in which Uncertainty Sampling can be used and where it promises the best results. 
-After an implementation of Uncertainty Sampling is done, 
+Our thesis will make the following contributions:
+First, we will look at existing approaches and analyze how uncertainty is measured in uncertainty sampling of active learning and which of these approaches is applicable for negative sampling.
+After an implementation of uncertainty sampling is done, 
 we will perform an evaluation by testing our approach on different \ac{KG} datasets.
 Due to the partly large amount of data and correspondingly longer execution times, \ac{PC2}\footnote{\url{https://pc2.uni-paderborn.de/}} will be used for this purpose,
 Subsequently, the results are compared with existing methods to conclude our approach \textbf{Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty}.
 
-% REQUIREMENTS
-%- FAST AND EFFECTIVE SAMPLING to not slow down the embedding learning process
-%- HIGH QUALITY NEGATIVE SAMPLES with high gradient for improve embedding
-%- find negative triples which are particularly interesting for the embedding model
- 
-
-
-% CHALLENGES
-%Consequently, there are two main challenges for sampling negative triples \cite{zhang2021efficient}:
-%At first, it is necessary to capture and model the dynamic distribution if negative triples to sample informative and useful negative triples with high gradients which help the model during the embedding learning process.
-%Secondly, these negative triples have to be sampled effectively  so that the Negative Sampling does not negatively affect the performance of embedding learning.
 
 
 

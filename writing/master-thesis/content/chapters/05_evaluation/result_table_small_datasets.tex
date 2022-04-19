@@ -11,54 +11,56 @@
         
         \midrule
         
+
+        \textsc{DistMult}  
+        & 69.7 & 89.1 & - & - \\
+        
+        \textsc{ComplEx}   
+        & 85.6 & 97.7 & - & - \\
+        
         \textsc{TransE}    
-        & 77.5 & 98.4 & - & -  \\
+        & 77.0 & 98.4 & - & -  \\
         
         \textsc{TransD}    
         & 79.6 & 98.7 & - & - \\ 
         
-        \textsc{DistMult}  
-        & 70.4 & 89.1 & - & - \\
-        
-        \textsc{ComplEx}   
-        & 85.6 & 97.7 & - & - \\
 
         \midrule
         
-        pre-trained  (5k epochs)
+        \textbf{Pre-trained  (5k epochs)}
         & & &  &  \\
         
         \kbgan (\textsc{DistMult} + \textsc{TransE})  
-        & - & - & - & - \\
+        & 62.9 & 81.5 & - & - \\
         
-       \kbgan (\textsc{ComplEx} + \textsc{TransE})   
-        & - & - & - & - \\
+        \kbgan (\textsc{ComplEx} + \textsc{TransE})   
+        & 63.9  & 94.5 & - & - \\
         
         \kbgan (\textsc{DistMult} + \textsc{TransD})  
-        & - & - & - & -\\
+        & 67.4 & 81.2 & - & -\\
         
         \kbgan (\textsc{ComplEx} + \textsc{TransD})   
-        & - & - & - & -\\
+        & 61.8 & 91.2 & - & -\\
 
-         \midrule
+        \midrule
          
-         \ucgan (\textsc{DistMult} + \textsc{TransE}) 
-          & - & - & - & - \\
+        \ucgan (\textsc{DistMult} + \textsc{TransE}) 
+        & 77.8 & 98.4 & - & - \\
          
         \ucgan (\textsc{ComplEx} + \textsc{TransE}) 
-          & -  & - & - & -\\
+        & 78.4 & 98.2 & - & -\\
           
-         \ucgan (\textsc{DistMult} + \textsc{TransD}) 
-          & -  & - & - & - \\
+        \ucgan (\textsc{DistMult} + \textsc{TransD}) 
+        & 79.8 & 99.2 & - & - \\
         
-          \ucgan (\textsc{ComplEx} + \textsc{TransD}) 
-          & -  & - & - & - \\
+        \ucgan (\textsc{ComplEx} + \textsc{TransD}) 
+        & 80.8  & 98.9 & - & - \\
           
           
-          \midrule
+        \midrule
         
-        Not pre-trained  (1k epochs)
-        & & &  &  \\
+        \textbf{Not pre-trained  (1k epochs)}
+        & & & &  \\
         
         \kbgan (\textsc{DistMult} + \textsc{TransE})  
         & 72.7 & 94.0 & - & - \\
@@ -93,5 +95,5 @@
     First section includes results for different embedding models achieved with pre-training.
     Second section is the original \kbgan approach with random sampling and different embedding models. Since no results were given in paper of \kbgan \cite{cai2017kbgan}, these results were generated independently.
     Third section includes results achieved by replacing Random Sampling with Sampling by Uncertainty, which is called \ucgan at this point.}
-\label{tab:results}
+\label{tab:results_small_datasets}
 \end{table}

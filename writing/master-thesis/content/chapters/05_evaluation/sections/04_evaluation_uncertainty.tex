@@ -14,11 +14,15 @@ The evaluation takes place on all four data sets in following \Autoref{subsec:un
 
 \subsection{Results}
 
-\textcolor{red}{ADD TEXT HERE}
-
+Results of our experiments on smaller datasets \umls and \kinship  are listed in \Autoref{tab:results_small_datasets} and bigger datasets \textsc{FB15k-237},  \textsc{WN18} and  \textsc{WN18RR} are listed in \Autoref{tab:results}.
 \input{content/chapters/05_evaluation/result_table_small_datasets}
-
 \input{content/chapters/05_evaluation/result_table}
+These tables list both the results given in the \kbgan paper \cite{cai2017kbgan} and our achieved MRR and Hit@10 values on the different datasets.
+Furthermore, results after 5000 epochs on pre-trained models but also results after 1000 epochs with non-pre-trained models are listed.
+The model named first in the brackets is the generator and the model named second is the discriminator.
+
+\newpage
+
 
 \subsection{Conclusion of Uncertainty Sampling}
 In some cases like training on \textsc{FB15k-237} adversarial training with \ussoftmax seem to work and on small datasets like \umls even better than \origsampling.

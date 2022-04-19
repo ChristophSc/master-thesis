@@ -12,6 +12,9 @@
         
         \midrule
         
+        \textbf{\textsc{Results according to paper}} 
+        &  &  &  &  &  & \\
+          
         \textsc{TransE}    
         & - & 42.8$^{\dag}$ & - & 89.2 & -    & 43.2$^{\dag}$ \\
         
@@ -25,9 +28,6 @@
         & 24.0$^{\ddag}$  & 41.9$^{\ddag}$ & \textbf{94.1} & 94.7 & \textbf{44.4}$^{\ddag}$ & \textbf{50.7}$^{\ddag}$ \\
 
         \midrule
-        
-        \textsc{Results according to paper} 
-          &  &  &  &  &  & \\
           
         \textsc{TransE} (pre-trained)                         & 24.2    & 42.2  & 43.3   & 91.5 & 18.6 & 45.9 \\
         
@@ -45,43 +45,75 @@
         & 27.7 & \textbf{\underline{45.8}} & \underline{77.9}
         & 94.8 & \underline{21.5} & 46.9\\
         
-         \midrule
+        \midrule
+        
+        \midrule
+         
+        \textbf{\textsc{My Results}} 
+        &  &  &  &  &  & \\
+        
+       \textsc{DistMult}  
+        & 21.4 & 37.3 & 71.0 & 94.3 & 35.6 & 43.5 \\
+        
+        \textsc{ComplEx}   
+        & 20.5 & 36.3 & 82.4 & 94.3 & 37.1 & 44.5 \\
+         
+        \textsc{TransE}    
+        & 23.2 & 40.8 & 44.2 & 91.7 & 17.8 & 41.3 \\
+        
+        \textsc{TransD}    
+        & 22.7 & 40.4 & 44.9 & 92.2 & 17.7 & 44.0 \\ 
+        
+        \midrule
           
           \textsc{5k epochs + pre-trained} 
           &  &  &  &  &  & \\
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  & 27.1  & 45.2 & - & - & 18.3 & 44.5 \\
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  
+          & 27.0  & 45.1 & 64.9 & 94.8 & 19.3 & 45.2 \\
           
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  & 27.1  & 45.4 & - & - & - & - \\
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  
+          & 26.8  & 44.9 & 64.4 & 94.9 & 19.2 & 45.5 \\
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  & 25.9  & 44.3 & - & - & - & - \\
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  
+          & 26.6  & 44.9 & 75.9 & 94.7 & 19.4 & 44.6 \\
 
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  & 26.6 & 45.2 & - & - & - & - \\
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  
+          & 26.5 & 44.9 & 77.3 & 94.8 & 19.1 & 44.5 \\
           
           \midrule
           
           \textsc{5k epochs + pre-trained} 
           &  &  &  &  &  & \\
           
-          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE})  & - & - & - & - & 18.3 & 44.5 \\
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE})  
+          & 23.9 & 41.8 & 43.2 & 92.5 & 17.0 & 44.3 \\
           
-          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE})  & -  & - & - & - & - & - \\
+          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE})  
+          & 23.8 & 41.7 & 43.3 & 92.5 & 17.0 & 44.4 \\
           
-          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD})  & -  & - & - & - & - & - \\
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD})  
+          & 23.6  & 41.7 & 47.2 & 93.7 & 17.6 & 44.6 \\
 
-          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD})  & -  & - & - & - & - & - \\
+          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD})  
+          & 23.6 & 41.7 & 46.5 & 93.2 & 17.6 & 45.1 \\
+         
           
           \midrule
         \textsc{1k epochs + not pre-trained} 
           &  &  &  &  &  & \\
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  & 25.7 & 43.9 & - & - & 18.3 & 44.5 \\
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  
+          & 25.3 & 43.1 & 59.7 & 94.7 & 18.6 & 44.5 \\
           
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  & 25.7 & 43.5 & - & - & - & - \\
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  
+          & 25.3 & 43.2 & 58.4 & 94.6 & 18.3 & 44.7 \\
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  & 25.8 & 43.8 & - & - & - & - \\
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  
+          & 25.7 & 43.5 & 70.8 & 94.3 & 18.7 & 43.7 \\
 
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  & 25.8 & 43.8 & - & - & - & - \\
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  
+          & 25.4 & 43.8 & 64.1 & 94.3 & 25.4 & 43.8 \\
           
           \midrule
          
@@ -89,16 +121,16 @@
           &  &  &  &  &  & \\
           
           \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE}) 
-          & 23.4  & 40.9 & - & - & 17.8 & 44.0\\
+          & 23.4  & 40.9 & 42.0 & 91.8 & 17.8 & 44.0\\
          
          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE}) 
-          & 23.2  & 40.8 & - & - & - & - \\
+          & 23.2  & 40.8 & 42.0 & 91.6 & 17.0 & 43.9 \\
           
           \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD}) 
-          & 23.3 & 40.9 & - & - & - & - \\
+          & 23.3 & 40.9 & 44.6 & 92.3 & 17.9 & 42.2 \\
         
         \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD}) 
-          & 23.0  & 41.1 & - & - & - & - \\
+          & 23.0  & 41.1 & 44.8 & 92.3 & 17.2 & 43.5 \\
           
         \bottomrule
     \end{tabular}

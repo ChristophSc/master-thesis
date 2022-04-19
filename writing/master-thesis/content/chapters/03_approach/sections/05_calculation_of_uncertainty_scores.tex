@@ -5,12 +5,13 @@
 The calculation of uncertainty scores based on the calculated probabilities takes place in the following steps.
 At first, for each triple $l= (h, r, t)$ a plausibility score $f_G(l)$ is calculated by the generator embedding model. 
 Subsequently, a classification is performed to obtain probabilities for positive triple class ($y = 1$) and negative triple class ($y = 0$).
-To finally sample by Uncertainty we need to calculate uncertainty scores now. 
+To finally sample by uncertainty we need to calculate uncertainty scores now. 
 For this a transformation function $\phi$ is needed which uses calculated class probabilities to map from plausibility scores from generator to an uncertainty score $u(l)$.
 \begin{equation} \label{eqn:uncertainty_function}
     u(l) = \phi(\mathds{P}(y = 1| f_G(h, r, t))), \phi: \mathbb{R} \rightarrow [0,1]
 \end{equation}
-For this transformation function we have several uncertainty metrics at our disposal which are Entropy, Least Confident, Margin of Confidence and Ratio of Confidence, which calculate uncertainty score $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | (h,r,t))$ (\autoref{fig:sampling_distributions}).
+For this transformation function we have several uncertainty measurements at our disposal which are entropy, least confidence, margin of confidence and ratio of confidence.
+They provide an uncertainty score $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | (h,r,t))$ of a given triple $(h, r, t)$ (\autoref{fig:sampling_distributions}).
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
@@ -29,14 +30,13 @@ For this transformation function we have several uncertainty metrics at our disp
       \centering
       \includegraphics[width=0.9\linewidth]{figures/smallest_ratio.PNG}
     \end{minipage}%
-    \caption{Uncertainty Sampling Distributions for (a) Entropy, (b) Least Confident, (c) Margin of Confidence and (d) Ratio of Confidence metrics in a binary classification problem.
-    The x-axis marks the probability of a triple belonging to the positive class $\mathbb{P}(y = 1 | l = (h,r,t))$ and the y-axis the uncertainty score $u(l)$ of the corresponding metric.}
+    \caption{Uncertainty sampling distributions for (a) entropy, (b) least confidence, (c) margin of confidence and (d) ratio of confidence in a binary classification problem.
+    The x-axis marks the probability of a triple belonging to the positive class $\mathbb{P}(y = 1 | l = (h,r,t))$ and the y-axis the uncertainty score $u(l)$ of the corresponding uncertainty measure.}
     \label{fig:sampling_distributions}
 \end{figure}
 
 % describe sampling methods
 % 1) always sample maximum uncertainty score
-
 Based on these distribution functions, two different \textbf{Uncertainty Sampling Methods} can be derived:
 \begin{itemize}
     \item 
@@ -65,8 +65,7 @@ Based on these distribution functions, two different \textbf{Uncertainty Samplin
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Softmax} Distribution (\textsc{USSoftmax})}:\\
     
     % 2) sample according to distribution
-    On the other hand triples can be sampled according to a probability distribution based on uncertainty scores.
-    This method is referred to as \textbf{Uncertainty Distribution}.
+    On the other hand triples can be sampled according to a softmax probability distribution based on uncertainty scores.
     Thus, triples close to $P(y = 1 | f_G(l)) = 0.5$ still have the highest probability of being sampled, but other triples for which the model is more certain are also assigned a probability in the classification.
     Uncertainty Sampling Distribution is defined as the softmax of all uncertainty scores:
     \begin{equation}
@@ -74,11 +73,13 @@ Based on these distribution functions, two different \textbf{Uncertainty Samplin
         p_{sampled}(h,r,t) = \frac{e^{u(h,r,t)}}{\sum_{(h,r,t) \in Neg}{e^{u(h,r,t)}}}
     \end{equation}
 \end{itemize}
+In the original \kbgan approach, triples were given a sampling probability according to their achieved score in the generator model.
+Thus, negative triples with the highest score also received the highest sampling probability.
+This sampling method is referred as \origsampling in the following.
+For the individual uncertainty measurements, the following definitions for $\phi$ and considerations for the two sampling methods result \cite{human-in-the-loop}.
 
-
-For the individual uncertainty metrics, the following definitions for $\phi$ and considerations for the two sampling methods result \cite{human-in-the-loop}:
-
-\textbf{Entropy} considers the differences between all the predictions.
+\textbf{Entropy} 
+considers the differences between all the predictions.
 Like the other uncertainty metrics, the high point of the function is at $x = 0.5$, where the model is most uncertain about the classification.
 However, it differs to the other metrics since it slopes flatter in both directions.
 Therefore, if triples are sampled by Uncertainty Distribution method, it is more likely that triples will be sampled that are further away from $x=0.5$.
@@ -139,7 +140,7 @@ And therefore:
 \begin{equation} \label{eq:marginofconfidence}
     = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |f_G(x)), \mathds{P}_{\theta}(y = 1 |f_G(x)))
 \end{equation}
-Since \autoref{eq:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by Margin of Confidence is the same as sampling by Least Confidence.
+Since \Autoref{eq:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by Margin of Confidence is the same as sampling by Least Confidence.
 
 \textbf{Ratio of Confidence}
 is quite similar to Margin of Confidence, but instead of the difference it compares the ratio of the two most confident predictions

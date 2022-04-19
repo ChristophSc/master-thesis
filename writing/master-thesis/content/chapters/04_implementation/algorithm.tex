@@ -1,7 +1,7 @@
 \begin{algorithm*}[t]
 \small
  \KwData{training set of positive fact triples $\mathcal{T}=\{(h,r,t)\}$}
- \KwIn{Pre-trained generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$, and pre-trained discriminator D with parameters $\theta_D$ and score function $f_D(h,r,t)$}
+ \KwIn{(Pre-trained) generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$, and (pre-trained) discriminator D with parameters $\theta_D$ and score function $f_D(h,r,t)$}
  \KwOut{Adversarially trained discriminator}
  $b \longleftarrow 0$\tcp*[l]{baseline for policy gradient}
  \Repeat{convergence}{
@@ -33,6 +33,7 @@
   $\theta_G \longleftarrow \theta_G+\eta_G G_G, \theta_D \longleftarrow \theta_D-\eta_D G_D$\tcp*[l]{update parameters}
   $b \leftarrow r_{sum} / |\mathcal{T}_{batch}|$\tcp*[l]{update baseline}
  }
- \caption{Pseudocode of \ucgan algorithm which modifies the original \kbgan algorithm. Lines marked in \textcolor{red}{red} are from original \kbgan algorithm and replaced by \textcolor{darkgreen}{green} marked lines from \ucgan. Black lines are the same in both approaches.}
+ \caption{\ucgan algorithm. 
+ \textcolor{red}{Red} lines were removed from original \kbgan algorithm, \textcolor{darkgreen}{green} lines are new for \ucgan.}
  \label{alg:ucgan}
 \end{algorithm*}

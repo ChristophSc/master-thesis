@@ -1,9 +1,7 @@
 \section{Calculation of Probabilities for Triple Classification}
-\label{sec:calculation_of_probabilitie_for_triple_classification}
-
-
-Having established the binary classification problem between positive and negative triples, it is now necessary to determine how to calculate for a triple the probability of belonging to one of these classes.
-Based on \Autoref{fig:positiveVsNegativeApproach} with ranges of positive and negative triple scores, we want to determine two bounds: 
+\label{sec:calculation_of_probabilities_for_triple_classification}
+Having established the binary classification problem between positive and negative triples, it is necessary to determine how to calculate for a triple the probability of belonging to one of these classes.
+Based on \Autoref{fig:positiveVsNegativeApproach} with ranges of positive and negative triple scores, we want to determine two bounds.
 Assuming we have a generator scoring function $f_G$ which retrieves scoring values for each triple $l = (h,r,t)$ such that $f_G(l) \in \mathbb{R}$.
 Therefore, to provide probabilities belonging to positive or negative triple class. we need to define two boundaries:
 First, $score_{min}$ which defines at which scoring value a triple has the probability 0 to be a positive triple: 
@@ -65,25 +63,26 @@ With $f_G$ the scoring function of the generator, this option results in the fol
     score_{max} := \argmax_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
 \end{equation}
 
-Since $score_{min}$ and $score_{max}$ are now defined by option two, the probability of a triple to be positive ($y = 1$) can be calculated with the following \autoref{eqn:positive_probability}
+Since $score_{min}$ and $score_{max}$ are now defined by option two, the probability of a triple to be positive ($y = 1$) can be calculated with following \Autoref{eqn:positive_probability}.
 \begin{equation}  \label{eqn:positive_probability}
     \mathds{P}(y = 1|(h, r, t)) =
     \begin{cases}
-        0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  
-        if \  f_G(h,r,t) \leq score_{min}
+        0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  \ \   
+         \text{if} \  f_G(h,r,t) \leq score_{min}
          
         \\ \\
-        1 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
-        if \ f_G(h,r,t) \geq score_{max}
+        1 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \   \ \ \
+        \text{if} \ f_G(h,r,t) \geq score_{max}
          
         \\ \\
         \frac{f_G(h,r,t) - score_{min}}{score_{max} - score_{min}}
-        \ \ \ \ \ \ \ 
-        else
+        \ \ \ \ \ \ 
+         \text{else}
         \\
-    \end{cases}  \in [0, 1]
+    \end{cases} 
 \end{equation}
-and accordingly, since we have a binary classification problem for positive and negative triples, the probability of a triple to be negative ($y=0$) is
+while $\mathds{P}(y = 1|(h, r, t))  \in [0, 1]$.
+Since we have a binary classification problem for positive and negative triples, the probability of a triple to be negative ($y=0$) is
 \begin{equation} \label{eqn:negative_probability}
     \mathds{P}(y = 0 | f_G(h, r, t)) = 1 - \mathds{P}(y = 1| f_G(h, r, t)) \in [0,1]
 \end{equation}

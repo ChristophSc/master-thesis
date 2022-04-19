@@ -1,32 +1,21 @@
 \section{Uncertainty Sampling} 
 \label{sec:uncertaintysampling}
-
-% Active Learning and Uncertainty Sampling: \cite{5272205}
-%- Active Learning to minimize the amount of human labeling efforts required for a supervised classifier
-%- active learner has two major schemes: uncertainty sampling and committee-based sampling
-%- most uncertain per cluster: using density to weigh the selected examples
 %- or: select examples based on informativeness, diversity and density criteria
-%- outlier problem: uncertainty sampling often fails by selecting outliers
 %- motivation behind uncertainty sampling: find some unlabeled examples near decision boundaries and use them to clarify the position of decision boundaries -> most informative instances
 %- use density to determine whether an unlabeled example is highly representative
- 
-
-
-
-
-Uncertainty Sampling originates from Active Learning, 
-where labeled data for training a supervised model is obtained from a dataset of unlabeled instances.
+The use of uncertainty has already led to promising improvements in many areas of machine learning.
+The term of uncertinty sampling is most often associated with the active learning, where labeled data for training a supervised model is obtained from a dataset of unlabeled instances.
 Based on the informativeness of the unlabeled instances for the learning algorithm, a prioritization results in which they are labeled.
 It is used in machine learning approaches, where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled data \cite{Settles2009ActiveLL}.
-They aim for greater accuracy with fewer labeled training instances \cite{Settles2009ActiveLL}.
+Active learning aims for greater accuracy with fewer labeled training instances \cite{Settles2009ActiveLL}.
 These selected unlabeled instances can either be generated de novo or sampled from a given distribution.
-In the literature several query strategies have been proposed with different approaches how to receive informative instances, one of them is Uncertainty Sampling \cite{Settles2009ActiveLL}.
+In the literature several query strategies have been proposed with different approaches how to receive informative instances, one of them is uncertainty sampling \cite{Settles2009ActiveLL}.
 Other query strategies for Active Learning are Query-By-Committee, Expected Model Change, Variance Reduction, Fisher Information Ration, Estimated Error Reduction and Density-Weighted Methods \cite{Settles2009ActiveLL}.
-They provide different strategies to obtain informative instances from the unlabeled dataset like voting of a committee consisting of several trained models, querying the instance that would impart the greatest change to the current model if we knew its label or queries instances which minimize the learner’s future error by minimizing its variance.
+They provide different strategies to obtain informative instances from the unlabeled dataset like voting of a committee consisting of several trained models, querying the instance that would impact the greatest change to the current model if we knew its label or queries instances which minimize the learner’s future error by minimizing its variance.
 
 In Uncertainty Sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of the unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$.
 Subsequently, the instance with the highest score will be sampled.
-Popular examples of measures for utility score include \cite{human-in-the-loop}
+Most common used  uncertainty measures for utility score include \cite{human-in-the-loop}:
 \begin{equation}
     \text{Entropy-based:}\hspace{15mm}
      s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}
@@ -47,112 +36,23 @@ where
 $y_m = \argmax_{y \in \mathcal{Y}} p_{\theta}(y | x)$ 
 and 
 $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$.
-Following three different frameworks for measuring the  uncertainty of a learner can be separated \cite{nguyen2021howtomeasure}.
-While the first one has been specifically developed for the purpose of active learning, the others are more general approaches for machine learning \cite{nguyen2021howtomeasure}.
 
-\subsection{Evidence-based Uncertainty} 
-
-\ac{EBU} differentiates between uncertainty due to conflicting evidence and insufficient evidence.
-\ac{EBU} looks at the influence of individual features,
-partitions them into those that provide evidence for the positive and for the negative class, 
-and either queries the instance with the highest conflicting evidence (\ac{CEU}) or where both evidences are low (\ac{IEU}).
-
-- uncertainty due to conflicting evidence or insufficient eviddence
--> conflicting-evidence uncertainty <-> insufficient evidence uncertainty
-- mainly motivated by Naive Bayes (NB) classifier
-- EBU looks at evidence features $x^m$ in feature representation $x = (x^1, ..., x^d)$ of instances. 
-- if we have class-conditional probabilities $p_{\theta}(x^m|0)$ and $p_{\theta}(x^m|1)$ for model $\theta$ for all feature space with dimension $d$.
-- Subsequently the set of features are partitioned for positive class $P_{\theta}$ and negative class $N_{\theta}$ which are defined as:
-\begin{equation}
-    P_{\theta}(x) = \bigg\{ x^m \bigg| \frac{p_{\theta}(x^m|1)}{p_{\theta}(x^m|0)} > 1 \bigg\} 
-\end{equation}
- \begin{equation}
-    N_{\theta}(x) = \bigg\{ x^m \bigg| \frac{p_{\theta}(x^m|0)}{p_{\theta}(x^m|1)} > 1 \bigg\} 
-\end{equation}
-The total evidence is for positive class $E_1$ and negative class $E_0$ is determined as:
-\begin{equation}
-    E_1(x) = \prod\limits_{x^m \in P_{\theta}(x)} \frac{p_{\theta}(x^m|1)}{p_{\theta}(x^m|0)}
-\end{equation}
-\begin{equation}
-    E_0(x) = \prod\limits_{x^m \in N_{\theta}(x)} \frac{p_{\theta}(x^m|0)}{p_{\theta}(x^m|1)}
-\end{equation} 
-Therefore, conflicting evidence is present if $E_1$ and $E_0$ are high.
-Likewise, if both $E_1$ and $E_0$ are low we measured uncertainty because of insufficient evidence.
-If evidence-based uncertainty sampling es restricted to the most uncertain cases it is close to standard entropy uncertainty sampling.
-
-
-
-
-\subsection{Credal Uncertainty}    
-
-\ac{CU} seeks to differentiate between the reducible and irreducible part of the uncertainty in a prediction by defining a credal set of models with probability distributions.
-A class y is dominated by another y' if y is more likely than y' for any distribution in the credal set.
-An instance x is sampled, which has the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
-- in case of binary classification with $\mathcal{Y} = \{0, 1\}$ this dominance is calculated by the score which is defines as
-\begin{equation}
-    s(x) = -max (\gamma(1,0,x), \gamma(0,1,x))
-\end{equation} 
-For binary classification where $p_{\theta}(0|x) = 1 - p_{\theta}(1|x)$ the scores can be written as 
-\begin{equation}
-\gamma(1,0,x) = \inf_{\theta \in C} \frac{p_{\theta}(1 | x)}{1 - p_{\theta}(1 | x)}
-\end{equation} 
-and
-\begin{equation}
-\gamma(0,1,x) = {\theta \in C} \frac{1 - p_{\theta}(1 | x)}{p_{\theta}(1 | x)}
-\end{equation} 
-
-
-
-\subsection{Epistemic and Aleatoric Uncertainty}
-\ac{EAU} are based on the use of relative likelihoods. 
-\ac{EU} samples instance for which both the positive and the negative class appear to be plausible, while \ac{AU} samples instances where none of the classes is supported.
-Therefore, the uncertainty due to either influence of the classes or lack of knowledge. 
-
-For a given instance x, the degrees of support or plausibility of the two classes are defined as:
-\begin{equation}
-\pi(1 | x) = \sup_{\theta \in \Theta} \min \bigg[ \pi_{\Theta}(\theta), p_{\theta}(1 | x) - p_{\theta}(0 | x)\bigg]
-\end{equation} 
-\begin{equation}
-\pi(0 | x) = \sup_{\theta \in \Theta} \min \bigg[ \pi_{\Theta}(\theta), p_{\theta}(0 | x) - p_{\theta}(1 | x)\bigg]
-\end{equation} 
-Accordingly, $\pi(1 | x)$ is high if and only if a highly plausible model supports the positive class much stronger as the negative class as vice versa for $\pi(0 | x)$.
-
-With this definition for degrees of support for positive and negative classes, epistemic uncertainty $u_e$ and aleatoric uncertainty $u_a$ are defined as:
-\begin{equation}
-u_e = \min \bigg[ \pi(1 | x), \pi(0 | x) \bigg]
-\end{equation}
-\begin{equation}
-u_a = 1 - \max \bigg[ \pi(1 | x), \pi(0 | x) \bigg]
-\end{equation}
-epistemic uncertainty: both positive and the negative class seem to be plausible -> lack of knowledge -> reducible part of the total uncertainty
-aleatoric uncertainty: non of the classes is supported -> due to data-generating process that are inherently random -> irreducible part of total uncertainty
-
-
-\ref{fig:uncertainty_measures} illustrates \ac{CU} and \ac{EU} and \ac{AU}
-
+\Autoref{fig:uncertainty_sampling_heatmap} illustrates an example of target areas for the different uncertainty measures when there are three labels.
 \begin{figure*}[t]
   \centering
-    \includegraphics[width=0.90\textwidth]{figures/uncertainty_measures.PNG}
-  \caption{Exponential rescaling of credal uncertainty, epistemic uncertainty and aleatoric uncertainty measure (from left to right). 
-  Uncertainty Sampling areas in intervals $[p, \bar{p}]$, where p (x-axis) is lower and $\bar{p}$ (y-axis) is upper probability. Lighter colors indicate higher values (\cite{nguyen2021howtomeasure}).
-  TODO: UPDATE + CREATE OWN FIGURE}
-  \label{fig:uncertainty_measures}
-\end{figure*}
-
-
-
-% TODO: create my own figure from cited example
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.90\textwidth]{figures/uncertainty_differences.PNG}
-  \caption{Difference between aleatoric and epistemic uncertainty (obtained from \cite{human-in-the-loop}).}
-  \label{fig:uncertainty_differences}
-\end{figure*}
-
-
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.70\textwidth]{figures/uncertainty_sampling_heatmap.PNG}
-  \caption{Heat map of for a multilabel-classification with three classes label of the four main uncertainty measures (obtained from \cite{human-in-the-loop}).}
+    \includegraphics[width=0.60\textwidth]{figures/uncertainty_sampling_heatmap.PNG}
+  \caption{Heat map of for a multilabel-classification with three labels for all four uncertainty measures (obtained from \cite{human-in-the-loop}).
+  Each dot is an instance with a different label.}
   \label{fig:uncertainty_sampling_heatmap}
 \end{figure*}
+This shows, for example, that entropy measure samples a much larger area than least confidence.
+The more different labels there are, the greater the difference between the different labels.
+
+In addition, the following three different frameworks for measuring the uncertainty of a learner can be separated \cite{nguyen2021howtomeasure}.
+
+
+\input{content/chapters/02_background/sections/08_uncertainty_sampling/01_EBU}
+
+\input{content/chapters/02_background/sections/08_uncertainty_sampling/02_CU}
+
+\input{content/chapters/02_background/sections/08_uncertainty_sampling/03_EAU}

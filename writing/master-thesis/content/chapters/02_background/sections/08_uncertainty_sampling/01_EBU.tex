@@ -1,0 +1,22 @@
+\subsection{Evidence-based Uncertainty} 
+\label{subsec:evidence_based_uncertainty}
+
+\ac{EBU} differentiates between uncertainty due to conflicting evidence and insufficient evidence \cite{nguyen2021howtomeasure}.
+\ac{EBU} checks the influence of individual features in the feature representation.
+Therefore, it partitions them into those that provide evidence for the positive and for the negative class \cite{nguyen2021howtomeasure}:
+\begin{equation}
+    P_{\theta}(x) = \bigg\{ x^m \bigg| \frac{p_{\theta}(x^m|1)}{p_{\theta}(x^m|0)} > 1 \bigg\} 
+\end{equation}
+ \begin{equation}
+    N_{\theta}(x) = \bigg\{ x^m \bigg| \frac{p_{\theta}(x^m|0)}{p_{\theta}(x^m|1)} > 1 \bigg\} 
+\end{equation}
+Subsequently, either the instance with the highest conflicting evidence (\ac{CEU}) or where both evidences are low (\ac{IEU}) are queried (insufficient evidence).
+The total evidence is for positive class $E_1$ and negative class $E_0$ is determined as \cite{nguyen2021howtomeasure}:
+\begin{equation}
+    E_1(x) = \prod\limits_{x^m \in P_{\theta}(x)} \frac{p_{\theta}(x^m|1)}{p_{\theta}(x^m|0)}
+\end{equation}
+\begin{equation}
+    E_0(x) = \prod\limits_{x^m \in N_{\theta}(x)} \frac{p_{\theta}(x^m|0)}{p_{\theta}(x^m|1)}
+\end{equation} 
+Therefore, conflicting evidence is present if $E_1$ and $E_0$ are high.
+Likewise, if both $E_1$ and $E_0$ are low we measured uncertainty because of insufficient evidence.
