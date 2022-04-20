@@ -9,7 +9,11 @@ def index_ent_rel(*filenames):
     for filename in filenames:
         with open(filename) as f:
             for ln in f:
-                s, r, t = ln.strip().split('\t')[:3]
+                ln = ln.strip()
+                if '\t' in ln:
+                    s, r, t = ln.split('\t')[:3]
+                else:
+                    s, r, t = ln.split(' ')[:3]
                 ent_set.add(s)
                 ent_set.add(t)
                 rel_set.add(r)
@@ -30,7 +34,11 @@ def read_data(filename, kb_index):
     dst = []
     with open(filename) as f:
         for ln in f:
-            s, r, t = ln.strip().split('\t')
+            ln = ln.strip()
+            if '\t' in ln:
+                s, r, t = ln.split('\t')[:3]
+            else:
+                s, r, t = ln.split(' ')[:3]
             src.append(kb_index.ent_id[s])
             rel.append(kb_index.rel_id[r])
             dst.append(kb_index.ent_id[t])
