@@ -146,17 +146,16 @@ def get_model_statistics(model, pos_head_entities, pos_relations, pos_tail_entit
     return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
 def get_scoring_statistics(gen, dis, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics = False):
-    with torch.no_grad():
-        # High scores indicate a low probability if a triple to be true  
-        if print_statistics:
-            print('----------', 'Generator statistics:', '----------')  
-        pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics) 
-        #if print_statistics:
-        #    print('----------', 'Discriminator statistics:', '----------')  
-        #get_model_statistics(dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, print_statistics)   
-        #if print_statistics:
-        #    print('')
-        return pos_min_score, pos_max_score, neg_min_score, neg_max_score
+    # High scores indicate a low probability if a triple to be true  
+    if print_statistics:
+        print('----------', 'Generator statistics:', '----------')  
+    pos_min_score, pos_max_score, neg_min_score, neg_max_score = get_model_statistics(gen, heads, relations, tails, heads_neg_filt, rel_neg_filt, tails_neg_filt, print_statistics) 
+    #if print_statistics:
+    #    print('----------', 'Discriminator statistics:', '----------')  
+    #get_model_statistics(dis, heads, relations, tails, heads_neg, relations_neg, tails_neg, print_statistics)   
+    #if print_statistics:
+    #    print('')
+    return pos_min_score, pos_max_score, neg_min_score, neg_max_score
     
 def inplace_shuffle(*lists):
     idx = []

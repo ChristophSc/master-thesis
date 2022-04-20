@@ -110,18 +110,12 @@ for epoch in range(n_epoch):
         neg_tail = neg_tail.cuda()
 
     # get statistics
-    print(head.requires_grad)
-    print(rel.requires_grad)
-    print(tail.requires_grad)
-    print(neg_head.requires_grad)
-    print(neg_tail.requires_grad)
+    if type(sampler) == OriginalSampler:
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score = None, None, None, None
+    else:
+        pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, neg_head, neg_rel, neg_tail, print_statistics = False)
+        logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
     
-    pos_min_score, pos_max_score, neg_min_score, neg_max_score =  get_scoring_statistics(gen, dis, head, rel, tail, neg_head, neg_rel, neg_tail, print_statistics = False)
-    logging.info('neg_min_score: ' + str(neg_min_score) + ', neg_max_score: ' +  str(neg_max_score) + ', pos_min_score: ' + str(pos_min_score) + ', pos_max_score: ' + str(pos_max_score))
-    #t1 = time()    
-    #print('get_scoring_statistics all takes %f' %(t1-t0))
-    #logging.info('Score ranges for all positives:')  
-        
     for h, r, t, h_neg, r_neg, t_neg in batch_by_num(n_batch, head, rel, tail, neg_head, neg_rel, neg_tail, n_sample=n_train):
         # h,r,t = indices of heads, relations and tails in batch
         # h_neg, t_neg = indices of heads and relations of negative triples from negative set Neg
@@ -143,7 +137,7 @@ for epoch in range(n_epoch):
         tp_logger.log_loss_reward(avg_loss.item(), avg_reward.item())     
     logging.info('Epoch %d/%d, D_loss=%f, reward=%f', epoch + 1, n_epoch, avg_loss, avg_reward)
     if (epoch + 1) % config().adv.epoch_per_test == 0:
-        #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)    
+        #gen.test_link(valid_data, n_ent, filt_heads, filt_tails)
         mrr, hits = dis.test_link(valid_data, n_ent, heads_filt, tails_filt) 
         tp_logger.log_performance(mrr, hits)
         if mrr > best_mrr:
@@ -153,6 +147,7 @@ tp_logger.log_loss_reward(avg_loss.item(), avg_reward.item())
 if config().log.log_pretrain_graph:
     tp_logger.create_and_save_figures(log_dir)   
 
+    
 dis.load(os.path.join('models', config().task.dir, mdl_name))
 logging.info('Best Performance:')
 dis.test_link(test_data, n_ent, heads_filt, tails_filt)
