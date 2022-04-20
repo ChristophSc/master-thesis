@@ -147,7 +147,7 @@ class CombinedGraphCreator():
   
   
   
-datasets = ["umls", "wn18", "wn18rr", "fb15k237"]
+datasets = ["umls", "kinship", "wn18", "wn18rr", "fb15k237"]
 gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
