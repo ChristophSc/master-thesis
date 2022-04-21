@@ -41,11 +41,11 @@ Based on these distribution functions, two different \textbf{Uncertainty Samplin
 \begin{itemize}
     \item 
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Max}imum Distribution (\textsc{USMax})}:\\
-    On the one hand, the triple with the maximum uncertainty score can always be sampled, which we refer to in the following as \textbf{Uncertainty Sampling Max}.
-    As can be seen from the \autoref{fig:sampling_distributions} all metrics have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1, the closest triple is assigned the highest uncertainty score.
+    On the one hand, the triple with the maximum uncertainty score can always be sampled.
+    As can be seen from the \autoref{fig:sampling_distributions} all uncertainty measures have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1, the closest triple is assigned the highest uncertainty score.
     If only one negative triple reaches this maximum uncertainty score, it will be sampled.
     If there are several triples with a maximum uncertainty score, one of the triples is sampled using a uniform distribution.
-    This results in the definition of Uncertainty Sampling Max with the following sampling probabilities:
+    This results in the definition of \usmax with the following sampling probabilities:
     \begin{equation} 
         p_{sampled}(h, r, t)=
         \begin{cases}
@@ -67,7 +67,7 @@ Based on these distribution functions, two different \textbf{Uncertainty Samplin
     % 2) sample according to distribution
     On the other hand triples can be sampled according to a softmax probability distribution based on uncertainty scores.
     Thus, triples close to $P(y = 1 | f_G(l)) = 0.5$ still have the highest probability of being sampled, but other triples for which the model is more certain are also assigned a probability in the classification.
-    Uncertainty Sampling Distribution is defined as the softmax of all uncertainty scores:
+    \ussoftmax is defined as the softmax of all uncertainty scores:
     \begin{equation}
         \label{eq:uncertainty_distribution}
         p_{sampled}(h,r,t) = \frac{e^{u(h,r,t)}}{\sum_{(h,r,t) \in Neg}{e^{u(h,r,t)}}}

@@ -2,29 +2,27 @@
 \label{ch:evaluation:sec:evaluation_uncertainty}
 
 Finally, the best sampling by uncertainty sampling method \ussoftmax with entropy uncertainty metric is evaluated by comparing it to the original sampling method \origsampling of \kbgan.
-The evaluation takes place on all four data sets in following \Autoref{subsec:uncertainty_umls} to \ref{subsec:uncertainty_fb15k237}.
+The evaluation takes place on all datasets in \Autoref{subsec:results_uncertainty} and a final Conclusion of uncertainty sampling is given in \Autoref{subsec:uncertainty_conclusion}.
 
+\subsection{Results on Datasets}
 \input{content/chapters/05_evaluation/sections/04_uncertainty/01_uncertainty_umls}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/02_uncertainty_kinship}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/03_uncertainty_wn18rr}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/04_uncertainty_wn18}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/05_uncertainty_fb15k237}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/02_uncertainty_wn18rr}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/03_uncertainty_wn18}
-
-\input{content/chapters/05_evaluation/sections/04_uncertainty/04_uncertainty_fb15k237}
-
-\subsection{Results}
-
-Results of our experiments on smaller datasets \umls and \kinship  are listed in \Autoref{tab:results_small_datasets} and bigger datasets \textsc{FB15k-237},  \textsc{WN18} and  \textsc{WN18RR} are listed in \Autoref{tab:results}.
+Results of our experiments on smaller datasets \umls and \kinship  are listed in \Autoref{tab:results_small_datasets} and bigger datasets \textsc{FB15k-237},  \textsc{WN18} and \textsc{WN18RR} are listed in \Autoref{tab:results}.
 \input{content/chapters/05_evaluation/result_table_small_datasets}
 \input{content/chapters/05_evaluation/result_table}
 These tables list both the results given in the \kbgan paper \cite{cai2017kbgan} and our achieved MRR and Hit@10 values on the different datasets.
 Furthermore, results after 5000 epochs on pre-trained models but also results after 1000 epochs with non-pre-trained models are listed.
 The model named first in the brackets is the generator and the model named second is the discriminator.
 
-\newpage
 
-
-\subsection{Conclusion of Uncertainty Sampling}
+\subsection{Conclusion}
+\label{subsec:uncertainty_conclusion}
+%
 In some cases like training on \textsc{FB15k-237} adversarial training with \ussoftmax seem to work and on small datasets like \umls even better than \origsampling.
 Additionally, it is noticeable that training looks very different for different datasets.
 Nevertheless, in most cases adversarial training with \origsampling still performs better and reaches higher MRR and Hit@10 values.
@@ -34,5 +32,10 @@ Another reason might be that classification is not accurate enough.
 During training we have observed that even if negative triples scoring ranges are lower than positive triple scoring ranges, this sometimes changes over training time.
 Therefore, the overlap of both ranges increases.
 In addition, uncertainty is currently only measured based on generators uncertainty score and does not include any further information about the \ac{KG}, its relations and entities.
+
+
+
+
+
 
 

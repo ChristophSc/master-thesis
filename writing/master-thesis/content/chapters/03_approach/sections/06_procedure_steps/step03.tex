@@ -8,7 +8,7 @@ Therefore, with this step a score $s_i$ for each triple $l_i = (h',r,t') \in Neg
 In the original \kbgan approach the sampling probabilities are directly calculated from scores and given to the Sampler.
 Since score $s_i \in \mathbb{R}$, sampling probabilities are calculated which sum up to 1 for all 
 With the softmax function, the individual negative triples of the set Neg are assigned such sampling probabilities that their sum is 1.
-The softmax Function which is defined as 
+The softmax function which is defined as 
 \begin{equation}
     s(x_i) = \frac{x_i}{\sum_{j=1}^{n}{e^{x_j}}}
 \end{equation}

@@ -1,6 +1,6 @@
 \section{Experimental Setup}
 \label{ch:evaluation:sec:experimental_setup}
-
+%
 This section presents the experimental setup under which our evaluations took place.
 This includes the embedding models, data sets, evaluation protocols but also implementation details.
 To allow the best possible comparison with the original \kbgan approach, many of the settings and parameters are chosen identically.
@@ -65,11 +65,11 @@ For comparison, an identical training was performed in \Autoref{fig:original_not
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/epochs5000/gan_train_random_fb15k237_mrrs.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/epochs5000/random_fb15k237_mrrs.png}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/epochs5000/gan_train_random_fb15k237_hit10s.png}
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k237/epochs5000/random_fb15k237_hit10.png}
     \end{minipage}
     \caption{Evaluation of Adversarial training on \textsc{FB15k-237} dataset without pre-trained models.
     Figures show validation MRRs and Hit@10s for 5000 epochs with Original Sampling.}

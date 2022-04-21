@@ -12,43 +12,33 @@ This results from the fact that most \ac{KGE} models, due to simplicity and effi
 % UNIFORM RANDOM SAMPLING
 Uniform Negative Random Sampling is a common technique of negative sampling where either the head or the tail entity in a given positive triple \triple{h}{r}{t} is randomly replaced by any other entity of the \ac{KG} which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
 Therefore, it is very likely to pick an entity which results in a zero gradient because the negative triple can be easily discriminated from the positive one \cite{cai2017kbgan}.
-For example, by replacing the head entity of the positive triple \triple{h}{r}{t} = \triple{Joe Biden}{bornIn}{USA} with head entity $h' = Paderborn$ would result in the negative triple \triple{Paderborn}{bornIn}{USA} which is not very informative for the embedding.
+For example, by replacing the head entity of the positive triple \triple{h}{r}{t} = \triple{Joe Biden}{bornIn}{USA} with head entity \texttt{h'} = \texttt{Paderborn} would result in the negative triple \triple{h'}{r}{t} =  \triple{Paderborn}{bornIn}{USA} which is not very informative for the embedding.
 By simply replacing the randomly selected head or tail entity of an again randomly selected entity of the \ac{KG} does not use any further information.
 For example, it would have been useful either if negative sampling had recognized that the head entity \texttt{Joe Biden} is a person and to replace it with another person.
 Or by recognizing that the tail entity as well as the sampled entity \texttt{Paderborn} is a location and its replacement would have led to the much more meaningful negative triple \triple{Joe Biden}{bornIn}{Paderborn}.  
 Thus, while this approach is a fast and effective way to generate negative triples, it leads to a low learning factor in the embedding model.
 
 % BERNOULLI SAMPLING
-More useful negative examples are created Bernoulli Sampling, which notes more information about a \ac{KG} and its individual entities and relations.
+More useful negative examples are created by Bernoulli Sampling, which notes more information about a \ac{KG} and its individual entities and relations.
 In comparison to Uniform Negative Random Sampling, it considers types of relations between entities (one-to-many, many-to-one and many-to-many) \cite{zhang2021efficient}.
-These relation types is an indicator for the sampling approach if it is better to replace the head or the tail entity.
-From the above example, it would have been recognized that the relation \texttt{bornIn} is a many-to-one relation.
+These relation types are an indicator for the sampling approach if it is better to replace the head or the tail entity.
+From the example above, it would have been recognized that the relation \texttt{bornIn} is a many-to-one relation.
 Therefore, the head entity cannot have this relation to multiple entities, making each replaced tail entity a more useful negative triple.
 Even though this is still a very fast and effective way to create negative triples, they are still easy to distinguish from positive ones.
 
 % OTHER INFORMATION USED
-In addition to these most commonly used methods, there are others which leverage external ontological constraints such as entity types.
+In addition to these most commonly used methods, there are others which leverage external constraints such as entity types.
 However, this resource does not always exist or is accessible \cite{cai2017kbgan}.
 Instead of sampling from all entities in a \ac{KG}, other negative sampling methods take the approach of sampling only from a handful of selected entities.
-For example, by sampling entities in the same domain, they hope to increase efficiency \cite{qiannegative}.
-However, due to the rapid growth and frequent updating of \acp{KG}, the constant renewal of custom clusters is essential and skilled \cite{qiannegative}. 
+For example, by sampling entities within the same domain, they hope to increase efficiency \cite{qiannegative}.
+However, due to the rapid growth and frequent updating of \acp{KG}, constantly updating custom clusters is essential and skilled \cite{qiannegative}. 
 Additionally, the creation of subsets of entities leads to a degradation of sampling performance and the information needed for this is not always available or is very difficult to derive from a \ac{KG}.
 
 
 %Many of these approaches aim to find hard negative examples that are close to positive facts from a given \ac{KG} and thus have a positive effect on the embedding learning process.
 
-%Most of graph representation learning methods can be unified within a \ac{SampledNCE} framework comprising an encoder that generates node embeddings by learning to distinguish pairs of a positive and a negative triple \cite{MCNS}.
-%Therefore, we need negative triples for embedding learning which are not available in most \acp{KG}. 
-
-
 % CHALLENGES
 %Consequently, there are two main challenges for sampling negative triples \cite{zhang2021efficient}:
 %At first, it is necessary to capture and model the dynamic distribution if negative triples to sample informative and useful negative triples with high gradients which help the model during the embedding learning process.
 %Secondly, these negative triples have to be sampled effectively  so that the Negative Sampling does not negatively affect the performance of embedding learning.
-
-
-% REQUIREMENTS
-%- FAST AND EFFECTIVE SAMPLING to not slow down the embedding learning process
-%- HIGH QUALITY NEGATIVE SAMPLES with high gradient for improve embedding
-%- find negative triples which are particularly interesting for the embedding model
  

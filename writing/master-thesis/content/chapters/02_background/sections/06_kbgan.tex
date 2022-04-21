@@ -1,64 +1,74 @@
 \section{KBGAN} 
 \label{sec:kbgan}
 
-In the group of \textit{Dynamic Distribution-Based Sampling}, \ac{KBGAN} is one of the pioneering works among \ac{GAN}-based approaches and contains two components which are trained in an adversarial training process.
-This process of \ac{KBGAN} is depicted in \autoref{fig:overview} and described as follows:
+\kbgan plays a central and important role in the context of this work.
+Thus, this approach is described for a precise understanding at this point.
+The embedding is learned with an adversarial training process which consists of two components: a generator and a discriminator.
+This process of \kbgan is depicted in \autoref{fig:overview} and described as follows:
 \begin{figure*}[t]
   \centering
     \includegraphics[width=0.95\textwidth]{figures/kbgan_original.png}
-  \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan})}
+  \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan}).}
   \label{fig:overview}
 \end{figure*}
 
 \begin{enumerate}
     \item 
-    At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is created by uniformly Sampling of $N_s$ entities $\in$ \entities to replace $h$ or $t$.
-    For reasons of efficiency and to reduce the likelihood of creating false negatives, $N_s$ is a relatively small number compared to the number of all possible negative examples \cite{cai2017kbgan}.
+    At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t)|h'\in\mathcal{E}\}\cup\{(h,r,t')|t'\in\mathcal{E}\}$ is created.
+    Ideally, this set would contain all possible negatives \cite{cai2017kbgan}.
+    Since \acp{KG} are usually highly incomplete, some of them might be false negatives which are actually true facts.
+    Therefore, \kbgan uniformly samples only $N_s$ entities and replaces either head entity \texttt{h} or tail entity \texttt{t} of a given positive triple \triple{h}{r}{t}.
+    In comparison to the number of all possible negatives, $N_s$ is a relatively small number \cite{cai2017kbgan}.
     
     \item 
     Negative triples from $Neg$ are given to the generator G as input.
     
     \item 
-    $G$ is a \ac{KGE} model with a softmax function to provide  probabilities of being sampled for each given negative triple, which gives us a probability distribution $p_G(h',r,t'|h,r,t)$.
-    Other models are also possible at this point, but the approach would then have to be adapted, so that it outputs a probability distribution over all negative triples of the set $Neg$ as well.
+    The generator G receives all negative triples from negative triple set $Neg$ and scores them with the scoring function $f_G$ of G.
+    Since G is a tensor factorization-based \ac{KGE} model like \distmult or \complex, negative triples with higher scores indicate a higher plausibility to be true.
+    The scores are passed to the softmax function, which assigns a sampling probability $p_i$ for each negative triple $l_i = (h_i, r_i, t_i)$:
+    \begin{equation} \label{eq:origsampling}
+        p_i = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}} \in [0,1]
+    \end{equation}
+    Therefore, we obtain a probability distribution $p_G(h',r,t'|h,r,t)$ where each negative triple \triple{h'}{r}{t'} a probability is assigned based on given positive triple \triple{h}{r}{t} and all sampling probabilities sum up to 1.
+    
+    \item
+    According to this probability distribution one negative triple is sampled.
+    Since from generator G negative triples with higher scores were assigned a correspondingly higher sampling probability, it is more probable to sample a negative triple which achieved a high score in generator.
 
     \item 
-    Afterwards, one of these triples is sampled as output of G according to $p_G$, while high quality triples should have a high probability to be sampled.
+    Afterwards, the sampled negative triple \triple{h'}{r}{t'} and corresponding positive triple \triple{h}{r}{t} are given to discriminator D.
     
     \item 
     Discriminator D receives as input both the sampled negative triple \triple{h'}{r}{t'} and the ground truth triple \triple{h}{r}{t}.
-    The training objective of D is a marginal loss function, because these benefit most from high quality negative examples \cite{cai2017kbgan}.
-
+    It underlying \ac{KGE} model scores with its scoring function $f_D$ scores both triples, the received positive and negative one.
+    Since D is a translation-based model, it returns distances where lower distance indicate a higher likelihood of truth and vice versa \cite{cai2017kbgan}.
+    Therefore, the distance of received positive triple \triple{h}{r}{t} should be small and if it was a good negative triple \triple{h'}{r}{t'} , its distance should be small as well.
+     
     \item 
-    Subsequently, D calculates the scores of both triples \triple{h}{r}{t} and \triple{h’}{r}{t'} with score function $f_D$ of D, which models distance between points or vector.
-    Therefore, a smaller distance indicates a higher likelihood of truth \cite{cai2017kbgan}.
-    
-    \item 
-    Accordingly, the objective of D is to minimize the marginal loss function $L_D$ which is defined as
-    \begin{equation}
-        L_D=\sum_{(h,r,t)\in\mathcal{T}}[f_D(h,r,t)-f_D(h',r,t')+\gamma]_+ \in \mathbb{R}^+
+    The training objective of D is a marginal loss function, because models based on these can  benefit the most from high quality negative examples .
+    Therefore, the marginal loss is calculated from both distances, the positive and the negative triple one:
+     \begin{equation}
+        L_{marginal}
+        =\sum_{(h,r,t)\in\kg}[f(h,r,t)-f(h',r,t')+\gamma]_+ 
+        = \sum_{(h,r,t)\in\kg}[d_p-d_n+\gamma]_+ 
     \end{equation}
+    where $d_p = f(h,r,t)$ is the distance of positive triple \triple{h}{r}{t} and $d_n = f(h',r,t')$ the distance of the negative triple  \triple{h'}{r}{t'}.
+    Therefore, the better the sampled negative triple is, the lower is its distance and a consequently lower marginal loss is achieved.
     
     \item 
-    To give G feedback for the sampled negative triple \triple{h’}{r}{t'} its calculated score $f_D(h',r,t')$ is send back to G as a reward, which is defined as
+    To give G feedback for the sampled negative triple \triple{h’}{r}{t'} a reward $r$ is send back to G, which is defined as
     \begin{equation}
         r = -f_D(h',r,t') \in \mathbb{R}^-
     \end{equation}
     since $f_D(h,r,t) \in \mathbb{R}^+$.
-    Therefore, the objective of G can be formulated as maximizing the expectation of negative distances:
+    Therefore, the lower distances are achieved with sampled negative triples, the higher the reward.
+    Consequently, the objective of G can be formulated as maximizing the expectation of negative distances:
     \begin{equation}
-        R_G=\sum_{(h,r,t)\in\mathcal{T}}\mathbb{E}[-f_D(h',r,t')]
+        R_G=\sum_{(h,r,t)\in\kg}\mathbb{E}[-f_D(h',r,t')]
     \end{equation}
     
     \item
     This process continues until convergence
 \end{enumerate}
-The dynamic distribution of the negative triple is determined through this procedure of the adversarial training, 
-
-
-
-
-
-%\cite{cai2017kbgan}
-%- probability-based, log-loss embedding models as the generator
-%- distance-based, margin-loss embedding as discriminator
+The dynamic distribution of negative triples is determined through this procedure of the adversarial training, 

@@ -1,0 +1,59 @@
+\subsubsection{WN18RR Dataset}
+\label{subsubsec:uncertainty_wn18rr}
+%
+In comparison to learning curves on \umls dataset, on \textsc{WN18RR} MRR values increase with \origsampling to about 17.5\% at 100 epochs and continues to increase MRR slightly (\Autoref{fig:advtrain_wn18rr_random_vs_uncertainty}).
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/epochs1000/random_wn18rr_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/1k_epochs/uncertainty_wn18rr_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/epochs1000/random_wn18rr_hit10.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/1k_epochs/uncertainty_wn18rr_hit10.png}
+    \end{minipage}%
+    \caption{Adversarial training on \textsc{WN18RR} dataset. 
+    Left Figures show Sampling Negative triples with \origsampling, right Figures show \ussoftmax with entropy metrics.
+    Shown are validation Hit@10 and MRRs for 1000 epochs.}
+    \label{fig:advtrain_wn18rr_random_vs_uncertainty}
+\end{figure}
+Nevertheless, after 1000 epochs in MRR reaches almost 19\%.
+In the beginning, the learning curve with \ussoftmax look similar to \origsampling, but after reaching a MRR of 17.5\% is almost stays on the same level.
+in contrasst, Hit@10 values constantly increase for both sampling methods such that maximum of about 45\% is reached at 1000 epochs.
+Therefore, even further learning can be expected with more epochs for both sampling methods.
+
+If we take a closer look to curves of losses and rewards during training, both both sampling methods losses constantly decrease loss \Autoref{fig:advtrain_wn18rr_losses_rewards}.
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/epochs1000/random_wn18rr_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/1k_epochs/uncertainty_wn18rr_losses.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/wn18rr/epochs1000/random_wn18rr_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/1k_epochs/uncertainty_wn18rr_rew.png}
+    \end{minipage}%
+    \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{WN18RR} dataset.
+    Left Figures show losses and rewards of \origsampling and right Figures show losses and rewards of \ussoftmax.}
+    \label{fig:advtrain_wn18rr_losses_rewards}
+\end{figure}
+Besides this, also the course of rewards look similar, even difference between model pairs with \transe and \transd exists in both sampling methods.
+Also the course of rewards look similar, even difference between model pairs with \transe and \transd exists in both sampling methods.
+Even if a higher reward is achieved with \origsampling from about 200 epochs, an increase in reward can be seen with both approaches.
+Thus, the quality of the sampled negative triples increases with both sampling methods.

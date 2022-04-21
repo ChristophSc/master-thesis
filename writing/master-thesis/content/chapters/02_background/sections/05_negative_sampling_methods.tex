@@ -2,16 +2,10 @@
 \label{sec:negativesamplingmethods}
 
 In the literature, several negative sampling methods are proposed to create synthetic negative examples which are used for subsequent embedding learning.
-They can be separated into three different groups \cite{qianunderstanding}:
-
+They can be separated into the following three different groups \cite{qianunderstanding}.
 
 \input{content/chapters/02_background/sections/04_negative_sampling_methods/01_static_distribution_based_sampling}
 
 \input{content/chapters/02_background/sections/04_negative_sampling_methods/02_custom_cluster_based_sampling}
 
 \input{content/chapters/02_background/sections/04_negative_sampling_methods/03_dynamic_distribution_based_sampling}
-
-
-
-In summary, there are already several approaches for Negative Sampling, but they still have problems to capture the dynamic distribution of the negative triples or effectively sample them \cite{zhang2021efficient}.
-Therefore, we present a new Negative Sampling technique which aims to \textbf{improve the efficiency of Sampling by selecting more informative and useful negative examples for the embedding model by uncertainty}.

@@ -1,0 +1,64 @@
+\subsubsection{UMLS Dataset}
+\label{subsubsec:metrics_umls}
+%
+First, we look at the different uncertainty metrics on the smallest \umls dataset.
+Therefore, we take a closer look at the course of MRR values for 1000 epochs with entropy, least confidence, confidence margin and confidence ratio metrics depicted in \Autoref{fig:advtrain_metrics_umls}.
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/1k_epochs/uncertainty_umls_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/least_confidence/umls/uncertainty_umls_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_margin/umls/uncertainty_umls_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_ratio/umls/uncertainty_umls_mrrs.png}
+    \end{minipage}%
+    \caption{Validation MRR values during adversarial training on \umls dataset for 1000 epochs. 
+    Figures show different uncertainty metrics with sampling method  \ussoftmax.
+    Top left shows entropy, top right least confidence, 
+    bottom left confidence margin and bottom right confidence ratio.}
+    \label{fig:advtrain_metrics_umls}
+\end{figure}
+With all uncertainty metrics, a significant increase in the MRR value is achieved at the beginning of the training.
+In addition, a constant increase is achieved with all metrics, so that this also suggests a further increase in the MRR value and thus an improvement in embedding after 1000 epochs.
+For all uncertainty sampling metrics, a maximum MRR of slightly below 80\% is achieved on the \umls dataset.
+
+
+If you look at the rewards over the course (\Autoref{fig:advtrain_metrics_umls_rew}), you can also see a sharp increase right at the beginning of the training.
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/umls/1k_epochs/uncertainty_umls_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/least_confidence/umls/uncertainty_umls_rew.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_margin/umls/uncertainty_umls_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_ratio/umls/uncertainty_umls_rew.png}
+    \end{minipage}%
+    \caption{Rewards during adversarial training on \umls dataset. 
+    Figures show training rewards of 1000 epochs with \ussoftmax with different uncertainty metrics.
+    Top left shows entropy, top right least confidence, 
+    bottom left confidence margin and bottom right confidence ratio.}
+    \label{fig:advtrain_metrics_umls_rew}
+\end{figure}
+However, this decreases steadily after reaching the maximum value.
+Thus, although the MRR continued to increase over the course of the training, sampling from the negative triple set did not result in a further increase in the reward.
+As the reward continues to decrease, this means that the returned distance of the negative triple in the discriminator continues to increase.
+Thus, the model is better and better able to recognise the sampled negative triple and to assign a high distance to it.
+It can also be seen that although all the rewards of the various uncertainty metrics have the same course, the distances with a \transd model in the discriminator are significantly lower than with a \transe model.
