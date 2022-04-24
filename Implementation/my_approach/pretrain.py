@@ -23,11 +23,11 @@ kb_index = index_ent_rel(os.path.join('data', task_dir, 'train.txt'),
                          os.path.join('data',task_dir, 'valid.txt'),
                          os.path.join('data',task_dir, 'test.txt'))
 n_ent, n_rel = graph_size(kb_index)
-
 train_data = read_data(os.path.join('data',task_dir, 'train.txt'), kb_index)
 inplace_shuffle(*train_data)
 valid_data = read_data(os.path.join('data',task_dir, 'valid.txt'), kb_index)
 test_data = read_data(os.path.join('data',task_dir, 'test.txt'), kb_index)
+
 heads_filt, tails_filt = filter_heads_tails(n_ent, train_data, valid_data, test_data)
 valid_data = [torch.LongTensor(vec) for vec in valid_data]
 test_data = [torch.LongTensor(vec) for vec in test_data]

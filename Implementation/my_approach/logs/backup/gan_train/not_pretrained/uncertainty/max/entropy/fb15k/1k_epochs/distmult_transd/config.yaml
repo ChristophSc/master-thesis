@@ -3,7 +3,7 @@ g_config: DistMult # DistMult, ComplEx
 d_config: TransE  # TransE, TransD
 test_batch_size: 100 # 100
 task:
-  dir: fb15k  # umls, wn18rr, wn18, fb15k237, fb15k, yago3_10, kinship
+  dir: fb15k  # umls, wn18rr, wn18, fb15k237
   type: link  # link
 adv:
   use_pretrained_models: false

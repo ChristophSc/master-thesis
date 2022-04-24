@@ -7,7 +7,7 @@ def index_ent_rel(*filenames):
     ent_set = set()
     rel_set = set()
     for filename in filenames:
-        with open(filename) as f:
+        with open(filename, encoding='utf-8') as f:
             for ln in f:
                 ln = ln.strip()
                 if '\t' in ln:
@@ -32,7 +32,7 @@ def read_data(filename, kb_index):
     src = []
     rel = []
     dst = []
-    with open(filename) as f:
+    with open(filename, encoding = 'utf-8') as f:
         for ln in f:
             ln = ln.strip()
             if '\t' in ln:
