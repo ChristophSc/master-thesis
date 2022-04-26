@@ -1,15 +1,16 @@
 \subsection{Credal Uncertainty}  
 \label{subsec:credal_uncertainty}
 
-\ac{CU} seeks to differentiate between the reducible and irreducible part of the uncertainty in a prediction by defining a credal set of models with probability distributions \cite{nguyen2021howtomeasure}.
-A class $y$ is dominated by another class $y'$ if $y$ is more likely than $y'$ for any distribution in the credal set $C$ \cite{nguyen2021howtomeasure}
+\ac{CU} seeks to differentiate between the reducible and irreducible part of uncertainty in a prediction.
+To achieve this a credal set of models denoted by $C \subseteq \Theta$ with plausible candidate models is defined \cite{nguyen2021howtomeasure}.
+With credal uncertainty sampling an instance x is sampled, if it has the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
+A class $y'$ is dominated by another class $y$ if $y$ is more likely than $y'$ for each distribution in the credal set $C$ \cite{nguyen2021howtomeasure}:
 \begin{equation} \label{eq:credal_uncertainty_dominance}
-\gamma(y,y',x) = \inf_{\theta \in C} \frac{p_{\theta}(y | x)}{p_{\theta}(y' | x)} > 1
+\gamma(y,y',x) = \inf_{\theta \in C} \frac{p_{\theta}(y | x)}{p_{\theta}(y' | x)} > 1.
 \end{equation} 
-An instance x is sampled, which has the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
-Therefore, in case of binary classification with $\mathcal{Y} = \{0, 1\}$ this dominance is calculated by the score which is defined as
+Therefore, in case of binary classification with $\mathcal{Y} = \{0, 1\}$ this dominance is calculated by score
 \begin{equation}
-    s(x) = -max (\gamma(1,0,x), \gamma(0,1,x))
+    s(x) = -max (\gamma(1,0,x), \gamma(0,1,x)).
 \end{equation} 
 For binary classification where $p_{\theta}(0|x) = 1 - p_{\theta}(1|x)$ inserted in \Autoref{eq:credal_uncertainty_dominance}, results in  
 \begin{equation}

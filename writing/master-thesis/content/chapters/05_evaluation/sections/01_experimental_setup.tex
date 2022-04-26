@@ -10,8 +10,11 @@ To allow a better comparison between Sampling by Uncertainty and original sampli
 These are the models \textsc{DistMult} and \textsc{Complex} for the generator component and the distance-based models \textsc{TransE} and \textsc{TransD} for the discriminator component.
 
 \textbf{Datasets}\\
-The results will be evaluated on four common knowledge completion datasets  \textsc{UMLS}, \textsc{WN18RR}, \textsc{WN18} 
-and \textsc{FB15k237}.
+The results are evaluated and described on four common knowledge completion datasets  \textsc{UMLS}, \textsc{WN18RR}, \textsc{WN18} 
+and \textsc{FB15k237} in this chapter.
+Additionally, these were also carried out on the \kinship, \textsc{FB15k} and \textsc{Yago3-10} datasets.
+However, as the results of these are very similar to the other four datasets and do not provide any additional information for the inclusion of uncertainty, the results and evaluation figures can be found in appendix in \Autoref{app:results}.
+
 While \textsc{UMLS} contains a relatively small dataset and is used for initial validations and testing of the different approaches.
 Due to the small amount of data, these could also be tested on the local computer with low runtimes.
 Once the tests on \textsc{UMLS} dataset were successful, it was possible to work with the other, larger datasets.
@@ -52,7 +55,7 @@ As example, \Autoref{fig:original_pretrained_advtrain} shows adversarial trainin
     \end{minipage}
     \caption{Evaluation of Adversarial training on \textsc{FB15k-237} dataset.
     All models for generator as well as discriminator are pre-trained.
-    Figures show validation MRRs and Hit@10s for 5000 epochs with Original Sampling.}
+    Figures show validation MRRs and Hit@10s for 5000 epochs with \origsampling.}
     \label{fig:original_pretrained_advtrain}
 \end{figure}
 In this and many other learning processes on other data sets, it can be seen that evaluation metrics MRR and Hit@10 often drop at the beginning and then rise again.
@@ -79,7 +82,7 @@ As can be seen, both training courses achieve MRRs of around 27\% and Hit@10s of
 Although all model combinations in the second case were not pre-trained, they also achieve an MRR of approximately 26\% and a Hit@10 of about 44\% after 1000 epochs, just like the pre-trained models.
 In addition, especially the training of first 1000 epochs without pre-training seem to be more constant than adversarial training with pre-trained models.
 For this reason, in the following sections we will present the evaluation without pre-training, i.e. training from scratch.
-Nevertheless, results of pre-training and the subsequent adversarial training on pre-trained models can be found in the appendix (\autoref{app:sec:pretraining} and \ref{app:sec:adv_training}).
+Nevertheless, results of pre-training and the subsequent adversarial training on pre-trained models can be found in the appendix (\autoref{app:results}).
 
 Additionally, in the original approach adversarial training takes place for 5000 epochs.
 However, during the evaluation it was found that in the case of adversarial training, the first 1000 epochs produced the greatest improvements in the discriminator model.

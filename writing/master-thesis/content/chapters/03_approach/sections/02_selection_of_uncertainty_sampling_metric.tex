@@ -2,30 +2,26 @@
 \label{sec:selection_of_an_uncertainty_sampling_type}
 
 % review of all frameworks
-In the literature we have several types of uncertainty at our disposal.
-As described in \Autoref{sec:uncertaintysampling}, there are three different frameworks for measuring uncertainty:
+In the literature we have three different frameworks of uncertainty sampling at our disposal:
 \ac{EBU}, \ac{EAU} and \ac{CU}.
-These frameworks for calculating uncertainty are based on different viewpoints, but all of them are based on a classification problem of two or more classes.
+These frameworks of uncertainty sampling have different viewpoints on uncertainty and how to measure it, but all of them are based on a classification problem of two or more classes.
 In \ac{EBU} we consider uncertainty within a model by looking at the individual features of a model and if they provide evidence for classes.
-This can be either very many (\textit{conflicting-evidence}) or only a few features (\textit{insufficient-evidence}) which are indicative for the respective classes.
+This can be either very many (\textit{conflicting-evidence}) or only a few features (\textit{insufficient-evidence}) which are indicative for respective classes.
 In contrast, \ac{EAU} considers \textit{epistemic uncertainty} within a single model’s prediction, and \textit{aleatoric uncertainty} across multiple model predictions \cite{human-in-the-loop}.
-Since \textit{credal uncertainty} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other, we calculate uncertainty among multiple models as well.
+\Ac{CU} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other.
 
 % determination of one framework
-In this adversarial training process, negative triples are first passed to the generator, which calculates scores for them based on the current embeddings.
+In an adversarial training process, negative triples are first passed to the generator, which calculates scores for them based on current embeddings.
 subsequently, based on these scores, one of these negative triples is sampled and given to the discriminator.
 Therefore, we only have information about the embeddings of the generator model and all negative triple scores.
 We do not have any additional features for the sampling process.
-For this reason, we will first take the point of view of epistemic uncertainty from \ac{EAU}.
-If we add further models for a classification between negative and positive triples in the later process or add additional features, the other viewpoints aleatoric uncertainty, \ac{EAU} and \ac{CU} can be taken as well.
-
+For this reason, we will first take framework of epistemic uncertainty from \ac{EAU}.
+The other frameworks can be considered as well, but for them additional models or model predictons or additional features are needed.
 
 %- literature on aleatoric uncertainty tends to focus on the optimal types of ensembles and dropouts \cite{human-in-the-loop}
 
 %for epistemic uncertainty the literature focuses
 %on improve accuracy on probability distributions within a single model \cite{human-in-the-loop}
-
-%-> we have a probability distribution from which is sampled
 
 %epistemic
 %-> philosophy: 

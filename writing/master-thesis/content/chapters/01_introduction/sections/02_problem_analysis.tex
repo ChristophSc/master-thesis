@@ -14,8 +14,8 @@ Uniform Negative Random Sampling is a common technique of negative sampling wher
 Therefore, it is very likely to pick an entity which results in a zero gradient because the negative triple can be easily discriminated from the positive one \cite{cai2017kbgan}.
 For example, by replacing the head entity of the positive triple \triple{h}{r}{t} = \triple{Joe Biden}{bornIn}{USA} with head entity \texttt{h'} = \texttt{Paderborn} would result in the negative triple \triple{h'}{r}{t} =  \triple{Paderborn}{bornIn}{USA} which is not very informative for the embedding.
 By simply replacing the randomly selected head or tail entity of an again randomly selected entity of the \ac{KG} does not use any further information.
-For example, it would have been useful either if negative sampling had recognized that the head entity \texttt{Joe Biden} is a person and to replace it with another person.
-Or by recognizing that the tail entity as well as the sampled entity \texttt{Paderborn} is a location and its replacement would have led to the much more meaningful negative triple \triple{Joe Biden}{bornIn}{Paderborn}.  
+For example, it would have been useful if either negative sampling had recognized that the head entity \texttt{Joe Biden} is a person and to replace it with another person.
+Moreover, recognizing that the tail entity as well as the sampled entity \texttt{Paderborn} is a location and its replacement would have led to the much more meaningful negative triple \triple{Joe Biden}{bornIn}{Paderborn}.  
 Thus, while this approach is a fast and effective way to generate negative triples, it leads to a low learning factor in the embedding model.
 
 % BERNOULLI SAMPLING

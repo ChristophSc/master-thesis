@@ -1,17 +1,18 @@
 \section{Calculation of Uncertainty Scores}
 \label{sec:calculation_of_uncertainty_scores}
-
-
-The calculation of uncertainty scores based on the calculated probabilities takes place in the following steps.
-At first, for each triple $l= (h, r, t)$ a plausibility score $f_G(l)$ is calculated by the generator embedding model. 
-Subsequently, a classification is performed to obtain probabilities for positive triple class ($y = 1$) and negative triple class ($y = 0$).
-To finally sample by uncertainty we need to calculate uncertainty scores now. 
-For this a transformation function $\phi$ is needed which uses calculated class probabilities to map from plausibility scores from generator to an uncertainty score $u(l)$.
+%
+Uncertainty sampling takes place on the basis of probabilities with which the instances belong to the respective classes.
+The calculation of the probabilities to belong to a class was determined in the previous step.
+Therefore, the calculation of uncertainty scores can take place at this point.
+%
+To transform probabilities of triples to belong to positive triple class ($y = 1$) and negative triple class ($y = 0$) into uncertainty scores a transformation function is needed.
+This transformation function $\phi$ uses calculated class probabilities to map to an uncertainty score.
+In case of this approach probabilities $\mathds{P}(y = 1| f_G(h, r, t))$ are  mapped to $u(l)$ with \Autoref{eqn:uncertainty_function}
 \begin{equation} \label{eqn:uncertainty_function}
     u(l) = \phi(\mathds{P}(y = 1| f_G(h, r, t))), \phi: \mathbb{R} \rightarrow [0,1]
 \end{equation}
-For this transformation function we have several uncertainty measurements at our disposal which are entropy, least confidence, margin of confidence and ratio of confidence.
-They provide an uncertainty score $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | (h,r,t))$ of a given triple $(h, r, t)$ (\autoref{fig:sampling_distributions}).
+For this transformation function several uncertainty measures are at disposal which are entropy, least confidence, margin of confidence and ratio of confidence.
+They provide distributions of uncertainty scores $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | (h,r,t))$ of a given triple $(h, r, t)$ (\autoref{fig:sampling_distributions}).
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
@@ -37,17 +38,18 @@ They provide an uncertainty score $u(l) \in [0, 1]$ for probabilities $\mathbb{P
 
 % describe sampling methods
 % 1) always sample maximum uncertainty score
-Based on these distribution functions, two different \textbf{Uncertainty Sampling Methods} can be derived:
+Based on these distributions, two different \textbf{Uncertainty Sampling Methods} can be derived:
 \begin{itemize}
     \item 
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Max}imum Distribution (\textsc{USMax})}:\\
     On the one hand, the triple with the maximum uncertainty score can always be sampled.
-    As can be seen from the \autoref{fig:sampling_distributions} all uncertainty measures have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1, the closest triple is assigned the highest uncertainty score.
-    If only one negative triple reaches this maximum uncertainty score, it will be sampled.
-    If there are several triples with a maximum uncertainty score, one of the triples is sampled using a uniform distribution.
-    This results in the definition of \usmax with the following sampling probabilities:
+    As can be seen from \autoref{fig:sampling_distributions} all uncertainty measures have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1.
+    The triple with the closest probability is assigned the highest uncertainty score.
+    If only one negative triple reaches a maximum uncertainty score among all negative triples, it will be sampled.
+    If there are several triples with a maximum uncertainty score, one of these triples is sampled with equal probability according to a uniform distribution.
+    This results in the definition of sampling method \usmax with the following sampling probabilities:
     \begin{equation} 
-        p_{sampled}(h, r, t)=
+        \mathbb{P}_{\usmax}(h, r, t) =
         \begin{cases}
              0 \ \ \ \ \ \  \ \ \ \ \ \ \ \  \ \ 
              \text{if}\ \ \ u(h, r, t) < \max_{(h,r,t) \in Neg}(u(h, r, t)) 
@@ -57,20 +59,20 @@ Based on these distribution functions, two different \textbf{Uncertainty Samplin
             \text{else} 
              \\
         \end{cases}
-         \label{eq:uncertainty_max}
+         \label{eq:usmax}
     \end{equation}
-    
+    with $\mathbb{P}_{\usmax}(h, r, t) \in [0,1]$ 
     
     \item
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Softmax} Distribution (\textsc{USSoftmax})}:\\
     
     % 2) sample according to distribution
     On the other hand triples can be sampled according to a softmax probability distribution based on uncertainty scores.
-    Thus, triples close to $P(y = 1 | f_G(l)) = 0.5$ still have the highest probability of being sampled, but other triples for which the model is more certain are also assigned a probability in the classification.
+    Thus, triples close to $P(y = 1 | f_G(l)) = 0.5$ still have the highest probability of being sampled, but other triples for which the model is more certain are also assigned a probability of being sampled.
     \ussoftmax is defined as the softmax of all uncertainty scores:
     \begin{equation}
-        \label{eq:uncertainty_distribution}
-        p_{sampled}(h,r,t) = \frac{e^{u(h,r,t)}}{\sum_{(h,r,t) \in Neg}{e^{u(h,r,t)}}}
+        \label{eq:ussoftmax}
+        \mathbb{P}_{\ussoftmax}(h,r,t) = \frac{e^{u(h,r,t)}}{\sum_{(h,r,t) \in Neg}{e^{u(h,r,t)}}} \in [0,1]
     \end{equation}
 \end{itemize}
 In the original \kbgan approach, triples were given a sampling probability according to their achieved score in the generator model.

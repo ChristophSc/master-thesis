@@ -4,18 +4,19 @@
 %- motivation behind uncertainty sampling: find some unlabeled examples near decision boundaries and use them to clarify the position of decision boundaries -> most informative instances
 %- use density to determine whether an unlabeled example is highly representative
 The use of uncertainty has already led to promising improvements in many areas of machine learning.
-The term of uncertinty sampling is most often associated with the active learning, where labeled data for training a supervised model is obtained from a dataset of unlabeled instances.
-Based on the informativeness of the unlabeled instances for the learning algorithm, a prioritization results in which they are labeled.
+The term of uncertainty sampling is most often associated with the active learning, where labeled data for training a supervised model is obtained from a dataset of unlabeled instances \cite{Settles2009ActiveLL}.
+Based on the informativeness of unlabeled instances for a learning algorithm, a prioritization results in which order they are labeled.
 It is used in machine learning approaches, where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled data \cite{Settles2009ActiveLL}.
 Active learning aims for greater accuracy with fewer labeled training instances \cite{Settles2009ActiveLL}.
 These selected unlabeled instances can either be generated de novo or sampled from a given distribution.
-In the literature several query strategies have been proposed with different approaches how to receive informative instances, one of them is uncertainty sampling \cite{Settles2009ActiveLL}.
-Other query strategies for Active Learning are Query-By-Committee, Expected Model Change, Variance Reduction, Fisher Information Ration, Estimated Error Reduction and Density-Weighted Methods \cite{Settles2009ActiveLL}.
-They provide different strategies to obtain informative instances from the unlabeled dataset like voting of a committee consisting of several trained models, querying the instance that would impact the greatest change to the current model if we knew its label or queries instances which minimize the learner’s future error by minimizing its variance.
+In the literature several query strategies have been proposed with different approaches how to receive informative instances.
+One of them is called uncertainty sampling.
+Other query strategies for Active Learning are query-by-committee, expected model change, variance reduction, fisher information ratio, estimated error reduction and density-weighted methods \cite{Settles2009ActiveLL}.
+They provide different strategies to obtain informative instances from an unlabeled dataset.
 
-In Uncertainty Sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of the unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$.
+In uncertainty sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$ \cite{nguyen2021howtomeasure}.
 Subsequently, the instance with the highest score will be sampled.
-Most common used  uncertainty measures for utility score include \cite{human-in-the-loop}:
+Most common used uncertainty measures for utility score include \cite{human-in-the-loop}:
 \begin{equation}
     \text{Entropy-based:}\hspace{15mm}
      s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}
@@ -46,13 +47,8 @@ $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$.
   \label{fig:uncertainty_sampling_heatmap}
 \end{figure*}
 This shows, for example, that entropy measure samples a much larger area than least confidence.
-The more different labels there are, the greater the difference between the different labels.
-
-In addition, the following three different frameworks for measuring the uncertainty of a learner can be separated \cite{nguyen2021howtomeasure}.
-
-
+For measuring the uncertainty of a learner the following three different frameworks can be separated \cite{nguyen2021howtomeasure}.
+%
 \input{content/chapters/02_background/sections/08_uncertainty_sampling/01_EBU}
-
 \input{content/chapters/02_background/sections/08_uncertainty_sampling/02_CU}
-
 \input{content/chapters/02_background/sections/08_uncertainty_sampling/03_EAU}

@@ -120,4 +120,27 @@
     \label{fig:gan_train_not_pretrained_usmax_fb15k237}
 \end{figure}
 % fb15k
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k/1k_epochs/uncertainty_fb15k_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k/1k_epochs/uncertainty_fb15k_hit10.png}
+    \end{minipage}
+    
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k/1k_epochs/uncertainty_fb15k_rew.png}
+    \end{minipage}%
+     \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/fb15k/1k_epochs/uncertainty_fb15k_losses.png}
+    \end{minipage}%
+    \caption{Results from adversarial training with \usmax on \textsc{FB15k} dataset.
+    Figures show MRR and Hit@10 learning curves, rewards and losses for 1000 epochs without pre-trained models.}
+    \label{fig:gan_train_not_pretrained_usmax_fb15k}
+\end{figure}
 % yago3_10

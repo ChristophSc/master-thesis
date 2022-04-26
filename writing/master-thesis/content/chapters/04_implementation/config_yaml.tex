@@ -1,19 +1,19 @@
-\begin{longlisting}
-  \begin{minted}[gobble=4, frame=single, linenos]{yaml}
+\begin{minted}[gobble=4, frame=single, linenos]{yaml}
     # general settings
     pretrain_config: DistMult | ComplEx | TransE | TransD
     g_config: DistMult | ComplEx
     d_config: TransE | TransD
     test_batch_size: 100 
     task:  # settings of dataset and evaluation type
-      dir: umls | wn18rr | wn18 | fb15k237 | kinship
+      dir: umls | wn18rr | wn18 | fb15k237 | kinship | 
+           fb15k | yago3_10
       type: link
     adv:   # settings for adversarial training
       use_pretrained_models: false
       n_sample: 20 
       sample_type: original | us_max |  us_softmax
-      measure_type: entropy | least_confidence | confidence_margin | 
-                    confidence_ratio  
+      measure_type: entropy | least_confidence | 
+                    confidence_margin | confidence_ratio  
       n_epoch: 5000
       n_batch: 100 
       epoch_per_test: 50
@@ -61,6 +61,3 @@
       log_pretrain_graph: true
       graph_every_nth_epoch: 10
 \end{minted}
-  \caption{Example of a \textit{config.yaml} file which contains all settings and parameters for pretraining and adversarial training}
-  \label{lst:config_yaml}
-\end{longlisting}

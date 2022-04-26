@@ -1,9 +1,8 @@
 \section{Calculation of Probabilities for Triple Classification}
 \label{sec:calculation_of_probabilities_for_triple_classification}
-Having established the binary classification problem between positive and negative triples, it is necessary to determine how to calculate for a triple the probability of belonging to one of these classes.
-Based on \Autoref{fig:positiveVsNegativeApproach} with ranges of positive and negative triple scores, we want to determine two bounds.
-Assuming we have a generator scoring function $f_G$ which retrieves scoring values for each triple $l = (h,r,t)$ such that $f_G(l) \in \mathbb{R}$.
-Therefore, to provide probabilities belonging to positive or negative triple class. we need to define two boundaries:
+Having established the binary classification problem between positive and negative triples, it is necessary to determine how to calculate the probability for a triple to belong to one of these classes.
+Assuming we have a generator scoring function $f_G$ which returns scoring values for each triple $l = (h,r,t)$ such that $f_G(l) \in \mathbb{R}$.
+Therefore, to provide probabilities belonging to positive or negative triple class, we need to define two boundaries:
 First, $score_{min}$ which defines at which scoring value a triple has the probability 0 to be a positive triple: 
 \begin{equation} \label{eqn:prob_score_min}
     \mathds{P}(y = 1 | f_G(l) \leq score_{min}) = 0
@@ -36,14 +35,15 @@ First option to define these borders is depicted in \Autoref{fig:positives_negat
 and results in the following definitions of  $score_{min}$ and 
 $score_{max}$:
 \begin{equation} \label{eqn:opt2_score_min}
-    score_{min} = \argmin_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
+    score_{min} = \argmin_{(h,r,t) \in \kg}{f_G(h,r,t)}
 \end{equation}
 \begin{equation} \label{eqn:opt2_score_max}
     score_{max} = \argmax_{(h',r,t') \in Neg}{f_G(h',r,t')}
 \end{equation}
 This option has the advantage of focusing only on the overlapping part of the model's prediction.
 However, the drawback is that several triples of the negative triple set $Neg$ are disregarded.
-If negative and positive scoring ranges do not overlap, all negative triples from $Neg$ would get a probability of zero to be a positive one and therefore, according to this option the model would not be uncertain about classification of all negative triples in $Neg$ and is therefore not considered for our approach.
+If negative and positive scoring ranges do not overlap, all negative triples from $Neg$ would get a probability of zero to be a positive one and therefore, according to this option the model would not be uncertain about classification of any negative triples in $Neg$.
+Consequently, it is not suitable for our approach.
 
 The other option is showed in \Autoref{fig:positives_negatives2}.
 \begin{figure*}[t]
@@ -53,17 +53,16 @@ The other option is showed in \Autoref{fig:positives_negatives2}.
   $score_{min}$ at the left border of all negative triple scores and $score_{max}$ at the right border of all positive ones.}
   \label{fig:positives_negatives2}
 \end{figure*}
-In comparison to the first option, this one provides a probability of being positive to almost every negative triple,
-no matter how the ranges of negative and positive triple scores are arranged.
+In comparison to the first option, this one provides a probability of being positive to almost every negative triple, no matter how the ranges of negative and positive triple scores are arranged.
 With $f_G$ the scoring function of the generator, this option results in the following definitions of $score_{min}$ and $score_{max}$:
 \begin{equation} \label{eqn:opt1_score_min}
     score_{min} := \argmin_{(h',r,t') \in Neg}{f_G(h',r,t')}
 \end{equation}
 \begin{equation} \label{eqn:opt1_score_max}
-    score_{max} := \argmax_{(h,r,t) \in \mathcal{KG}}{f_G(h,r,t)}
+    score_{max} := \argmax_{(h,r,t) \in \kg}{f_G(h,r,t)}
 \end{equation}
-
-Since $score_{min}$ and $score_{max}$ are now defined by option two, the probability of a triple to be positive ($y = 1$) can be calculated with following \Autoref{eqn:positive_probability}.
+Therefore, this option is more suitable for our approach and is implemented for uncertainty sampling.
+Consequently, the probability of a triple to be positive ($y = 1$) can be calculated with following \Autoref{eqn:positive_probability}.
 \begin{equation}  \label{eqn:positive_probability}
     \mathds{P}(y = 1|(h, r, t)) =
     \begin{cases}

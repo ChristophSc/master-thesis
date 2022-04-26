@@ -10,11 +10,11 @@ Since score $s_i \in \mathbb{R}$, sampling probabilities are calculated which su
 With the softmax function, the individual negative triples of the set Neg are assigned such sampling probabilities that their sum is 1.
 The softmax function which is defined as 
 \begin{equation}
-    s(x_i) = \frac{x_i}{\sum_{j=1}^{n}{e^{x_j}}}
+    s(x_i) = \frac{\exp{x_i}}{\sum_{j=1}^{n}{\exp{x_j}}}
 \end{equation}
 and therefore, in the  original approach we obtain sampling probability $p_i$ for each negative triple $l_i$:
 \begin{equation}
-    p_i = s(f_G(l_i)) = \frac{f_G(l_i)}{\sum_{j=1}^{N_s}{e^{f_G(l_j)}}}
+    p_i = s(f_G(l_i)) = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}}
 \end{equation}
 Therefore, we obtain high probabilities to sample negative triples with high scores.
 In the example, this results in the values shown in \Autoref{tab:generator_scores}.

@@ -1,6 +1,5 @@
-\subsection{WN18RR Dataset}
-\label{subsec:methods_wn18rr}
-
+\subsubsection{WN18RR Dataset}
+\label{subsubsec:methods_wn18rr}
 In contrast to the evaluation metrics for the \umls dataset, the two evaluation metrics for the wn18rr dataset look relatively similar as can be seen in \Autoref{fig:advtrain_wn18rr_usmax_ussoftmax}.
 \begin{figure}
     \centering
@@ -29,7 +28,6 @@ This time both sampling methods achieve almost the same maxima of MRR and Hit@10
 In contrast to the learning process with the \umls dataset, the metrics now also \usmax remain at the maximum value, but stagnate there as with the \ussoftmax approach.
 Additionally, in both approaches a small increase of Hit@10 values can be found over the whole validation time such that maximum is reached at the end of 1000 epochs.
 Therefore, with longer training of more than 1000 epochs, a further increase in the evaluation metrics can be expected.
-\textcolor{red}{ADD REASON}
 
 From the course of losses and rewards during training (\Autoref{fig:advtrain_wn18rr_usmax_ussoftmax_losses_rewards}) it can be seen, that now losses for \usmax as well as for \ussoftmax constantly decrease over time.
 \begin{figure}
@@ -56,10 +54,6 @@ From the course of losses and rewards during training (\Autoref{fig:advtrain_wn1
     \label{fig:advtrain_wn18rr_usmax_ussoftmax_losses_rewards}
 \end{figure}
 Besides this, also the rewards of both approaches increase over time.
-\textcolor{red}{Interestingly, the reward curves with a \transd discriminator model behave very differently from those with a \transe model.}
 Although rewards increase over time and therefore distance of negative triples decrease over time in discriminator, the evaluation metrics still stay on the same level.
 According to the course of losses and rewards, the discriminator models seem to learn over time.
 Nevertheless, MRRs and Hit@10s stay on same level.
-\textcolor{red}{ADD REASON}
-
-

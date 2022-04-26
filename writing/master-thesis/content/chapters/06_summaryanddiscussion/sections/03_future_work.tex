@@ -5,18 +5,16 @@ In some cases, the enrichment of negative sampling process with uncertainty info
 Nevertheless, there is some room for improvement, which we leave to future work.
 These can be separated in following aspects.
 
-\subsubsection{Extend \ucgan with other Approaches}
+\subsubsection{Extend \usgan with other Approaches}
 
-\ucgan is based on \kbgan which is one of the pioneer works in dynamic distribution-based and presented in 2017.
+\usgan is based on \kbgan which is one of the pioneer works in dynamic distribution-based and presented in 2017.
 Therefore, other approaches based on \kbgan were already presented which e.g. extending the approach with a cache like in \textsc{NSCaching} \cite{zhang2019nscaching}.
 The idea of extending negative sampling by uncertainty information can also be applied for these approaches.
-
 
 \subsubsection{Improve Classification}
 Uncertainty scores are currently calculated based on a classification of positives and negative which is motivated by uncertainty sampling in active learning.
 In turn, the classification is only based of generator model scores which might not be accurate enough.
 Therefore, improving classification with several information about \ac{KG} structure, entities and relations of a \ac{KG} might improve classification of positive and negative examples and, therefore, uncertainty sampling.
-\textcolor{red}{delete section 'improve classification' in chapter approach and summarise ideas here?} 
 
 \subsubsection{Edit Definition of Uncertainty}
 Currently, motivated by uncertainty sampling from active learning, uncertainty is based on classification of triples as positive or negative ones.

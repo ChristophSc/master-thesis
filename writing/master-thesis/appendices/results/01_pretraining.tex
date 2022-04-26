@@ -90,4 +90,24 @@
     \label{fig:pretraining}
 \end{figure}
 % fb15k
+\begin{figure}
+    \centering
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/pretrain/fb15k/pretrain_fb15k_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/pretrain/fb15k/pretrain_fb15k_hit10.png}
+    \end{minipage}
+    \begin{minipage}{.3\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/pretrain/fb15k/pretrain_fb15k_losses.png}
+    \end{minipage}%
+    \caption{MRRs, Hit@10s and losses during pre-training of \ac{KGE} models for 1000 epochs on \textsc{FB15k} dataset.}
+    \label{fig:pretraining}
+\end{figure}
 % yago3-10
+
+
+\input{appendices/results/result_tables_pretraining}

@@ -1,7 +1,6 @@
-\subsection{WN18 Dataset}
-\label{subsec:methods_wn18}
-
-
+\subsubsection{WN18 Dataset} 
+\label{subsubsec:methods_wn18}
+%
 The courses of evaluation metrics on \textsc{WN18} dataset are very similar to that on \textsc{WN18RR} dataset.
 Interestingly, the model pairs with a \transd model in the discriminator also show a significantly worse performance as can be seen in \Autoref{fig:advtrain_wn18_usmax_ussoftmax}.
 \begin{figure}
@@ -32,7 +31,6 @@ But unlike learning on the \textsc{WN18RR} dataset, the discriminator does not a
 Furthermore, \ussoftmax shows an even clearer difference in the models where \transd is the discriminator for the course of validation MRR.
 This also shows that adversarial training with a \transd discriminator is worse for \usmax but better for \ussoftmax.
 At Hit@10, no differences between the model pairs can be seen in the \ussoftmax.
-\textcolor{red}{ADD REASON}
 
 The progression of losses and rewards is also similar to the \textsc{WN18RR} dataset (\Autoref{fig:advtrain_wn18_usmax_ussoftmax_losses_rewards}).
 \begin{figure}
@@ -58,7 +56,4 @@ The progression of losses and rewards is also similar to the \textsc{WN18RR} dat
     Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_wn18_usmax_ussoftmax_losses_rewards}
 \end{figure}
-However, it is striking that the model pair \dismult + \transd have a considerable drop in rewards after 700 epochs.
-\textcolor{red}{ADD REASON}
-
-
+However, it is striking that the model pair \textsc{DistMult} + \textsc{TransD} have a considerable drop in rewards after 700 epochs.

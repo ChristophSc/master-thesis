@@ -1,0 +1,98 @@
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lllllll}
+        \toprule
+        \textbf{Method} &
+        \multicolumn{2}{c}{\textbf{UMLS}} & 
+        \multicolumn{2}{c}{\textbf{KINSHIP}} & 
+        \multicolumn{2}{c}{\textbf{FBK15}}\\
+        
+        \cmidrule{2-6} \cmidrule{7-7} \\
+        {} & MRR & H@10 & MRR & H@10 & MRR & H@10 \\
+        
+        \midrule
+        
+        
+        \kbgan (\textsc{DistMult} + \textsc{TransE})  
+        & 62.9 & 81.5 & 13.3 & 29.2 & 43.2 & 66.0 \\
+        
+        \kbgan (\textsc{ComplEx} + \textsc{TransE})   
+        & 63.9  & 94.5 & 6.7 & 13.9 & 43.4 & 66.2\\
+        
+        \kbgan (\textsc{DistMult} + \textsc{TransD})  
+        & 67.4 & 81.2 & 11.9 & 24.9 & 43.7 & 67.1\\
+        
+        \kbgan (\textsc{ComplEx} + \textsc{TransD})   
+        & 61.8 & 91.2 & 9.7 & 22.6 & 43.8 & 67.2\\
+
+        \midrule
+         
+        \usgan (\textsc{DistMult} + \textsc{TransE}) 
+        & 77.8 & 98.4 & 21.9 & 57.8 & 33.7 & 56.3\\
+         
+        \usgan (\textsc{ComplEx} + \textsc{TransE}) 
+        & 78.4 & 98.2 & 22.0 & 58.8 & 33.6 & 56.2\\
+          
+        \usgan (\textsc{DistMult} + \textsc{TransD}) 
+        & 79.8 & 99.2 & 34.4 & 57.4 & 34.4 & 57.4\\
+        
+        \usgan (\textsc{ComplEx} + \textsc{TransD}) 
+        & 80.8  & 98.9 & 27.4 & 66.8 & 34.4 & 57.1\\
+          
+        \bottomrule
+    \end{tabular}
+    \caption{Experimental results of adversarial training on datasets \textsc{UMLS}, \textbf{KINSHIP} and \textbf{FB15k} for 5000 epochs with pre-trained models.
+    First section shows MRR and Hit@10 results of original \kbgan approach with \origsampling, second section shows 
+    \usgan with \ussoftmax and entropy uncertainty metrics.}
+\label{tab:result_table1_5k_epochs}
+\end{table}
+
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lllllll}
+        \toprule
+        \textbf{Method} &
+        \multicolumn{2}{c}{\textbf{FB15k-237}} & 
+        \multicolumn{2}{c}{\textbf{WN18}} & 
+        \multicolumn{2}{c}{\textbf{WN18RR}}\\
+        
+        \cmidrule{2-6} \cmidrule{7-7} \\
+        {} & MRR & H@10 & MRR & H@10 & MRR & H@10 \\
+    
+        \midrule
+          
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  
+          & 27.0  & 45.1 & 64.9 & 94.8 & 19.3 & 45.2 \\
+          
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  
+          & 26.8  & 44.9 & 64.4 & 94.9 & 19.2 & 45.5 \\
+          
+          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  
+          & 26.6  & 44.9 & 75.9 & 94.7 & 19.4 & 44.6 \\
+
+          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  
+          & 26.5 & 44.9 & 77.3 & 94.8 & 19.1 & 44.5 \\
+          
+          \midrule
+          
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE})  
+          & 23.9 & 41.8 & 43.2 & 92.5 & 17.0 & 44.3 \\
+          
+          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE})  
+          & 23.8 & 41.7 & 43.3 & 92.5 & 17.0 & 44.4 \\
+          
+          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD})  
+          & 23.6  & 41.7 & 47.2 & 93.7 & 17.6 & 44.6 \\
+
+          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD})  
+          & 23.6 & 41.7 & 46.5 & 93.2 & 17.6 & 45.1 \\
+  
+        \bottomrule
+    \end{tabular}
+    \caption{Experimental results of adversarial training on datasets \textsc{FB15k-237}, \textbf{WN18} and \textbf{WN18RR} for 5000 epochs with pre-trained models.
+    First section shows MRR and Hit@10 results of original \kbgan approach with \origsampling, second section shows 
+    \usgan with \ussoftmax and entropy uncertainty metrics.}
+\label{tab:result_table2_5k_epochs}
+\end{table}

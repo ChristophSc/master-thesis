@@ -2,17 +2,12 @@
 
 The aim is to improve the discriminator model, which is achieved by minimising the marginal loss.
 The marginal loss is defined as in \Autoref{eq:marginalloss2}.
-Therefore, all positive triples $(h,r,t) \in \mathcal{T}$, where $\mathcal{T}$ is the set of all positive triples, and their sampled negative triple $(h',r', t')$  are passed to the marginal loss function $L_D$ of the discriminator
+Therefore, all positive triples $(h,r,t) \in \kg$ and their sampled negative triple $(h',r', t')$  are passed to the marginal loss function $L_D$ of the discriminator
 \begin{multline} \label{eq:marginalloss2}.
     L_D =\sum_{(h,r,t)\in\mathcal{T}}[f(h,r,t)-f(h',r,t')+\gamma]_+\\
     (h',r,t') \sim p_G(h,r,t|h,r,t) 
 \end{multline}
-while $p_G(h', r, t'|h, r, t)$ is the probability distribution on negative triples and defined as \cite{cai2017kbgan}
-\begin{multline}
-    p_G(h',r,t'|h,r,t)=\frac{\exp f_G(h',r,t')}{\sum\exp f_G(h^*,r,t^*)} \\
-    (h^*,r,t^*)\in Neg(h,r,t)
-\end{multline}
-\textcolor{red}{UPDATE: EITHER UNCERTAINTY MAX OR UNCERTAINTY DISTRIBUTION PROBABILITY DISTRIBUTION}
+while $p_G(h', r, t'|h, r, t)$ is the probability distribution on negative triples with either \usmax defined in \Autoref{eq:usmax} or \ussoftmax defined in \Autoref{eq:ussoftmax}.
 Therefore, discriminator loss is minimized if difference between positive and negative triple score is low and in optimal case zero.
 The sampled negative triple $(h',r,t')$ was picked based on the uncertainty of the generator model.
 By sampling such an uncertain negative triple from generator, we hope to catch an uncertain triple for the discriminator as well.

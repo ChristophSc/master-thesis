@@ -6,10 +6,10 @@ Before the training begins, the configurations are loaded from the \textit{confi
 The settings and parameters of the training can be defined in this file.
 One example config-file is showed in \Autoref{lst:config_yaml}.
 \input{content/chapters/04_implementation/config_yaml}
-The settings under adv contain the most important settings for the adversarial training, such as the definition of the generator and discriminator model.
+The settings under \textit{adv} contain the most important settings for the adversarial training, such as the definition of the generator and discriminator model.
 These settings can also be overwritten via parameters when starting the script.
 Then, training, validation and test data are loaded and the adversarial training for the specified number of epochs begins.
-
+\newpage
 The adversarial training runs via the \texttt{BaseModel} class depicted in \Autoref{fig:basemodel_classdiagram}.
 \begin{figure*}[t]
   \centering

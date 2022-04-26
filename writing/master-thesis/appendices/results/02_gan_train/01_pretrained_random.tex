@@ -1,4 +1,3 @@
-\subsubsection{Original Sampling}
 % umls
 \begin{figure}
     \centering
@@ -120,4 +119,27 @@
     \label{fig:gan_train_pretrained_random_fb15k237}
 \end{figure}
 % fb15k
+\begin{figure}
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/fb15k/random_fb15k_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/fb15k/random_fb15k_hit10.png}
+    \end{minipage}
+    
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/fb15k/random_fb15k_rew.png}
+    \end{minipage}%
+     \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{figures/results/gan_train/pretrained/random/fb15k/random_fb15k_losses.png}
+    \end{minipage}%
+    \caption{Results from adversarial training with \origsampling on \textsc{FB15k} dataset.
+    Figures show MRR and Hit@10 learning curves, rewards and losses for 5000 epochs with pre-trained models.}
+    \label{fig:gan_train_pretrained_random_fb15k}
+\end{figure}
 % yago3_10

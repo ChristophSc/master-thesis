@@ -2,7 +2,7 @@
 \label{ch:implementation}
 
 
-After explaining our approach, we will now go into more detail about the implementation of \ucgan.
+After explaining our approach, we will now go into more detail about the implementation of \usgan.
 For this purpose, \autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo code.
 Since some components were already implemented in the original \kbgan approach, in this chapter we focus on the differences between the new \ucgan and the original approach.
 Already implemented components are only discussed to the extent that the adversarial training can be understood.
@@ -15,11 +15,7 @@ In the following \Autoref{sec:sampling_by_uncertainty}, the new changes in the i
 At the end of this chapter a hyperparameter optimization is described in \Autoref{sec:hyperparameter_optimization} and configurations to run training on $PC^2$ is reported in \Autoref{sec:processing_on_pc2}.
 
 \input{content/chapters/04_implementation/sections/01_algorithm}
-
 \input{content/chapters/04_implementation/sections/02_adv_training}
-
 \input{content/chapters/04_implementation/sections/03_uncertainty_sampling}
-
 \input{content/chapters/04_implementation/sections/04_hyperparameter_optimization}
-
 \input{content/chapters/04_implementation/sections/05_processing_on_pc2}

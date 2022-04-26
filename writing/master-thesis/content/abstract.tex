@@ -5,14 +5,15 @@
 \label{sec:abstract}
 
 Knowledge graphs present an incomplete knowledge repository of the world.
-The information are stored through a connective structure of entities and relations.
-To simplify the manipulation as well as preserving the inherent structure of a knowledge graph, entities and relations are embedded by knowledge graph embeddings in a continuous low-dimensional vector space.
+The information is stored through a connective structure of entities and relations.
+To simplify the manipulation as well as to preserve the inherent structure of a knowledge graph, entities and relations are embedded by knowledge graph embeddings in a continuous low-dimensional vector space.
 Learning these embeddings requires the distinction between positive and negative triples.
-Since only positive information are stored in knowledge graphs, 
-there are several training types available to find negative examples, one of these is negative sampling. 
-Thus, common used negative sampling approaches provide low quality negative examples.
+Since only positive information is stored in knowledge graphs, 
+there are several training types available to find negative examples.
+One of these is negative sampling. 
+However, commonly used negative sampling approaches provide low quality negative examples.
 As a result, embedding learning suffers from a too simple distinction between positive and negative instances, which has a direct impact on downstream tasks.
-In many areas of machine learning, such as active learning, sampling through uncertainty offers the possibility of sampling particularly informative instances for a model and thus making the learning process more efficient.
+In active learning and many areas of machine learning, sampling through uncertainty offers the possibility of sampling particularly informative instances for a model and thus making the learning process more efficient.
 Therefore, in this thesis we want to investigate the inclusion of uncertainty information in the negative sampling process as well.
 Therefore, several methods of sampling by uncertainty are analyzed and, subsequently, applied in a negative sampling approach.
 
@@ -21,4 +22,14 @@ Therefore, several methods of sampling by uncertainty are analyzed and, subseque
 {\usekomafont{chapter}Abstract (Deutsch)}
 \label{sec:abstract-german}
 
-
+Wissensgraphen stellen einen unvollständigen Wissensspeicher der Welt dar.
+Die Informationen werden durch eine zusammenhängende Struktur von Entitäten und Beziehungen gespeichert.
+Um die Manipulation zu vereinfachen und die zugrunde liegende  Struktur eines Wissensgraphen zu erhalten, werden Entitäten und Beziehungen durch Wissensgrapheneinbettungen in einen kontinuierlichen niedrigdimensionalen Vektorraum eingebettet.
+Das Lernen dieser Einbettungen erfordert die Unterscheidung zwischen positiven und negativen Tripeln.
+Da in Wissensgraphen nur positive Informationen gespeichert sind, gibt es mehrere Trainingsarten, um negative Beispiele zu finden.
+Eine davon ist das negative Sampling. 
+Die üblicherweise verwendeten Ansätze für das negative Sampling liefern jedoch Negativbeispiele von geringer Qualität.
+Infolgedessen leidet das Einbettungslernen unter einer zu einfachen Unterscheidung zwischen positiven und negativen Instanzen, was sich direkt auf die nachfolgenden Aufgaben auswirkt.
+Beim aktiven Lernen und in vielen anderen Bereichen des maschinellen Lernens bietet das Sampling durch Unsicherheit die Möglichkeit, besonders informative Instanzen für ein Modell zu samplen und damit den Lernprozess effizienter zu gestalten.
+In dieser Arbeit soll daher auch die Einbeziehung von Unsicherheitsinformationen in den negativen Samplingprozess untersucht werden.
+Dazu werden verschiedene Methoden des Samplings durch Unsicherheit analysiert und anschließend in einem Negative-Sampling-Ansatz angewendet.
