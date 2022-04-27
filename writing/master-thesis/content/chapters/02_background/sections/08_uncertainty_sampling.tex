@@ -18,18 +18,18 @@ In uncertainty sampling, given a model $\theta$ which has been trained on labele
 Subsequently, the instance with the highest score will be sampled.
 Most common used uncertainty measures for utility score include \cite{human-in-the-loop}:
 \begin{equation}
-    \text{Entropy-based:}\hspace{15mm}
+    \text{Entropy-based:}\hspace{15mm} \label{eqn:entropy_def}
      s(\theta, x) = - \sum_{y \in \mathcal{Y}}{p_{\theta}(y | x) \cdot log p_{\theta}(y|x)}
 \end{equation}
 \begin{equation}
-    \text{Least confidence:}\hspace{27mm}
+    \text{Least confidence:}\hspace{27mm} \label{eqn:least_confidence_def}
      s(\theta, x) = 1 - \max_{y \in \mathcal{Y}}{p_{\theta}(y | x)}
 \end{equation}
 \begin{equation}
-    \text{Margin of confidence:}\hspace{12mm}
+    \text{Margin of confidence:}\hspace{12mm} \label{eqn:margin_of_confidence_def}
     s(\theta, x) = p_{\theta}(y_m | x) - p_{\theta}(y_n|x)
 \end{equation}
-\begin{equation}
+\begin{equation} \label{eqn:ratio_of_confidence_def}
     \text{Ratio of confidence:}\hspace{33mm}
     s(\theta, x) = \frac{p_{\theta}(y_m | x)}{p_{\theta}(y_n|x)}
 \end{equation}

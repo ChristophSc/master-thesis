@@ -11,10 +11,15 @@ In contrast, \ac{EAU} considers \textit{epistemic uncertainty} within a single m
 \Ac{CU} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other.
 
 % determination of one framework
-In an adversarial training process, negative triples are first passed to the generator, which calculates scores for them based on current embeddings.
-subsequently, based on these scores, one of these negative triples is sampled and given to the discriminator.
-Therefore, we only have information about the embeddings of the generator model and all negative triple scores.
-We do not have any additional features for the sampling process.
+To determine one of the uncertainty sampling frameworks for our approach, the available information in the original \kbgan approach are considered.
+In the adversarial training process, the negative triple set $Neg$ is created and passed to the generator.
+The generator scores all negative triples based on current embeddings.
+Based on these scores, sampling probabilities are calculated.
+According to this probability distribution, one of these negative triples is sampled and given to the discriminator.
+Therefore, we only have information about the embeddings of the generator as well as the discriminator model, all negative triples and their scores.
+Consequently, we could either sample by the uncertainty of the generator or the discriminator embedding model.
+Therefore, since it corresponds to the original course, we choose the uncertainty pf the generator model.
+The original sampling method according to scores is replaced by sampling with uncertainty in the new approach of \usgan.
 For this reason, we will first take framework of epistemic uncertainty from \ac{EAU}.
 The other frameworks can be considered as well, but for them additional models or model predictons or additional features are needed.
 

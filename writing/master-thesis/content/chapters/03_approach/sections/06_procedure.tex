@@ -1,11 +1,6 @@
 \section{Procedure of Adversarial Training with Sampling by Uncertainty}
 \label{sec:procedure}
-
-In the original \kbgan approach two embedding models are available in form of the generator and discriminator.
-Therefore, we could either sample by the uncertainty of the generator or the discriminator embedding model.
-In \kbgan approach the negative triple set $Neg$ is created before they are given to the generator.
-Subsequently they are sampled by probability distribution and given to discriminator.
-Therefore, since it corresponds to the original course, we choose the uncertainty in the prediction of the generator and the original sampling by probabilities calculated by the scores of the generator is replaced by sampling from uncertainty.
+%
 The correspondingly modified architecture and the sequence of the sampling process is shown in \Autoref{fig:uncertainty_sampling_architecture}.
 \input{content/chapters/03_approach/uncertainty_samping_architecture}
 The changed elements are marked in green.

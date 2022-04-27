@@ -2,154 +2,170 @@
 \label{sec:calculation_of_uncertainty_scores}
 %
 Uncertainty sampling takes place on the basis of probabilities with which the instances belong to the respective classes.
-The calculation of the probabilities to belong to a class was determined in the previous step.
+In the previous step we determine the calculation of probabilities to belong to a class.
 Therefore, the calculation of uncertainty scores can take place at this point.
-%
-To transform probabilities of triples to belong to positive triple class ($y = 1$) and negative triple class ($y = 0$) into uncertainty scores a transformation function is needed.
-This transformation function $\phi$ uses calculated class probabilities to map to an uncertainty score.
-In case of this approach probabilities $\mathds{P}(y = 1| f_G(h, r, t))$ are  mapped to $u(l)$ with \Autoref{eqn:uncertainty_function}
+
+To get from the generator scores to the uncertainty scores of the individual triples, a transformation function is used.
+Subsequently, this transformation function $\phi$ uses the individual class probabilities to map to uncertainty scores.
+Therefore, generator scores obtained by $f_G(l)$ for a triple $l = (h,r,t)$ are  mapped to $u(l)$ with following definition.
 \begin{equation} \label{eqn:uncertainty_function}
-    u(l) = \phi(\mathds{P}(y = 1| f_G(h, r, t))), \phi: \mathbb{R} \rightarrow [0,1]
+    u(l) = \phi(f_G(x))
 \end{equation}
+where $\phi: \mathbb{R} \rightarrow [0,1]$.
 For this transformation function several uncertainty measures are at disposal which are entropy, least confidence, margin of confidence and ratio of confidence.
-They provide distributions of uncertainty scores $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | (h,r,t))$ of a given triple $(h, r, t)$ (\autoref{fig:sampling_distributions}).
+They provide distributions of uncertainty scores $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | f_G(l))$ of a given triple $(h, r, t)$ (\Autoref{fig:sampling_distributions}).
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/uncertainty_metric_entropy.pdf}
+      \includegraphics[width=\linewidth]{figures/uncertainty_metric_entropy.pdf}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/least_confident_graph.PNG}
+      \includegraphics[width=\linewidth]{figures/least_confident_graph.PNG}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/smallest_margin_graph.PNG}
+      \includegraphics[width=\linewidth]{figures/smallest_margin_graph.PNG}
     \end{minipage}%
     \begin{minipage}{.5\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth]{figures/smallest_ratio.PNG}
+      \includegraphics[width=\linewidth]{figures/smallest_ratio.PNG}
     \end{minipage}%
     \caption{Uncertainty sampling distributions for (a) entropy, (b) least confidence, (c) margin of confidence and (d) ratio of confidence in a binary classification problem.
-    The x-axis marks the probability of a triple belonging to the positive class $\mathbb{P}(y = 1 | l = (h,r,t))$ and the y-axis the uncertainty score $u(l)$ of the corresponding uncertainty measure.}
+    The x-axis marks the probability of a triple belonging to the positive class $\mathbb{P}(y = 1 | f_G(l))$ and the y-axis the uncertainty score $u(l)$ of the corresponding uncertainty measure.}
     \label{fig:sampling_distributions}
 \end{figure}
 
 % describe sampling methods
 % 1) always sample maximum uncertainty score
-Based on these distributions, two different \textbf{Uncertainty Sampling Methods} can be derived:
+Based on the calculated probabilities, uncertainty scores are assigned to the triples.
+Therefore, two different \textbf{Uncertainty Sampling Methods} can be derived based on these distributions:
 \begin{itemize}
     \item 
+    % sampling according to max distribution
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Max}imum Distribution (\textsc{USMax})}:\\
-    On the one hand, the triple with the maximum uncertainty score can always be sampled.
-    As can be seen from \autoref{fig:sampling_distributions} all uncertainty measures have the maximum uncertainty score of 1 at the high point of the function which is located at $P(y = 1 | f_G(l)) = 0.5$ with uncertainty score of 1.
-    The triple with the closest probability is assigned the highest uncertainty score.
+    The first option is to always sample the triple with maximum uncertainty score.
+    As can be seen from \autoref{fig:sampling_distributions} all uncertainty measures have a maximum uncertainty score of 1 which is located at $P(y = 1 | f_G(l)) = 0.5$.
+    Therefore, with \usmax all triples that are closest to this probability of 0.5 of being a positive triple get a sampling probability.
     If only one negative triple reaches a maximum uncertainty score among all negative triples, it will be sampled.
     If there are several triples with a maximum uncertainty score, one of these triples is sampled with equal probability according to a uniform distribution.
-    This results in the definition of sampling method \usmax with the following sampling probabilities:
+    This results in the definition of sampling method \usmax with the following sampling probability $\mathbb{P}_{\usmax}(l) \in [0,1]$ for $l = (h,r,t)$:
     \begin{equation} 
-        \mathbb{P}_{\usmax}(h, r, t) =
+        \mathbb{P}_{\usmax}(l) =
         \begin{cases}
-             0 \ \ \ \ \ \  \ \ \ \ \ \ \ \  \ \ 
-             \text{if}\ \ \ u(h, r, t) < \max_{(h,r,t) \in Neg}(u(h, r, t)) 
+             0 \ \ \ \ \ \ \ \ \ \ \ \ \ \  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+             \text{if}\ \ \ u(l) < \max_{l \in Neg}(u(l)) 
              \\ \\
-            \frac{1}{|\{(h,r,t) | u(h,r,t) = \max_{(h,r,t) \in Neg}(u(h, r, t)\}|} 
-            \ \ \ \ \
+            \frac{1}{|\{l | u(l) = \max_{l \in Neg}(u(l)\}|} 
+            \ \ \ \
             \text{else} 
              \\
         \end{cases}
          \label{eq:usmax}
     \end{equation}
-    with $\mathbb{P}_{\usmax}(h, r, t) \in [0,1]$ 
     
     \item
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Softmax} Distribution (\textsc{USSoftmax})}:\\
     
-    % 2) sample according to distribution
-    On the other hand triples can be sampled according to a softmax probability distribution based on uncertainty scores.
+    % 2) sample according to softmax distribution
+    The second sampling option is to sample according to a softmax probability distribution based on uncertainty scores.
     Thus, triples close to $P(y = 1 | f_G(l)) = 0.5$ still have the highest probability of being sampled, but other triples for which the model is more certain are also assigned a probability of being sampled.
-    \ussoftmax is defined as the softmax of all uncertainty scores:
+    \ussoftmax is defined as the softmax of all uncertainty scores for $l = (h,r,t)$:
     \begin{equation}
         \label{eq:ussoftmax}
-        \mathbb{P}_{\ussoftmax}(h,r,t) = \frac{e^{u(h,r,t)}}{\sum_{(h,r,t) \in Neg}{e^{u(h,r,t)}}} \in [0,1]
+        \mathbb{P}_{\ussoftmax}(l) = \frac{e^{u(l)}}{\sum_{l = \in Neg}{e^{u(l)}}} \in [0,1]
     \end{equation}
 \end{itemize}
 In the original \kbgan approach, triples were given a sampling probability according to their achieved score in the generator model.
 Thus, negative triples with the highest score also received the highest sampling probability.
 This sampling method is referred as \origsampling in the following.
-For the individual uncertainty measurements, the following definitions for $\phi$ and considerations for the two sampling methods result \cite{human-in-the-loop}.
+For the individual uncertainty measures, the following definitions for $\phi$ and considerations for the two sampling methods \usmax and \ussoftmax result.
 
 \textbf{Entropy} 
-considers the differences between all the predictions.
-Like the other uncertainty metrics, the high point of the function is at $x = 0.5$, where the model is most uncertain about the classification.
-However, it differs to the other metrics since it slopes flatter in both directions.
-Therefore, if triples are sampled by Uncertainty Distribution method, it is more likely that triples will be sampled that are further away from $x=0.5$.
-According to the definition of Entropy, the mapping function $\phi$ is defined as follows:
+considers the differences between all predictions.
+According to the definition of entropy (\Autoref{eqn:entropy_def}), with $l = (h,r,t)$ the mapping function $\phi$ is defined as
 \begin{equation}
-    \phi(x) = - \sum_{y \in \mathcal{Y}}{\mathds{P}_{\theta}(y | f_G(x)) \cdot log \mathds{P}_{\theta}(y | f_G(x))}
+    \phi(x) = - \sum_{y \in \mathcal{Y}}{\mathds{P}_{\theta}(y | x) \cdot log \mathds{P}_{\theta}(y | x)}.
 \end{equation}
-Since in our case we are dealing with a binary classification with $y_i \in \{0,1\}$, this results in calculation:
+In this case $x = f_G(l)$ can be inserted for a triple $l = (h,r,t)$.
+Additionally, we have a binary classification problem with $\mathcal{Y} = \{0,1\}$.
+Inserting $x$ and $\mathcal{Y}$ leads to
 \begin{equation}
-= - \mathds{P}(y = 1| f_G(x)) log \mathds{P}(y = 1 | f_G(x))
-- \mathds{P}(y = 0| f_G(x)) log \mathds{P}(y = 0 | f_G(x))
+= - \mathds{P}(y = 1| f_G(l)) log \mathds{P}(y = 1 | f_G(l))
+- \mathds{P}(y = 0| f_G(l)) log \mathds{P}(y = 0 | f_G(l)).
 \end{equation}
-\begin{equation}
-= - \mathds{P}(y = 1| f_G(x) ) log \mathds{P}(y = 1 | f_G(x))
-- ((1 - \mathds{P}(y = 1 | f_G(x)))
-     log(1 - \mathds{P}(y = 1 | f_G(x))))
-\end{equation}
+And since in a binary classification the probability of one class can be expressed by the counter probability of the other class 
+$\mathds{P}(y = 0| f_G(l)) = 1 - \mathds{P}(y = 1 | f_G(l))$.
+\begin{align*} 
+&= - \mathds{P}(y = 1| f_G(l)) log \mathds{P}(y = 1 | f_G(l))\\
+  &\hspace{4mm}- ((1 - \mathds{P}(y = 1 | f_G(l))) log(1 - \mathds{P}(y = 1 | f_G(l)))) \\
+&= - \mathds{P}(y = 1| f_G(l)) log \mathds{P}(y = 1 | f_G(l)) \\
+   &\hspace{4mm}- (log(1 - \mathds{P}(y = 1 | f_G(l))) - \mathds{P}(y = 1 | f_G(l)) log(1 - \mathds{P}(y = 1 | f_G(l)))) \\
+&= - \mathds{P}(y = 1| f_G(l)) log \mathds{P}(y = 1 | f_G(l)) \\
+   &\hspace{4mm}- log(1 - \mathds{P}(y = 1 | f_G(l))) + \mathds{P}(y = 1 | f_G(l)) log(1 - \mathds{P}(y = 1 | f_G(l))) 
+\end{align*}
+As can be seen from the graph of the entropy function (\Autoref{fig:sampling_distributions}) it has the high point of the function at $P(y = 1 | f_G(l)) = 0.5$ like the other uncertainty measures.
+Therefore, at this point the model is most uncertain about the classification between negative ($y = 0$) and positive triple($y = 1$).
+However, it differs to the other metrics since it slopes flatter in both directions ($P(y = 1 | f_G(l)) = 0$ and $P(y = 1 | f_G(l)) = 1$).
+Therefore, if triples are sampled by sampling method \ussoftmax, it is more likely that triples will be sampled that are further away from $P(y = 1 | f_G(l)) = 0.5$ than with the other uncertainty measures.
 
 \textbf{Least Confidence} 
-measures the distance between the most confident prediction and 100\%.
-Normalized for $n$ classes to an uncertainty score between 0 and 1 it is defined as follows:
+measures the distance between the most confident prediction and 100\% confidence.
+According to the definition of least confidence (\Autoref{eqn:least_confidence_def}) and a given triple $l = (h,r,t)$ the transformation function $\phi$ for this uncertainty measure is defined as
 \begin{equation}
-    \phi(x) = (1 - \max_{y \in \mathcal{Y}}{\mathds{P}_{\theta}(y | f_G(x))}) \cdot \left(\frac{n}{n-1}\right)
+    \phi(x) = (1 - \max_{y \in \mathcal{Y}}{\mathds{P}_{\theta}(y | x)}) \cdot \left(\frac{n}{n-1}\right).
 \end{equation}
-Since we have a binary classification, we can set $n = 2$ and $y \in \{0,1\}$:
-\begin{equation}
-    \phi(x) = (1 - \max({\mathds{P}_{\theta}(y = 1| f_G(x)), \mathds{P}_{\theta}(y = 0| f_G(x))})) \cdot 2
-\end{equation}
+It is normalized for $n$ classes to an output between 0 and 1.
+Again, $x = f_G(l)$ for a triple $l = (h,r,t)$ can be inserted and since we have a binary classification with $n = 2$ classes and $\mathcal{Y} = \{0,1\}$, the equation can be rewritten to
 \begin{equation} \label{eq:leastconfidence}
-    = 2 - 2 \max({\mathds{P}_{\theta}(y = 1| f_G(x)), \mathds{P}_{\theta}(y = 0| f_G(x))})
+\begin{split}
+\phi_1(l) 
+& = (1 - \max({\mathds{P}(y = 1| f_G(l)), \mathds{P}(y = 0| f_G(l))})) \cdot 2 \\
+&= 2 - 2 \max({\mathds{P}(y = 1| f_G(l)), \mathds{P}(y = 0| f_G(l))}).
+\end{split}
 \end{equation}
-In contrast to entropy, the graph slopes much faster in the direction of $x = 0$ and $x = 1$, so that triples with lower uncertainty of the model are also sampled with lower probability with Uncertainty Distribution method.
+In contrast to entropy, the graph slopes much faster in the direction of $\mathds{P}(y | f_G(l)) = 0$ and $\mathds{P}(y | f_G(l)) = 1$, so that triples with lower uncertainty of the model are also sampled with lower probability with sampling method \ussoftmax.
 
 \textbf{Margin of Confidence}
 deals with the two most confident predictions where
-$y_m = \argmax_{y \in \mathcal{Y}} \mathds{P}_{\theta}(y | f_G(x))$ 
-and $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{\mathds{P}_{\theta}(y | f_G(x))}$.
-To convert this to a range between 0 and 1, we need to subtract it from 1:
+$y_m = \argmax_{y \in \mathcal{Y}} \mathds{P}_{\theta}(y | x)$ 
+and $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{\mathds{P}_{\theta}(y | x)}$.
+Given the definition of margin of confidence (\Autoref{eqn:margin_of_confidence_def}), transformation function $\phi$ for this uncertainty measure results in
 \begin{equation}
-    \phi(x) = 1 - (\mathds{P}_{\theta}(y_m |f_G(x)) - \mathds{P}_{\theta}(y_n | f_G(x)))
+    \phi(x) = 1 - (\mathds{P}_{\theta}(y_m |x) - \mathds{P}_{\theta}(y_n | x)).
 \end{equation}
-Again, this can be further simplified due to the binary classification because for first case of $y_m = 1$ and $y_n = 0$ this results in
+To unify it with the transformation functions of the other uncertainty measures, their difference is subtracted from 1.
+For triple $l = (h,r,t)$ and $x = f_G(l)$ and due to the fact that we have a binary classification problem with either $y_m = 1$ and $y_n = 0$ or vice versa, there are two different cases.
+For first case of $y_m = 1$ and $y_n = 0$ this results in
 \begin{equation}
-    \phi(x) = 1 - (\mathds{P}_{\theta}(y = 1 |f_G(x)) - \mathds{P}_{\theta}(y = 0 | f_G(x)))
+\begin{split}
+\phi_1(l) 
+&= 1 - (\mathds{P}(y = 1 |f_G(l)) - \mathds{P}_{\theta}(y = 0 | f_G(l))) \\
+&= 1 - (\mathds{P}(y = 1 |f_G(l)) -  (1 - \mathds{P}(y = 1 | f_G(l))) \\
+&= 1 - (2 \mathds{P}(y = 1 |f_G(l)) - 1) \\
+&= 2 - 2 \mathds{P}(y = 1 |f_G(l))
+\end{split}
 \end{equation}
-\begin{equation}
-    = 1 - (\mathds{P}_{\theta}(y = 1 |f_G(x)) 
-    -  (1 - \mathds{P}_{\theta}(y = 1 | f_G(x)))
-\end{equation}
-\begin{equation}
-    = 1 - (2 \mathds{P}_{\theta}(y = 1 |f_G(x)) - 1)
-\end{equation}
-\begin{equation}
-    = 2 - 2 \mathds{P}_{\theta}(y = 1 |f_G(x))
-\end{equation}
-and for second case if $y_m = 0$ and $y_n = 1$ we have  $ 2 - 2 \mathds{P}_{\theta}(y = 0 |f_G(x))$ . 
-And therefore:
+For second case of $y_m = 0$ and $y_n = 1$ we have  $\phi_2 = 2 - 2 \mathds{P}(y = 0 |f_G(l))$. 
+And therefore this leads to overall definition of $\phi(x)$ for margin of confidence
 \begin{equation} \label{eq:marginofconfidence}
-    = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |f_G(x)), \mathds{P}_{\theta}(y = 1 |f_G(x)))
+    \phi(l) = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |x), \mathds{P}_{\theta}(y = 1 |x)).
 \end{equation}
-Since \Autoref{eq:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by Margin of Confidence is the same as sampling by Least Confidence.
+Since \Autoref{eqn:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by nargin of confidence is the same as sampling by least confidence.
+This is also evident when looking at the function graphs depicted in \Autoref{fig:sampling_distributions}.
+Therefore, for this case of binary classification the same uncertainty scores are assigned and\usmax as well as \ussoftmax sample triples with the same probability.
 
 \textbf{Ratio of Confidence}
-is quite similar to Margin of Confidence, but instead of the difference it compares the ratio of the two most confident predictions
+is quite similar to margin of confidence, but instead of the difference it compares the ratio of the two most confident predictions for given triple $l = (h,r,t)$
 \begin{equation}
-    \phi(x) = \frac{\mathds{P}_{\theta}(y_m | f_G(x))}{\mathds{P}_{\theta}(y_n | f_G(x))}
+    \phi(x) = \frac{\mathds{P}_{\theta}(y_m | x)}{\mathds{P}_{\theta}(y_n |x)}
 \end{equation}
-where $y_m$ and $y_n$ are equally defined as in Margin of Confidence.
-Due to the ratio between the two most confident predictions $y_m$ and $y_n$, there is an even stronger focus on sampling only uncertain triples in the Uncertainty Distribution method around $x = 0.5$.
+where $y_m$ and $y_n$ are equally defined as in margin of confidence.
+Inserted $x = f_G(l)$ for a triple $l = (h,r,t)$ leads to
+\begin{equation}
+    \phi(l) = \frac{\mathds{P}(y_m |  f_G(l))}{\mathds{P}(y_n |f_G(l))}.
+\end{equation}
+Looking at the function graph of ratio of confidence in \Autoref{fig:sampling_distributions}, due to the ratio between the two most confident predictions $y_m$ and $y_n$, there is an even stronger focus on sampling only uncertain triples with \ussoftmax around $\mathds{P}(y = 1 | f_G(l)) = 0.5$.
 
 
