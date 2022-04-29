@@ -1,11 +1,8 @@
 \section{Improving Classification by Adding More Information} 
 \label{sec:improving_classification}
-
-\textcolor{red}{DELETE THIS SECTION ??? SINCE IT IS NEITHER IMPLEMENTED NOR EVALUATED, IT IS MORE AN IDEA FOR FUTURE WORK -> MENTION IT THERE IN MORE DETAIL?}
-
-
+%
 \textbf{Providing further information of the graph}\\
-Until now, only information of the scoring function of the generator is used for the classification of the triple as either positive or negative.
+Until now, only information on the scoring function of the generator is used for the classification of the triple as either positive or negative.
 However, since this only contains implicit information about, for example, the structure of the \ac{KG} and its entities and relations, the idea is to supplement this classification with further, explicit information.
 Therefore, the idea is to include additional functions for classification in the form of the following functions: 
 
@@ -14,7 +11,7 @@ Then the $Generator\_Score$ function contains the following features from \cite{
 \begin{itemize}
     \item 
     \emph{\ac{PEER}:} 
-    Relative frequency of peers within a peer group that is related to different objects, e.g. 0.9 of persons are married. 
+    Relative frequency of peers within a peer group that is related to different objects, e.g. 0.9 if persons are married. 
     \begin{equation}
         PEER(h,r) = \frac{|\{p | p \in peergroup(h), (h, r, t) \in \mathcal{T}\}|}{|peergroup(h)|}
     \end{equation}
@@ -42,8 +39,7 @@ Then the $Generator\_Score$ function contains the following features from \cite{
     $Generator\_Score$ function of the \ac{KGE} model from generator like in the original \ac{KBGAN} approach (e.g. \textsc{DistMult}  or \textsc{ComplEx}).
 \end{itemize}
 
-
-To incorporate these information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by several information about entities and relations in the \ac{KG}.
+To incorporate this information in the score function than just the embedding of a triple, we want to extend the original score function $f_G$ by information about entities and relations in the \ac{KG}.
 Therefore, our new score function $Classification\_Score$ is defined as follows:
 \begin{equation}
     Classification\_Score(h, r, t)=
@@ -63,11 +59,10 @@ Initially they are set to randomly generated values but can be optimized at a la
 Furthermore, $\neg (h, r, t)$ is a \textit{grounded negative statement} and is satisfied if $(h, r, t) \notin$ \ac{KG} and $\neg\exists(h, r, \_)$ is a \textit{universally negative statement} which is satisfied if there exists no $t$ such that $(h, r, t) \in KG$ \cite{arnaout2020enriching}.
 \textit{PEER}, \textit{POP}, \textit{PIVO} and \textit{FRQ} are functions that provide additional information about the \ac{KG}, its entities and relations such that the $Generator\_Score$ can make more reliable statements about whether the given triple $(h, r, t)$ is positive or not.
 However, these components of the function can also be replaced or extended by further components known from for example Cluster-Based Sampling methods that give more information about a \ac{KG} and its structure.
-For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling or Near miss Sampling can be considered \cite{kotnis2017analysis}.
+For example, the K-Means algorithm \cite{qianunderstanding} or other techniques known from Relational Sampling, Nearest Neighbor Sampling, or Near miss Sampling can be considered \cite{kotnis2017analysis}.
 
 
 \textbf{Filtered setting}\\
-
 Another idea was to remove the false negative triples from the negative triple set Neg by filtering all triples that appear in the KG after creating Neg.
 We hoped that this would lead to a more precise definition of the scoring ranges for negative and positive triples and thus make the classification based on them more accurate.
 However, it has turned out that this setting takes a very long time and is also detrimental to the model.

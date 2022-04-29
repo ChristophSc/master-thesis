@@ -1,6 +1,6 @@
 \textbf{4. Sampling of an Uncertain Negative Triple}\\
-
-All calculated scores for negative triples from generator are handed to the Uncertainty Sampler to calculate the uncertainty of the model and sample a triple where the model is uncertain how to classify it.
+%
+All calculated scores for negative triples from the generator are handed to the Uncertainty Sampler to calculate the uncertainty of the model and sample a triple where the model is uncertain how to classify it.
 As shown in \Autoref{fig:uncertainty_sampling_component}, the Uncertainty Sampler is divided into three sub-components and steps.
 \input{content/chapters/03_approach/uncertainty_sampling_component}
 It contains a \textbf{Classifier}, an \textbf{Uncertainty Scorer} and a \textbf{Sampler} component.
@@ -17,35 +17,35 @@ For these triples and their generator score probabilities are derived for being 
 
 \textbf{Uncertainty Scorer} \\
 The task of the Uncertainty Scorer is to assign uncertainty values for all negative triples.
-As input it receives the probabilties from the Classifier of each triple to be a positive one.
+As input, it receives the probabilities from the Classifier of each triple to be a positive one.
 As output it returns uncertainty scores $u_i \in [0,1]$ for $i \in [1, N_s]$ for all negative triples $l_i = (h_i, r_i, t_i)$ where $u_i = 0$ indicates low and $u_i = 1$ high uncertainty.
 As mentioned in \Autoref{sec:calculation_of_uncertainty_scores},  there are several Uncertainty Metrics at our disposal:
-Entropy, Least Confidence, Margin of Confidence and Ratio of Confidence.
-One of these Uncertainty metrics is chosen according to configuration and for each triple the model´s uncertainty is measured.
-The closer a probability of a negative triple to be a positive one is to 0.5, the higher is the uncertainty score. 
+Entropy, Least Confidence, Margin of Confidence, and Ratio of Confidence.
+One of these Uncertainty metrics is chosen according to configuration and for each triple, the model´s uncertainty is measured.
+The closer a probability of a negative triple to being a positive one is to 0.5, the higher the uncertainty score. 
 Uncertainty scores $u(l)$ are calculated with \Autoref{eqn:uncertainty_function}.
 For our example, this means that the Uncertainty Scorer calculates the uncertainties listed in \Autoref{tab:uncertainty_scores} for the individual uncertainty metrics.
 \input{content/chapters/03_approach/sections/table_uncertainty_scores}
 As you can see from the example, $l_4 = (h_4, r_4, t_4)$ has a probability of 42.03\% which is closest to 0.5 among all triples.
-For each triple the uncertainty scores are calculated for all uncertainty metrics and the highest score is marked in bold.
+For each triple, the uncertainty scores are calculated for all uncertainty metrics and the highest score is marked in bold.
 As you can see, although the uncertainty scores are different, $l_4$ receives the highest value for all four uncertainty metrics.
 These uncertainty values $u_i$ are now passed to the Sampler component.
 
 
 \textbf{Sampler} \\
 The actual sampling of a negative triple takes place within this component, which is then passed on to the discriminator.
-It receives uncertainty scores for all negative triples from Uncertainty Scorer as input and returns one negative triple as output.
+It receives uncertainty scores for all negative triples from the Uncertainty Scorer as input and returns one negative triple as output.
 As mentioned in \Autoref{sec:calculation_of_uncertainty_scores} we have two methods at our disposal how to sample an uncertain triple.
-Either Uncertainty Max which always samples the triple where model is most uncertain or Uncertainty Distribution which samples according to a distribution based on uncertainty scores.
-One triple is sampled according to configured sampling method and returned to discriminator where the next step takes place.
+Either Uncertainty Max which always samples the triple where the model is most uncertain or Uncertainty Distribution which samples according to a distribution based on uncertainty scores.
+One triple is sampled according to configured sampling method and returned to the discriminator where the next step takes place.
 
-If we sample by Uncertainty Max this means selecting only the triple with the maximum uncertainty score.
+If we sample by \usmax this means selecting only the triple with the maximum uncertainty score.
 In our example, this would always be the triple $l_4$ for all uncertainty metrics.
-If we sample by Uncertainty Distribution method, we have to calculate sampling probabilities based on uncertainty scores first and then pick one triple according the probability distribution.
-In \Autoref{tab:uncertainty_measure_example_distribution}, for all triples and all uncertainty metrics the sampling probabilities are displayed.
+If we sample by the \ussoftmax method, we have to calculate sampling probabilities based on uncertainty scores first and then pick one triple according to the probability distribution.
+In \Autoref{tab:uncertainty_measure_example_distribution}, for all triples and all uncertainty metrics, the sampling probabilities are displayed.
 \input{content/chapters/03_approach/sections/table_uncertainty_measure_example_distribution}
-For all different metrics $t_4$ is still the most probable one to be sampled, but the uncertainty sampling metrics differ in their probability to sample $t_4$.
-E.g. while based on confidence ratio, $t_4$ is sampled with a probability of 26.36\% it is only sampled with probability of 23.63\% for entropy uncertainty metrics.
+For all different metrics, $t_4$ is still the most probable one to be sampled, but the uncertainty sampling metrics differ in their probability to sample $t_4$.
+E.g. while based on confidence ratio, $t_4$ is sampled with a probability of 26.36\% it is only sampled with a probability of 23.63\% for entropy uncertainty metrics.
 The more negative triples $t_i$ exist, the more these sampling probabilities differ.
 
 

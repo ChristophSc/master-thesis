@@ -1,7 +1,6 @@
 \section{Selection of an Uncertainty Sampling Framework} 
 \label{sec:selection_of_an_uncertainty_sampling_type}
-
-% review of all frameworks
+%
 In the literature we have three different frameworks of uncertainty sampling at our disposal:
 \ac{EBU}, \ac{EAU} and \ac{CU}.
 These frameworks of uncertainty sampling have different viewpoints on uncertainty and how to measure it, but all of them are based on a classification problem of two or more classes.
@@ -11,23 +10,23 @@ In contrast, \ac{EAU} considers \textit{epistemic uncertainty} within a single m
 \Ac{CU} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other.
 
 % determination of one framework
-To determine one of the uncertainty sampling frameworks for our approach, the available information in the original \kbgan approach are considered.
+To determine one of the uncertainty sampling frameworks for our approach, the available information in the original \kbgan approach is considered.
 In the adversarial training process, the negative triple set $Neg$ is created and passed to the generator.
 The generator scores all negative triples based on current embeddings.
 Based on these scores, sampling probabilities are calculated.
 According to this probability distribution, one of these negative triples is sampled and given to the discriminator.
-Therefore, we only have information about the embeddings of the generator as well as the discriminator model, all negative triples and their scores.
+Therefore, we only have information about the embeddings of the generator as well as the discriminator model, all negative triples, and their scores.
 Consequently, we could either sample by the uncertainty of the generator or the discriminator embedding model.
-Therefore, since it corresponds to the original course, we choose the uncertainty pf the generator model.
+Therefore, since it corresponds to the original course, we choose the uncertainty of the generator model.
 The original sampling method according to scores is replaced by sampling with uncertainty in the new approach of \usgan.
-For this reason, we will first take framework of epistemic uncertainty from \ac{EAU}.
-The other frameworks can be considered as well, but for them additional models or model predictons or additional features are needed.
-
+For this reason, we will first take the framework of epistemic uncertainty from \ac{EAU}.
+The other frameworks can be considered as well, but additional models, model predictions, or additional features are needed.
+%
 %- literature on aleatoric uncertainty tends to focus on the optimal types of ensembles and dropouts \cite{human-in-the-loop}
-
+%
 %for epistemic uncertainty the literature focuses
 %on improve accuracy on probability distributions within a single model \cite{human-in-the-loop}
-
+%
 %epistemic
 %-> philosophy: 
 %due to limited data and knowledge. 
@@ -37,7 +36,7 @@ The other frameworks can be considered as well, but for them additional models o
 %-> machine learning:
 %-> literature on epistemic uncertainty tends to focus
 %on getting more accurate probability distributions from within a single model
-
+%
 %aleatoric:
 %-> philosophy:
 %arising from the natural stochasticity of observations

@@ -1,12 +1,12 @@
 \textbf{5. Passing Positive Triple and Sampled Negative Triple to Discriminator}\\
-Subsequently, the sampled negative triple as well as the original positive triples is passed to the discriminator D.
-
+%
+Subsequently, the sampled negative triple, as well as the original positive triples, are passed to the discriminator D.
 According to our example, originals positive triple $l_p = (h,r,t) = (NewOrleans, LocatedIn, Louisiana)$ and a negative triple is sampled.
 As described in step before, this is most probable $l_4$ where tail entity was replaced by entity $t_4 = China$.
 Therefore, $l_4 = (NewOrleans, LocatedIn, China)$ is passed to discriminator.
 In the original approach, it is most likely that $t_3 = Florida$ would have been sampled, as this achieved the highest score in the generator.
-But our approach tries to improve the embeddings in the discriminator where the generator is unsure how to classify it either as positive or negative triple.
-Since classification is based on scoring values, their embedding needs to be adjusted such that scoring function $f_G$ retrieves a lower score for sampled negative triples and therefore, it is easier to classify.
+But our approach tries to improve the embeddings in the discriminator where the generator is unsure how to classify it either as a positive or negative triple.
+Since classification is based on scoring values, their embedding needs to be adjusted such that scoring function $f_G$ retrieves a lower score for sampled negative triples, and therefore, it is easier to classify.
 
 
 

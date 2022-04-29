@@ -1,11 +1,11 @@
 \subsection{Evidence-based Uncertainty} 
 \label{subsec:evidence_based_uncertainty}
-
+%
 \Ac{EBU} differentiates between uncertainty due to conflicting evidence and insufficient evidence \cite{nguyen2021howtomeasure}.
 \ac{EBU} checks the influence of individual features $x^m$ in a feature representation 
 $x = (x^1,..., x^d)$ of instances \cite{nguyen2021howtomeasure}.
 For a given model $\theta$, the class-conditional probabilities, denoted as $p_{\theta}(x^m |0)$ and $p_{\theta}(x^m | 1)$ for binary classes 0 and 1, the values of the m-th feature for a given instance x are considered.
-Subsequently, the set of features are partitioned into those that provide evidence for a positive class
+Subsequently, the set of features is partitioned into those that provide evidence for a positive class
 \begin{equation}
     P_{\theta}(x) = \bigg\{ x^m \bigg| \frac{p_{\theta}(x^m|1)}{p_{\theta}(x^m|0)} > 1 \bigg\} 
 \end{equation}
@@ -13,7 +13,7 @@ and those that provide evidence for a negative class \cite{nguyen2021howtomeasur
  \begin{equation}
     N_{\theta}(x) = \bigg\{ x^m \bigg| \frac{p_{\theta}(x^m|0)}{p_{\theta}(x^m|1)} > 1 \bigg\} 
 \end{equation}
-Afterwards, either the instance with the highest conflicting evidence (\ac{CEU}) or where both evidences are low (\ac{IEU}) are queried (insufficient evidence).
+Afterward, either the instance with the highest conflicting evidence (\ac{CEU}) or where both evidences are low (\ac{IEU}) are queried (insufficient evidence).
 The total evidence for positive class $E_1$ 
 \begin{equation}
     E_1(x) = \prod\limits_{x^m \in P_{\theta}(x)} \frac{p_{\theta}(x^m|1)}{p_{\theta}(x^m|0)}

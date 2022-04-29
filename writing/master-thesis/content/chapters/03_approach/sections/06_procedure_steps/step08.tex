@@ -1,9 +1,8 @@
 \textbf{8. Passing Reward to Discriminator based on Distance of Negative Triple}\\
-
-
+%
 The reward defined by $r = - f_D(h',r,t')$ of the current negative triple is calculated and returned to the Generator.
 Therefore, it is the negative value of the negative triple distance.
-The negative triple distance calculated is high, if it was easy for the discriminator to recognise the triple as negative one.
+The negative triple distance calculated is high, if it was easy for the discriminator to recognize the triple as a negative one.
 Since our approach is based on a \ac{GAN}, the generator tries to trick the discriminator to pass negative triples that are recognized as positive ones.
 Therefore, the lower the distance of the sampled negative triple calculated by the discriminator, the more likely it is that this was mistaken for a positive triple.
 Therefore, this results in maximizing the reward passed to the generator.

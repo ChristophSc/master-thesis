@@ -1,12 +1,12 @@
 \textbf{3. Calculate Score for all Negative Triples in $Neg$}\\
-
+%
 At this point, the adversarial training between generator and discriminator starts.
 In this training, the negative triples from the set Neg are passed on to the generator model G.
-Since the generator is a tensor factorisation-based model, the score and thus the plausibility of each triple $l$ is calculated with the scoring function $f_G$.
+Since the generator is a tensor factorization-based model, the score and thus the plausibility of each triple $l$ is calculated with the scoring function $f_G$.
 Therefore, with this step a score $s_i$ for each triple $l_i = (h',r,t') \in Neg$ is calculated.
 
 In the original \kbgan approach the sampling probabilities are directly calculated from scores and given to the Sampler.
-Since score $s_i \in \mathbb{R}$, sampling probabilities are calculated which sum up to 1 for all 
+Since score $s_i \in \mathbb{R}$, sampling probabilities are calculated which sum up to 1 for all.
 With the softmax function, the individual negative triples of the set Neg are assigned such sampling probabilities that their sum is 1.
 The softmax function which is defined as 
 \begin{equation}

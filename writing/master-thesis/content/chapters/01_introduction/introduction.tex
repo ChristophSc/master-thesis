@@ -1,32 +1,34 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-% general introduction to the topic, definition of important terms
+% Knowledge Graphs
 \acp{KG} represent structured collections of facts describing the world  \cite{hogan2020knowledge}.
 These collections of facts have been used in a wide range of applications, like question answering, structured search \cite{zhang2019nscaching}, and link prediction \cite{cai2017kbgan, Alam2020AffinityDN}.
 In recent years, numerous \acp{KG} such as \textsc{FB15K}, \textsc{WN18}, \textsc{YAGO} \cite{ConEx} and \textsc{WikiData} \cite{arnaoutwikinegata} have been released.
 A \ac{KG} is a multi-relational graph where entities are stored as nodes and relations as directed edges \cite{zhang2019nscaching}.
-Facts are represented as a triple in the form of \triple{head entity}{relation}{tail entity}, denoted as  \triple{h}{r}{t}.
+Facts are represented as a triple in the form of \triple{head entity}{relation}{tail entity}, denoted as \triple{h}{r}{t}.
 These triples indicate that a head entity \texttt{h} (subject) is connected with a tail entity \texttt{t} (object) by a specific relation \texttt{r} (predicate) \cite{zhang2019nscaching, Alam2020AffinityDN}.
 \acp{KG} are an effective way of representing structured data, but it is difficult to manipulate the underlying symbolic nature of these triples \cite{8047276}.
+
+% Knowledge Graph Embeddings
 Renowned areas of research are \acp{KGE} which tackle this issue by embedding entities and relations into a continuous, low-dimensional vector space using embedding models \cite{Alam2020AffinityDN}.
 These embeddings simplify the manipulation while preserving the inherent structure of a \ac{KG} \cite{8047276}. 
-For this purpose, various embedding models present a scoring function which measure the plausibility for each fact \cite{8047276, ConvE, qiannegative}.
+For this purpose, various embedding models present a scoring function that measures the plausibility for each fact \cite{8047276, ConvE, qiannegative}.
 To learn these low-dimensional \acp{KGE} for entities and relations, the embedding models present several different training approaches \cite{Ruffinelli2020You}.
 They differ by introducing new training types, defining new loss functions, other forms of regularization or reciprocal relations \cite{Ruffinelli2020You}.
-While in the beginning of \ac{KGE} learning there were some one-class classification solutions proposed, it turned out that using negative instances lead to better \ac{KGE} models \cite{kotnis2017analysis}.
-Thus, \acp{KG} represent an incomplete picture of the reality, since for the sake of space efficiency they contain only positive instances \cite{qiannegative} and not all positive information is represented in \acp{KG} either.
-Therefore, training types of embedding models mainly differ in the way 
-how negative examples are generated \cite{Ruffinelli2020You}. 
-One of these training types is called Negative Sampling.
 
+% learning embeddings with negative triples -> transition to negative sampling
+For inducing \acp{KGE}, it turned out that using negative instances leads to better \ac{KGE} models than previous approaches \cite{kotnis2017analysis}.
+However, \acp{KG} represent an incomplete picture of the reality, since for the sake of space efficiency they contain only positive instances \cite{qiannegative} and not all positive information is represented in \acp{KG} either.
+Therefore, training types of embedding models mainly differ in the way how negative examples are generated \cite{Ruffinelli2020You}. 
+One of these training types is called negative sampling.
+\clearpage
 \input{content/chapters/01_introduction/sections/01_negative_sampling}
-
+%
 \input{content/chapters/01_introduction/sections/02_problem_analysis}
-
+%
 \input{content/chapters/01_introduction/sections/03_objectives}
-
+%
 \input{content/chapters/01_introduction/sections/04_related_work}
-
+%
 \input{content/chapters/01_introduction/sections/05_structure_of_thesis}
-

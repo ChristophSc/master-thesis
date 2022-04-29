@@ -1,33 +1,31 @@
 \section{Future Work} 
 \label{sec:futurework}
-
-In some cases, the enrichment of negative sampling process with uncertainty information in \kbgan has proven to be promising and thus represents another alternative.
-Nevertheless, there is some room for improvement, which we leave to future work.
-These can be separated in following aspects.
-
-\subsubsection{Extend \usgan with other Approaches}
-
-\usgan is based on \kbgan which is one of the pioneer works in dynamic distribution-based and presented in 2017.
-Therefore, other approaches based on \kbgan were already presented which e.g. extending the approach with a cache like in \textsc{NSCaching} \cite{zhang2019nscaching}.
-The idea of extending negative sampling by uncertainty information can also be applied for these approaches.
-
-\subsubsection{Improve Classification}
-Uncertainty scores are currently calculated based on a classification of positives and negative which is motivated by uncertainty sampling in active learning.
-In turn, the classification is only based of generator model scores which might not be accurate enough.
-Therefore, improving classification with several information about \ac{KG} structure, entities and relations of a \ac{KG} might improve classification of positive and negative examples and, therefore, uncertainty sampling.
-
-\subsubsection{Edit Definition of Uncertainty}
-Currently, motivated by uncertainty sampling from active learning, uncertainty is based on classification of triples as positive or negative ones.
+%
+Possible future work includes improving the \usgan approach itself and testing different variations.
+First of all, the classification of \usgan can be improved.
+Currently, uncertainty scores are based on a classification of positives and negatives which is motivated by uncertainty sampling in active learning.
+However, the classification is only based on generator model scores which might not be accurate enough.
+Therefore, improving classification with information about \ac{KG} structure, entities, and relations of a \ac{KG} might improve classification of positive and negative examples and consequently, uncertainty sampling.
+Secondly, the definition of Uncertainty can be edited.
+Currently, motivated by uncertainty sampling from active learning, uncertainty is based on the classification of triples as positive or negative ones.
 Since there are several types of uncertainty available, an alternative definition of uncertainty might lead to further improvements and more effective negative sampling.
 For example, the uncertainty can also be defined in sampling, i.e. how uncertain the sampler is whether sampling a triple will lead to good results.
-Therefore, for a big set of negative triples uncertainty scores are assigned and if a triple was sampled in the past, uncertainty score can be decreased.
+Therefore, for a big set of negative triples uncertainty scores are assigned and if a triple was sampled in the past, the uncertainty score can be decreased.
 
-This idea can be extended by combining calculated uncertainty score with original sampling probability based on generator model scores.
-Then, the combination of both leads leads to a new sampling probability distribution.
+This idea can be extended by combining calculated uncertainty scores with original sampling probability based on generator model scores.
+Then, the combination of both leads to a new sampling probability distribution.
 Sampling using this combination would lead to an amplification of the sampling variation.
-Since in the original approach the sampling probability is based on generator score, it is very unlikely to ever sampling a negative triples which achieves a low score in the beginning.
+Since in the original approach the sampling probability is based on generator score, it is very unlikely to ever sample a negative triple which achieves a low score in the beginning.
 Therefore, even if it might lead to a low distance in discriminator and consequently small marginal loss, it will never be sampled.
-If uncertainties and probabilities based on scores are combined, i.e. in a multiplicative way, never sampled triples get a low generator score but high uncertainty score, triples which are sampled very often achieve a high generator score but a low uncertainty.
+If uncertainties and probabilities based on scores are combined, i.e. in a multiplicative way, never sampled triples get a low generator score but a high uncertainty score, triples that are sampled very often achieve a high generator score but a low uncertainty.
 Therefore, both of them have the chance to be sampled.
 
+The last point for future work is to extend other approaches of negative sampling with uncertainty information.
+Within this work, uncertainty information was implemented in the negative sampling process in the \kbgan approach and the effects were analyzed.
+Besides \kbgan, there are many other dynamic distribution-based negative sampling approaches in which the incorporation of uncertainty information is possible.
+Furthermore, it can also be applied to static distribution-based and custom cluster-based negative sampling approaches.
+\kbgan is one of the pioneering works in dynamic distribution-based sampling.
+Many other approaches based on \kbgan were already presented which extend the approach e.g. with a cache like in \textsc{NSCaching} \cite{zhang2019nscaching}.
+Consequently, their improvements as well as the expansion of uncertainty information could be exploited.
 
+% Hyperparameter optimization for each dataset

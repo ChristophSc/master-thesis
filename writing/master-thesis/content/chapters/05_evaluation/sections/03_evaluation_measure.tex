@@ -2,7 +2,7 @@
 \label{ch:evaluation:sec:evaluation_metrics}
 %
 In the previous section, the two uncertainty sampling methods were only compared with the uncertainty measure entropy.
-Since \ussoftmax was found to be a slightly better sampling method, this section now compares and evaluates the different uncertainty metrics entropy, least confidence, margin of confidence and ratio of confidence with \ussoftmax. 
+Since \ussoftmax was found to be a slightly better sampling method, this section now compares and evaluates the different uncertainty metrics entropy, least confidence, margin of confidence, and ratio of confidence with \ussoftmax. 
 These are also analysed for different data sets in \Autoref{subsec:measures_results} and concluded in \Autoref{subsec:measure_conclusion}.
 %
 \subsection{Results on Datasets} \label{subsec:measures_results}
@@ -13,8 +13,8 @@ These are also analysed for different data sets in \Autoref{subsec:measures_resu
 %
 \subsection{Conclusion}
 \label{subsec:measure_conclusion}
-On all datasets there is no significant difference between uncertainty metrics entropy, least confidence, confidence margin and confidence ratio.
-In most cases maximum is almost reached after 100 to 150 epochs, after this learning stagnates or improves slowly.
-Regarding rewards all uncertainty metrics have the same curves, but rewards are different between model pairs with \transe and \transe discriminator model.
-Since none of the uncertainty metrics achieves a significant better result than the other ones, we choose standard uncertainty metrics entropy.
-Therefore, \ussoftmax with entropy metrics is compared to \origsampling in next section.
+On all datasets, there is no significant difference between uncertainty metrics entropy, least confidence, confidence margin, and confidence ratio.
+In most cases, the maximum is almost reached after 100 to 150 epochs, after this learning stagnates or improves slowly.
+Regarding rewards, all uncertainty metrics have the same curves, but rewards are different between model pairs with \transe and \transe discriminator models.
+Since none of the uncertainty metrics achieves a significantly better result than the other ones, we choose standard uncertainty metrics entropy.
+Therefore, \ussoftmax with entropy metrics is compared to \origsampling in the next section.

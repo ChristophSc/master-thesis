@@ -1,5 +1,6 @@
 \textbf{1. Creation of Negative Triple Set Neg}\\
-For each epoch in the training process a set of negative triples is created.
+%
+For each epoch in the training process, a set of negative triples is created.
 This set, which is defined by $Neg(h,r,t)=\{(h_i',r,t_i')\}_{i=1\dots N_s}$, is created by Bernoulli sampling of $N_s$ negative triples.
 Therefore, either head or tail entity is replaced with different probabilities according to the mapping property of relations and entities.
 In comparison to Random Sampling, it applies higher probabilities to head entity replacement in one-to-many relations and tail in many-to-one relations \cite{qiannegative}.

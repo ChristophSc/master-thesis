@@ -1,0 +1,46 @@
+\subsection{Loss Functions} 
+\label{subsec:loss_functions}
+%
+As described in \cite{cai2017kbgan} several training objective types for \ac{KGE} models exist.
+Every model defines a \textit{score function} $f(h,r,t)$ which assigns a score to each triple \triple{h}{r}{t} in a knowledge graph.
+The score of a triple given by a scoring function represents the estimated likelihood of a triple to be true \cite{cai2017kbgan}.
+Since different \ac{KGE} models formulate different designs for their scoring function, the interpretation of this score is also different which in turn leads to different training objectives.
+Two common loss functions are the following \cite{cai2017kbgan}.
+\begin{enumerate}
+    \item 
+    \textbf{Marginal loss function} is mostly used by translation-based models like \textsc{TransE} and \textsc{TransD}.
+    Since these models work with distances, a smaller distance indicates a higher likelihood of a triple to be true.
+    It is defined as 
+    \begin{equation}
+        L_{marginal}=\sum_{(h,r,t)\in\kg}[f(h,r,t)-f(h',r,t')+\gamma]_+\label{eq:marginalloss}
+    \end{equation}
+    where $\gamma$ is the margin, $[\cdot]_+=\max(0, \cdot)$ is the hinge function, and $(h',r,t') \in \{(h',r,t)\text{ }|\text{ }h' \in \mathcal{E}\} \cup \{(h,r,t')\text{ }|\text{ }t' \in \mathcal{E}\}$ is a negative triple.
+    Variations of this loss function type are depicted in \Autoref{fig:loss_functions}.
+    \begin{figure*}[t]
+      \centering
+        \includegraphics[width=0.95\textwidth]{figures/loss_functions.PNG}
+      \caption{Loss functions of \acp{KGE} (obtained from \cite{9207513}).}
+      \label{fig:loss_functions}
+    \end{figure*}
+    With \textit{Margin Ranking Loss} a margin $\gamma$ is set between positive and negative samples.
+    \textit{Limited-based scoring loss} extends this by limiting the score of positives samples to an upper-bound $\gamma_1$ \cite{9207513}.
+    Consequently, scores of positive triples are forced to stay before the upper bound which
+    significantly improves the performance of translation-based KGE models \cite{9207513}.
+    \textit{Soft Margin} is another modified version that uses a sliding technique to move false negative samples towards positive samples \cite{9207513}.     
+    
+    \item 
+    \textbf{Log-softmax loss function} is commonly used for models which have a probabilistic interpretation of the score function like \distmult or \complex.
+    Therefore, for corrupted, negative triples the score should be lower than for positive ones.
+    The negative log-likelihood of a probabilistic model defines the loss function \cite{cai2017kbgan}
+    \begin{equation} \label{eq:nllloss}
+        L_{log\text{-}softmax}=\sum_{(h,r,t)\in\kg}-\log \frac{\exp f(h,r,t)}{\sum\exp f(h',r,t')}
+    \end{equation}
+    where $(h',r,t') \in \{(h,r,t)\} \cup Neg(h,r,t)$ and $Neg(h,r,t) \subset \{(h',r,t) \text{ }|\text{ }h' \in \mathcal{E}\} \cup \{(h,r,t')\text{ } |\text{ }t' \in \mathcal{E}\}$ is a set of sampled corrupted triples.
+    Therefore, it provides a probability distribution over a set of triples where each triple $(h, r, t)$ has probability $p$ which is defined as \cite{cai2017kbgan}
+    \begin{equation}
+        p(h,r,t) = \frac{\exp f(h,r,t)}{\sum_{(h',r,t')}\exp f(h',r,t')}.
+    \end{equation}
+    In the original \kbgan approach this distribution is provided by the generator from which one negative triple is sampled and given to the discriminator.
+\end{enumerate}
+
+

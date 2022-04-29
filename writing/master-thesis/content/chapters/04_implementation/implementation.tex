@@ -1,13 +1,12 @@
 \chapter{Implementation}
 \label{ch:implementation}
-
-
+%
 After explaining our approach, we will now go into more detail about the implementation of \usgan.
-For this purpose, \autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo code.
+For this purpose, \autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo-code.
 Since some components were already implemented in the original \kbgan approach, in this chapter we focus on the differences between the new \ucgan and the original approach.
 Already implemented components are only discussed to the extent that the adversarial training can be understood.
 We also focus on describing the implementation of Adversarial Training.
-The pre-training takes place separately, but does not differ from the basic training of the original individual models like \distmult, \complex, \transe and \transd.
+The pre-training takes place separately but does not differ from the basic training of the original individual models like \distmult, \complex, \transe, and \transd.
 Nevertheless, some methods for pre-training can be found in the individual class diagrams.
 \Autoref{sec:adv_training}  first introduces the most important classes and methods for the functionality of Adversarial Training.
 This also includes information on how to start the training and how and which configurations can be made.

@@ -1,4 +1,5 @@
 \section{Calculation of Probabilities for Triple Classification}
+%
 \label{sec:calculation_of_probabilities_for_triple_classification}
 Having established the binary classification problem between positive and negative triples, it is necessary to determine how to calculate the probability for a triple to belong to one of these classes.
 Assuming we have a generator scoring function $f_G$ which returns scoring values for each triple $l = (h,r,t)$ such that $f_G(l) \in \mathbb{R}$.
@@ -21,7 +22,7 @@ Since we have a binary classification, counter probabilities are given by:
 \end{equation}
 
 \textbf{Determination of boundaries $\textbf{score}_{\textbf{min}}$ and $\textbf{score}_{\textbf{max}}$}\\
-Based on \Autoref{fig:positiveVsNegativeApproach}, we have following two options for determination of scoring boundaries.
+Based on \Autoref{fig:positiveVsNegativeApproach}, we have the following two options for the determination of scoring boundaries.
 
 % use borders of negatives/positives for classification
 First option to define these borders is depicted in \Autoref{fig:positives_negatives1}.
@@ -42,7 +43,7 @@ $score_{max}$:
 \end{equation}
 This option has the advantage of focusing only on the overlapping part of the model's prediction.
 However, the drawback is that several triples of the negative triple set $Neg$ are disregarded.
-If negative and positive scoring ranges do not overlap, all negative triples from $Neg$ would get a probability of zero to be a positive one and therefore, according to this option the model would not be uncertain about classification of any negative triples in $Neg$.
+If negative and positive scoring ranges do not overlap, all negative triples from $Neg$ would get a probability of zero to be a positive one, and therefore, according to this option, the model would not be uncertain about the classification of any negative triples in $Neg$.
 Consequently, it is not suitable for our approach.
 
 The other option is showed in \Autoref{fig:positives_negatives2}.
@@ -85,5 +86,3 @@ Since we have a binary classification problem for positive and negative triples,
 \begin{equation} \label{eqn:negative_probability}
     \mathds{P}(y = 0 | f_G(h, r, t)) = 1 - \mathds{P}(y = 1| f_G(h, r, t)) \in [0,1]
 \end{equation}
-
-

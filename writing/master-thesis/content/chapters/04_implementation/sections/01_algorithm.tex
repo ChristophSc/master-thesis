@@ -1,10 +1,10 @@
 \section{Algorithm}
 \label{sec:algorithm}
-
+%
 The original algorithm of \kbgan was modified for \usgan by replacing the original sampling by sampling with uncertainty.
-\Autoref{alg:ucgan} shows the individual steps of \kbgan in pseudo code.
+\Autoref{alg:ucgan} shows the individual steps of \kbgan in pseudo-code.
 In it, replaced steps of \kbgan are marked in red and the new steps are marked in green.
 The steps marked in black have not changed from the original approach.
 \input{content/chapters/04_implementation/algorithm}
-It can be seen that the original sampling steps have been replaced and that sampling is no longer based on generator scores but on uncertainty scores.
-For the calculation of this uncertainty, further steps such as the calculation of $score_{min}$ and $score_{max}$ are necessary before the actual sampling in order to classify and then sample them.
+It can be seen that the original sampling steps have been replaced and that sampling is no longer based on generator scores but uncertainty scores.
+For the calculation of this uncertainty, further steps such as the calculation of $score_{min}$ and $score_{max}$ are necessary before the actual sampling to classify and then sample them.

@@ -2,19 +2,19 @@
 \label{sec:objectives}
 
 % OBJECTIVE + HYPOTHESIS
-Inspired by uncertainty sampling in active learning,  uncertainty information is incorporated in an existing negative sampling process from embedding learning.
-Unlike previous approaches, we thus do not sample a negative triple which is closest to a positive one, but the one where the embedding model is most uncertain about.
-Therefore, the sampled instances can be hard negative examples, but also other negative triples which are valuable for the embedding model.
+Inspired by uncertainty sampling in active learning,  uncertainty information is incorporated into an existing negative sampling process from embedding learning.
+Unlike previous approaches, we thus do not sample a negative triple which is closest to a positive one, but the one where the embedding model is most uncertain.
+Therefore, the sampled instances can be hard negative examples, but also other negative triples that are valuable for the embedding model.
 By implementing a new sampling method, more informative negative triples are expected and therefore, have a positive impact on a negative sampling process.
-This could be an acceleration of learning process like achieving same accuracies with less epochs, same accuracies with less training time or achieving a better overall accuracy.
+This could be an acceleration of the learning process like achieving the same accuracies with fewer epochs, the same accuracies with less training time, or achieving better overall accuracy.
 
 % CONTRIBUTIONS
 This thesis will make the following contributions:
 First, a look at existing approaches is taken and it is analyzed, how uncertainty is measured in uncertainty sampling of active learning.
 Subsequently, these approaches will be reviewed for their applicability so that a new negative sampling approach can be created.
-After an implementation of uncertainty sampling will be carried out, an evaluation will be performed by testing the new approach on different \ac{KG} datasets.
+After the implementation of uncertainty sampling will be carried out, an evaluation will be performed by testing the new approach on different \ac{KG} datasets.
 Due to the partly large amount of data and correspondingly longer execution times, \ac{PC2}\footnote{\url{https://pc2.uni-paderborn.de/}} will be used for this purpose.
-Finally, the results will be compared with existing methods to conclude the approach approach of \textbf{Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty}.
+Finally, the results will be compared with existing methods to conclude the approach of \textbf{Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty}.
 
 
 

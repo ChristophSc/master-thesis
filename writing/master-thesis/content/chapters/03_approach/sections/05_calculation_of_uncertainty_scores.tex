@@ -1,8 +1,8 @@
 \section{Calculation of Uncertainty Scores}
 \label{sec:calculation_of_uncertainty_scores}
 %
-Uncertainty sampling takes place on the basis of probabilities with which the instances belong to the respective classes.
-In the previous step we determine the calculation of probabilities to belong to a class.
+Uncertainty sampling takes place based on probabilities with which the instances belong to the respective classes.
+In the previous step, we determine the calculation of probabilities to belong to a class.
 Therefore, the calculation of uncertainty scores can take place at this point.
 
 To get from the generator scores to the uncertainty scores of the individual triples, a transformation function is used.
@@ -32,7 +32,7 @@ They provide distributions of uncertainty scores $u(l) \in [0, 1]$ for probabili
       \centering
       \includegraphics[width=\linewidth]{figures/smallest_ratio.PNG}
     \end{minipage}%
-    \caption{Uncertainty sampling distributions for (a) entropy, (b) least confidence, (c) margin of confidence and (d) ratio of confidence in a binary classification problem.
+    \caption{Uncertainty sampling distributions for (a) entropy, (b) least confidence, (c) margin of confidence, and (d) ratio of confidence in a binary classification problem.
     The x-axis marks the probability of a triple belonging to the positive class $\mathbb{P}(y = 1 | f_G(l))$ and the y-axis the uncertainty score $u(l)$ of the corresponding uncertainty measure.}
     \label{fig:sampling_distributions}
 \end{figure}
@@ -45,11 +45,11 @@ Therefore, two different \textbf{Uncertainty Sampling Methods} can be derived ba
     \item 
     % sampling according to max distribution
     \textbf{\underline{U}ncertainty \underline{S}ampling with \underline{Max}imum Distribution (\textsc{USMax})}:\\
-    The first option is to always sample the triple with maximum uncertainty score.
+    The first option is to always sample the triple with the maximum uncertainty score.
     As can be seen from \autoref{fig:sampling_distributions} all uncertainty measures have a maximum uncertainty score of 1 which is located at $P(y = 1 | f_G(l)) = 0.5$.
     Therefore, with \usmax all triples that are closest to this probability of 0.5 of being a positive triple get a sampling probability.
     If only one negative triple reaches a maximum uncertainty score among all negative triples, it will be sampled.
-    If there are several triples with a maximum uncertainty score, one of these triples is sampled with equal probability according to a uniform distribution.
+    If there are several triples with a maximum uncertainty score, one of these triples is sampled with an equal probability according to a uniform distribution.
     This results in the definition of sampling method \usmax with the following sampling probability $\mathbb{P}_{\usmax}(l) \in [0,1]$ for $l = (h,r,t)$:
     \begin{equation} 
         \mathbb{P}_{\usmax}(l) =
@@ -79,7 +79,7 @@ Therefore, two different \textbf{Uncertainty Sampling Methods} can be derived ba
 \end{itemize}
 In the original \kbgan approach, triples were given a sampling probability according to their achieved score in the generator model.
 Thus, negative triples with the highest score also received the highest sampling probability.
-This sampling method is referred as \origsampling in the following.
+This sampling method is referred to as \origsampling in the following.
 For the individual uncertainty measures, the following definitions for $\phi$ and considerations for the two sampling methods \usmax and \ussoftmax result.
 
 \textbf{Entropy} 
@@ -152,9 +152,9 @@ And therefore this leads to overall definition of $\phi(x)$ for margin of confid
 \begin{equation} \label{eq:marginofconfidence}
     \phi(l) = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |x), \mathds{P}_{\theta}(y = 1 |x)).
 \end{equation}
-Since \Autoref{eqn:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by nargin of confidence is the same as sampling by least confidence.
+Since \Autoref{eqn:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by a margin of confidence is the same as sampling by least confidence.
 This is also evident when looking at the function graphs depicted in \Autoref{fig:sampling_distributions}.
-Therefore, for this case of binary classification the same uncertainty scores are assigned and\usmax as well as \ussoftmax sample triples with the same probability.
+Therefore, for this case of binary classification, the same uncertainty scores are assigned and\usmax as well as \ussoftmax sample triples with the same probability.
 
 \textbf{Ratio of Confidence}
 is quite similar to margin of confidence, but instead of the difference it compares the ratio of the two most confident predictions for given triple $l = (h,r,t)$
@@ -167,5 +167,3 @@ Inserted $x = f_G(l)$ for a triple $l = (h,r,t)$ leads to
     \phi(l) = \frac{\mathds{P}(y_m |  f_G(l))}{\mathds{P}(y_n |f_G(l))}.
 \end{equation}
 Looking at the function graph of ratio of confidence in \Autoref{fig:sampling_distributions}, due to the ratio between the two most confident predictions $y_m$ and $y_n$, there is an even stronger focus on sampling only uncertain triples with \ussoftmax around $\mathds{P}(y = 1 | f_G(l)) = 0.5$.
-
-

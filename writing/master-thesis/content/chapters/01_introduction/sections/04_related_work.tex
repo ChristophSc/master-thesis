@@ -3,23 +3,23 @@
 
 % EMBEDDING MODELS
 The history of \acp{KG} goes back several years, but in recent years there has been a lot of research in this area, especially in the context of \acp{KGE}.  
-Dai et. al \cite{electronics9050750} created an overview of several different and most common used embedding models, their approaches and application possibilities.
+Dai et. al \cite{electronics9050750} created an overview of several different and most commonly used embedding models, their approaches, and application possibilities.
 Among many different embedding models, distance-based models like \transe \cite{TransE} and \transd \cite{TransD} can be highlighted, which will also take a more important part in the course of this work.
 Other embedding models represent \distmult \cite{DistMult} and \complex \cite{ComplEx}, which are based on semantic matching. 
 
 % NEGATIVE SAMPLING
 Due to the importance of sampling good negative triples, much research in this area has been done in recent years.
-However, standard techniques continue to be Uniform Random Sampling \cite{TransE} and Bernoulli Sampling \cite{TransH}, which do not produce high quality negative triples, but are used in many models due to their simplicity and high performance.  
-A more complex approach to generate negative samples is, for example, domain sampling \cite{domainSampling}.
+However, standard techniques continue to be Uniform Random Sampling \cite{TransE} and Bernoulli Sampling \cite{TransH}, which do not produce high-quality negative triples but are used in many models due to their simplicity and high performance.  
+A more complex approach for generating negative samples is, for example, domain sampling \cite{domainSampling}.
 It samples only entities from a subset of the entities of a \ac{KG}.
 Pioneers of dynamic negative sampling are \kbgan \cite{cai2017kbgan} and \igan \cite{IGAN}, which attempt to estimate the distribution of negative triples by constructing a \ac{GAN}.
 Inspired by \acp{GAN}, which were proposed for generating samples in a continuous space such as images, pre-trained models are improved through an adversarial learning process \cite{cai2017kbgan}.
 An overview of all the different negative sampling techniques is given for example from Qian et. al \cite{qiannegative} or Yang et. al \cite{MCNS}.
 
 % ACTIVE LEARNING + UNCERTAINTY SAMPLING
-In addition to the topic of \acp{KGE}, our approach includes other research in the literature of uncertainty sampling in active learning.
+In addition to the topic of \acp{KGE}, our approach includes other research in the literature on uncertainty sampling in active learning.
 Uncertainty sampling is applied in active learning which supports supervised learning systems where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled instances \cite{Settles2009ActiveLL}.
 Several different approaches are available to select the instances to be labeled.
-One of them is uncertainty sampling which uses a classifier to identify unlabeled examples with least confidence \cite{5272205}.
+One of them is uncertainty sampling which uses a classifier to identify unlabeled examples with the least confidence \cite{5272205}.
 Therefore, the most informative unlabeled examples are selected for human annotation.
 In turn, in uncertainty sampling, several measures are available on how to obtain the uncertain cases of a classifier \cite{nguyen2021howtomeasure}.
