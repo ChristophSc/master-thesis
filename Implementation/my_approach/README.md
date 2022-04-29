@@ -1,23 +1,63 @@
-# KBGAN
-Liwei Cai and William Yang Wang, "KBGAN: Adversarial Learning for Knowledge Graph Embeddings", in *Proceedings of The 16th Annual Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (NAACL HLT 2018)*.
+# USGAN 
 
-Paper: https://arxiv.org/abs/1711.04071
+- [What is USGAN](#USGAN)
+- [Implementation](#Implementation)
+- [Components](#Components)
+- [Installation](#Installation)
+- [Configuration](#Configuration)
+- [Execution](#Execution)
+- [Output](#Output)
+- [Parameters](#Parameters)
 
-Our lab: http://nlp.cs.ucsb.edu/index.html
+## USGAN
+- Description: Incorporation of uncertainty information in an existing negative sampling approach 
+- Master Thesis topic: Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty
+- Name: Christoph Schäfer
 
-## Dependencies
-* Python 3
-* PyTorch 0.2.0
-* PyYAML
-* nvidia-smi
 
-**PyTorch 0.2.0 is REQUIRED**. Because PyTorch is not backward compatible, **newer versions will NOT work**. We understand that 0.2.0 is outdated, but we currently have no schedule of adding support to newer PyTorch versions.
+## Implementation
+USGAN is in Python xxx
 
-## Usage
-1. Unzip `data.zip`.
-2. Pretrain: `python3 pretrain.py --config=config_<dataset_name>.yaml --pretrain_config=<model_name>` (this will generate a pretrained model file)
-2. Adversarial train: `python3 gan_train.py --config=config_<dataset_name>.yaml --g_config=<G_model_name> --d_config=<D_model_name>` (make sure that G model and D model are both pretrained)
+Used Packages:
+- [NumPy](http://www.numpy.org/)
+- [SciPy](https://www.scipy.org/)
+- [scikit-learn](http://scikit-learn.org)
+- [Pandas](https://pandas.pydata.org/)
 
-Feel free to explore and modify parameters in config files. Default parameters are those used in experiments reported in the paper.
+## Components
 
-Decrease `test_batch_size` in config files if you experience GPU memory exhaustion. (this would make the program runs slower, but would not affect the test result)
+| Component | Description |
+| ---- | --- |
+
+
+## Installation
+
+```
+python --version
+Python x.x.x
+git clone https://github.com/ChristophSc/master-thesis.git
+pip install -r requirements.txt
+```
+
+## Configuration
+description of ´config.yaml´
+
+## Execution
+
+```
+# start pre-training
+python pretrain.py 
+
+# start adversarial training
+python3 gan_train.py
+```
+
+## Output
+
+- model-file:
+- logs
+- plots:
+- 
+
+## Parameters
+

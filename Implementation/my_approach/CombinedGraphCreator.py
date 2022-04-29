@@ -29,15 +29,19 @@ class CombinedGraphCreator():
     plt.xlabel("Epochs", fontsize=14)
     plt.ylabel(y_label, fontsize=14)
     for model_name in logged_values.keys():
-      
-      
-      x =  50 if self.n_epochs == 5000 else 10 # int(self.n_epochs / (len(logged_values[model_name])-1))
-      n_points = [x for x in range(0, self.n_epochs+1, x)]
-      if len(logged_values[model_name]) > 1000:   # for rewards
-        logged_list = [logged_values[model_name][i] for i in range(0, len(logged_values[model_name]), 10)]
-      elif len(logged_values[model_name]) > 500:   # for rewards
-        logged_list = [logged_values[model_name][i] for i in range(0, len(logged_values[model_name]), 5)]     
+      if y_label == "Rewards" or y_label == "Losses" :
+        x = 10
+        n_points = [x for x in range(0, self.n_epochs+1, x)]
+        logged_list = logged_values[model_name]
       else:
+      
+        x =  50 # if self.n_epochs == 5000 else 10 # int(self.n_epochs / (len(logged_values[model_name])-1))
+        n_points = [x for x in range(0, self.n_epochs+1, x)]
+        # if len(logged_values[model_name]) > 1000:   # for rewards
+        #   logged_list = [logged_values[model_name][i] for i in range(0, len(logged_values[model_name]), 10)]
+        # if len(logged_values[model_name]) > 500:   # for rewards
+        #    logged_list = [logged_values[model_name][i] for i in range(0, len(logged_values[model_name]), 5)]     
+        # else:
         logged_list = logged_values[model_name]
       plt.plot(n_points, logged_list, label = model_name)
     plt.legend()
@@ -147,12 +151,12 @@ class CombinedGraphCreator():
   
   
   
-datasets = ["fb15k"] # "umls", "kinship", "wn18", "wn18rr", "fb15k237",  "fb15k"]
+datasets = ["yago3_10"] # "umls", "kinship", "wn18", "wn18rr", "fb15k237",  "fb15k", "yago3_10"]
 gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
-pretraining_cases = ["pretrained"]  # "pretrained", "not_pretrained"
-sampling_types = ["uncertainty", "random"]
+pretraining_cases = ["not_pretrained"]  # "pretrained", "not_pretrained"
+sampling_types = ["uncertainty"]   #  ["uncertainty", "random"]
 uncertainty_sampling_types = ["max", "max_distribution"] # "max_distribution"
 uncertainty_measures = ["entropy", "least_confidence", "confidence_margin", "confidence_ratio"] # 
 
@@ -169,7 +173,7 @@ for dataset in datasets:
           for uncertainty_measure in uncertainty_measures:
               CombinedGraphCreator(dataset = dataset, 
                                   models = model_pairs, 
-                                  n_epochs = 5000,
+                                  n_epochs = 1000,
                                   train_type = "gan_train", 
                                   pretrained = pretrained,
                                   sampling_type = sampling_type,
