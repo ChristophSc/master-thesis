@@ -6,24 +6,24 @@
         \textbf{Tail entities}
         & \textbf{$t_1$} & \textbf{$t_2$} & \textbf{$t_3$} & \textbf{$t_4$} & \textbf{$t_5$} \\
          
+        & BarackObama 
+        & Google 
         & Florida
-        & China
-        & BarackObama
-        & StarTrek
-        & Google  \\
+        & China 
+        & StarTrek \\
 
         \midrule
         
         \textbf{Generator scores for}
+        & $s_1$ & $s_2$ & $s_3$ & $s_4$ & $s_5$ \\
+       
+        
+        \textbf{$l_i' = (h, r, t_i)$}
         & -5.916 
         & -2.249  
         & 3.719 
         & -0.761 
         & -6.942 \\
-       
-        
-        \textbf{$l_i = (h_i, r_i, t_i)$}
-         & & & & &  \\
         
          \midrule
         
@@ -38,9 +38,9 @@
        & & &  & &  \\
         \bottomrule
     \end{tabular}
-    \caption{Example: For a given positive triple $(h,r,t)$ five different negative triples were created by replacing the tail entities to obtain negative triple set 
-    $Neg = \{(h,r,t_i')\}$ for $i \in [1,5]$.
-    For all negative triples a score $s_i$ in calculated by generator G scoring function $f_G$: $f_G(h_i,r_i,t_i) = f_i$.
-    Therefore, tail entities $t_i$ for negative triples $(h_i, r_i, t_i)$ with $i \in [0,5]$ given by the generator model G with scoring function $f_G$ }
+    \caption{Example: The table shows generator scores 
+    $s_i$ for each negative triple $(h,r,t_i)$ with $i \in [1,5]$ obtained by using generator function $f_G$.
+    For the original sampling approach of \kbgan, depicted sampling probabilities $p_i$ for $i \in [1,5]$ are obtained by using the softmax function.
+    Since }
 \label{tab:generator_scores}
 \end{table}

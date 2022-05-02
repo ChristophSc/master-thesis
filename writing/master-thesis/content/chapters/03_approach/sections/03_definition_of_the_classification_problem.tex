@@ -24,7 +24,7 @@ What is the boundary between two labels in an \ac{SVM} is the scoring function i
 In the case of a tensor factorization-based model, true triples achieve higher scores, and negative triples lower scores.
 Therefore, a separation between positive and negative triples in a \ac{KGE} is achieved.
 An optimal embedding would be able to perfectly distinguish between positive and negative triples.
-However, since such embedding does not exist, the scoring function returns high scoring values for negative triples and low scores for negative triples.
+However, since such embedding does not exist, the scoring function returns high scoring values for positive triples and low scores for negative triples.
 Therefore, there is no clear "decision boundary" between positive and negative instances.
 The figure out uncertain cases of negative and positive triples and apply uncertainty measures based on probabilities for different classes, the scoring values of the generator need to be converted into a classification problem.
 Therefore, if the embedding model is uncertain about the classification of any triple, its uncertainty score will be high.
@@ -54,7 +54,7 @@ Therefore, including positive triple scoring information would result in samplin
 \end{figure*}
 According to this approach, if we define classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
 Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
-Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, we look for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
+Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, it is looked for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
 Since this means the triple can be assigned to both the positive and the negative class, the model is uncertain about how to classify the triple.
 
 

@@ -17,9 +17,10 @@
         & \underline{42.03\%} 
         & 10.93\%  \\
         
+        
         \midrule
         \textbf{Uncertainty scores}
-        & $u_1$ & $u_2$ & $u_3$ & $u_4$ & $u_5$ \\
+         & $u_1$ & $u_2$ & $u_3$ & $u_4$ & $u_5$ \\
         
         Entropy 
         & 0.6364 & 0.9299 & 0.9378 & \underline{0.9816} & 0.4977 \\
@@ -33,8 +34,43 @@
         Confidence ratio
         & 0.19174 & 0.5277 & 0.5487 & \underline{0.7250} & 0.1227\\
         
+        \midrule
+        \textbf{Sampling probability}
+        & & & & & \\
+
+        \textbf{with \usmax}
+        & & & & & \\
+        
+        Entropy 
+        & 0\% 
+        & 0\% 
+        & 0\% 
+        & \underline{100\%}
+        & 0\% \\
+        
+        Least confidence 
+        & 0\% 
+        & 0\% 
+        & 0\% 
+        & \underline{100\%}
+        & 0\% \\
+       
+        Confidence margin
+        & 0\% 
+        & 0\% 
+        & 0\% 
+        & \underline{100\%}
+        & 0\% \\
+        
+        Confidence ratio
+        & 0\% 
+        & 0\% 
+        & 0\% 
+        & \underline{100\%}
+        & 0\% \\
+        
         \bottomrule
     \end{tabular}
-    \caption{Example: For all negative triples $l_i' = (h, r, t_i)$ an probability $p_i$ to be positive was calculated. Uncertainty Scorer component retrieves these probabilities as input and calculates uncertainty scores $u_i$ for $i \in [1, 5]$ with different uncertainty metrics.}
-\label{tab:uncertainty_scores}
+    \caption{Result}
+\label{tab:uncertainty_measure_example_max}
 \end{table}

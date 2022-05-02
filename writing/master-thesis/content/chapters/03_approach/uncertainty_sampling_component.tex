@@ -1,6 +1,8 @@
-\begin{figure*}[t]
+\begin{figure}[H]
   \centering
     \includegraphics[width=0.90\textwidth]{figures/uncertainty_sampling_component.pdf}
-  \caption{Uncertainty Sampling component which contains a Classifier, an Uncertainty Scorer, and an Uncertainty Sampler. Uncertainty Sampler can sample either according to Uncertainty Max or Uncertainty Distribution. The input of the Uncertainty Sampling component are scores of triples and the output is a negative triple sampled by uncertainty.}
+  \caption{Uncertainty Sampling component which contains the Classifier,  Uncertainty Scorer, and  Sampler component. 
+  The Sampler can sample either according to \usmax or \ussoftmax sampling method. 
+  The input of the Uncertainty Sampling component are scores of triples and the output is one negative triple sampled by uncertainty.}
   \label{fig:uncertainty_sampling_component}
-\end{figure*}
+\end{figure}

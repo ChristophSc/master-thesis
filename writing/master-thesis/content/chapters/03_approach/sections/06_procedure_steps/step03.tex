@@ -1,26 +1,27 @@
-\textbf{3. Calculate Score for all Negative Triples in $Neg$}\\
-%
-At this point, the adversarial training between generator and discriminator starts.
-In this training, the negative triples from the set Neg are passed on to the generator model G.
-Since the generator is a tensor factorization-based model, the score and thus the plausibility of each triple $l$ is calculated with the scoring function $f_G$.
-Therefore, with this step a score $s_i$ for each triple $l_i = (h',r,t') \in Neg$ is calculated.
+\textbf{3. Calculate Score for all Negative Triples in Neg}\\
+% DESCRIPTION
+At this point, the adversarial training process between generator and discriminator starts.
+The goal of this step is to calculate the scoring values for all negative triples.
+Thus, in this step, all negative triples are passed to the generator scoring function $f_G$.
+Since the generator is a tensor factorization-based model, the score obtained reflects the plausibility of each negative triple to be true.
+After all scoring values of the negative triples have been calculated, they are given to the Uncertainty Sampling component.
 
-In the original \kbgan approach the sampling probabilities are directly calculated from scores and given to the Sampler.
-Since score $s_i \in \mathbb{R}$, sampling probabilities are calculated which sum up to 1 for all.
-With the softmax function, the individual negative triples of the set Neg are assigned such sampling probabilities that their sum is 1.
-The softmax function which is defined as 
+% EXAMPLE - ORIGINAL APPRObACH FOR COMPARISON
+In comparison, in the original \kbgan approach the sampling probabilities are directly derived from the scoring values. 
+According to the example, a score $s_i$ for each triple $l_i' = (h,r,t_i')$ is calculated first.
+Since all scores $s_i \in \mathbb{R}$, they to not sum up to one.
+Therefore, the softmax function is used to obtain sampling probabilities $p_i$ for each negative triple $l_i$, where each $p_i$ is defined as
 \begin{equation}
-    s(x_i) = \frac{\exp{x_i}}{\sum_{j=1}^{n}{\exp{x_j}}}
+    p_i = s(f_G(l_i)) = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}}.
 \end{equation}
-and therefore, in the  original approach we obtain sampling probability $p_i$ for each negative triple $l_i$:
-\begin{equation}
-    p_i = s(f_G(l_i)) = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}}
-\end{equation}
-Therefore, we obtain high probabilities to sample negative triples with high scores.
-In the example, this results in the values shown in \Autoref{tab:generator_scores}.
+Consequently, negative triples with high scores get a high probability to be sampled.
+For our examples, this results in the values shown in \Autoref{tab:generator_scores}.
 \input{content/chapters/03_approach/sections/table_generator_scores}
+According to our example, the negative triple $l_3' = (h,r,t_3)$ achieves the highest score and, therefore, obtains the highest probability to be sampled.
 
+
+% EXAMPLE NEW APPROACH
 Since our approach needs the scores to classify the triples, instead the output of generator G are scores $s_i \in \mathbb{R}$ for each negative triple in $Neg$.
-Therefore, the original Sampling technique is replaced by an Uncertainty Sampler which samples one triple based on the model´s uncertainty.
+Therefore, the original sampling technique is replaced by an Uncertainty Sampler which samples one triple based on the model´s uncertainty.
 
 

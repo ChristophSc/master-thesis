@@ -1,8 +1,8 @@
-\textbf{7. Calculation of Loss between Positive and Negative Triple}\\
+\textbf{7. Calculation of the Marginal Loss}\\
 %
 The aim is to improve the discriminator model, which is achieved by minimising the marginal loss.
 The marginal loss is defined as in \Autoref{eq:marginalloss2}.
-Therefore, all positive triples $(h,r,t) \in \kg$ and their sampled negative triple $(h',r', t')$  are passed to the marginal loss function $L_D$ of the discriminator
+Therefore, all positive triples $(h,r,t) \in \kg$ and their sampled negative triple $(h',r, t')$  are passed to the marginal loss function $L_D$ of the discriminator
 \begin{multline} \label{eq:marginalloss2}.
     L_D =\sum_{(h,r,t) \in \mathcal{T}}[f(h,r,t) - f(h',r,t')+\gamma]_+\\
     (h',r,t') \sim p_G(h,r,t\text{ }|\text{ }h,r,t) 

@@ -5,23 +5,24 @@ The correspondingly modified architecture and the sequence of the sampling proce
 \input{content/chapters/03_approach/uncertainty_samping_architecture}
 The changed elements are marked in green.
 Accordingly, these elements change the adversarial learning procedure.
-As in the original \kbgan, our approach includes two components of a generator and a discriminator which are \ac{KGE} models that can be either pre-trained or not.
-In \Autoref{fig:uncertainty_sampling_architecture} steps 1 to 8 are marked which will be described in the following 
-The training process can be described in the following steps
-which are described in more detail below.
-To make the difference between the original model and our approach clear, we will use an example to explain this process.
+As in the original \kbgan, our approach includes two components of a generator and a discriminator which are \ac{KGE} models.
+In \Autoref{fig:uncertainty_sampling_architecture} steps 1 to 8 are marked which will be described in more detail below.
 
 \input{content/chapters/03_approach/sections/06_procedure_steps/step01}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step02}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step03}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step04}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step05}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step06}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step07}
+
 \input{content/chapters/03_approach/sections/06_procedure_steps/step08}
 
 These adversarial training steps are repeated until a determined number of epochs is reached, such that the generator improves the quality of sampled negative triples and the discriminator improves embedding over time.
 The output of our algorithm is the adversarially trained discriminator and its embedding.
-
-
-

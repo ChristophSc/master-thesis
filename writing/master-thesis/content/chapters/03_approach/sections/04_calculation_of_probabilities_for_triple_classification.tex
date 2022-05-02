@@ -1,6 +1,5 @@
-\section{Calculation of Probabilities for Triple Classification}
+\section{Calculation of Probabilities for Triple Classification} \label{sec:calculation_of_probabilities_for_triple_classification}
 %
-\label{sec:calculation_of_probabilities_for_triple_classification}
 Having established the binary classification problem between positive and negative triples, it is necessary to determine how to calculate the probability for a triple to belong to one of these classes.
 Assuming we have a generator scoring function $f_G$ which returns scoring values for each triple $l = (h,r,t)$ such that $f_G(l) \in \mathbb{R}$.
 Therefore, to provide probabilities belonging to positive or negative triple class, we need to define two boundaries:
@@ -21,18 +20,18 @@ Since we have a binary classification, counter probabilities are given by:
     \mathds{P}(y = 0 | f_G(l)) = 1 - \mathds{P}(y = 1 | f_G(l)) \in \mathbb{R}
 \end{equation}
 
-\textbf{Determination of boundaries $\textbf{score}_{\textbf{min}}$ and $\textbf{score}_{\textbf{max}}$}\\
-Based on \Autoref{fig:positiveVsNegativeApproach}, we have the following two options for the determination of scoring boundaries.
+\textbf{Determination of Boundaries $\textbf{score}_{\textbf{min}}$ and $\textbf{score}_{\textbf{max}}$}\\
+For the determination of scoring boundaries, the following two options are available.
 
 % use borders of negatives/positives for classification
-First option to define these borders is depicted in \Autoref{fig:positives_negatives1}.
-\begin{figure*}[t]
+The first option to define these borders is depicted in \Autoref{fig:positives_negatives1}.
+\begin{figure}[H]
   \centering
     \includegraphics[width=0.75\textwidth]{figures/positives_negatives1.pdf}
   \caption{First option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | f_G(l))$ ) or negative ($\mathds{P}(y = 0 | f_G(l))$). 
   $score_{min}$ at the left border of all positive triple scores and $score_{max}$ at the right border of all negative triples.}
   \label{fig:positives_negatives1}
-\end{figure*}
+\end{figure}
 and results in the following definitions of  $score_{min}$ and 
 $score_{max}$:
 \begin{equation} \label{eqn:opt2_score_min}
@@ -46,15 +45,15 @@ However, the drawback is that several triples of the negative triple set $Neg$ a
 If negative and positive scoring ranges do not overlap, all negative triples from $Neg$ would get a probability of zero to be a positive one, and therefore, according to this option, the model would not be uncertain about the classification of any negative triples in $Neg$.
 Consequently, it is not suitable for our approach.
 
-The other option is showed in \Autoref{fig:positives_negatives2}.
-\begin{figure*}[t]
+The other option is shown in \Autoref{fig:positives_negatives2}.
+In comparison to the first option, this one provides a probability of being positive to almost every negative triple, no matter how the ranges of negative and positive triple scores are arranged.
+\begin{figure}[H]
   \centering
     \includegraphics[width=0.75\textwidth]{figures/positives_negatives2.pdf}
   \caption{Second option to define probabilities of triples to be positive ($\mathds{P}(y = 1 | f_G(l))$) or negative ($\mathds{P}(y = 0 | f_G(l))$). 
   $score_{min}$ at the left border of all negative triple scores and $score_{max}$ at the right border of all positive ones.}
   \label{fig:positives_negatives2}
-\end{figure*}
-In comparison to the first option, this one provides a probability of being positive to almost every negative triple, no matter how the ranges of negative and positive triple scores are arranged.
+\end{figure}
 With $f_G$ the scoring function of the generator, this option results in the following definitions of $score_{min}$ and $score_{max}$:
 \begin{equation} \label{eqn:opt1_score_min}
     score_{min} := \argmin_{(h',r,t') \in Neg}{f_G(h',r,t')}

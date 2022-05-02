@@ -1,18 +1,60 @@
 \textbf{2. Calculating Minimum and Maximum Score for Positive and Negative Triples}\\
-%
-To be able to carry out the classification in the later uncertainty sampling process, the scores of all positive triples of the \ac{KG} as well as the negative triples of $Neg$ must be calculated before the actual adversarial training.
-For this purpose, the corresponding triples are passed to the generator model, and, based on the embeddings trained so far, a score for all triples is calculated with the scoring function $f_G$.
-Assuming the \ac{KG} consists of N positive triples and for each triple, a negative triple set of size $N_s$ was first created. 
-Consequently, scores of N positive triples and $N \cdot N_s$ negative triples are calculated to obtain the minima and maxima of both positive and negative triples.
-Our example results in the scoring ranges shown in \autoref{fig:scoring_ranges}.
-\begin{figure*}[t]
+% DESCRIPTION
+To be able to carry out the classification in the later uncertainty sampling process, the minimum and maximum scoring values are needed for classification later on (\Autoref{sec:calculation_of_probabilities_for_triple_classification}).
+To obtain $score_{min}$ and $score_{max}$ is the goal of this step.
+To achieve this, the scores of all positive triples of the \ac{KG} as well as the negative triples of $Neg$ are calculated before the actual adversarial training process.
+For this purpose, they are passed to the generator model G.
+Subsequently, a score for all triples is calculated with the scoring function $f_G$.
+Assuming the \ac{KG} consists of $N$ positive triples and for each triple, a negative triple set of size $N_s$ was first created. 
+Consequently, scores of $N$ positive triples and $N \cdot N_s$ negative triples are calculated to obtain the minimum and maximum scores of positive and negative triples.
+
+% EXAMPLE
+In our example, a score was calculated for the positive triple $l = (h,r,t)$ and the corresponding five negative triples $l_i' = (h,r,t_i')$  with $i \in [1,5]$ as well as for all other positive triples of the \ac{KG} and their corresponding negative triples.
+The calculated scores of our example negative triple set are depicted in \Autoref{tab:generator_scores_of_neg}.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{llllll}
+        \toprule
+        
+        \textbf{Tail entities}
+        & \textbf{$t_1$} & \textbf{$t_2$} & \textbf{$t_3$} & \textbf{$t_4$} & \textbf{$t_5$} \\
+         
+        & Florida
+        & China
+        & BarackObama
+        & StarTrek
+        & Google  \\
+
+        \midrule
+        
+        \textbf{Generator scores for}
+        & $s_1$ & $s_2$ & $s_3$ & $s_4$ & $s_5$ \\
+       
+        
+        \textbf{$l_i' = (h, r, t_i)$}
+        & -5.916 
+        & -2.249  
+        & 3.719 
+        & -0.761 
+        & -6.942\\ 
+        
+        \bottomrule
+        
+    \end{tabular}
+    \caption{Example: For each negative triple
+    $\{(h,r,t_i')\}$ with $i \in [1,5]$ a score was calculated by the generator scoring function $f_G$.
+    This was done not only for this negative triple set but also for the positive triple $l = (h,r,t)$ and all other positive triples of the KG and their corresponding negative triples.}
+\label{tab:generator_scores_of_neg}
+\end{table}
+Taking the scores of all positive triples of the \ac{KG} and their negative triple sets results in scoring ranges for negative and positive triples.
+These are shown in \autoref{fig:scoring_ranges}.
+\begin{figure}[H]
   \centering
     \includegraphics[width=0.75\textwidth]{figures/scoremin_scoremax_example.pdf}
   \caption{Score range of positive and negative triples.
-  The uncertainty of a model is in the scoring range where the 
-  model found scores of both positive and negative triples.}
+  The uncertainty of a model is in the scoring range where the model found scores of both positive and negative triples.}
   \label{fig:scoring_ranges}
-\end{figure*}
+\end{figure}
 For negative triples, we obtained a score range of $[-9.1, 2.2]$, for positive triples a score range of $[-4, 10.7]$ and overlap between $[-4, 2.2]$.
 Therefore, $score_{min} = -9.1$ and $score_{max} = 10.7$.
 Since we have a fixed negative triple set for each epoch, they only need to be calculated once before each epoch.

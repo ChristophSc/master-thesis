@@ -1,8 +1,8 @@
-\subsubsection{UMLS Dataset}
-\label{subsubsec:methods_umls}
-
+\textbf{UMLS Dataset}
+\label{subsubsec:methods_umls}\\
+%
 The learning curves of MRR and Hit@10 values at the validation set on the \umls data set can be seen in \Autoref{fig:advtrain_umls_usmax_ussoftmax}.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
@@ -38,7 +38,7 @@ If discriminator is certain about distinguishing these sampled negative triples 
 Since discriminator returns negative distance of negative triple as reward to the generator and the distance was small, the reward might be high.
 Therefore, generator continues to sample always the same triples without ever considering sampling other triples.
 This is confirmed by looking at the course of losses and rewards of the two sampling methods in \Autoref{fig:advtrain_umls_usmax_ussoftmax_losses_rewards}.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
@@ -66,7 +66,7 @@ With \ussoftmax (right Figures) the losses during training seem to constantly de
 Surprisingly, even if losses decrease, rewards decrease.
 However, this also explains why the generator continues to sample other negative triples with \ussoftmax as it receives increasingly negative feedback from the discriminator.
 
-However, the \umls data set is relatively small so that high MRR values are quickly reached.
+In comparison to most other evaluated datasets, the \umls dataset is relatively small so that high MRR values are quickly reached.
 For this reason, it is difficult to see whether the sampling approach is theoretically still capable of achieving a better value.
 Therefore, the approaches should also be compared with larger data sets.
 
