@@ -1,18 +1,17 @@
 \section{KBGAN} 
 \label{sec:kbgan}
 %
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.95\textwidth]{figures/kbgan_original.png}
+  \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan}).}
+  \label{fig:overview}
+\end{figure}
 In the course of this work, uncertainty information is included in an existing negative sampling process.
 For this purpose, the pioneering work of dynamic distribution-based negative sampling methods \kbgan was chosen.
 Thus, this approach is described for a precise understanding at this point.
 The embedding is learned with an adversarial training process which consists of two components: a generator and a discriminator.
 This process of \kbgan is depicted in \autoref{fig:overview} and described as follows:
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.95\textwidth]{figures/kbgan_original.png}
-  \caption{An overview of the \textsc{kbgan} framework (based on: \cite{cai2017kbgan}).}
-  \label{fig:overview}
-\end{figure*}
-
 \begin{enumerate}
     \item 
     At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t) \text{ } | \text{ } h' \in \mathcal{E}\} \cup \{(h,r,t') \text{ } | \text{ } t'\in\mathcal{E}\}$ is created.

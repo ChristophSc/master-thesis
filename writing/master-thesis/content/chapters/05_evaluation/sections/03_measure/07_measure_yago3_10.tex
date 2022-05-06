@@ -1,0 +1,60 @@
+\textbf{YAGO3-10 Dataset}
+\label{subsubsec:metrics_yago3_10}\\
+%
+Looking at the development of evaluation metrics MRR and Hit@10 on the biggest among all used datasets \textsc{YAGO3-10}, an improvement until the end of training can be seen (\Autoref{fig:advtrain_metrics_yago3_10}).
+In addition, all model pairs perform equally well with a slight increase the whole time.
+The highest improvement is in the beginning of training until 100 epochs, afterward only  small improvements follow.
+Furthermore, all uncertainty measures perform equally well.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/least_confidence/yago3_10/uncertainty_yago3_10_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_margin/yago3_10/uncertainty_yago3_10_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_ratio/yago3_10/uncertainty_yago3_10_mrrs.png}
+    \end{minipage}%
+    \caption{Validation MRR values during adversarial training on \textsc{YAGO3-10} dataset for 1000 epochs. 
+    Figures show different uncertainty metrics with sampling method  \ussoftmax.
+    Top left shows entropy, top right least confidence, 
+    bottom left confidence margin and bottom right confidence ratio.}
+    \label{fig:advtrain_metrics_yago3_10}
+\end{figure}
+
+
+
+Even if there is a difference in the values of the rewards for different discriminator models, their course is identical (\Autoref{fig:advtrain_metrics_yago3_10_rew}).
+This can be recognized for all uncertainty measures.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/least_confidence/yago3_10/uncertainty_yago3_10_rew.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_margin/yago3_10/uncertainty_yago3_10_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/confidence_ratio/yago3_10/uncertainty_yago3_10_rew.png}
+    \end{minipage}%
+    \caption{Rewards during adversarial training on \textsc{YAGO3-10} dataset. 
+    Figures show training rewards of 1000 epochs with \ussoftmax with different uncertainty metrics.
+    Top left shows entropy, top right least confidence, 
+    bottom left confidence margin and bottom right confidence ratio.}
+    \label{fig:advtrain_metrics_yago3_10_rew}
+\end{figure}

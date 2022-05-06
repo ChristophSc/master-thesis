@@ -2,13 +2,12 @@
 \label{sec:adv_training}
 %
 The adversarial training starts via the script \textit{gan\_train.py}.
-Before the training begins, the configurations are loaded from the \textit{config.yaml} file.
-The settings and parameters of the training can be defined in this file.
-An example configuration file is shown in \Autoref{app:config_yaml}.
-The settings under \textit{adv} contain the most important settings for the adversarial training, such as the definition of the generator and discriminator model.
+Before the training begins, the configurations are loaded from the \textit{config.yaml} file where all the settings and parameters of the training are defined.
+An example configuration file is shown in the appendix in \Autoref{app:config_yaml}.
+The most important settings for adversarial training like the definition of the generator and discriminator model are defined under \textit{adv}.
 These settings can also be overwritten via parameters when starting the script.
 Then, training, validation, and test data are loaded and the adversarial training for the specified number of epochs begins.
-\newpage
+
 The adversarial training runs via the \texttt{BaseModel} class depicted in \Autoref{fig:basemodel_classdiagram}.
 \begin{figure*}[t]
   \centering
@@ -16,23 +15,25 @@ The adversarial training runs via the \texttt{BaseModel} class depicted in \Auto
   \caption{\ac{UML}-Classdiagram of \texttt{BaseModel} and inherited Models  \texttt{DistMult},  \texttt{ComplEx},  \texttt{TransE} and  \texttt{TransD}}
   \label{fig:basemodel_classdiagram}
 \end{figure*}
-It implements methods for loading and saving the learned models in specified files, a \texttt{pretrain} method which is overwritten by the inherited methods, and a function called \texttt{test\_link} which performs an evaluation for a given data set and calculates the MRR and Hit@10.
+It implements methods for loading and saving the learned models in specified files, a \texttt{pretrain} method which is overwritten by the inherited classes, and a function called \texttt{test\_link} which performs an evaluation for a given data set and calculates the MRR and Hit@10 values.
 However, the most important methods of this class are \texttt{gen\_step} and \texttt{dis\_step}, which represent an iteration step of the generator and the discriminator respectively.
-The two methods are run with the generator and discriminator models set.
-For the generator these are the \texttt{DistMultModel} or the \texttt{ComplExModel} and for the discriminator the \texttt{TransEModel} and the \texttt{TransDModel}.
-Consequently, the scores of the negative triples are calculated in the \texttt{gen\_step} and one of the negative triples is sampled.
+Therefore, the scores of the negative triples are calculated in the \texttt{gen\_step} and one of the negative triples is sampled for each positive triple.
+Furthermore, \texttt{gen\_step} has several parameters.
+The negative triples are passed to the generator via the parameters \texttt{head}, \texttt{rel}, and \texttt{tail}.
+Also, \texttt{n\_sample} negative triples are sampled for each positive using the specified \texttt{sampler}.
+The different samplers are described in more detail in the next \Autoref{sec:sampling_by_uncertainty}.
 This sampled negative triple and the underlying positive triple are then passed to the \texttt{dis\_step} function.
-
-The individual models all have a variable \texttt{mdl}, which is an object of the class \texttt{BaseModule} and its inheriting classes.
+Since the generator and discriminator can be different KGE models, they are each specified using the \texttt{mdl} variable of the inherited class.
+It is an object of the class \texttt{BaseModule} and its inheriting classes.
 This and inherited classes are depicted in \Autoref{fig:basemodule_classdiagram}
 \begin{figure*}[t]
   \centering
     \includegraphics[width=0.95\textwidth]{figures/BaseModule.PNG}
   \caption{\ac{UML}-Classdiagram of \texttt{BaseModule} which inherits from the class \texttt{Module} from the package \texttt{torch.nn}.
-  For each implemented model for generator and discriminator there inherited Modules \texttt{DistMultModule},  \texttt{ComplExModule},  \texttt{TransEModule} and  \texttt{TransDModule}}
+  For each implemented model for generator and discriminator there are inherited modules \texttt{DistMultModule},  \texttt{ComplExModule},  \texttt{TransEModule} and  \texttt{TransDModule}}
   \label{fig:basemodule_classdiagram}
 \end{figure*}
-These thus represent a \texttt{torch.nn.Module} and contain the embeddings for entities and relations.
+These represent a \texttt{torch.nn.Module} and contain the embeddings for entities and relations.
 Each class implements a \texttt{score} function which calculates a score for a given triple.
 The current embeddings of the entities and relations are also reflected in the local variables of the \texttt{torch.nn.Embedding} type.
 For the calculation of the losses during training, a \texttt{softmax\_loss} method was implemented for the generator models and a \texttt{pair\_loss} method for the discriminator models.
@@ -41,5 +42,5 @@ This represents a simple call to the respective scoring function.
 
 By implementing these models and passing negative and positive triples, it is now possible to perform an adversarial training.
 Originally, the sampling of a negative triple was carried out in the generator.
-Since in our approach there is now an extension of the original model to include Sampling by Uncertainty, we have outsourced this functionality to additional classes.
+Since in our approach there is now an extension of the original model to include a sampling based on uncertainty scores, the sampling functionality is outsourced to additional classes.
 Sampling is now done by an additional class \texttt{BaseSampler}, of which our \texttt{BaseModel} has an instance named \texttt{smpl}.

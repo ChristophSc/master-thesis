@@ -1,0 +1,55 @@
+\textbf{FB15k Dataset}
+\label{subsubsec:uncertainty_fb15k}\\
+%
+
+Looking at the results of the evaluation metrics MRR and HIt@10 on the fb15k dataset, both the learning curves and the maximum achieved values look very similar (\Autoref{fig:advtrain_fb15k_random_vs_uncertainty}).
+For \usgan, only the model pairs with a \transe discriminator perform slightly worse.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k/1k_epochs/random_fb15k_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k/1k_epochs/uncertainty_fb15k_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k/1k_epochs/random_fb15k_hit10.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k/1k_epochs/uncertainty_fb15k_hit10.png}
+    \end{minipage}%
+    \caption{Adversarial training on \textsc{FB15k} dataset. 
+    Left Figures show sampling negative triples with \origsampling, right figures show \ussoftmax with entropy uncertainty metrics.
+    Shown are validation Hit@10 and MRRs for 1000 epochs.}
+    \label{fig:advtrain_fb15k_random_vs_uncertainty}
+\end{figure}
+
+A close look at the development of the rewards shows that for exactly these model pairs the rewards also decrease over time (\Autoref{fig:advtrain_fb15k_losses_rewards}).
+Thus, \transe is clearly better able in this case and on this data set to recognize the negative triples and to assign correspondingly high distances to them.
+For the other model pairs, in both approaches the reward increases with time and thus the quality of the sampled triples.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k/1k_epochs/random_fb15k_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k/1k_epochs/uncertainty_fb15k_losses.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/fb15k/1k_epochs/random_fb15k_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/fb15k/1k_epochs/uncertainty_fb15k_rew.png}
+    \end{minipage}%
+    \caption{Comparison of training losses and rewards over 1000 epochs on \textsc{FB15k}  dataset.
+    Left Figures show losses and rewards of \origsampling and right Figures show losses and rewards of \ussoftmax.}
+    \label{fig:advtrain_fb15k_losses_rewards}
+\end{figure}

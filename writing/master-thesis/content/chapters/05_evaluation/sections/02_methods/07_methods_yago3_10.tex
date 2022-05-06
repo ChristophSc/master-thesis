@@ -1,0 +1,54 @@
+\textbf{YAGO3-10 Dataset}
+\label{subsubsec:methods_yago3_10}\\
+%
+On \textsc{YAGO3-10} dataset all model pairs seem to perform differently with \usmax, while they are almost equally with \ussoftmax (\Autoref{fig:advtrain_yago3_10_usmax_ussoftmax}).
+The model pairs with \complex generator, and especially \complex and \transd achieve better results with \usmax.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_mrrs.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_mrrs.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_hit10.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_hit10.png}
+    \end{minipage}%
+    \caption{Adversarial training on \textsc{YAGO3-10} dataset. 
+    Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.
+    Shown are validation MRR and Hit@10 values for 1000 epochs.}
+    \label{fig:advtrain_yago3_10_usmax_ussoftmax}
+\end{figure}
+
+Looking at the development of losses and rewards on the \textsc{YAGO3-10} dataset, losses decrease over time for both sampling methods, but rewards do not seem to increase over time (\Autoref{fig:advtrain_yago3_10_usmax_ussoftmax_losses_rewards}).
+On the contrary, these seem more likely to stagnate or even reduce over time after having a high peak at the beginning.
+In addition, the rewards of \distmult and \transd with \usmax are different than other model pairs with a high variance during training.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_losses.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_losses.png}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_rew.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_rew.png}
+    \end{minipage}%
+    \caption{Losses and rewards during 1000 epochs of adversarial training on \textsc{YAGO3-10} dataset. 
+    Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.}
+    \label{fig:advtrain_yago3_10_usmax_ussoftmax_losses_rewards}
+\end{figure}

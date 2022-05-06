@@ -21,7 +21,23 @@ Subsequently, these sampling methods replace the original sampling method of the
 Finally, the new approach is evaluated in detail on a total of seven different data sets and the experimental results are compared.
 To ensure reproducibility, we provide scripts, datasets, and results of this work on our project page \url{https://github.com/ChristophSc/master-thesis}.
 
-\vspace*{20mm}
-
+% \vspace*{20mm}
+\clearpage
 {\usekomafont{chapter}Abstract (Deutsch)}
-\label{sec:abstract-german}
+\label{sec:abstract-german}\\
+
+Wissensgraphen stellen einen unvollständigen Wissensspeicher dar, in dem Fakten über die reale Welt abgespeichert sind.  
+Diese Fakten werden in einer Netzstruktur dargestellt, in der Entitäten als Knoten und Relationen als Kanten gespeichert werden. 
+Diese Wissensdatenbanken werden für zahlreiche nachfolgende Aufgaben wie die strukturierte Suche und die Vorhersage von Verbindungen verwendet.
+Da das Volumen der Netze in den letzten Jahren erheblich zugenommen hat, sind die Berechnung und die Verwaltung von großen Wissensgraphen immer wichtiger geworden. 
+Aus diesem Grund sind Modelle zur Einbettung von Wissensgraphen vorgestellt worden, um die Entitäten und Relationen in einen kontinuierlichen niedrigdimensionalen Vektorraum einzubetten. Das Lernen dieser Einbettungen erfordert eine Unterscheidung zwischen positiven und negativen Tripeln. 
+Da nur positive Informationen in Wissensgraphen gespeichert sind, gibt es mehrere Trainingsarten, um negative Beispiele zu finden. 
+Eine davon ist das negative Sampling. 
+Allerdings liefern die gängigen verwendeten negativ Sampling Ansätze Negativbeispiele von geringer Qualität. 
+Diese kann den Trainingsprozess erschweren, zu einer schlechteren Einbettung führen und sich somit direkt auf die nachgelagerten Aufgaben auswirken. 
+Beim aktiven Lernen und in vielen Bereichen des maschinellen Lernens, bietet das Sampling durch Ungewissheit die Möglichkeit, besonders informative Instanzen für ein Modell zu samplen und damit den Lernprozess effizienter zu gestalten.
+In dieser Arbeit wird daher der Einbezug von Unsicherheitsinformationen in ein negatives Sampling-Verfahren untersucht. 
+Aus diesem Grund werden zunächst verschiedene Methoden des Samplings durch Unsicherheit analysiert. 
+Anschließend ersetzen diese die Samplingmethoden das ursprüngliche Sampling des generativen adversen netzbasierten Ansatzes namens KBGAN. 
+Schließlich wird der neue Ansatz auf insgesamt sieben verschiedenen Datensätzen detailliert evaluiert und die experimentellen Ergebnisse verglichen. 
+Um die Reproduzierbarkeit zu gewährleisten, stellen wir Skripte, Datensätze und Ergebnisse dieser Arbeit auf unserer Projekt Seite \url{https://github.com/ChristophSc/master-thesis} vor.

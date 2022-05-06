@@ -1,7 +1,8 @@
-\subsubsection{WN18RR Dataset}
-\label{subsubsec:methods_wn18rr}
+\textbf{WN18RR Dataset}
+\label{subsubsec:methods_wn18rr}\\
+%
 In contrast to the evaluation metrics for the \umls dataset, the two evaluation metrics for the wn18rr dataset look relatively similar as can be seen in \Autoref{fig:advtrain_wn18rr_usmax_ussoftmax}.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
@@ -20,8 +21,8 @@ In contrast to the evaluation metrics for the \umls dataset, the two evaluation 
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/1k_epochs/uncertainty_wn18rr_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \textsc{WN18RR} dataset. 
-    Left Figures shows Sampling Negative triples with \usmax, Right Figures shows Sampling by \ussoftmax.
-    Shown are validation Hit@10 and MRRs for 1000 epochs.}
+    Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.
+    Shown are validation MRR and Hit@10 values for 1000 epochs.}
     \label{fig:advtrain_wn18rr_usmax_ussoftmax}
 \end{figure}
 This time both sampling methods achieve almost the same maxima of MRR and Hit@10 values (17.5\% and 43\%) for all model pairs.
@@ -30,7 +31,7 @@ Additionally, in both approaches a small increase of Hit@10 values can be found 
 Therefore, with longer training of more than 1000 epochs, a further increase in the evaluation metrics can be expected.
 
 From the course of losses and rewards during training (\Autoref{fig:advtrain_wn18rr_usmax_ussoftmax_losses_rewards}) it can be seen, that now losses for \usmax as well as for \ussoftmax constantly decrease over time.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
       \centering
@@ -48,9 +49,8 @@ From the course of losses and rewards during training (\Autoref{fig:advtrain_wn1
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/wn18rr/1k_epochs/uncertainty_wn18rr_rew.png}
     \end{minipage}%
-    \caption{Losses and rewards during adversarial training on \textsc{WN18RR} dataset. 
-    Left Figures shows Sampling Negative triples with \usmax, right figures shows \ussoftmax.
-    Shown are validation Hit@10 and MRRs for 1000 epochs.}
+    \caption{Losses and rewards during 1000 epochs of adversarial training on \textsc{WN18RR} dataset. 
+    Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.}
     \label{fig:advtrain_wn18rr_usmax_ussoftmax_losses_rewards}
 \end{figure}
 Besides this, also the rewards of both approaches increase over time.
