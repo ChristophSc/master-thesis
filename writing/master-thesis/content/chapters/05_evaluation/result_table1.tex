@@ -1,0 +1,75 @@
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lllllll}
+        \toprule
+        \textbf{Method} &
+        \multicolumn{2}{c}{\textbf{UMLS}} & 
+        \multicolumn{2}{c}{\textbf{KINSHIP}}\\
+        
+        \cmidrule{2-6} \cmidrule{7-7} \\
+        {} & MRR & H@10 & MRR & H@10 \\
+
+        \midrule
+        \textbf{\kbgan} 
+        & & & & \\
+        
+        \textsc{DistMult} + \textsc{TransE}
+        & 72.7 
+        & 94.0 
+        & \underline{24.0} 
+        & 50.1 \\
+        
+        \textsc{ComplEx} + \textsc{TransE}   
+        & 72.4 
+        & 95.1 
+        & \underline{26.2}
+        & 52.5 \\
+        
+        \textsc{DistMult} + \textsc{TransD}
+        & 73.8 
+        & 95.7 
+        & \underline{27.7} 
+        & 55.8 \\
+        
+        \textsc{ComplEx} + \textsc{TransD}   
+        & 71.4 
+        & 94.8 
+        & 24.0 
+        & 51.1 \\
+        
+         \midrule
+         
+         \textbf{\usgan} 
+         & & & & & & \\
+         
+        \textsc{DistMult} + \textsc{TransE}
+         & \underline{78.4} 
+         & \underline{98.7} 
+         & 22.7 
+         & \underline{56.7}\\
+         
+        \textsc{ComplEx} + \textsc{TransE}
+         & \underline{79.5}
+         & \underline{99.0}
+         & 23.2 
+         & \underline{56.8}\\
+          
+        \textsc{DistMult} + \textsc{TransD}
+         & \underline{80.3}
+         & \underline{99.0}
+         & 25.3 
+         & \underline{65.4} \\
+        
+        \textsc{ComplEx} + \textsc{TransD}
+         & \underline{80.6}  
+         & \underline{99.1} 
+         & \underline{27.9}
+         & \underline{66.5}\\
+        \bottomrule
+    \end{tabular}
+    \caption{Result table for smaller datasets \textsc{UMLS} and \textsc{KINSHIP}.
+    First section contains MRR and Hit@10 values of adversarial training with original \kbgan approach.
+    The second section shows results achieved with new approach \usgan with \ussoftmax and entropy uncertainty measure.
+    The first model is that of the generator and the second that of the discriminator, both are not pre-trained.}
+\label{tab:result_table1}
+\end{table}

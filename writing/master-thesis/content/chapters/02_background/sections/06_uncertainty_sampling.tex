@@ -12,6 +12,14 @@ One of them is called uncertainty sampling.
 Other query strategies for Active Learning are query-by-committee, expected model change, variance reduction, fisher information ratio, estimated error reduction, and density-weighted methods \cite{Settles2009ActiveLL}.
 They provide different strategies to obtain informative instances from an unlabeled dataset.
 
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.9\textwidth]{figures/heat_map.pdf}
+  \caption{Heat map of for a multilabel-classification with three labels for all four uncertainty measures (obtained from \cite{human-in-the-loop}).
+  Each dot is an instance with a different label.}
+  \label{fig:uncertainty_sampling_heatmap}
+\end{figure}
+\clearpage
 In uncertainty sampling, given a model $\theta$ which has been trained on labeled dataset $D$, each instance $x_j$ of unlabeled data pool $U$ will be assigned a utility score $s(\theta, x_j)$ \cite{nguyen2021howtomeasure}.
 Subsequently, the instance with the highest score will be sampled.
 Most common used uncertainty measures for utility score include \cite{human-in-the-loop}:
@@ -37,16 +45,11 @@ and
 $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{p_{\theta}(y | x)}$.
 
 \Autoref{fig:uncertainty_sampling_heatmap} illustrates an example of target areas for the different uncertainty measures when there are three labels.
-\begin{figure*}[t]
-  \centering
-    \includegraphics[width=0.60\textwidth]{figures/uncertainty_sampling_heatmap.PNG}
-  \caption{Heat map of for a multilabel-classification with three labels for all four uncertainty measures (obtained from \cite{human-in-the-loop}).
-  Each dot is an instance with a different label.}
-  \label{fig:uncertainty_sampling_heatmap}
-\end{figure*}
 This shows, for example, that entropy measure samples in a much larger area than the least confidence.
 For measuring the uncertainty of a learner the following three different frameworks can be separated \cite{nguyen2021howtomeasure}.
 %
 \input{content/chapters/02_background/sections/08_uncertainty_sampling/01_EBU}
+
 \input{content/chapters/02_background/sections/08_uncertainty_sampling/02_CU}
+
 \input{content/chapters/02_background/sections/08_uncertainty_sampling/03_EAU}
