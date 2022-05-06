@@ -11,10 +11,12 @@ The Classifier's task is to classify the negative triples by assigning each nega
 It receives the negative triple scores $s_i \in \mathbb{R}$ from the generator as input and returns a probability for each negative triple $(h',r,t') \in Neg$ to be positive  ($\mathbb{P}(y = 1| (h',r,t'))$) (\Autoref{eqn:positive_probability}) as output. 
 Therefore, $score_{min}$ and $score_{max}$ are used to calculate probabilities.
 
-\input{content/chapters/03_approach/sections/table_probabilities}
+% EXAMPLE
 For our example, in \Autoref{tab:positive_probabilities} generator scores for all negative triples $l_i' = (h, r, t_i)$ are listed which are the input of the Classifier.
 For these triples and their generator score probabilities are derived for being a positive triple.
 Therefore, negative triple $l_5' = (h,r,t_5)$ has the lowest probability of 10.93\% to be a positive one and $l_3' = (h,r,t_3)$ has the highest probability of 64.57\% to be a positive one.
+\input{content/chapters/03_approach/sections/table_probabilities}
+\clearpage
 
 \textbf{Uncertainty Scorer} \\
 % DESCRIPTION
@@ -45,7 +47,8 @@ One triple is sampled according to configured sampling method and returned to th
 
 % EXAMPLE - USMAX
 In our example, if the \usmax sampling method is configured a triple with a maximum uncertainty score will be selected.
-As can be seen in \Autoref{tab:uncertainty_measure_example_max}, only the triple $l_4 = (h,r,t_4)$ achieves a maximum uncertainty score $u_4$ for all uncertainty measures.
+As can be seen in \Autoref{tab:uncertainty_measure_example_max}, 
+only the triple $l_4 = (h,r,t_4)$ achieves a maximum uncertainty score $u_4$ for all uncertainty measures.
 \input{content/chapters/03_approach/sections/table_uncertainty_measure_example_max}
 Since no other triple achieves this maximum uncertainty score, it will be sampled.
 Otherwise, if there were multiple triples with this uncertainty score in the negative triple set $Neg$, they would get the same probability of being sampled.

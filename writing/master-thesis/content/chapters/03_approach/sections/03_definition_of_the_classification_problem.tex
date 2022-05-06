@@ -6,14 +6,13 @@ Before we come to the calculation of uncertainty and the subsequent sampling, a 
 This definition can be used to determine what type of uncertainty is present and how it can be calculated.
 
 Before a classification problem is defined, we take a closer look at an example of uncertainty sampling in a \ac{SVM} \Autoref{fig:svm}.
-\begin{figure}[H]
+\begin{figure*}[t]
   \centering
-    \includegraphics[width=0.45\textwidth]{figures/SVM.pdf}
+    \includegraphics[width=0.6\textwidth]{figures/SVM.pdf}
   \caption{Example of uncertainty sampling in a \ac{SVM} classification. Instances with least distance to linear plane are sampled.
   The width of boundary is maximized  (figure based on \cite{human-in-the-loop}).}
   \label{fig:svm}
-\end{figure}
-\clearpage
+\end{figure*}
 The figure shows a binary classification of labels A and B in a two-dimensional space.
 Instances of classes A and B are separated as best as possible by a boundary.
 Some of the instances are still unlabelled.
@@ -31,30 +30,33 @@ The figure out uncertain cases of negative and positive triples and apply uncert
 Therefore, if the embedding model is uncertain about the classification of any triple, its uncertainty score will be high.
 By sampling these uncertain triples to the discriminator it learns to distinguish between uncertain cases of positive and negative triples.
 Thus, if uncertainty sampling is used to select instances based on a classification of positive and negative triples, a negative triples with a score in the highlighted uncertain area depicted in \Autoref{fig:badVsGoodApproach} would be sampled.
-\begin{figure}[H]
+\begin{figure*}[t]
   \centering
-    \includegraphics[width=0.9\textwidth]{figures/badVsGoodApproach.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/badVsGoodApproach.pdf}
   \caption{Illustration of sampled instances by uncertainty sampling according to negative scores.
   Range of negative triple scores is in $[a, b]$ and range of positive triple scores is in  $[c, d]$ with $a,b,c,d \in \mathbb{R}$
   If uncertainty is only measured by negative triple scores, sampled instanced would be too easy too distinguish them from positive ones.}
   \label{fig:badVsGoodApproach}
-\end{figure}
+\end{figure*}
 In comparison, in the original \kbgan approach a triple with a high score is most likely to be sampled.
 Since the generator is a tensor factorization-based model and their score indicates the plausibility of a triple to be true, the area of positive triple scores should be slightly higher than the area of negative scores.
 Nevertheless, since a perfect embedding model is unknown, there is an overlap of positive and negative triple scores.
 As can be seen from \Autoref{fig:badVsGoodApproach}, if the classification is based only on low and high negative triple scores, this would lead to a sampling of instances that are easily distinguishable from the model and therefore, less helpful to learn a good embedding.
 For this reason, we need to include information about positive triple scores, so that a classification between positive and negative triples is possible.
 Therefore, including positive triple scoring information would result in sampling triples from a different scoring area illustrated in \Autoref{fig:positiveVsNegativeApproach}
-\begin{figure}[H]
+\begin{figure*}[t]
   \centering
-    \includegraphics[width=0.9\textwidth]{figures/positiveVsNegativeApproach.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/positiveVsNegativeApproach.pdf}
   \caption{Illustration of the sampled instances by uncertainty sampling according to negative and positive triple scores.
   Range of negative triple scores is in $[a, b]$ and range of positive triple scores is in  $[c, d]$ with $a,b,c,d \in \mathbb{R}$
   Now Uncertainty Sampling measures high uncertainty for triples which are close to positive ones, so which could be either a negative or a positive one.}
   \label{fig:positiveVsNegativeApproach}
-\end{figure}
+\end{figure*}
 According to this approach, if we define classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
 Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
 Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, it is looked for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
 Since this means the triple can be assigned to both the positive and the negative class, the model is uncertain about how to classify the triple.
-\clearpage
+
+
+
+

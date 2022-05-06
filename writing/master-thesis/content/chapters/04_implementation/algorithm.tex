@@ -1,4 +1,4 @@
-\begin{algorithm}[H]
+\begin{algorithm*}[t]
 \small
  \KwData{training set of positive fact triples $\mathcal{T}=\{(h,r,t)\}$}
  \KwIn{(Pre-trained) generator G with parameters $\theta_G$ and score function $f_G(h,r,t)$, and (pre-trained) discriminator D with parameters $\theta_D$ and score function $f_D(h,r,t)$}
@@ -6,23 +6,23 @@
  $b \longleftarrow 0$\tcp*[l]{baseline for policy gradient}
  \Repeat{convergence}{
   Sample a mini-batch of data $\mathcal{T}_{batch}$ from $\mathcal{T}$ \;
-  
   $G_G \longleftarrow 0$, $G_D \longleftarrow 0$\tcp*[l]{gradients of parameters of G and D}
   $r_{sum} \longleftarrow 0$\tcp*[l]{for calculating the baseline}
-  Uniformly randomly sample $N_s$ negative triples for each positive triple $(h,r,t) \in \kg$: $Neg(h,r,t)=\{(h_i',r,t_i')\}_{i=1\dots N_s}$\;
-  
-  $score_{min} \longleftarrow \argmin_{(h',r,t')\in Neg}{score(h',r,t')}$\;
-  
-  $score_{max} \longleftarrow \argmax_{(h,r,t)\in \kg}{score(h,r,t)}$ \;
-   
+
   \For{$(h,r,t)\in \mathcal{T}_{batch}$}{
-    Classify all negative triples by calculating their probability of being a positive triple:  $\mathds{P}(y = 1|f_G(h, r, t)) = \frac{f_G(h,r,t) - score_{min}}{score_{max} - score_{min}}$\;
+    Uniformly randomly sample $N_s$ negative triples $Neg(h,r,t)=\{(h_i',r,t_i')\}_{i=1\dots N_s}$\;
+        
+    \textcolor{darkgreen}{$score_{min} \longleftarrow \argmin_{(h',r,t')\in Neg}{score(h',r,t')}$\;}
     
-    Calculate uncertainty scores $u_i \in Neg$ with $i \in [1, N_s]$ of all negative triples\;
+   \textcolor{darkgreen}{$score_{max} \longleftarrow \argmax_{(h,r,t)\in \mathcal{T}_{batch}}{score(h,r,t)}$ \;}
     
-    Obtain their probability of being sampled: $p_i=\frac{exp^{u_i}}{\sum_{j=1}^{N_s} exp^{u_j}}$\;
+    \textcolor{darkgreen}{Classify all negative triples by calculating their probability of being a positive triple:  $\mathds{P}(y = 1|(h, r, t)) = \frac{f_G(h,r,t) - score_{min}}{score_{max} - score_{min}}$\;}
     
-    Sample one negative triple $(h_s',r,t_s')$ from $Neg(h,r,t)$  based on uncertainty scores  according to $\{p_i\}_{i=1\dots N_s}$. Assume its probability to be $p_s$\;
+     \textcolor{darkgreen}{Calculate uncertainty scores $u_i \in Neg$ with $i \in [1, N_s]$ of all negative triples\;}
+    
+    \textcolor{red}{Obtain their probability of being sampled: $p_i=\frac{ u_i}{\sum_{j=1}^{N_s} u_j}$\;}
+    
+    \textcolor{red}{Sample one negative triple $(h_s',r,t_s')$ from $Neg(h,r,t)$  by Uncertainty Sampling according to $\{p_i\}_{i=1\dots N_s}$. Assume its probability to be $p_s$\;}
 
     $G_D \longleftarrow G_D + \nabla_{\theta_D}[f_D(h,r,t)-f_D(h_s',r,t_s')+\gamma]_+$\tcp*[l]{accumulate gradients for D}
     
@@ -33,6 +33,7 @@
   $\theta_G \longleftarrow \theta_G+\eta_G G_G, \theta_D \longleftarrow \theta_D-\eta_D G_D$\tcp*[l]{update parameters}
   $b \leftarrow r_{sum} / |\mathcal{T}_{batch}|$\tcp*[l]{update baseline}
  }
- \caption{\usgan algorithm with sampling method \ussoftmax.}
+ \caption{\usgan algorithm. 
+ \textcolor{red}{Red} lines were removed from original \kbgan algorithm, \textcolor{darkgreen}{green} lines are new for \usgan .}
  \label{alg:ucgan}
-\end{algorithm}
+\end{algorithm*}

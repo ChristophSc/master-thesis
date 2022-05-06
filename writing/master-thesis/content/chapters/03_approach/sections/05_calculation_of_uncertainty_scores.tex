@@ -14,22 +14,21 @@ Therefore, generator scores obtained by $f_G(l)$ for a triple $l = (h,r,t)$ are 
 where $\phi: \mathbb{R} \rightarrow [0,1]$.
 For this transformation function several uncertainty measures are at disposal which are entropy, least confidence, margin of confidence and ratio of confidence.
 They provide distributions of uncertainty scores $u(l) \in [0, 1]$ for probabilities $\mathbb{P}(y = 1 | f_G(l))$ of a given triple $(h, r, t)$ (\Autoref{fig:sampling_distributions}).
-\clearpage
-\begin{figure}[H]
+\begin{figure}
     \centering
-    \begin{minipage}{.4\textwidth}
+    \begin{minipage}{.5\textwidth}
       \centering
       \includegraphics[width=\linewidth]{figures/uncertainty_metric_entropy.pdf}
     \end{minipage}%
-    \begin{minipage}{.4\textwidth}
+    \begin{minipage}{.5\textwidth}
       \centering
       \includegraphics[width=\linewidth]{figures/least_confident_graph.PNG}
     \end{minipage}
-    \begin{minipage}{.4\textwidth}
+    \begin{minipage}{.5\textwidth}
       \centering
       \includegraphics[width=\linewidth]{figures/smallest_margin_graph.PNG}
     \end{minipage}%
-    \begin{minipage}{.4\textwidth}
+    \begin{minipage}{.5\textwidth}
       \centering
       \includegraphics[width=\linewidth]{figures/smallest_ratio.PNG}
     \end{minipage}%

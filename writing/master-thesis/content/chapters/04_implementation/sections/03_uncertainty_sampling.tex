@@ -1,18 +1,17 @@
-\section{Sampling by Uncertainty}
-\label{sec:sampling_by_uncertainty}
-% BASESAMPLER
-For the implementation of sampling by uncertainty, the existing approach was adapted and supplemented with further classes and functionalities.
+ \section{Sampling by Uncertainty}
+ \label{sec:sampling_by_uncertainty}
+ 
+For the implementation of Sampling by Uncertainty, the existing approach was adapted and supplemented with further classes and functionalities.
 To keep the functionality of the original sampling, it was moved to a class \texttt{OriginalSampler} and the new sampling method to \texttt{UncertaintySampler} which are depicted in \Autoref{fig:base_sampler}.
-\begin{figure}[H]
+\begin{figure*}[t]
   \centering
     \includegraphics[width=0.95\textwidth]{figures/classdiagrams/BaseSampler.pdf}
-    \caption{Classdiagram of \texttt{BaseSampler} with inherited classes \texttt{OriginalSampler} and \texttt{UncertaintySampler}.}
+    \caption{Classdiagram \texttt{BaseSampler} with inherited classes \texttt{OriginalSampler} and \texttt{UncertaintySampler}.}
   \label{fig:base_sampler}
-\end{figure}
+\end{figure*}
 This allows to determine the sampling method in the configuration file and dynamically create an object of the corresponding class during runtime.
 \texttt{OriginalSampler} only overrides the \texttt{sample} method of 
-the inheriting class \texttt{BaseSampler} which takes several parameters.
-They are defined as follows.
+the inheriting class \texttt{BaseSampler} which takes several parameters which are defined as follows.
 \begin{itemize}
     \item 
     \texttt{n}: the number of negative triple sets
@@ -34,8 +33,6 @@ They are defined as follows.
     \texttt{max\_score}:
     maximum score of all positive triples in the \ac{KG}
 \end{itemize}
-
-% CLASSIFIER AND UNCERTAINTY SCORER
 Besides overriding the \texttt{sample} method, \texttt{UncertaintySampler} additionally contains attributes with objects of classes \texttt{Classifier} and \texttt{UncertaintyScorer}.
 These are depicted in \Autoref{fig:uncertainty_sampler}.
 \begin{figure*}[t]
@@ -45,18 +42,20 @@ These are depicted in \Autoref{fig:uncertainty_sampler}.
     Inherited class \texttt{UncertaintySamplerMax} implements functionality to always a negative triple with maximum uncertainty score and \texttt{UncertaintySamplerSoftmax} implements functionality to sample a negative triple according to a softmax probability distribution.}
   \label{fig:uncertainty_sampler}
 \end{figure*}
-The different sampling methods \usmax and \ussoftmax were implemented in the two inheriting classes \texttt{UncertaintySamplerSoftmax} and \texttt{UncertaintySamplerMax} which are using a softmax and a max probability distribution to sample.
+In addition, the different sampling methods were implemented in two inheriting classes \texttt{UncertaintySamplerSoftmax} and \texttt{UncertaintySamplerMax} which are using a softmax and a max probability distribution to sample.
+
 As described in \Autoref{ch:approach}, the \texttt{Classifier} contains the additional functionality of classifying negative triples.
-Therefore, for a given set of \texttt{logits} given by the generator, it calculates the probability that they are a negative triple or a positive triple.
+Therefore, for a given set of \texttt{logits} given by the generator, it calculates the probability that they are a negative triple (output = 0) or a positive triple (output = 1).
 Accordingly, the function \texttt{classify} returns values $\in [0,1]$ for all negative triples.
 This probability is determined on basis of given \texttt{min\_score} and \texttt{max\_score}.
-\begin{figure}[H]
+
+The \texttt{UncertaintyScorer} is responsible for measuring and scoring the uncertainty of the generator model for given negative triples.
+For this purpose, it has various types of an \texttt{UncertaintyMeasure} at its disposal, as shown in \Autoref{fig:uncertainty_measures}.
+\begin{figure*}[t]
   \centering
     \includegraphics[width=0.95\textwidth]{figures/classdiagrams/UncertaintyScorer.pdf}
   \caption{Classdiagram with \texttt{UncertaintyScorer} and its \texttt{UncertaintyMeasure}.
   \texttt{UncertaintyMeasure} has several inherited classes depending on its implementation of how to measure uncertainty.}
   \label{fig:uncertainty_measures}
-\end{figure}
-The \texttt{UncertaintyScorer} is responsible for measuring and scoring the uncertainty of the generator model for given negative triples.
-For this purpose, it has various types of an \texttt{UncertaintyMeasure} at its disposal, as shown in \Autoref{fig:uncertainty_measures}.
-Thus, for the different uncertainty measures, classes were implemented that override the \texttt{measure\_uncertainty} method and, for a given set of probabilities \texttt{probs}, assign an uncertainty score $u_i \in [0,1]$ for $i \in [1, |Neg|]$.
+\end{figure*}
+Thus, for the different uncertainty metrics, classes were implemented that override the \texttt{measure\_uncertainty} method and, for a given set of probabilities \texttt{probs}, assign an uncertainty score $u_i \in [0,1]$ for $i \in [1, |Neg|]$.

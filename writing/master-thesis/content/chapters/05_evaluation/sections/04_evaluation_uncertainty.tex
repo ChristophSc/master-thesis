@@ -8,33 +8,24 @@ The evaluation takes place on datasets in \Autoref{subsec:results_uncertainty} a
 
 \input{content/chapters/05_evaluation/sections/04_uncertainty/01_uncertainty_umls}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/02_uncertainty_kinship}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/02_uncertainty_wn18rr}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/03_uncertainty_wn18rr}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/03_uncertainty_wn18}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/04_uncertainty_wn18}
+\input{content/chapters/05_evaluation/sections/04_uncertainty/04_uncertainty_fb15k237}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/05_uncertainty_fb15k237}
+Results of our experiments on smaller datasets \umls and \kinship  are listed in \Autoref{tab:results_small_datasets} and bigger datasets \textsc{FB15k-237},  \textsc{WN18} and \textsc{WN18RR} are listed in \Autoref{tab:results}.
+\input{content/chapters/05_evaluation/result_table_small_datasets}
+\input{content/chapters/05_evaluation/result_table}
+These tables list both the results given in the \kbgan paper \cite{cai2017kbgan} and our achieved MRR and Hit@10 values on the different datasets.
+Furthermore, results after 5000 epochs on pre-trained models and also results after 1000 epochs with non-pre-trained models are listed.
+The model named first in the brackets is the generator and the model named second is the discriminator.
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/06_uncertainty_fb15k}
 
-\input{content/chapters/05_evaluation/sections/04_uncertainty/07_uncertainty_yago3_10}
-
-\subsection{Summary and Conclusion}
+\subsection{Conclusion}
 \label{subsec:uncertainty_conclusion}
 %
-The results of the experiments are listed in tables to compare them to the original approach.
-These show both the MRR and Hit@10 results achieved with the original approach \kbgan and those obtained with \usgan with \ussoftmax and entropy uncertainty measure.
-\Autoref{tab:result_table1} includes all results for smaller datasets \umls and \kinship,
-\Autoref{tab:result_table2} lists all results for \textsc{WN18RR} and \textsc{WN18}, and \Autoref{tab:result_table2} depicts results for \textsc{FB15k-237}, \textsc{FB15k} and \textsc{YAGO3-10} datasets.
-
-\input{content/chapters/05_evaluation/result_table1}
-
-\input{content/chapters/05_evaluation/result_table2}
-
-\input{content/chapters/05_evaluation/result_table3}
-
-In some cases such as training on \textsc{FB15k-237} adversarial training with \ussoftmax seems to work and on small datasets like \umls even better than \origsampling.
+In some cases like training on \textsc{FB15k-237} adversarial training with \ussoftmax seems to work and on small datasets like \umls even better than \origsampling.
 Additionally, it is noticeable that training looks very different for different datasets.
 Nevertheless, in most cases, adversarial training with \origsampling still performs better and reaches higher MRR and Hit@10 values.
 Therefore, measuring and sampling by the uncertainty of the generator to classify triples as positives and negatives does not necessarily imply the uncertainty of the discriminator model.
@@ -46,6 +37,3 @@ In addition, uncertainty is currently only measured based on the generator's unc
 
 
 % scores of positive and neative triples sometimes has a high overlap which leads sampling of negative triples with an average score
-% hyperparameter optimization necessary for all datasets
-% Models are very dependent on hyperparameters, small changes can already have large effects on learning behavior.
-% Depending on the properties of a data set, the selected model pair for generator and discriminator and the set hyperparameters, a completely different training behavior can occur.

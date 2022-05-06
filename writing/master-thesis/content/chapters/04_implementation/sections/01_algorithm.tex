@@ -1,18 +1,11 @@
 \section{Algorithm}
 \label{sec:algorithm}
-% 1) create set of negative triples
-% 2) score_min and score_max for positive and negative triples
-% 3) classify triples
-% 4) calculate uncertainty scores
-% 5) calculate sampling probability based on uncertainty scores
+%
 The original algorithm of \kbgan was modified for \usgan by replacing the original sampling by sampling with uncertainty.
 \Autoref{alg:ucgan} shows the individual steps of \usgan in pseudo-code.
-In contrast to the original \kbgan approach, the sampling of a negative triple is based on the achieved uncertainty scores instead of generator scores.
-In addition, the algorithm was supplemented by the necessary calculations.
-Following the creation of the negative triple set neg, the minimum and maximum scoring values $score_{min}$ and $score_{max}$ were calculated.
-Subsequently, a classification of negative triples is performed for the individual triples of the batch.
-Based on the probability of belonging to the positive triple class, the uncertainty scores and the sampling probabilities can be calculated.
-All other steps are the same as in the original \kbgan approach.
-
 \input{content/chapters/04_implementation/algorithm}
-
+In it, replaced steps of \kbgan are marked in red and the new steps are marked in green.
+The steps marked in black have not changed from the original approach.
+%calculation of $score_{min}$ and $score_{max}$.
+It can be seen that the original sampling steps have been replaced and that sampling is no longer based on generator scores but uncertainty scores.
+For the calculation of this uncertainty, further steps such as the calculation of $score_{min}$ and $score_{max}$ are necessary before the actual sampling to classify and then sample them.

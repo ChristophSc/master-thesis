@@ -1,4 +1,4 @@
-\begin{table}[H]
+\begin{table}[h]
     \centering
     \begin{tabular}{lll}
         \toprule
@@ -9,20 +9,19 @@
     
         \midrule
         
-        \textsc{DistMult} & $k=50, \lambda=0.1$ & L2 regularization: $L_{reg}=L+\lambda||\Theta||_2^2$ \\ 
-        
-        \textsc{ComplEx}  & $k=25, \lambda=0.1$ & L2 regularization: $L_{reg}=L+\lambda||\Theta||_2^2$ \\
-        
         \textsc{TransE} & $L_1$ distance, $k=50, \gamma=3$ & $||\mathbf{e}||_2\leq 1,||\mathbf{r}||_2\leq 1$ \\ 
         
         \textsc{TransD} & $L_1$ distance, $k=50, \gamma=3$ & $||\mathbf{e}||_2\leq 1,||\mathbf{r}||_2\leq 1,||\mathbf{e_p}||_2\leq 1,||\mathbf{r_p}||_2\leq 1$  \\ 
         
+        \textsc{DistMult} & $k=50, \lambda=1/0.1$ & L2 regularization: $L_{reg}=L+\lambda||\Theta||_2^2$ \\ 
+        
+        \textsc{ComplEx}  & $2k=50, \lambda=1/0.1$ & L2 regularization: $L_{reg}=L+\lambda||\Theta||_2^2$ \\
+         
         \bottomrule
     \end{tabular}
-    \caption{Hyperparameter settings for generator and discriminator models.
-    For generator models a learning rate of $\lambda=0.1$ is used. 
-    Constraints and regularizations are taken from \cite{cai2017kbgan}.
-    All hyperparameters are shared among all datasets. 
-    $\Theta$ represents all parameters in the model.}
+    \caption{Hyperparameter settings of the four models we used. 
+    For \textsc{DistMult} and \textsc{ComplEx}, $\lambda=1$ is used for \textsc{FB15k-237} and $\lambda=0.1$ is used for \textsc{WN18} and \textsc{WN18RR}. 
+    All other hyperparameters are shared among all datasets. 
+    $L$ is the global loss defined in Equation \eqref{eq:nllloss}. $\Theta$ represents all parameters in the model.}
     \label{tab:hyperparams}
 \end{table}
