@@ -8,7 +8,7 @@ Since different \ac{KGE} models formulate different designs for their scoring fu
 Two common loss functions are the following \cite{cai2017kbgan}.
 \begin{enumerate}
     \item 
-    \textbf{Marginal loss function} is mostly used by translation-based models like \textsc{TransE} and \textsc{TransD}.
+    \textbf{Marginal loss function} is mostly used by translation-based models such as \textsc{TransE} and \textsc{TransD}.
     Since these models work with distances, a smaller distance indicates a higher likelihood of a triple to be true.
     It is defined as 
     \begin{equation}
@@ -29,7 +29,7 @@ Two common loss functions are the following \cite{cai2017kbgan}.
     \textit{Soft Margin} is another modified version that uses a sliding technique to move false negative samples towards positive samples \cite{9207513}.     
     
     \item 
-    \textbf{Log-softmax loss function} is commonly used for models which have a probabilistic interpretation of the score function like \distmult or \complex.
+    \textbf{Log-softmax loss function} is commonly used for models which have a probabilistic interpretation of the score function such as \distmult and \complex.
     Therefore, for corrupted, negative triples the score should be lower than for positive ones.
     The negative log-likelihood of a probabilistic model defines the loss function \cite{cai2017kbgan}
     \begin{equation} \label{eq:nllloss}

@@ -1,12 +1,12 @@
-\begin{table}[h]
+\begin{table}[H]
     \centering
-    \begin{tabular}{lllllll}
+    \begin{tabular}{lllll}
         \toprule
         \textbf{Method} &
         \multicolumn{2}{c}{\textbf{WN18RR}} & 
         \multicolumn{2}{c}{\textbf{WN18}}\\
         
-        \cmidrule{2-6} \cmidrule{7-7} \\
+        \cmidrule{2-4} \cmidrule{5-5} \\
         {} & MRR & H@10 & MRR & H@10\\
         
         \midrule
@@ -44,7 +44,7 @@
           \midrule
           
           \textbf{\usgan} 
-          & & & & & & \\
+          & & & &  \\
          
           \textsc{DistMult} + \textsc{TransE}
            & 17.8 
@@ -75,9 +75,9 @@
           \\
         \bottomrule
     \end{tabular}
-    \caption{Experimental results on \textsc{WN18} and \textsc{WN18RR} dataset.
+    \caption{Experimental results on \textsc{WN18RR} and \textsc{WN18} dataset.
     The first section contains MRR and Hit@10 values of adversarial training with original \kbgan approach.
     The second section shows results achieved with new approach \usgan with \ussoftmax and entropy uncertainty measure.
-    The first model is that of the generator and the second that of the discriminator, both are not pre-trained.}
+    The generator and the discriminator are not pre-trained.}
 \label{tab:result_table2}
 \end{table}

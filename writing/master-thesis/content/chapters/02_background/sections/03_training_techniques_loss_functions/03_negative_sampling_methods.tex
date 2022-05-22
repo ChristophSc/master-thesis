@@ -5,7 +5,7 @@ In the literature, several negative sampling methods are proposed to create synt
 They can be separated into the following three different groups \cite{qianunderstanding}.
 
 \textbf{Static Distribution-Based Sampling} \label{static_distribution_based_sampling}\\
-Static distribution-based sampling includes methods like the uniform, Bernoulli, and probabilistic sampling techniques from a fixed and static distribution of negative triples.
+Static distribution-based sampling includes methods such as the uniform, Bernoulli, and probabilistic sampling techniques from a fixed and static distribution of negative triples.
 While in the uniform sampling either the head or tail entity is replaced by an entity randomly sampled from entity set \entities,
 the Bernoulli sampling technique uses different probabilities for replacing head or tail entity depending on the underlying relation type.
 In contrast, probabilistic sampling speeds up the training process by including a training bias.
@@ -45,12 +45,12 @@ Dynamic distribution-based sampling tries to model the changes of negative tripl
 A generator and a discriminator \cite{zhang2021efficient}.
 While the generator dynamically approximates the constantly updated negative triple distribution to provide high-qualitative negative triples,
 the discriminator learns to distinguish positive and negative triples with its own \ac{KGE} model.
-Pioneer works are \ac{KBGAN} \cite{cai2017kbgan} and \ac{IGAN} \cite{IGAN}, but several other approaches like \ac{MCNS} \cite{MCNS} exist.
+Pioneer works are \ac{KBGAN} \cite{cai2017kbgan} and \ac{IGAN} \cite{IGAN}, but several other approaches such as \ac{MCNS} \cite{MCNS} exist.
 \acp{GAN} were originally proposed for generating examples in a continuous space such as images and adapted for the generation of hard negative examples \cite{zhang2021efficient}.
 With its adaptation to \ac{KGE} learning, the distribution of negative triples is determined through the adversarial learning process.  
 
 % Evaluation
-However, capturing the negative triple distribution has some drawbacks.
+Capturing the negative triple distribution has some drawbacks.
 It is not effectively sampled from this distribution and the number of training parameters increases.
 In addition, the model suffers from instability and degeneracy \cite{zhang2021efficient}.
 This results from the fact, that the \textsc{REINFORCE} gradient has a high variance for training the generator and only a few negative triples lead to a large gradient \cite{zhang2021efficient}.

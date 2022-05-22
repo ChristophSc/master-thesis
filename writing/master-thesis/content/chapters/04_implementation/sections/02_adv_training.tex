@@ -4,7 +4,7 @@
 The adversarial training starts via the script \textit{gan\_train.py}.
 Before the training begins, the configurations are loaded from the \textit{config.yaml} file where all the settings and parameters of the training are defined.
 An example configuration file is shown in the appendix in \Autoref{app:config_yaml}.
-The most important settings for adversarial training like the definition of the generator and discriminator model are defined under \textit{adv}.
+The most important settings for adversarial training such as the definition of the generator and discriminator model are defined under \textit{adv}.
 These settings can also be overwritten via parameters when starting the script.
 Then, training, validation, and test data are loaded and the adversarial training for the specified number of epochs begins.
 
@@ -44,3 +44,4 @@ By implementing these models and passing negative and positive triples, it is no
 Originally, the sampling of a negative triple was carried out in the generator.
 Since in our approach there is now an extension of the original model to include a sampling based on uncertainty scores, the sampling functionality is outsourced to additional classes.
 Sampling is now done by an additional class \texttt{BaseSampler}, of which our \texttt{BaseModel} has an instance named \texttt{smpl}.
+\clearpage

@@ -2,9 +2,8 @@
 \label{subsubsec:uncertainty_kinship}\\
 %
 A significant increase can also be seen in the progression of the MRR learning curve on the \kinship data set with both approaches, but the MRR value remains constant with \usgan after reaching the maximum (\Autoref{fig:advtrain_kinship_random_vs_uncertainty}).
-With the original \kbgan approach, however, it drops again for all model pairs.
-However, the maximum MRR values of \kbgan cannot be surpassed by the new approach \usgan p.
-The situation is different, however, for the Hit@10 values.
+With the original \kbgan approach, it drops again for all model pairs, but the maximum MRR values cannot be surpassed by the new approach \usgan.
+The situation is different for the Hit@10 values.
 These exceed the maximum value of the original approach with all model pairs.
 \begin{figure}[H]
     \centering
@@ -25,7 +24,7 @@ These exceed the maximum value of the original approach with all model pairs.
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/kinship/1k_epochs/uncertainty_kinship_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \kinship dataset. 
-    Left Figures show sampling negative triples with \origsampling, right figures show \ussoftmax with entropy uncertainty metrics.
+    Left Figures show sampling negative triples with \origsampling, right figures show \ussoftmax with entropy uncertainty measure.
     Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_kinship_random_vs_uncertainty}
 \end{figure}

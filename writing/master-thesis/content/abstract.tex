@@ -5,9 +5,9 @@
 \label{sec:abstract}
 %
 Knowledge graphs present an incomplete knowledge repository that store facts about the real world.
-These facts are represented in a network structure where entities are stored as nodes and relations as edged.
-These knowledge bases are used for a large number of downstream tasks such as structured search and link prediction.
-As the volume of networks increased significantly in recent years, the calculation and management of large KG systems have become more important.
+These facts are represented in a network structure where entities are stored as nodes and relations as edges.
+These knowledge graphs are used for a large number of downstream tasks such as structured search and link prediction.
+As the volume of knowledge graphs increased significantly in recent years, the management of large knowledge graph systems have become more important.
 For this reason, knowledge graph embedding models have been presented to embed entities and relations in a continuous low-dimensional vector space.
 Learning these embeddings requires a distinction between positive and negative triples.
 Since only positive information is stored in knowledge graphs, there are several training types available to find negative examples.
@@ -15,7 +15,7 @@ One of these is negative sampling.
 However, commonly used negative sampling approaches provide low-quality negative examples.
 This can impede the training process, lead to a worse embedding and thus directly impact downstream tasks.
 In active learning and many areas of machine learning, sampling through uncertainty offers the possibility of sampling particularly informative instances for a model and thus making the learning process more efficient.
-Therefore, in this thesis, we want to investigate the incorporation of uncertainty information in a negative sampling process.
+In this thesis, we are interested in leveraging uncertainty means in the process of negative sampling.
 For this reason, several methods of uncertainty sampling are analyzed first.
 Subsequently, these sampling methods replace the original sampling method of the generative adversarial network-based approach KBGAN. 
 Finally, the new approach is evaluated in detail on a total of seven different data sets and the experimental results are compared.

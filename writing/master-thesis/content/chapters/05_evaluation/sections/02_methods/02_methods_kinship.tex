@@ -2,10 +2,6 @@
 \label{subsubsec:methods_kinship}\\
 %
 A sharp increase in evaluation metrics can also be seen on the \kinship dataset, especially at the beginning of the training (\Autoref{fig:advtrain_kinship_usmax_ussoftmax}).
-With both \usmax and \ussoftmax, the values increase steadily up to about 100 epochs.
-In contrast to the \umls data set, however, the models with a \transd discriminator perform significantly better than those with a \transe discriminator.
-So they do not seem to depend on the generator model as with the \umls dataset.
-Furthermore, this difference between the different models in the discriminator can also be seen in the \ussoftmax sampling approach.
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -29,6 +25,10 @@ Furthermore, this difference between the different models in the discriminator c
     Shown are validation MRR and Hit@10 values for 1000 epochs.}
     \label{fig:advtrain_kinship_usmax_ussoftmax}
 \end{figure}
+With both \usmax and \ussoftmax, the values increase steadily up to about 100 epochs.
+In contrast to the \umls data set, however, the models with a \transd discriminator perform significantly better than those with a \transe discriminator.
+So they do not seem to depend on the generator model as with the \umls dataset.
+Furthermore, this difference between the different models in the discriminator can also be seen in the \ussoftmax sampling approach.
 Equal to the \umls dataset, however, is that with \usmax there is a drop in the evaluation metrics after reaching the maximum at 100 epochs, but the values continue to increase slightly with \ussoftmax.
 Furthermore, there is a significant increase in the Hit@10 metric with the model pairs with a \transd discriminator.
 These reach a value of over 65\% with \ussoftmax, whereas they remained below this with \usmax and the other model pairs.

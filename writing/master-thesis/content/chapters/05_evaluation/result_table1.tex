@@ -1,12 +1,12 @@
-\begin{table}[h]
+\begin{table}[H]
     \centering
-    \begin{tabular}{lllllll}
+    \begin{tabular}{lllll}
         \toprule
         \textbf{Method} &
         \multicolumn{2}{c}{\textbf{UMLS}} & 
         \multicolumn{2}{c}{\textbf{KINSHIP}}\\
         
-        \cmidrule{2-6} \cmidrule{7-7} \\
+        \cmidrule{2-4} \cmidrule{5-5} \\
         {} & MRR & H@10 & MRR & H@10 \\
 
         \midrule
@@ -40,7 +40,7 @@
          \midrule
          
          \textbf{\usgan} 
-         & & & & & & \\
+         & & & & \\
          
         \textsc{DistMult} + \textsc{TransE}
          & \underline{78.4} 
@@ -68,8 +68,8 @@
         \bottomrule
     \end{tabular}
     \caption{Result table for smaller datasets \textsc{UMLS} and \textsc{KINSHIP}.
-    First section contains MRR and Hit@10 values of adversarial training with original \kbgan approach.
+    The first section contains MRR and Hit@10 values of adversarial training with original \kbgan approach.
     The second section shows results achieved with new approach \usgan with \ussoftmax and entropy uncertainty measure.
-    The first model is that of the generator and the second that of the discriminator, both are not pre-trained.}
+    The generator and the discriminator are not pre-trained.}
 \label{tab:result_table1}
 \end{table}

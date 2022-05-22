@@ -1,7 +1,7 @@
 \section{Evaluation of Uncertainty Sampling}
 \label{ch:evaluation:sec:evaluation_uncertainty}
 %
-Finally, the best sampling by uncertainty sampling method \ussoftmax with entropy uncertainty metric is evaluated by comparing it to the original sampling method \origsampling of \kbgan.
+Finally, the best sampling by uncertainty sampling method \ussoftmax with entropy uncertainty measure is evaluated by comparing it to the original sampling method \origsampling of \kbgan.
 The evaluation takes place on datasets in \Autoref{subsec:results_uncertainty} and a final Conclusion of uncertainty sampling is given in \Autoref{subsec:uncertainty_conclusion}.
 %
 \subsection{Results on Datasets} \label{subsec:results_uncertainty}
@@ -20,7 +20,7 @@ The evaluation takes place on datasets in \Autoref{subsec:results_uncertainty} a
 
 \input{content/chapters/05_evaluation/sections/04_uncertainty/07_uncertainty_yago3_10}
 
-\subsection{Summary and Conclusion}
+\subsection{Summary and Conclusion of Uncertainty Sampling}
 \label{subsec:uncertainty_conclusion}
 %
 The results of the experiments are listed in tables to compare them to the original approach.
@@ -30,19 +30,22 @@ These show both the MRR and Hit@10 results achieved with the original approach \
 
 \input{content/chapters/05_evaluation/result_table1}
 
-\input{content/chapters/05_evaluation/result_table2}
-
-\input{content/chapters/05_evaluation/result_table3}
-
-In some cases such as training on \textsc{FB15k-237} adversarial training with \ussoftmax seems to work and on small datasets like \umls even better than \origsampling.
+In some cases such as training on \textsc{FB15k-237} adversarial training with \ussoftmax seems to work and on small datasets such as \umls even better than \origsampling.
 Additionally, it is noticeable that training looks very different for different datasets.
 Nevertheless, in most cases, adversarial training with \origsampling still performs better and reaches higher MRR and Hit@10 values.
 Therefore, measuring and sampling by the uncertainty of the generator to classify triples as positives and negatives does not necessarily imply the uncertainty of the discriminator model.
 Even if the generator model might be uncertain if a given triple is positive or negative, the discriminator can be more certain about this classification.
+\clearpage
+
+\input{content/chapters/05_evaluation/result_table2}
+
 Another reason might be that classification is not accurate enough.
 During training, we have observed that even if negative triples scoring ranges are lower than positive triple scoring ranges, this sometimes changes over training time.
 Therefore, the overlap of both ranges increases.
 In addition, uncertainty is currently only measured based on the generator's uncertainty score and does not include any further information about the \ac{KG}, its relations, and entities.
+\clearpage
+
+\input{content/chapters/05_evaluation/result_table3}
 
 
 % scores of positive and neative triples sometimes has a high overlap which leads sampling of negative triples with an average score

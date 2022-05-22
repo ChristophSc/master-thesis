@@ -3,6 +3,8 @@
 %
 When looking at the validation curves on the \textsc{FB15k} dataset, a difference can be seen in the different model pairs (\Autoref{fig:advtrain_fb15k_usmax_ussoftmax}).
 In this case, however, with \usmax the model pairs perform significantly better with a \distmult generator and with \ussoftmax with a \transd discriminator.
+Both evaluation metrics show a clear increase over the entire validation process.
+However, it is noticeable that with \ussoftmax both MRR and Hit@10 achieve higher values than \usmax.
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -26,10 +28,8 @@ In this case, however, with \usmax the model pairs perform significantly better 
     Shown are validation MRR and Hit@10 values for 1000 epochs.}
     \label{fig:advtrain_fb15k_usmax_ussoftmax}
 \end{figure}
-Both evaluation metrics show a clear increase over the entire validation process.
-However, it is noticeable that with \ussoftmax both MRR and Hit@10 achieve higher values than \usmax.
+\clearpage
 
-This significantly stronger increase in the evaluation metrics with a \distmult generator for \usmax and a \transd discriminator for \ussoftmax can also be seen in the development of the rewards (\Autoref{fig:advtrain_fb15k_usmax_ussoftmax_losses_rewards}).
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -52,4 +52,5 @@ This significantly stronger increase in the evaluation metrics with a \distmult 
     Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.}
     \label{fig:advtrain_fb15k_usmax_ussoftmax_losses_rewards}
 \end{figure}
-However, even if the rewards for the other model pairs decrease, the evaluation metrics still improve for \ussoftmax.
+This significantly stronger increase in the evaluation metrics with a \distmult generator for \usmax and a \transd discriminator for \ussoftmax can also be seen in the development of the rewards (\Autoref{fig:advtrain_fb15k_usmax_ussoftmax_losses_rewards}).
+However, even if the rewards for the other model pairs decrease, the evaluation metrics still improve for \textsc{USSoftmax}.

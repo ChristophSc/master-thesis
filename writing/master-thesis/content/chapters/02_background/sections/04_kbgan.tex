@@ -15,7 +15,7 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
 \begin{enumerate}
     \item 
     At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t) \text{ } | \text{ } h' \in \mathcal{E}\} \cup \{(h,r,t') \text{ } | \text{ } t'\in\mathcal{E}\}$ is created.
-    Ideally, this set would contain all possible negatives \cite{cai2017kbgan}.
+    Ideally, this set contains all possible negatives \cite{cai2017kbgan}.
     Since \acp{KG} are usually highly incomplete, some of them might be false negatives that are actually true facts.
     Therefore, \kbgan uniformly samples only $N_s$ entities and replaces either head entity \texttt{h} or tail entity \texttt{t} of a given positive triple \triple{h}{r}{t}.
     In comparison to the number of all possible negatives, $N_s$ is a relatively small number \cite{cai2017kbgan}.
@@ -25,7 +25,7 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
     
     \item 
     The generator G receives all negative triples from the negative triple set $Neg$ and scores them with the scoring function $f_G$ of G.
-    Since G is a tensor factorization-based \ac{KGE} model like \distmult or \complex, negative triples with higher scores indicate a higher plausibility to be true.
+    Since G is a tensor factorization-based \ac{KGE} model such as \distmult and \complex, negative triples with higher scores indicate a higher plausibility to be true.
     The scores are passed to the softmax function, which assigns a sampling probability $p_i$ for each negative triple $l_i = (h_i, r_i, t_i)$:
     \begin{equation} \label{eq:origsampling}
         p_i = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}} \in [0,1]

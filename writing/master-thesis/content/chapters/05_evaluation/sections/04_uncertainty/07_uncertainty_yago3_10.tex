@@ -3,46 +3,49 @@
 %
 On the \textsc{YAGO3-10} dataset, the course of the learning curve looks relatively similar for both approaches, but the original approach achieves significantly better results for both MRR and Hit@10 values towards the end (\Autoref{fig:advtrain_yago3_10_random_vs_uncertainty}).
 After a sharp increase in the values in both approaches, the slope of the learning curve is much steeper in the original \kbgan approach.
+
+Looking at the rewards in \Autoref{fig:advtrain_yago3_10_losses_rewards}, they also descrease for the new sampling approach and thus the sampled negative triples are better in the original approach and improve steadily over time, while in the new approach a decreasing reward is obtained on this data set.
+\clearpage
 \begin{figure}[H]
     \centering
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/yago3_10/1k_epochs/random_yago3_10_mrrs.png}
     \end{minipage}%
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_mrrs.png}
     \end{minipage}
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/yago3_10/1k_epochs/random_yago3_10_hit10.png}
     \end{minipage}%
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_hit10.png}
     \end{minipage}%
     \caption{Adversarial training on \textsc{YAGO3-10} dataset. 
-    Left Figures show sampling negative triples with \origsampling, right figures show \ussoftmax with entropy uncertainty metrics.
+    Left Figures show sampling negative triples with \origsampling, right figures show \ussoftmax with entropy uncertainty measure.
     Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_yago3_10_random_vs_uncertainty}
 \end{figure}
 
-Looking at the rewards in \Autoref{fig:advtrain_yago3_10_losses_rewards}, they also descrease for the new samplign approach and thus the sampled negative triples are better in the original approach and improve steadily over time, while in the new approach a decreasing reward is obtained on this data set.
+
 \begin{figure}[H]
     \centering
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/yago3_10/1k_epochs/random_yago3_10_losses.png}
     \end{minipage}%
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_losses.png}
     \end{minipage}
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/random/yago3_10/1k_epochs/random_yago3_10_rew.png}
     \end{minipage}%
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
       \centering
       \includegraphics[width=0.9\linewidth]{figures/results/gan_train/not_pretrained/uncertainty/max_distribution/entropy/yago3_10/1k_epochs/uncertainty_yago3_10_rew.png}
     \end{minipage}%

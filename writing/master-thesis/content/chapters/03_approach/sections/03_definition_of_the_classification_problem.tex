@@ -44,7 +44,7 @@ Since the generator is a tensor factorization-based model and their score indica
 Nevertheless, since a perfect embedding model is unknown, there is an overlap of positive and negative triple scores.
 As can be seen from \Autoref{fig:badVsGoodApproach}, if the classification is based only on low and high negative triple scores, this would lead to a sampling of instances that are easily distinguishable from the model and therefore, less helpful to learn a good embedding.
 For this reason, we need to include information about positive triple scores, so that a classification between positive and negative triples is possible.
-Therefore, including positive triple scoring information would result in sampling triples from a different scoring area illustrated in \Autoref{fig:positiveVsNegativeApproach}
+Therefore, including positive triple scoring information result in sampling triples from a different scoring area illustrated in \Autoref{fig:positiveVsNegativeApproach}
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.9\textwidth]{figures/positiveVsNegativeApproach.pdf}

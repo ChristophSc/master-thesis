@@ -13,7 +13,7 @@ $$\{ s(i, k, j') : j' \in \entities \wedge (i, k, j') \notin \text{ training, va
 Therefore, we obtain a filtered ranks $rank(j|i, k)$ and $rank(i|k, j)$.
 First one for object $j$ and given head entity $i$ and relation $k$, 
 and second one for object $i$ and given relation $k$ and tail entity j \cite{Ruffinelli2020You}.
-Subsequently, metrics like the \ac{MRR} or the average Hits@k are computed.
+Subsequently, metrics such as the \ac{MRR} or the average Hits@k are computed.
 MRR is defined as \cite{Ruffinelli2020You}
 \begin{equation}
     MRR = \frac{1}{2 |\mathcal{K}^{test}|} \sum_{(i,k,j) \in  \mathcal{K}^{test}} \left( \frac{1}{rank(i |k,j)} + \frac{1}{rank(j|i,k)} \right)

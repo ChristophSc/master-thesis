@@ -3,6 +3,8 @@
 %
 The courses of evaluation metrics on \textsc{WN18} dataset are very similar to that on \textsc{WN18RR} dataset.
 Interestingly, the model pairs with a \transd model in the discriminator also show a significantly worse performance as can be seen in \Autoref{fig:advtrain_wn18_usmax_ussoftmax}.
+The maximum of the metrics is already reached after about 100 epochs.
+But unlike learning on the \textsc{WN18RR} dataset, the discriminator does not achieve better Hit@10 values over time on \textsc{WN18} dataset.
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -26,13 +28,13 @@ Interestingly, the model pairs with a \transd model in the discriminator also sh
     Shown are validation MRR and Hit@10 values for 1000 epochs.}
     \label{fig:advtrain_wn18_usmax_ussoftmax}
 \end{figure}
-The maximum of the metrics is already reached after about 100 epochs.
-But unlike learning on the \textsc{WN18RR} dataset, the discriminator does not achieve better Hit@10 values over time on \textsc{WN18} dataset.
 Furthermore, \ussoftmax shows an even clearer difference in the models where \transd is the discriminator for the course of validation MRR.
 This also shows that adversarial training with a \transd discriminator is worse for \usmax but better for \ussoftmax.
 At Hit@10, no differences between the model pairs can be seen in the \ussoftmax.
 
 The progression of losses and rewards is also similar to the \textsc{WN18RR} dataset (\Autoref{fig:advtrain_wn18_usmax_ussoftmax_losses_rewards}).
+However, it is striking that the model pair \textsc{ComplEx} + \textsc{TransD} have a considerable drop in rewards after 150 epochs with \usmax.
+\clearpage
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -55,4 +57,3 @@ The progression of losses and rewards is also similar to the \textsc{WN18RR} dat
     Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.}
     \label{fig:advtrain_wn18_usmax_ussoftmax_losses_rewards}
 \end{figure}
-However, it is striking that the model pair \textsc{DistMult} + \textsc{TransD} have a considerable drop in rewards after 700 epochs.
