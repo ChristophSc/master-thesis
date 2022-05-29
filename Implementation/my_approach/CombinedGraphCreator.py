@@ -145,13 +145,13 @@ class CombinedGraphCreator():
   
   
   
-datasets = ["fb15k"] # "umls", "kinship", "wn18", "wn18rr", "fb15k237",  "fb15k", "yago3_10"]
+datasets = ["yago3_10"] # "umls", "kinship", "wn18", "wn18rr", "fb15k237",  "fb15k", "yago3_10"]
 gen_models = ["DistMult", "ComplEx"]
 dis_models = ["TransE", "TransD"]
 all_models = gen_models + dis_models
-pretraining_cases = ["not_pretrained"]  # "pretrained", "not_pretrained"
-sampling_types = ["uncertainty"]   #  ["uncertainty", "random"]
-uncertainty_sampling_types = ["max_distribution"] # "max_distribution"
+pretraining_cases = ["pretrained"]  # "pretrained", "not_pretrained"
+sampling_types = ["uncertainty", "random"]   #  ["uncertainty", "random"]
+uncertainty_sampling_types = ["max", "max_distribution"] # "max_distribution"
 uncertainty_measures = ["entropy", "least_confidence", "confidence_margin", "confidence_ratio"] # 
 
 for dataset in datasets:
@@ -167,7 +167,7 @@ for dataset in datasets:
           for uncertainty_measure in uncertainty_measures:
               CombinedGraphCreator(dataset = dataset, 
                                   models = model_pairs, 
-                                  n_epochs = 1000,
+                                  n_epochs = 5000,
                                   train_type = "gan_train", 
                                   pretrained = pretrained,
                                   sampling_type = sampling_type,
