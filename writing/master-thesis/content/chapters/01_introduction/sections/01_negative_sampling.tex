@@ -15,21 +15,21 @@ Considering nodes as words and the neighbors of the nodes as the context of a wo
 Therefore, the idea was applied to \ac{KGE} learning and has become common practice over the past several years.
 Instead of discriminating true samples from noise samples, positive triples are discriminated from negative ones.
 Since bad or too obviously incorrect negative triples fail to capture the latent semantics in a \ac{KG} and lead to a zero loss problem, several negative sampling methods have been developed and used in different \ac{KGE} models \cite{qiannegative}.
-Since a high quality of generated negative triples ensures successful training and the learned embedding performs better in downstream tasks, negative sampling becomes a very important part in \ac{KGE} learning.
+Therefore, generated negative triples with a high quality ensure successful training, and the learned embedding performs better in downstream tasks, negative sampling becomes a very important part in \ac{KGE} learning.
 
 % ASSUMPTIONS FOR LEARNING EMBEDDINGS
 Since there are only positive triples in a \ac{KG} and thus no information is available about the distribution of negative triples or their quality, negative sampling is a challenging task for embedding models.
 There are two different ways of looking at \acp{KG} at hand for negative sampling:
 Negative triples can be generated either under the \ac{CWA} or the \ac{OWA} \cite{qiannegative}.
-Both assumptions consider statements stored in the \ac{KG} as true, but differ on unobserved facts which are not present in the \ac{KG}.
+Both assumptions consider statements stored in the \ac{KG} as true, but differ on unobserved facts which are not present in a \ac{KG}.
 With the \ac{CWA} they are considered as false, but the \ac{OWA} assumes that missing triples are simply unknown and consequently can be either true or false
 \cite{qiannegative}.
 The \ac{CWA} has two main drawbacks.
-On the one hand, it has worse performance in downstream tasks \cite{qiannegative} since false negative triples are generated.
-False negative triples are triples that are assumed not to be true, but actually, reflect true facts of the reality \cite{qianunderstanding}.
+On the one hand, it has worse performance in downstream tasks \cite{qiannegative} since false-negative triples can be generated.
+False-negative triples are defined as triples that are assumed not to be true, but actually, reflect true facts of the reality \cite{qianunderstanding}.
 On the other hand, the \ac{CWA} has scalability issues due to a large number of negative samples \cite{qiannegative}.
 Therefore, generating more informative negative triples by negative sampling with good performance represents a non-trivial step in \ac{KGE} learning.
-Especially, because the quality of these generated negative triples has a direct impact on the \acp{KGE} and thus all further downstream tasks \cite{qiannegative}.
+Especially, because the quality of these generated negative triples has a direct impact on the \acp{KGE} \cite{qiannegative}.
 
 % GENERAL PROCESS OF NEGATIVE SAMPLING
 Overall, there are several variations for embedding learning with negative sampling in the literature.

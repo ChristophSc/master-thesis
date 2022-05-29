@@ -10,16 +10,15 @@ These sampling methods usually result in sampled negative triples which are easy
 Therefore, new and more promising negative sampling methods are required.
 
 % summary -> uncertainty 
-Since including uncertainty information produces promising results in other machine learning areas such as uncertainty sampling in active learning, we included uncertainty information in a negative sampling process.
+Since including uncertainty produces promising results in other machine learning areas such as uncertainty sampling in active learning, \usgan includes uncertainty information in a negative sampling process.
 Our approach of \usgan is based on \kbgan, which dynamically captures the distribution of negative samples and samples one negative triple from a given negative triple set.
 \usgan extends this sampling process by adding uncertainty information to each negative triple.
-Therefore, we implemented four different uncertainty metrics: entropy, least confidence, confidence margin, and confidence ratio.
+Therefore, four different uncertainty measures of entropy, least confidence, confidence margin, and confidence ratio were implemented.
 Based on a classification between positive and negative triples, an uncertainty score is calculated for each negative triple and sampled according to probability distribution given by sampling method \ussoftmax or \usmax.
-To analyze all sampling methods and uncertainty metrics in \usgan, we evaluated them on four different datasets and compared the results with the original \kbgan sampling approach 
-
+To analyze all sampling methods and uncertainty measures in \usgan, they were evaluated on seven different datasets and the results were compared with the original \kbgan sampling approach.
 
 % conclusion
-In conclusion, our evaluation of \usgan with different uncertainty metrics, sampling methods, and different datasets show that it is possible to learn embeddings with the uncertainty sampling method.
+In conclusion, our evaluation of \usgan with different uncertainty measures, sampling methods, and different datasets show that it is possible to learn embeddings with the uncertainty sampling method.
 In most cases, adding additional uncertainty information to the negative sampling process leads to an improvement of the original \ac{KGE} models.
 For some cases, \usgan increased the learning curve of MRR and Hit@10 values for some data sets and seem to perform well, especially on smaller datasets such as \umls and outperforms \kbgan.
 Additionally, it was established that \usgan is very dependent on the underlying dataset and hyperparameter tuning since training sometimes behaves completely differently.

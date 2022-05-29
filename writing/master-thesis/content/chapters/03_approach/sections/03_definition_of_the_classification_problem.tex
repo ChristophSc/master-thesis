@@ -43,17 +43,17 @@ In comparison, in the original \kbgan approach a triple with a high score is mos
 Since the generator is a tensor factorization-based model and their score indicates the plausibility of a triple to be true, the area of positive triple scores should be slightly higher than the area of negative scores.
 Nevertheless, since a perfect embedding model is unknown, there is an overlap of positive and negative triple scores.
 As can be seen from \Autoref{fig:badVsGoodApproach}, if the classification is based only on low and high negative triple scores, this would lead to a sampling of instances that are easily distinguishable from the model and therefore, less helpful to learn a good embedding.
-For this reason, we need to include information about positive triple scores, so that a classification between positive and negative triples is possible.
+For this reason, information about positive triple scores needs to be included, so that a classification between positive and negative triples is possible.
 Therefore, including positive triple scoring information result in sampling triples from a different scoring area illustrated in \Autoref{fig:positiveVsNegativeApproach}
 \begin{figure}[H]
   \centering
     \includegraphics[width=0.9\textwidth]{figures/positiveVsNegativeApproach.pdf}
   \caption{Illustration of the sampled instances by uncertainty sampling according to negative and positive triple scores.
   Range of negative triple scores is in $[a, b]$ and range of positive triple scores is in  $[c, d]$ with $a,b,c,d \in \mathbb{R}$
-  Now Uncertainty Sampling measures high uncertainty for triples which are close to positive ones, so which could be either a negative or a positive one.}
+  Now uncertainty sampling measures high uncertainty for triples which are close to positive ones, so which could be either a negative or a positive one.}
   \label{fig:positiveVsNegativeApproach}
 \end{figure}
-According to this approach, if we define classes $y = 0$  for negative triples and $y = 1$ for positive triples, we can classify each triple $(h,r,t)$ in a binary classification problem.
+According to this approach, by defining class $y = 0$ for negative triples and class $y = 1$ for positive triples, each triple $(h,r,t)$ can be classified in a binary classification problem.
 Accordingly, we can calculate the probability of being either a negative or a positive triple for each triple $\mathbb{P}(y| (h,r,t)) \in [0,1]$ for $y \in \{0,1\}$.
 Since we want to have as good negative triples as possible and therefore, triples that can be classified either positive or negative, it is looked for negative triples $(h',r,t')$ close to the probability of $\mathbb{P}(y = 0| (h',r,t')) = \mathbb{P}(y = 1| (h',r,t')) = 0.5$.
 Since this means the triple can be assigned to both the positive and the negative class, the model is uncertain about how to classify the triple.

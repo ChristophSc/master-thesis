@@ -13,12 +13,12 @@ These triples indicate that a head entity \texttt{h} (subject) is connected with
 % Knowledge Graph Embeddings
 In recent years, \ac{KGE} research showed that many challenging tasks can be tackled by means of learning continuous vector representations for entities and relations using embedding models \cite{Alam2020AffinityDN}.
 These embeddings simplify the manipulation, while preserving the inherent structure of a \ac{KG} \cite{8047276}. 
-For this purpose, various embedding models present a scoring function that measures the plausibility for each fact \cite{8047276, ConvE, qiannegative}.
+For this purpose, various embedding models define a scoring function that measures the plausibility for each fact \cite{8047276, ConvE, qiannegative}.
 To learn these low-dimensional \acp{KGE} for entities and relations, the embedding models present several different training approaches \cite{Ruffinelli2020You}.
 They differ by introducing new training types, defining new loss functions, other forms of regularization or reciprocal relations \cite{Ruffinelli2020You}.
 
 % learning embeddings with negative triples -> transition to negative sampling
-Recent results show that using negative triples for embedding learning leads to better \ac{KGE} models than previous approaches \cite{kotnis2017analysis}.
+Recent results show that using negative triples for embedding learning lead to better \ac{KGE} models than previous approaches \cite{kotnis2017analysis}.
 However, \acp{KG} represent an incomplete picture of the reality, since for the sake of space efficiency they contain only positive triples \cite{qiannegative} and not all positive information is represented in \acp{KG} either.
 Therefore, training types of embedding models mainly differ in the way how negative triples are generated \cite{Ruffinelli2020You}. 
 One of these training types is called negative sampling.

@@ -2,7 +2,7 @@
 \label{sec:calculation_of_uncertainty_scores}
 %
 Uncertainty sampling takes place based on probabilities with which the instances belong to the respective classes.
-In the previous step, we determine the calculation of probabilities to belong to a class.
+In the previous step, the calculation of probabilities belonging to a class was determined.
 Therefore, the calculation of uncertainty scores can take place at this point.
 
 To get from the generator scores to the uncertainty scores of the individual triples, a transformation function is used.
@@ -151,9 +151,9 @@ For first case of $y_m = 1$ and $y_n = 0$ this results in
 For second case of $y_m = 0$ and $y_n = 1$ we have  $\phi_2 = 2 - 2 \mathds{P}(y = 0 |f_G(l))$. 
 And therefore this leads to overall definition of $\phi(x)$ for margin of confidence
 \begin{equation} \label{eq:marginofconfidence}
-    \phi(l) = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |x), \mathds{P}_{\theta}(y = 1 |x)).
+    \phi(l) = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |f_G(l)), \mathds{P}_{\theta}(y = 1 |f_G(l))).
 \end{equation}
-Since \Autoref{eqn:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by a margin of confidence is the same as sampling by least confidence.
+Since \Autoref{eq:leastconfidence} and \ref{eq:marginofconfidence} are equal, for binary classification sampling by a margin of confidence is the same as sampling by least confidence.
 This is also evident when looking at the function graphs depicted in \Autoref{fig:sampling_distributions}.
 Therefore, for this case of binary classification, the same uncertainty scores are assigned and\usmax as well as \ussoftmax sample triples with the same probability.
 

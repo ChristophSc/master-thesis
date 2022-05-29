@@ -2,7 +2,7 @@
 %
 After both the positive and the negative triple have been passed to the discriminator, the scoring function $f_D$ is used to calculate their score.
 Since the discriminator model is a translation-based model, these scores are distances between head, relation, and tail in the embedding space.
-In the original \kbgan and also our approach we used \textsc{TransE} and \textsc{TransD}.
+In the original \kbgan and also the new \usgan approach \textsc{TransE} and \textsc{TransD} are used.
 So for our example, the positive triple $l$, as well as sampled negative triple $l_4$, are scored by the discriminator with the scoring function $f_D$.
 Therefore, we obtain two distances for positive triple $d_1 = f_D(l)$ and negative triple $d_2 = f_D(l_4)$
 Since low distances indicate a positive triple its distance should be lower than the negative triple distance ($d_1 < d_2)$.

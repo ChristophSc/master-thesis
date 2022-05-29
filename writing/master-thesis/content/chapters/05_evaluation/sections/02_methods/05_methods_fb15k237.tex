@@ -59,7 +59,7 @@ In comparison, with \ussoftmax this maximum is already reached after 100 epochs 
     Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.}
     \label{fig:advtrain_fb15k237_usmax_ussoftmax_losses_rewards}
 \end{figure}
-If we compare training losses and rewards of \usmax and \usmax on \textsc{FB15k-237} we see a similar behaviour as on \textsc{WN18} and \textsc{WN18RR} (\Autoref{fig:advtrain_fb15k237_usmax_ussoftmax_losses_rewards}).
+If the training losses and rewards of \usmax and \usmax on \textsc{FB15k-237} are compared, a similar behaviour as on \textsc{WN18} and \textsc{WN18RR} can be seen (\Autoref{fig:advtrain_fb15k237_usmax_ussoftmax_losses_rewards}).
 The losses of all model pairs in \usmax as well as \ussoftmax decrease over time.
 Surprisingly just \complex + \transe increase again after 400 epochs, since this model pair also increases MRR and Hit@10 but not for the other model pairs over time.
 Interestingly, in \usmax and \ussoftmax rewards for model pairs of with \transe in discriminator are higher than for the other model pairs.

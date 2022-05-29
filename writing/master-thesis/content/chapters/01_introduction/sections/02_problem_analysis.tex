@@ -7,7 +7,7 @@ This classification is based on the achieved scoring values of a triple.
 Depending on the KGE model, positive triples get high scores and negative triples get low scores or vice versa. 
 Due to simplicity and efficiency, most negative sampling approaches, create very poor, i.e. too easily classifiable negative triples. 
 The reason for this is that the scoring values of positive and negative triples differ greatly, which facilitates classification. 
-One very performant, simple, and commonly used approach for negative sampling is Uniform Negative Random Sampling.
+One very performant, simple, and commonly used approach for negative sampling is uniform negative random sampling.
 
 % UNIFORM RANDOM SAMPLING
 In uniform negative random sampling, either the head or the tail entity in a given positive triple \triple{h}{r}{t} is randomly replaced by any other entity of the \ac{KG} which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 

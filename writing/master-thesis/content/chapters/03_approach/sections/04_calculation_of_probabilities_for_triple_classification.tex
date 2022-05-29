@@ -2,7 +2,7 @@
 %
 Having established the binary classification problem between positive and negative triples, it is necessary to determine how to calculate the probability for a triple to belong to one of these classes.
 Assuming we have a generator scoring function $f_G$ which returns scoring values for each triple $l = (h,r,t)$ such that $f_G(l) \in \mathbb{R}$.
-Therefore, to provide probabilities belonging to positive or negative triple class, we need to define two boundaries:
+Therefore, to provide probabilities belonging to positive or negative triple class, two boundaries need to be defined:
 First, $score_{min}$ which defines at which scoring value a triple has the probability 0 to be a positive triple: 
 \begin{equation} \label{eqn:prob_score_min}
     \mathds{P}(y = 1 | f_G(l) \leq score_{min}) = 0

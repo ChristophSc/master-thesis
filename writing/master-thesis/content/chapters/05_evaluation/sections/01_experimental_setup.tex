@@ -6,7 +6,7 @@ This includes the embedding models, data sets, evaluation protocols but also imp
 To allow the best possible comparison with the original \kbgan approach, many of the settings and parameters are chosen identically.
 
 \textbf{Embedding Models}\\
-To allow a better comparison between Sampling by Uncertainty and original sampling, we train with the same models chosen by \kbgan.
+To allow a better comparison between sampling by uncertainty and the original sampling, it is trained with the same models chosen by \kbgan.
 These are the models \textsc{DistMult} and \textsc{Complex} for the generator component and the distance-based models \textsc{TransE} and \textsc{TransD} for the discriminator component.
 
 \textbf{Datasets}\\
@@ -38,7 +38,7 @@ Therefore, the current learning process and embeddings can be evaluated and comp
 
 \textbf{Implementation Details}\\
 In the original \kbgan approach, the models are first pre-trained individually over 1000 epochs on the corresponding data set before the actual \ac{GAN} training takes place.
-In the course of our tests, we found that the adversarial training learns quickly and achieves good results even without pre-training the individual models.
+In the course of our tests, it turned out that models learn quickly with adversarial training and good results are achieved even without pre-training the individual models.
 
 As example, \Autoref{fig:original_pretrained_advtrain} shows adversarial training process of \textsc{FB15k-237} for 5000 epochs with the original sampling approach from \kbgan and pre-trained  generator and discriminator models.
 \begin{figure}[H]
@@ -79,13 +79,13 @@ For comparison, an identical training was performed in \Autoref{fig:original_not
 As can be seen, both training courses achieve MRRs of around 27\% and Hit@10s of around 45\%.
 Although all model combinations in the second case were not pre-trained, they also achieve an MRR of approximately 26\% and a Hit@10 of about 44\% after 1000 epochs, just like the pre-trained models.
 In addition, especially the training of the first 1000 epochs without pre-training seems to be more constant than adversarial training with pre-trained models.
-For this reason, in the following sections, we will present the evaluation without pre-training, i.e. training from scratch.
+For this reason, the following sections present the results of adversarial training without pre-training the models.
 Nevertheless, the results of pre-training and the subsequent adversarial training on pre-trained models can be found in the appendix (\autoref{app:results}).
 
 Additionally, in the original approach, adversarial training takes place for 5000 epochs.
 However, during the evaluation, it was found that in the case of adversarial training, the first 1000 epochs produced the greatest improvements in the discriminator model.
 This was especially the case for training without pre-trained models.
-For this reason, in our evaluation, we will focus on the first 1000 epochs.
+For this reason, the evaluation shows the results of training for 1000 epochs.
 
 For the evaluation, the parameters shown in \autoref{tab:evaluation_parameter} were defined.
 \begin{table}[h]

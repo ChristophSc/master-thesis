@@ -30,7 +30,8 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
     \begin{equation} \label{eq:origsampling}
         p_i = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}} \in [0,1]
     \end{equation}
-    Therefore, we obtain a probability distribution $p_G(h',r,t'|h,r,t)$ where each negative triple \triple{h'}{r}{t'} a probability is assigned based on given positive triple \triple{h}{r}{t} and all sampling probabilities sum up to 1.
+    Therefore, a probability distribution $p_G(h',r,t'|h,r,t)$ is obtained where for each negative triple \triple{h'}{r}{t'} a probability is assigned based on a given positive triple \triple{h}{r}{t}. 
+    All sampling probabilities sum up to 1.
     
     \item
     According to this probability distribution, one negative triple is sampled.

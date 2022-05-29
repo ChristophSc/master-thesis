@@ -1,9 +1,9 @@
 \chapter{Implementation}
 \label{ch:implementation}
 %
-After explaining our approach, we will now go into more detail about the implementation of \usgan.
+After explaining the new approach, this chapter describes the implementation of \usgan in more detail.
 For this purpose, \Autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo-code.
-Since some components were already implemented in the original \kbgan approach, in this chapter we focus on the differences to the new \usgan.
+Since some components were already implemented in the original \kbgan approach, this chapter focuses on the differences to the new \usgan.
 In addition, the description is limited to adversarial training and the negative sampling process.
 The optional pre-training can take place separately but does not differ from the basic training of the original individual models \distmult, \complex, \transe, and \textsc{TransD}.
 \Autoref{sec:adv_training} first introduces the most important classes and methods for the functionality of adversarial training.

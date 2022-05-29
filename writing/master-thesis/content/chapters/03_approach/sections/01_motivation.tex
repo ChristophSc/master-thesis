@@ -28,6 +28,6 @@ Accordingly, we also want to incorporate uncertainty information in an embedding
 The basic idea of sampling by uncertainty is to select particularly interesting negative triples from an already existing set of negative triples.
 Since most embedding models from the three negative sampling categories (\Autoref{subsec:negative_sampling_methods}) can sample negative triples, they can also create a negative triple set,
 Accordingly, any approach of the three categories can be selected and extended by uncertainty information.
-Since the dynamic distribution-based approach \kbgan already creates such a set of negative triples and captures the distribution of negative triples dynamically, we have decided to extend this approach.
+Since the dynamic distribution-based approach \kbgan already creates such a set of negative triples and captures the distribution of negative triples dynamically, this approach should be extended.
 Therefore, instead of sampling only based on scoring values of negative triples, our approach will sample them based on uncertainty scores.
-Since this new approach is based on a \ac{GAN} with an adversarial learning process where negative triples are sampled by uncertainty and given to the discriminator, we call this approach \textbf{\underline{U}ncertainty \underline{S}ampling \underline{G}enerative \underline{A}dversarial \underline{N}etwork (\textsc{USGAN})}.
+Since this new approach is based on a \ac{GAN} with an adversarial learning process where negative triples are sampled by uncertainty and given to the discriminator, this approach is called \textbf{\underline{U}ncertainty \underline{S}ampling \underline{G}enerative \underline{A}dversarial \underline{N}etwork (\textsc{USGAN})}.

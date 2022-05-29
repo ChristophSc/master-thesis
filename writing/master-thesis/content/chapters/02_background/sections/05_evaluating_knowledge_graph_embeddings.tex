@@ -10,7 +10,7 @@ Therefore, except for the test triple of interest, all true corrupted triples ar
 Subsequently, a collection of pseudo-negative object scores is obtained in a filtered setting  which is defined as \cite{Ruffinelli2020You}
 $$\{ s(i, k, j') : j' \in \entities \wedge (i, k, j') \notin \text{ training, validation, or test set}\}.$$
 
-Therefore, we obtain a filtered ranks $rank(j|i, k)$ and $rank(i|k, j)$.
+Therefore, filtered ranks $rank(j|i, k)$ and $rank(i|k, j)$ are obtained.
 First one for object $j$ and given head entity $i$ and relation $k$, 
 and second one for object $i$ and given relation $k$ and tail entity j \cite{Ruffinelli2020You}.
 Subsequently, metrics such as the \ac{MRR} or the average Hits@k are computed.

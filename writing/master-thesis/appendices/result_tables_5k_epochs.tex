@@ -43,7 +43,7 @@
     \end{tabular}
     \caption{Experimental results of adversarial training on datasets \textsc{UMLS}, \textsc{KINSHIP} and \textsc{FB15k} for 5000 epochs with pre-trained models.
     First section shows MRR and Hit@10 results of original \kbgan approach with \origsampling, second section shows 
-    \usgan with \ussoftmax and entropy uncertainty metrics.}
+    \usgan with \ussoftmax and entropy uncertainty measure.}
 \label{tab:result_table1_5k_epochs}
 \end{table}
 
@@ -63,36 +63,36 @@
     
         \midrule
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransE})  
+          \kbgan (\textsc{DistMult} + \textsc{TransE})  
           & 27.0  & 45.1 & 64.9 & 94.8 & 19.3 & 45.2 \\
           
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransE})  
+          \kbgan (\textsc{ComplEx} + \textsc{TransE})  
           & 26.8  & 44.9 & 64.4 & 94.9 & 19.2 & 45.5 \\
           
-          \textsc{kbgan} (\textsc{DistMult} + \textsc{TransD})  
+          \kbgan (\textsc{DistMult} + \textsc{TransD})  
           & 26.6  & 44.9 & 75.9 & 94.7 & 19.4 & 44.6 \\
 
-          \textsc{kbgan} (\textsc{ComplEx} + \textsc{TransD})  
+          \kbgan (\textsc{ComplEx} + \textsc{TransD})  
           & 26.5 & 44.9 & 77.3 & 94.8 & 19.1 & 44.5 \\
           
           \midrule
           
-          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransE})  
+          \usgan (\textsc{DistMult} + \textsc{TransE})  
           & 23.9 & 41.8 & 43.2 & 92.5 & 17.0 & 44.3 \\
           
-          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransE})  
+          \usgan (\textsc{ComplEx} + \textsc{TransE})  
           & 23.8 & 41.7 & 43.3 & 92.5 & 17.0 & 44.4 \\
           
-          \textsc{ucgan} (\textsc{DistMult} + \textsc{TransD})  
+          \usgan (\textsc{DistMult} + \textsc{TransD})  
           & 23.6  & 41.7 & 47.2 & 93.7 & 17.6 & 44.6 \\
 
-          \textsc{ucgan} (\textsc{ComplEx} + \textsc{TransD})  
+          \usgan (\textsc{ComplEx} + \textsc{TransD})  
           & 23.6 & 41.7 & 46.5 & 93.2 & 17.6 & 45.1 \\
   
         \bottomrule
     \end{tabular}
     \caption{Experimental results of adversarial training on datasets \textsc{FB15k-237}, \textsc{WN18} and \textsc{WN18RR} for 5000 epochs with pre-trained models.
     First section shows MRR and Hit@10 results of original \kbgan approach with \origsampling, second section shows 
-    \usgan with \ussoftmax and entropy uncertainty metrics.}
+    \usgan with \ussoftmax and entropy uncertainty measure.}
 \label{tab:result_table2_5k_epochs}
 \end{table}

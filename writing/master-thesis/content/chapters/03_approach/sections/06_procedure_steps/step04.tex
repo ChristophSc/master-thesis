@@ -51,10 +51,9 @@ Since no other triple achieves this maximum uncertainty score, it will be sample
 Otherwise, if there were multiple triples with this uncertainty score in the negative triple set $Neg$, they would get the same probability of being sampled.
 
 % EXAMPLE - SOFTMAX
-In contrast, if we sample according to the \ussoftmax method, we have to calculate sampling probabilities with the softmax function based on uncertainty scores first.
+In contrast, if it is sampled according to the \ussoftmax method, the sampling probabilities have to be calculated first with the softmax function based on uncertainty scores.
 With \Autoref{eq:ussoftmax}, we obtain the sampling probability listed in \Autoref{tab:uncertainty_measure_example_softmax} for the different uncertainty measures.
 \input{content/chapters/03_approach/sections/table_uncertainty_measure_example_softmax}
 For all different measures, $t_4$ is the most probable one to be sampled, but the uncertainty sampling measures differ in their probability to sample $t_4$.
-E.g. while based on confidence ratio, $t_4$ is sampled with a probability of 26.36\% it is only sampled with a probability of 23.63\% for entropy uncertainty metrics.
+E.g. while based on confidence ratio, $t_4$ is sampled with a probability of 26.36\% it is only sampled with a probability of 23.63\% for entropy uncertainty measures.
 The more negative triples exist, the more these sampling probabilities differ.
-

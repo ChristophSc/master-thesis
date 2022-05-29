@@ -1,7 +1,7 @@
 \textbf{UMLS Dataset}
 \label{subsubsec:uncertainty_umls}\\
 %
-First of all datasets, the learning curves on \umls dataset between \ussoftmax with entropy metrics and \origsampling depicted in \Autoref{fig:advtrain_umls_random_vs_uncertainty} are compared.
+First of all datasets, the learning curves on \umls dataset between \ussoftmax with entropy measure and \origsampling depicted in \Autoref{fig:advtrain_umls_random_vs_uncertainty} are compared.
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -25,8 +25,8 @@ First of all datasets, the learning curves on \umls dataset between \ussoftmax w
     Shown are validation Hit@10 and MRRs for 1000 epochs.}
     \label{fig:advtrain_umls_random_vs_uncertainty}
 \end{figure}
-As can be seen from the graphs, while \origsampling reaches maximum of about 74\% at 100 epochs, \ussoftmax with entropy metrics reaches slower its maximum at about 150 epochs with 75 to 80 \% depending on the model pair.
-In addition it is noticeable, that MRR values with \origsampling decreases after reaching maximum while \ussoftmax stays on the same value.
+As can be seen from the graphs, while \origsampling reaches a maximum of about 74\% at 100 epochs, \ussoftmax with entropy measure reaches slower its maximum at about 150 epochs with 75 to 80 \% depending on the model pair.
+In addition, it is noticeable, that MRR values with \origsampling decrease after reaching maximum while \ussoftmax stays on the same value.
 This applies to MRR values as well as Hit@10 values.
 Furthermore, in \origsampling a difference between MRR values for \distmult and \complex generators can be noticed.
 While model pairs with \distmult reach a local minimum of 0.5, model pairs with \complex go down to about 37\%.
@@ -55,9 +55,9 @@ The learning curves can be explained by taking a closer look to losses and rewar
     Left Figures show losses and rewards of \origsampling and right Figures show losses and rewards of \ussoftmax.}
     \label{fig:advtrain_umls_losses_rewards}
 \end{figure}
-Both, losses in \origsampling and \ussoftmax decrease quickly in the beginning, but in comparison, losses in \origsampling increase again after reaching global minimum at about 40 epochs while \ussoftmax further decreasses losses.
-Therefore, \origsampling does not improve results, but in turn worsens them.
+Both, losses in \origsampling and \ussoftmax decrease quickly in the beginning, but in comparison, losses in \origsampling increase again after reaching the global minimum at about 40 epochs while \ussoftmax further decreases losses.
+Therefore, \origsampling does not improve results, but in turn, worsens them.
 Thus, \kbgan with \origsampling seems to have a problem with small data sets.
 In turn, \ussoftmax further decreases losses after 40 epochs slightly until a loss of about 0.5.
-By taking a closer look to rewards in \Autoref{fig:advtrain_umls_losses_rewards} it can be determined that with \origsampling rewards continue to slightly increase the value , while with \ussoftmax rewards decrease after reaching global minumum in the beginning of training. 
+By taking a closer look at rewards in \Autoref{fig:advtrain_umls_losses_rewards} it can be determined that with \origsampling rewards continue to slightly increase the value, while with \ussoftmax rewards decrease after reaching global minumum in the beginning of training. 
 And for rewards of \ussoftmax, again model pairs with a \transd discriminator model distinguish from training with \transe discriminator model while in \origsampling the curves are more similar.
