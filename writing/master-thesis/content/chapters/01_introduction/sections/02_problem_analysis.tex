@@ -10,17 +10,18 @@ The reason for this is that the scoring values of positive and negative triples 
 One very performant, simple, and commonly used approach for negative sampling is uniform negative random sampling.
 
 % UNIFORM RANDOM SAMPLING
-In uniform negative random sampling, either the head or the tail entity in a given positive triple \triple{h}{r}{t} is randomly replaced by any other entity of the \ac{KG} which remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
+In uniform negative random sampling, either the head or the tail entity in a given positive triple \triple{h}{r}{t} is randomly replaced by any other entity of the \ac{KG}.
+This remains in the new negative triple \triple{h’}{r}{t} or \triple{h}{r}{t’}. 
 Therefore, it is very likely to pick an entity that results in a zero gradient because the negative triple can be easily discriminated from the positive one \cite{cai2017kbgan}.
 For example, by replacing the head entity of the positive triple \triple{h}{r}{t} = \triple{Joe Biden}{bornIn}{USA} with head entity \texttt{h'} = \texttt{Paderborn} result in the negative triple \triple{h'}{r}{t} =  \triple{Paderborn}{bornIn}{USA} which is not very informative for the embedding.
 Simply replacing the randomly selected head or tail entity of an again randomly selected entity does not use any further information.
-In comparison, it would have been useful if either negative sampling had recognized that the head entity \texttt{Joe Biden} is a person and replaced it with another person.
+In comparison, it would have been useful if had been recognized that the head entity \texttt{Joe Biden} is a person and replaced it with another person.
 Moreover, recognizing that the tail entity, as well as the sampled entity \texttt{Paderborn}, is a location and its replacement would have led to the much more meaningful negative triple \triple{Joe Biden}{bornIn}{Paderborn}.  
-Thus, while this approach is a fast and effective way to generate negative triples, it leads to a low learning factor in the embedding model.
+Thus, while this approach is a fast and effective way to generate negative triples, it leads to a low learning factor for the embedding model.
 
 % BERNOULLI SAMPLING
 Negative triples can also be sampled via Bernoulli distribution that incorporates background knowledge about entities and relations. 
-More specifically, it considers one-to-many, many-to-one and many-to-many relation types between entities \cite{zhang2021efficient}.
+More specifically, it considers one-to-many, many-to-one, and many-to-many relation types between entities \cite{zhang2021efficient}.
 These relation types are an indicator for the sampling approach if it is better to replace the head or the tail entity.
 From the example above, it would have been recognized that the relation \texttt{bornIn} is a many-to-one relation.
 Therefore, the head entity cannot have this relation to multiple entities, making each replaced tail entity a more useful negative triple.

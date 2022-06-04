@@ -28,9 +28,9 @@ The closer a probability of a negative triple to being a positive one is to 0.5,
 Uncertainty scores $u(l)$ for a triple $l = (h,r,t)$ are calculated with \Autoref{eqn:uncertainty_function}.
 
 % EXAMPLE
-For our example, this means that the Uncertainty Scorer calculates the uncertainties listed in \Autoref{tab:uncertainty_scores} for the different uncertainty measures.
 \input{content/chapters/03_approach/sections/table_uncertainty_scores}
-As you can see from the example, $l_4' = (h, r, t_4)$ has a probability of 42.03\% which is closest to 50\% among all triples.
+For our example, this means that the Uncertainty Scorer calculates the uncertainties listed in \Autoref{tab:uncertainty_scores} for the different uncertainty measures.
+As can be seen from the example, $l_4' = (h, r, t_4)$ has a probability of 42.03\% which is closest to 50\% among all triples.
 For a better comparison of the different uncertainty measures, the uncertainty scores for all uncertainty measures are listed in the table.
 As you can see, although the uncertainty scores are different, $l_4$ receives the highest value for all four uncertainty measures.
 These uncertainty values are now passed to the Sampler component.
@@ -42,11 +42,11 @@ It receives uncertainty scores for all negative triples from the Uncertainty Sco
 As mentioned in \Autoref{sec:calculation_of_uncertainty_scores} we have two methods at our disposal how to sample an uncertain triple.
 Either \usmax which always samples a triple with maximum uncertainty score or \ussoftmax which samples according to a softmax probability distribution based on uncertainty scores.
 One triple is sampled according to configured sampling method and returned to the discriminator where the next step of the adversarial training process takes place.
+\input{content/chapters/03_approach/sections/table_uncertainty_measure_example_max}
 
 % EXAMPLE - USMAX
 In our example, if the \usmax sampling method is configured a triple with a maximum uncertainty score will be selected.
 As can be seen in \Autoref{tab:uncertainty_measure_example_max}, only the triple $l_4 = (h,r,t_4)$ achieves a maximum uncertainty score $u_4$ for all uncertainty measures.
-\input{content/chapters/03_approach/sections/table_uncertainty_measure_example_max}
 Since no other triple achieves this maximum uncertainty score, it will be sampled.
 Otherwise, if there were multiple triples with this uncertainty score in the negative triple set $Neg$, they would get the same probability of being sampled.
 

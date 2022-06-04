@@ -11,13 +11,14 @@ Triplet Fact-Based Representation Learning Models are separated into three group
     The basic idea of \transe is that a functional relation \texttt{r} corresponds to a translation of embeddings, i.e. $h + r \thickapprox t$ when \triple{h}{r}{t} holds.
     If it does not hold, \texttt{t} should be far away from $h + r$ which lead to a energy-based framework $d(h+r, t)$ for some dissimilarity measure $d$ which is the $L_1$ or $L_2$ norm \cite{TransE}.
     The idea of \transe is depicted in \Autoref{fig:translationbasedmodels} (a).
-    \begin{figure*}[t]
+    \begin{figure}[H]
       \centering
         \includegraphics[width=0.95\textwidth]{figures/Transe+TransD.pdf}
       \caption{Illustrations of (a) \transe and (b) \transd (based on: \cite{electronics9050750}).}
       \label{fig:translationbasedmodels}
-    \end{figure*}
-    Therefore, head entity \texttt{h}, tail entity \texttt{t} and relation \texttt{r} are in the same vector space and the model tries to create the embeddings such that $h+r$ map to \texttt{t} as closely as possible, which leads to the scoring function
+    \end{figure}
+    Therefore, head entity \texttt{h}, tail entity \texttt{t} and relation \texttt{r} are in the same vector space and the model tries to create the embeddings such that $h+r$ map to \texttt{t} as closely as possible.
+    This leads to the scoring function
     \begin{equation}
         f_r(h,r,t) = || h + r - t ||_{l_1, l_2}
         \label{eq:transescoringfunction}
@@ -27,8 +28,8 @@ Triplet Fact-Based Representation Learning Models are separated into three group
     It is illustrated in \Autoref{fig:translationbasedmodels} (b).
     
     \item 
-    \textbf{Tensor Factorization-Based Models} transforms triple facts into a 3D binary tensor $\mathcal{X} \in \mathbb{R}^{n \times n \times m}$ where $n$ and $m$ denote the number of entities and relations \cite{electronics9050750}.
-    Examples of this group are \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, \textsc{HolE} \cite{HolE}.
+    \textbf{Tensor Factorization-Based Models} transform triple facts into a 3D binary tensor $\mathcal{X} \in \mathbb{R}^{n \times n \times m}$ where $n$ and $m$ denote the number of entities and relations \cite{electronics9050750}.
+    Examples of this group are \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, and \textsc{HolE} \cite{HolE}.
     \distmult simplifies the computational complexity of \rescal and restricts matrix $M_r \in \mathbb{R}^{d \times d}$, which is a matrix associated with the relation, to be a diagonal matrix, i.e. $M_r = diag(r), r \in \mathbb{R}^d$ \cite{electronics9050750}. 
     Therefore, its scoring function is transformed to
     \begin{equation}
@@ -39,7 +40,7 @@ Triplet Fact-Based Representation Learning Models are separated into three group
         f_r(h,r) = Re(h^{\top}diag(r)\bar{t})
         \label{eq:complexscoringfunction}
     \end{equation}
-    where $Re(\cdot)$ denotes the real part of a complex value and $\bar{t}$ is the complex conjugate of t \cite{electronics9050750}.
+    where $Re(\cdot)$ denotes the real part of a complex value and $\bar{t}$ is the complex conjugate of tail t \cite{electronics9050750}.
     
     \item 
     \textbf{Neural Network-Based Models} use deep learning and its representation and generalization capabilities to embed a knowledge graph by a neural network \cite{electronics9050750}.

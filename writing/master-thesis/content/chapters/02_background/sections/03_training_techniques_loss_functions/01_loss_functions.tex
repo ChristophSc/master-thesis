@@ -1,10 +1,11 @@
 \subsection{Loss Functions} 
 \label{subsec:loss_functions}
 %
-As described in \cite{cai2017kbgan} several training objective types for \ac{KGE} models exist.
-Every model defines a \textit{score function} $f(h,r,t)$ which assigns a score to each triple \triple{h}{r}{t} in a knowledge graph.
+As described by Cai et al. several training objective types for \ac{KGE} models exist \cite{cai2017kbgan}.
+Every model defines a \textit{score function} $f(h,r,t)$ which assigns a score to each triple \triple{h}{r}{t} in a \ac{KG}.
 The score of a triple given by a scoring function represents the estimated likelihood of a triple to be true \cite{cai2017kbgan}.
-Since different \ac{KGE} models formulate different designs for their scoring function, the interpretation of this score is also different which in turn leads to different training objectives.
+Since different \ac{KGE} models formulate different designs for their scoring function, the interpretation of this score is also different.
+This leads to different training objectives of \ac{KGE} models.
 Two common loss functions are the following \cite{cai2017kbgan}.
 \begin{enumerate}
     \item 
@@ -40,7 +41,5 @@ Two common loss functions are the following \cite{cai2017kbgan}.
     \begin{equation}
         p(h,r,t) = \frac{\exp f(h,r,t)}{\sum_{(h',r,t')}\exp f(h',r,t')}.
     \end{equation}
-    In the original \kbgan approach this distribution is provided by the generator from which one negative triple is sampled and given to the discriminator.
 \end{enumerate}
-
-
+\clearpage

@@ -1,11 +1,12 @@
 \section{Evaluating Knowledge Graph Embeddings} 
 \label{sec:evaluating_knowledge_graph_embeddings}
 %
-The most common evaluation protocol for \ac{KGE} models is a form of question answering and called \textit{entity ranking} \cite{Ruffinelli2020You}.
+The most common evaluation protocol for \ac{KGE} models is a form of question answering and is called \textit{entity ranking} \cite{Ruffinelli2020You}.
 After separating available data into training, validation, and test sets, for a given test triple $(i,k,j)$ the task is to determine missing entities j and i.
 For this purpose, potential triples are ranked by their model score $s(i, k, j)$ in descending order to derive a collection of pseudo-negative object scores \cite{Ruffinelli2020You}.
 Since in many \ac{KGE} models either the head or the tail entity is randomly replaced by other entities of the \ac{KG}, these corrupted triples may be true facts.
-For this reason, many approaches distinguish between \textit{raw} and \textit{filtered}, where for corrupted triples it is looked at whether these occur in the train, test, or validation set \cite{TransE}.
+For this reason, many approaches distinguish between \textit{raw} and \textit{filtered}.
+In the filtered setting, it is checked whether the corrupted triples occur in the train, test, or validation set \cite{TransE}.
 Therefore, except for the test triple of interest, all true corrupted triples are removed from the list before they are scored.
 Subsequently, a collection of pseudo-negative object scores is obtained in a filtered setting  which is defined as \cite{Ruffinelli2020You}
 $$\{ s(i, k, j') : j' \in \entities \wedge (i, k, j') \notin \text{ training, validation, or test set}\}.$$
@@ -13,7 +14,7 @@ $$\{ s(i, k, j') : j' \in \entities \wedge (i, k, j') \notin \text{ training, va
 Therefore, filtered ranks $rank(j|i, k)$ and $rank(i|k, j)$ are obtained.
 First one for object $j$ and given head entity $i$ and relation $k$, 
 and second one for object $i$ and given relation $k$ and tail entity j \cite{Ruffinelli2020You}.
-Subsequently, metrics such as the \ac{MRR} or the average Hits@k are computed.
+Subsequently, a metrics such as the \ac{MRR} or the average Hits@k are computed.
 MRR is defined as \cite{Ruffinelli2020You}
 \begin{equation}
     MRR = \frac{1}{2 |\mathcal{K}^{test}|} \sum_{(i,k,j) \in  \mathcal{K}^{test}} \left( \frac{1}{rank(i |k,j)} + \frac{1}{rank(j|i,k)} \right)

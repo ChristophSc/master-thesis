@@ -2,7 +2,7 @@
 \label{sec:selection_of_an_uncertainty_sampling_type}
 %
 According to the literature, three different frameworks of uncertainty sampling are at our disposal:
-\ac{EBU}, \ac{EAU} and \ac{CU}.
+\ac{EBU}, \ac{EAU} and \ac{CU} (\Autoref{sec:uncertaintysampling}).
 These frameworks of uncertainty sampling have different viewpoints on uncertainty and how to measure it, but all of them are based on a classification problem of two or more classes.
 In \ac{EBU} we consider uncertainty within a model by looking at the individual features of a model and if they provide evidence for classes.
 This can be either very many (\textit{conflicting-evidence}) or only a few features (\textit{insufficient-evidence}) which are indicative for respective classes.
@@ -10,7 +10,7 @@ In contrast, \ac{EAU} considers \textit{epistemic uncertainty} within a single m
 \Ac{CU} differentiates between the reducible and irreducible part of the uncertainty in a prediction and the domination of one class over the other.
 
 % determination of one framework
-To determine one of the uncertainty sampling frameworks for our approach, the available information in the original \kbgan approach is considered.
+To determine one of the uncertainty sampling frameworks for the new approach, the available information in the original \kbgan approach is considered.
 In the adversarial training process, the negative triple set $Neg$ is created and passed to the generator.
 The generator scores all negative triples based on current embeddings.
 Based on these scores, sampling probabilities are calculated.
@@ -19,10 +19,8 @@ Therefore, only information about the embeddings of the generator as well as the
 Consequently, it can be sampled either by the uncertainty of the generator or the discriminator embedding model.
 Therefore, since it corresponds to the original course, we choose the uncertainty of the generator model.
 The original sampling method according to scores is replaced by sampling with uncertainty in the new approach of \textsc{USGAN}.
-For this reason, at first, the framework of epistemic uncertainty from \ac{EAU} is taken.
+For this reason, the framework of epistemic uncertainty from \ac{EAU} is selected.
 The other frameworks can be considered as well, but additional models, model predictions, or additional features are needed.
-%
-%- literature on aleatoric uncertainty tends to focus on the optimal types of ensembles and dropouts \cite{human-in-the-loop}
 %
 %for epistemic uncertainty the literature focuses
 %on improve accuracy on probability distributions within a single model \cite{human-in-the-loop}
