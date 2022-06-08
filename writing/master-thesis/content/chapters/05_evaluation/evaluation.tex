@@ -5,12 +5,11 @@
 % 2) unterteilt nach sampling methode:
 %    origsampling - usmax - ussoftmax
 % 3) unterteilt nach metrik: MRR, Hit@10, Losses, Rewards für jeweils alle 3 sampling methoden
-To validate all approaches of uncertainty sampling presented in \autoref{ch:approach}, this chapter evaluates them.
-For this purpose, \autoref{ch:evaluation:sec:experimental_setup} first explains the experimental setup under which conditions and settings our evaluations were conducted.
-Subsequently, the different uncertainty sampling methods \textsc{UncertaintySamplingMax} and \textsc{UncertaintySamplingSoftmax} are first evaluated in \autoref{ch:evaluation:sec:evaluation_methods}.
-Depending on which uncertainty measures of \textsc{UncertaintySamplingSoftmax}, different probability distributions are calculated.
-For this reason, an evaluation of these takes place in \autoref{ch:evaluation:sec:evaluation_metrics}.
-A final evaluation of the best sampling by uncertainty approach is made in \autoref{ch:evaluation:sec:evaluation_uncertainty} to compare it to the original sampling of \kbgan.
+In this chapter the new approach of \usgan is evaluated.
+For this purpose, \Autoref{ch:evaluation:sec:experimental_setup} first explains the experimental setup under which conditions and settings the evaluations are conducted.
+Subsequently, the different uncertainty sampling methods \usmax and \ussoftmax are first evaluated in \Autoref{ch:evaluation:sec:evaluation_methods}.
+Since several uncertainty measures are available, their results on different datasets are compared and evaluated in \Autoref{ch:evaluation:sec:evaluation_metrics}.
+A final evaluation of the best sampling by uncertainty method is made in \Autoref{ch:evaluation:sec:evaluation_uncertainty} to compare it to the original sampling of \kbgan.
 
 \input{content/chapters/05_evaluation/sections/01_experimental_setup}
 

@@ -2,7 +2,7 @@
 \label{subsubsec:metrics_kinship}\\
 %
 As can be seen in \Autoref{fig:advtrain_metrics_kinship}, MRR and Hit@10 values increase with all uncertainty measures on \kinship dataset.
-All of the model pairs reach their maximuúm at about 150 epochs.
+All of the model pairs reach their maximum at about 150 epochs.
 While on \umls dataset all model pairs seem to work equally well with all model pairs, the results on \kinship dataset are better with a \transd discriminator.
 \begin{figure}[H]
     \centering
@@ -32,8 +32,8 @@ While on \umls dataset all model pairs seem to work equally well with all model 
 
 When looking at the development of the losses and rewards in \Autoref{fig:advtrain_metrics_kinship_rew}, it is particularly striking that the rewards with a \transe discriminator develop significantly differently than those with a \transd discriminator.
 However, both processes stagnate after a certain time.
-In comparison to the development of rewards on \umls dataset it looks better, because rewards are acutally increasing as intended.
-Although these rewards of model pairs with \transd discriminator are declining, these model pairs are performing particularly wellfor evalution metrics.
+In comparison to the development of rewards on \umls dataset, it looks better, because rewards are actually increasing as intended.
+Although these rewards of model pairs with \transd discriminator are declining, these model pairs are performing particularly well for evaluation metrics.
 This leads to the theory that the rewards do not necessarily say anything about the quality of the embedding learned.
 \clearpage
 \begin{figure}[H]

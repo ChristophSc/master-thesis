@@ -10,11 +10,12 @@
 %Instead, true samples from a \ac{KG} are separated from noise distribution samples to asymptotically estimate the true distribution, which is highly efficient with low computational cost \cite{qianunderstanding}.
 
 % HISTORY + GENERAL
-Negative sampling originates from neuronal probabilistic language models where it was introduced to overcome the computational difficulty by transforming the difficult density estimation problem into a binary classification problem \cite{qianunderstanding}.
+Negative sampling originates from neuronal probabilistic language models \cite{qianunderstanding}.
+In these, the complex density estimation problem is transformed into a binary classification problem to overcome the computational difficulty \cite{qianunderstanding}.
 Considering nodes as words and the neighbors of the nodes as the context of a word, graph representation learning of \acp{KGE} is similar to language modeling \cite{qianunderstanding}.
 Therefore, the idea was applied to \ac{KGE} learning and has become common practice over the past several years.
 Instead of discriminating true samples from noise samples, positive triples are discriminated from negative ones.
-Since bad or too obviously incorrect negative triples fail to capture the latent semantics in a \ac{KG} and lead to a zero loss problem, several negative sampling methods have been developed and used in different \ac{KGE} models \cite{qiannegative}.
+Since poor or too obviously wrong negative triples cannot capture the latent semantics in a \ac{KG} and lead to a zero-loss problem, several negative sampling methods have been developed and used in various \ac{KGE} models \cite{qiannegative}.
 Therefore, generated negative triples with a high quality ensure successful training, and the learned embedding performs better in downstream tasks, negative sampling becomes a very important part in \ac{KGE} learning.
 
 % ASSUMPTIONS FOR LEARNING EMBEDDINGS

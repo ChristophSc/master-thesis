@@ -30,7 +30,7 @@ These show both the MRR and Hit@10 results achieved with the original approach \
 
 \input{content/chapters/05_evaluation/result_table1}
 
-In some cases such as training on \textsc{FB15k-237} adversarial training with \ussoftmax seems to work and on small datasets such as \umls even better than \origsampling.
+In some cases such as training on \textsc{FB15k-237} adversarial training with \ussoftmax seems to work and on small datasets such as \umls even better than \textsc{OrigSampling}.
 Additionally, it is noticeable that training looks very different for different datasets.
 Nevertheless, in most cases, adversarial training with \origsampling still performs better and reaches higher MRR and Hit@10 values.
 Therefore, measuring and sampling by the uncertainty of the generator to classify triples as positives and negatives does not necessarily imply the uncertainty of the discriminator model.
@@ -43,12 +43,11 @@ Another reason might be that classification is not accurate enough.
 It was observed that even if negative triples scoring ranges are lower than positive triple scoring ranges at the beginning of training, this sometimes changes over training time.
 Therefore, the overlap of both ranges increases.
 In addition, uncertainty is currently only measured based on the generator's uncertainty score and does not include any further information about the \ac{KG}, its relations, and entities.
+
+As already mentioned in \Autoref{sec:algorithm}, the creation of the negative triple sets $Neg$ takes place within the epoch loop.
+However, it would also be possible to move this part into the batch loop.
+This would have the consequence that the calculation of the scoring values and thus also the calculation of $score_{min}$ and $score_{max}$ would be based on the current positive and negative triples.
+This could increase the performance of the approach, especially for larger knowledge graphs, since the classification of the underlying scoring ranges of the positive and negative triples would not be so high anymore.
 \clearpage
 
 \input{content/chapters/05_evaluation/result_table3}
-
-
-% scores of positive and neative triples sometimes has a high overlap which leads sampling of negative triples with an average score
-% hyperparameter optimization necessary for all datasets
-% Models are very dependent on hyperparameters, small changes can already have large effects on learning behavior.
-% Depending on the properties of a data set, the selected model pair for generator and discriminator and the set hyperparameters, a completely different training behavior can occur.

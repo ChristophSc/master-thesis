@@ -17,7 +17,7 @@ They provide distributions of uncertainty scores $u(l) \in [0, 1]$ for probabili
     \centering
     \begin{minipage}{.4\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{figures/uncertainty_metric_entropy.pdf}
+      \includegraphics[width=\linewidth]{figures/entropy_graph.PNG}
     \end{minipage}%
     \begin{minipage}{.4\textwidth}
       \centering
@@ -84,7 +84,7 @@ For the individual uncertainty measures, the following definitions for $\phi$ an
 considers the differences between all predictions.
 According to the definition of entropy (\Autoref{eqn:entropy_def}), the mapping function $\phi$ is defined as
 \begin{equation}
-    \phi(x) = - \sum_{y \in \mathcal{Y}}{\mathds{P}_{\theta}(y | x) \cdot log \mathds{P}_{\theta}(y | x)}.
+    \phi(x) = - \sum_{y \in \mathcal{Y}}{\mathds{P}(y | x) \cdot log \mathds{P}(y | x)}.
 \end{equation}
 In this case $x = f_G(l)$ can be inserted for a triple $l = (h,r,t)$.
 Additionally, we have a binary classification problem with $\mathcal{Y} = \{0,1\}$.
@@ -112,7 +112,7 @@ Therefore, if triples are sampled by sampling method \ussoftmax, it is more like
 measures the distance between the most confident prediction and 100\% confidence.
 According to the definition of least confidence (\Autoref{eqn:least_confidence_def}) the transformation function $\phi$ for this uncertainty measure is defined as
 \begin{equation}
-    \phi(x) = (1 - \max_{y \in \mathcal{Y}}{\mathds{P}_{\theta}(y | x)}) \cdot \left(\frac{n}{n-1}\right).
+    \phi(x) = (1 - \max_{y \in \mathcal{Y}}{\mathds{P}(y | x)}) \cdot \left(\frac{n}{n-1}\right).
 \end{equation}
 It is normalized for $n$ classes to an output between 0 and 1.
 Again, $x = f_G(l)$ for a triple $l = (h,r,t)$ can be inserted and since we have a binary classification with $n = 2$ classes and $\mathcal{Y} = \{0,1\}$, the equation can be rewritten to
@@ -127,10 +127,10 @@ In contrast to entropy, the graph slopes much faster in the direction of $\mathd
 \clearpage
 
 \textbf{Margin of Confidence}
-deals with the two most confident predictions $y_m = \argmax_{y \in \mathcal{Y}} \mathds{P}_{\theta}(y | x)$ and $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{\mathds{P}_{\theta}(y | x)}$.
+deals with the two most confident predictions $y_m = \argmax_{y \in \mathcal{Y}} \mathds{P}(y | x)$ and $y_n = \argmax_{y \in \mathcal{Y} \setminus y_m}{\mathds{P}(y | x)}$.
 Given the definition of margin of confidence (\Autoref{eqn:margin_of_confidence_def}), transformation function $\phi$ for this uncertainty measure results in
 \begin{equation}
-    \phi(x) = 1 - (\mathds{P}_{\theta}(y_m |x) - \mathds{P}_{\theta}(y_n | x)).
+    \phi(x) = 1 - (\mathds{P}(y_m |x) - \mathds{P}(y_n | x)).
 \end{equation}
 To unify it with the transformation functions of the other uncertainty measures, their difference is subtracted from 1.
 For triple $l = (h,r,t)$ and $x = f_G(l)$ and due to the fact that we have a binary classification problem with either $y_m = 1$ and $y_n = 0$ or vice versa, there are two different cases.
@@ -138,7 +138,7 @@ For first case of $y_m = 1$ and $y_n = 0$ this results in
 \begin{equation}
 \begin{split}
 \phi_1(l) 
-&= 1 - (\mathds{P}(y = 1 |f_G(l)) - \mathds{P}_{\theta}(y = 0 | f_G(l))) \\
+&= 1 - (\mathds{P}(y = 1 |f_G(l)) - \mathds{P}(y = 0 | f_G(l))) \\
 &= 1 - (\mathds{P}(y = 1 |f_G(l)) -  (1 - \mathds{P}(y = 1 | f_G(l))) \\
 &= 1 - (2 \mathds{P}(y = 1 |f_G(l)) - 1) \\
 &= 2 - 2 \mathds{P}(y = 1 |f_G(l))
@@ -147,7 +147,7 @@ For first case of $y_m = 1$ and $y_n = 0$ this results in
 For second case of $y_m = 0$ and $y_n = 1$ we have  $\phi_2 = 2 - 2 \mathds{P}(y = 0 |f_G(l))$. 
 And therefore this leads to overall definition of $\phi(x)$ for margin of confidence
 \begin{equation} \label{eq:marginofconfidence}
-    \phi(l) = 2 - 2 \max(\mathds{P}_{\theta}(y = 0 |f_G(l)), \mathds{P}_{\theta}(y = 1 |f_G(l))).
+    \phi(l) = 2 - 2 \max(\mathds{P}(y = 0 |f_G(l)), \mathds{P}(y = 1 |f_G(l))).
 \end{equation}
 Since the equations of least confidence (\Autoref{eq:leastconfidence}) and margin of confidence (\ref{eq:marginofconfidence}) are equal, sampling according to these uncertainty measures in a binary classification is equal.
 This is also evident when looking at the function graphs depicted in \Autoref{fig:sampling_distributions}.
@@ -156,7 +156,7 @@ Therefore, for this case of binary classification, the same uncertainty scores a
 \textbf{Ratio of Confidence}
 is quite similar to margin of confidence, but instead of the difference it compares the ratio of the two most confident predictions
 \begin{equation}
-    \phi(x) = \frac{\mathds{P}_{\theta}(y_m | x)}{\mathds{P}_{\theta}(y_n |x)}
+    \phi(x) = \frac{\mathds{P}(y_m | x)}{\mathds{P}(y_n |x)}
 \end{equation}
 where $y_m$ and $y_n$ are equally defined as in margin of confidence.
 Inserted $x = f_G(l)$ for a triple $l = (h,r,t)$ leads to

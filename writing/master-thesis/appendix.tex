@@ -6,6 +6,30 @@
 %
 %\section{Classdiagrams}
 %\label{sec:appendix:classdiagrams}
+\section{Credal Uncertainty}  
+\label{subsec:credal_uncertainty}
+%
+\Acl{CU} (CU) distinguishes between the reducible and irreducible part of the uncertainty in a prediction \cite{nguyen2021howtomeasure}.
+To achieve this a credal set of models denoted by $C \subseteq \Theta$ with plausible candidate models is defined \cite{nguyen2021howtomeasure}.
+An instance $x$ is sampled with credal uncertainty if it has the least evidence for the dominance of one of the classes \cite{nguyen2021howtomeasure}.
+If class $y$ is more likely than class $y'$ for each distribution in the credal set $C$, $y'$ is dominated by $y$ \cite{nguyen2021howtomeasure}:
+\begin{equation} \label{eq:credal_uncertainty_dominance}
+\gamma(y,y',x) = \inf_{\theta \in C} \frac{p_{\theta}(y | x)}{p_{\theta}(y' | x)} > 1.
+\end{equation} 
+Therefore, in case of binary classification with $\mathcal{Y} = \{0, 1\}$ this dominance is calculated by score \cite{nguyen2021howtomeasure}
+\begin{equation}
+    s(x) = -max (\gamma(1,0,x), \gamma(0,1,x)).
+\end{equation} 
+For binary classification where $p_{\theta}(0|x) = 1 - p_{\theta}(1|x)$ inserted in \Autoref{eq:credal_uncertainty_dominance}, results in  \cite{nguyen2021howtomeasure}
+\begin{equation}
+\gamma(1,0,x) = \inf_{\theta \in C} \frac{p_{\theta}(1 | x)}{1 - p_{\theta}(1 | x)}
+\end{equation} 
+and
+\begin{equation}
+\gamma(0,1,x) = \inf_{\theta \in C} \frac{1 - p_{\theta}(1 | x)}{p_{\theta}(1 | x)}
+\end{equation} 
+
+\clearpage
 
 \section{Configuration File} \label{app:config_yaml}
 \input{appendices/config_yaml}

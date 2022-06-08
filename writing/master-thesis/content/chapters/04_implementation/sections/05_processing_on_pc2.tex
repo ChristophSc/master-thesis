@@ -4,7 +4,4 @@
 Since most of the evaluated datasets are large and running algorithms on them are computationally expensive, the servers of \ac{PC2} \footnote{https://pc2.uni-paderborn.de/} were used to ensure faster processing of the learning process.
 The \ac{OCuLUS} cluster was used for this because of its GPU support.
 For this, a \ac{VPN} connection was created with the server and the corresponding files were uploaded to the user directory.
-Subsequently, a setup of the configuration files for job manager CCS was executed to start jobs with a \texttt{ccsalloc} command.
-%The syntax for executing a job looked like this:
-%\\
-%\texttt{ccsalloc -I -s now --duration 2h }\\ \texttt{--res=rset=1:ncpus=8:mem=20g:gpus=1:rtx2080=t python gan\_train.py}
+Subsequently, a setup of the configuration files for job manager CCS has been executed to start jobs with a \texttt{ccsalloc} command.

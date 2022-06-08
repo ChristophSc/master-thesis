@@ -1,27 +1,25 @@
 \section{Experimental Setup}
 \label{ch:evaluation:sec:experimental_setup}
 %
-This section presents the experimental setup under which our evaluations took place.
-This includes the embedding models, data sets, evaluation protocols but also implementation details.
-To allow the best possible comparison with the original \kbgan approach, many of the settings and parameters are chosen identically.
+This section presents the experimental setup for the evaluation of the \usgan approach.
+This includes the embedding models, datasets, evaluation protocols but also implementation details.
 
 \textbf{Embedding Models}\\
-To allow a better comparison between sampling by uncertainty and the original sampling, it is trained with the same models chosen by \kbgan.
-These are the models \textsc{DistMult} and \textsc{Complex} for the generator component and the distance-based models \textsc{TransE} and \textsc{TransD} for the discriminator component.
+To allow a better comparison between sampling by uncertainty and the original sampling, it is trained with the same models chosen by \textsc{KBGAN}.
+These are the models \textsc{DistMult} and \textsc{ComplEx} for the generator component and the distance-based models \textsc{TransE} and \textsc{TransD} for the discriminator component.
 
 \textbf{Datasets}\\
-The results are evaluated and described on seven common knowledge completion datasets  \textsc{UMLS}, \textsc{KINSHIP}, \textsc{WN18RR}, \textsc{WN18}, \textsc{FB15k-237}, \textsc{FB15k} and \textsc{Yago3-10} in this chapter.
-
+The results are evaluated and described on seven common knowledge graph datasets  \textsc{UMLS}, \textsc{KINSHIP}, \textsc{WN18RR}, \textsc{WN18}, \textsc{FB15k-237}, \textsc{FB15k}, and \textsc{Yago3-10}.
 \textsc{UMLS} and \textsc{KINSHIP} contain a relatively small dataset and are used for initial validations and testing of the different approaches.
-Due to the small amount of data, these could also be tested on the local computer with low runtimes.
-Once the tests on \textsc{UMLS} and \textsc{KINSHIP} datasets were successful, it was possible to work with the other, larger datasets.
+Due to the small amount of data, these can also be tested on the local computer with low runtime.
+Once the tests on \textsc{UMLS} and \textsc{KINSHIP} datasets have been successful, it was possible to work with the other, larger datasets.
 The significantly higher number of entities and relations resulted in longer runtimes.
 \input{content/chapters/05_evaluation/datasets_table}
-For this reason, these evaluations took place on the $PC^2$ servers.
+For this reason, the $PC^2$ servers have been used for these evaluations.
 \textsc{WN18RR} is a subset of \textsc{WN18} \textsc{WN18RR} and removes reversing relation, which increases the difficulty of reasoning dramatically \cite{cai2017kbgan}.
-\textsc{FB15k-237} is a subset of \textsc{FB15k} and does not contain redundant relations which are present in \textsc{FB15k}.
-These datasets are commonly used in knowledge graph research so their evaluation allows us to compare them with state-of-the-art approaches.
-Statistics of datasets with the number of relations and entities, heads, and tails are shown in \autoref{tab:datasets}. 
+\textsc{FB15k-237} is a subset of \textsc{FB15k} and does not contain its redundant relations.
+These datasets are commonly used in knowledge graph research so the evaluations of these datasets can be compared with state-of-the-art approaches.
+Statistics of all used datasets containing the number of relations and entities, heads, and tails are shown in \Autoref{tab:datasets}. 
 In addition, the size of the training, validation, and test set is given.
         
 \textbf{Evaluation Protocols}\\
@@ -34,13 +32,13 @@ Additionally, since some triples might already be seen in training, validation, 
 Therefore, triples that have been seen in training, validation, or test set are filtered out from ranking.
 Subsequently, common evaluation metrics MRR and Hit@10 are used which return values $\in [0,1]$ where is the worst and 1 is the best result.
 Therefore, the current learning process and embeddings can be evaluated and compared to other embedding models.
-\clearpage
 
 \textbf{Implementation Details}\\
 In the original \kbgan approach, the models are first pre-trained individually over 1000 epochs on the corresponding data set before the actual \ac{GAN} training takes place.
 In the course of our tests, it turned out that models learn quickly with adversarial training and good results are achieved even without pre-training the individual models.
 
-As example, \Autoref{fig:original_pretrained_advtrain} shows adversarial training process of \textsc{FB15k-237} for 5000 epochs with the original sampling approach from \kbgan and pre-trained  generator and discriminator models.
+As example, \Autoref{fig:original_pretrained_advtrain} shows validation results of adversarial training process on the\textsc{FB15k-237} dataset.
+Depicted is a training process for 5000 epochs with the original sampling approach from \kbgan and pre-trained generator and discriminator models.
 \begin{figure}[H]
     \centering
     \begin{minipage}{.5\textwidth}
@@ -59,9 +57,10 @@ As example, \Autoref{fig:original_pretrained_advtrain} shows adversarial trainin
 In this and many other learning processes on other data sets, it can be seen that evaluation metrics MRR and Hit@10 often drop at the beginning and then rise again.
 This can be explained by the fact that during pre-training, the models are trained separated and independently.
 In adversarial training, however, they learn together, so the models first have to understand each other.
-Only when this has happened do the evaluation metrics rise again.
+Only then the evaluation metrics rise again.
 
-For comparison, an identical training was performed in \Autoref{fig:original_not_pretrained_advtrain}, where the only difference was that the models were not pre-trained.
+For comparison to the adversarial training process with pre-trained models, identical training has been performed without pre-trained models.
+This process is depicted in \Autoref{fig:original_not_pretrained_advtrain}.
 \begin{figure}
     \centering
     \begin{minipage}{.5\textwidth}
@@ -77,17 +76,17 @@ For comparison, an identical training was performed in \Autoref{fig:original_not
     \label{fig:original_not_pretrained_advtrain}
 \end{figure}
 As can be seen, both training courses achieve MRRs of around 27\% and Hit@10s of around 45\%.
-Although all model combinations in the second case were not pre-trained, they also achieve an MRR of approximately 26\% and a Hit@10 of about 44\% after 1000 epochs, just like the pre-trained models.
+Although all model combinations in the second case were not pre-trained, they also achieve an MRR of approximately 26\% and a Hit@10 of about 44\% after 1000 epochs, which is almost the same as with pre-trained models.
 In addition, especially the training of the first 1000 epochs without pre-training seems to be more constant than adversarial training with pre-trained models.
 For this reason, the following sections present the results of adversarial training without pre-training the models.
-Nevertheless, the results of pre-training and the subsequent adversarial training on pre-trained models can be found in the appendix (\autoref{app:results}).
+Nevertheless, the results of pre-training and the subsequent adversarial training on pre-trained models can be found in the appendix (\Autoref{app:results}).
 
 Additionally, in the original approach, adversarial training takes place for 5000 epochs.
 However, during the evaluation, it was found that in the case of adversarial training, the first 1000 epochs produced the greatest improvements in the discriminator model.
 This was especially the case for training without pre-trained models.
 For this reason, the evaluation shows the results of training for 1000 epochs.
 
-For the evaluation, the parameters shown in \autoref{tab:evaluation_parameter} were defined.
+For the evaluation, the parameters shown in \Autoref{tab:evaluation_parameter} were defined.
 \begin{table}[h]
     \centering
     \begin{tabular}{lll}

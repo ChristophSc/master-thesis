@@ -2,9 +2,9 @@
 \label{subsubsec:uncertainty_wn18}\\
 %
 On \textsc{WN18} dataset the learning curves of MRR values strongly for both sampling methods (\Autoref{fig:advtrain_wn18_random_vs_uncertainty}).
-While both sampling methods reach a MRR value of 45\% at 100 epochs, this value further increases with \origsampling and stagnates or slightly decreases with \ussoftmax.
-Nevertheless, Hit@10 values look similar forh both sampling methods.
-Both of them reach their maximum of about 92\% at already 100 epochs and stay the whole time on same level.
+While both sampling methods reach an MRR value of 45\% at 100 epochs, this value further increases with \origsampling and stagnates or slightly decreases with \ussoftmax.
+Nevertheless, Hit@10 values look similar for both sampling methods.
+Both of them reach their maximum of about 92\% at already 100 epochs and stay the whole time on the same level.
 
 The fact that the MRR values continue to increase with \origsampling but not with \ussoftmax can be justified on the basis of the rewards (\Autoref{fig:advtrain_wn18_losses_rewards}).
 While with \origsampling rewards are increasing the whole time, they are stagnating with \ussoftmax at 200 epochs and do not increase anymore.

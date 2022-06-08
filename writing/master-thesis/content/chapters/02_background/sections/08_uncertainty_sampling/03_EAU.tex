@@ -2,8 +2,8 @@
 \label{subsec:epistemic_and_alreatoric_uncertainty}
 %
 \Ac{EAU} is based on the use of relative likelihoods \cite{nguyen2021howtomeasure}. 
-\Ac{EU} samples an instance for which both the positive and the negative class appear to be plausible, while \ac{AU} samples instances where none of the classes is supported.
-For a set of training data $D = \{(x_i, y_i)\}_{i=1}^{N}$ the normalized likelihood of a model $h_{\theta}$ is defined as
+\Ac{EU} samples an instance for which the positive and the negative class are plausible, while \ac{AU} samples instances where none of the classes is supported \cite{nguyen2021howtomeasure}.
+For a set of training data $D = \{(x_i, y_i)\}_{i=1}^{N}$ the normalized likelihood of a model $h_{\theta}$ is defined as \cite{nguyen2021howtomeasure}
 \begin{equation}
 \pi_{\Theta}(\theta) = \frac{L(\theta)}{L(\theta^{ml})} = \frac{L(\theta)}{\max_{\theta'\in \Theta}{L(\theta')}}.
 \end{equation} 

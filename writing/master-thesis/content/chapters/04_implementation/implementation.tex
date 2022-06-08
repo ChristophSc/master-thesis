@@ -3,10 +3,10 @@
 %
 After explaining the new approach, this chapter describes the implementation of \usgan in more detail.
 For this purpose, \Autoref{sec:algorithm} first presents the \ac{GAN} training process in pseudo-code.
-Since some components were already implemented in the original \kbgan approach, this chapter focuses on the differences to the new \usgan.
+Since some components were already implemented in the original \kbgan approach, this chapter focuses on the differences to the new \textsc{USGAN}.
 In addition, the description is limited to adversarial training and the negative sampling process.
-The optional pre-training can take place separately but does not differ from the basic training of the original individual models \distmult, \complex, \transe, and \textsc{TransD}.
-\Autoref{sec:adv_training} first introduces the most important classes and methods for the functionality of adversarial training.
+The optional pre-training can take place separately but does not differ from the training of the original individual models \textsc{DistMult}, \textsc{ComplEx}, \textsc{TransE}, and \textsc{TransD}.
+\Autoref{sec:adv_training} introduces the most important classes and methods for the functionality of adversarial training.
 In the following \Autoref{sec:sampling_by_uncertainty}, the new changes in the implementation for the new sampling method based on uncertainty are presented.
 At the end of this chapter a hyperparameter optimization is described in \Autoref{sec:hyperparameter_optimization} and configurations to run training on $PC^2$ is reported in \Autoref{sec:processing_on_pc2}.
 

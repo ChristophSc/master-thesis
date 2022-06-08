@@ -27,14 +27,14 @@ The learning curves of MRR and Hit@10 values at the validation set on the \umls 
 \end{figure}
 Both the \usmax  on the left and the \ussoftmax on the right show a sharp increase in the metrics at the beginning.
 Both sampling approaches seem to learn within the first about 50 epochs.
-However, MRR values have a higher maximum with \ussoftmax method.
+However, MRR values have a higher maximum with the \ussoftmax method.
 \usmax just reaches a maximum MRR of 65\% while \ussoftmax has a maximum of 80\% for all model pairs.
 Nevertheless, maximum Hit@10 values of some model pairs (\distmult + \transd and \complex + \transe) with \usmax are as high as with \ussoftmax in are much higher in \ussoftmax with about 98\%.
 The biggest difference of both evaluation metrics seem to be that with \usmax values decrease after maximum was reached and in \ussoftmax they almost stay on the maximum value.
 Furthermore, it can be seen that for \usmax the adversarial training with a \distmult generator achieves slightly better results than with a \complex generator.
 In the \ussoftmax sampling approach, however, this does not seem to make a significant difference. 
 
-The reason for this is probably that in \usmax the potentially sampled set of negative triples is significantly smaller, since only triples with maximum uncertainty from the negative set Neg are passed to the discriminator.
+The reason for this is probably that in \usmax the potentially sampled set of negative triples is significantly smaller since only triples with maximum uncertainty from the negative set Neg are passed to the discriminator.
 Therefore, they might be informative and helpful for the discriminator to learn the embedding in the beginning but later on not anymore.
 \begin{figure}[H]
     \centering
@@ -58,11 +58,11 @@ Therefore, they might be informative and helpful for the discriminator to learn 
     Left figures show sampling negative triples with \usmax, right figures show \ussoftmax.}
     \label{fig:advtrain_umls_usmax_ussoftmax_losses_rewards}
 \end{figure}
-If discriminator is certain about distinguishing these sampled negative triples from positives, later on some others would be helpful.
-Since discriminator returns negative distance of negative triple as reward to the generator and the distance was small, the reward might be high.
-Therefore, generator continues to sample always the same triples without ever considering sampling other triples.
+If the discriminator is certain about distinguishing these sampled negative triples from positives, later on, some others would be helpful.
+Since the discriminator returns a negative distance of negative triple as a reward to the generator and the distance was small, the reward might be high.
+Therefore, the generator continues to sample always the same triples without ever considering sampling other triples.
 This is confirmed by looking at the course of losses and rewards of the two sampling methods in \Autoref{fig:advtrain_umls_usmax_ussoftmax_losses_rewards}.
-Even if training losses of discriminator increase after 150 epochs, the generator continues to sample the same triples since rewards increase over time and stay on same level after about 300 epochs.
+Even if training losses of discriminator increase after 150 epochs, the generator continues to sample the same triples since rewards increase over time and stay on the same level after about 300 epochs.
 With \ussoftmax (right Figures) the losses during training seem to constantly decrease over time.
 Surprisingly, even if losses decrease, rewards decrease.
 However, this also explains why the generator continues to sample other negative triples with \ussoftmax as it receives increasingly negative feedback from the discriminator.

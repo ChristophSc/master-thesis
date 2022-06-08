@@ -8,6 +8,6 @@ Therefore, all positive triples $(h,r,t) \in \kg$ and their sampled negative tri
     (h',r,t') \sim p_G(h,r,t\text{ }|\text{ }h,r,t) 
 \end{multline}
 while $p_G(h', r, t'\text{ }|\text{ }h, r, t)$ is the probability distribution on negative triples with either \usmax defined in \Autoref{eq:usmax} or \ussoftmax defined in \Autoref{eq:ussoftmax}.
-Therefore, discriminator loss is minimized if the difference between positive and negative triple scores is low and in optimal case zero.
-The sampled negative triple $(h',r,t')$ was picked based on the uncertainty of the generator model.
-By sampling such an uncertain negative triple from the generator, we hope to catch an uncertain triple for the discriminator as well.
+Therefore, the discriminator loss is minimized if the difference between positive and negative triple scores is low and in optimal case zero.
+The sampled negative triple $(h',r,t')$ is selected based on the uncertainty of the generator model.
+By sampling such an uncertain negative triple from the generator, we aim to select an uncertain triple for the discriminator as well.

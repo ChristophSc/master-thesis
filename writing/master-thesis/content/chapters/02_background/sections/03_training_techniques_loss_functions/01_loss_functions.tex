@@ -24,10 +24,10 @@ Two common loss functions are the following \cite{cai2017kbgan}.
       \label{fig:loss_functions}
     \end{figure*}
     With \textit{Margin Ranking Loss} a margin $\gamma$ is set between positive and negative samples.
-    \textit{Limited-based scoring loss} extends this by limiting the score of positives samples to an upper-bound $\gamma_1$ \cite{9207513}.
-    Consequently, scores of positive triples are forced to stay before the upper bound which
-    significantly improves the performance of translation-based KGE models \cite{9207513}.
-    \textit{Soft Margin} is another modified version that uses a sliding technique to move false negative samples towards positive samples \cite{9207513}.     
+    \textit{Limited-based scoring loss} extends this by limiting the score of positive samples to an upper-bound $\gamma_1$ \cite{9207513}.
+    As a result, the values of positive triples are forced to stay in front of the upper limit.
+    With this method, the performance of translation-based KGE models is vastly improved \cite{9207513}.
+    \textit{Soft Margin} is another modified version where false-negative samples are moved toward positive samples by a sliding technique \cite{9207513}.     
     
     \item 
     \textbf{Log-softmax loss function} is commonly used for models which have a probabilistic interpretation of the score function such as \distmult and \complex.

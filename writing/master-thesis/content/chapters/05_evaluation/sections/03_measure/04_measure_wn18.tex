@@ -26,12 +26,12 @@ Also for the adversarial training on the WN18 dataset, the development of the MR
     bottom left confidence margin and bottom right confidence ratio.}
     \label{fig:advtrain_measures_wn18}
 \end{figure}
-The model pairs with \transd as discriminator model stagnates at about an MRR of 44\%, model pairs with \transe  discriminator model decreases after reaching maximum of 44\% after about 300 epochs.
+The MRR value of model pairs with \transd as discriminator model stagnates at about 44\%, for model pairs with \transe  discriminator model, the MRR value decreases after reaching a maximum of 44\% after about 300 epochs.
 This can be noted for all uncertainty measures.
 
 If we take a closer look at rewards during training on \textsc{WN18} dataset, the course is similar to training rewards on datasets mentioned before (\Autoref{fig:advtrain_metrics_wn18}).
-Model pairs with \transe discriminator increase quickly to a reward of -8.2 at 50 epochs an increases only slowly afterwards.
-In contrast, model pairs with \transd discriminator reach a local maximum at 50 epochs with only a reward of -8.8.
+The rewards of model pairs with a \transe discriminator increase quickly to a value of -8.2 at 50 epochs and increase only slowly afterward.
+In contrast, rewards of model pairs with a \transd discriminator reach a local maximum at 50 epochs with only a value of -8.8.
 But subsequently, rewards decrease again until 200 epochs and start increasing again.
 \clearpage
 \begin{figure}[H]

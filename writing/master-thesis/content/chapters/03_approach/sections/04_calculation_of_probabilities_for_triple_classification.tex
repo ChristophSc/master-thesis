@@ -33,10 +33,10 @@ The first option to define these borders is depicted in \Autoref{fig:positives_n
 and results in the following definitions of  $score_{min}$ and 
 $score_{max}$:
 \begin{equation} \label{eqn:opt2_score_min}
-    score_{min} = \argmin_{(h,r,t) \in \kg}{f_G(h,r,t)}
+    score_{min} = \min_{(h,r,t) \in \kg}{f_G(h,r,t)}
 \end{equation}
 \begin{equation} \label{eqn:opt2_score_max}
-    score_{max} = \argmax_{(h',r,t') \in Neg}{f_G(h',r,t')}
+    score_{max} = \max_{(h',r,t') \in Neg}{f_G(h',r,t')}
 \end{equation}
 This option has the advantage of focusing only on the overlapping part of the model's prediction.
 However, the drawback is that several triples of the negative triple set $Neg$ are disregarded.
@@ -54,14 +54,17 @@ In comparison to the first option, this one provides a probability of being posi
 \end{figure}
 With the scoring function $f_G$ of the generator $G$, this option results in the following definitions of $score_{min}$ and $score_{max}$:
 \begin{equation} \label{eqn:opt1_score_min}
-    score_{min} := \argmin_{(h',r,t') \in Neg}{f_G(h',r,t')}
+    score_{min} := \min_{(h',r,t') \in Neg}{f_G(h',r,t')}
 \end{equation}
 \begin{equation} \label{eqn:opt1_score_max}
-    score_{max} := \argmax_{(h,r,t) \in \kg}{f_G(h,r,t)}
+    score_{max} := \max_{(h,r,t) \in \kg}{f_G(h,r,t)}
 \end{equation}
 \clearpage
 Therefore, this option is more suitable for our approach and is implemented for uncertainty sampling.
-Consequently, the probability of a triple $l = (h, r, t)$ to be a positive ($y = 1$) can be calculated with following \Autoref{eqn:positive_probability}.
+
+To bring the real values of the triple scores to probability values between 0 and 1, we studied different methods.
+We considered sigmoid, however we were interested in a linear mapping function.
+Therefore, the probability of a triple $l = (h, r, t)$ to be a positive ($y = 1$) can be calculated with following \Autoref{eqn:positive_probability}.
 \begin{equation}  \label{eqn:positive_probability}
     \mathds{P}(y = 1|f_G(l)) =
     \begin{cases}

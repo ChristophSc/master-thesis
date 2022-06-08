@@ -3,6 +3,9 @@
     \includegraphics[width=0.90\textwidth]{figures/uncertainty_sampling_component.pdf}
   \caption{Uncertainty Sampling component which contains the Classifier,  Uncertainty Scorer, and  Sampler component. 
   The Sampler can sample either according to \usmax or \ussoftmax sampling method. 
-  The input of the Uncertainty Sampling component are scores of triples and the output is one negative triple sampled by uncertainty.}
+  The input of the Uncertainty Sampling component are scores of triples and the output is one negative triple sampled by uncertainty.
+  In this example, most probable the triple $t_4$ is sampled because it is closest to 50\% with a probability of 42.03\%.
+  Thus, based on the classification, it can be a positive or negative triple.
+  Therefore, it has the highest uncertainty score of 0.9575.}
   \label{fig:uncertainty_sampling_component}
 \end{figure}

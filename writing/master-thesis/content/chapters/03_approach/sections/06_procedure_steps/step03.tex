@@ -8,11 +8,11 @@ After all scoring values of the negative triples have been calculated, they are 
 
 % EXAMPLE - ORIGINAL APPRObACH FOR COMPARISON
 In comparison, in the original \kbgan approach the sampling probabilities are directly derived from the scoring values. 
-According to the example, a score $s_i$ for each triple $l_i' = (h,r,t_i')$ is calculated first.
-Since all scores $s_i \in \mathbb{R}$, they to not sum up to one.
+According to the example, a score for each triple $l_i' = (h,r,t_i')$ is calculated first.
+Since all scores $f_G(l) \in \mathbb{R}$, they to not sum up to one.
 Therefore, the softmax function is used to obtain sampling probabilities $p_i$ for each negative triple $l_i$, where each $p_i$ is defined as
 \begin{equation}
-    p_i = s(f_G(l_i)) = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}}.
+    p_i = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}}.
 \end{equation}
 Consequently, negative triples with high scores get a high probability to be sampled.
 For our examples, this results in the values shown in \Autoref{tab:generator_scores}.
@@ -21,7 +21,7 @@ According to our example, the negative triple $l_3' = (h,r,t_3)$ achieves the hi
 
 
 % EXAMPLE NEW APPROACH
-Since our approach needs the scores to classify the triples, instead the output of generator G are scores $s_i \in \mathbb{R}$ for each negative triple in $Neg$.
-Therefore, the original sampling technique is replaced by an Uncertainty Sampler which samples one triple based on the model´s uncertainty.
+Since our approach needs the scores to classify the triples, instead of probabilities  the output of generator G are scores $s_i \in \mathbb{R}$ for each negative triple in $Neg$.
+Therefore, the original sampling technique is replaced by an Uncertainty Sampler which samples one triple based on the model's uncertainty.
 
 

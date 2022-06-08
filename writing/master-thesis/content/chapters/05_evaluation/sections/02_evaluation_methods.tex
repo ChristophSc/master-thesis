@@ -26,16 +26,16 @@ This is followed by a conclusion of uncertainty sampling methods in  \Autoref{su
 % summary
 In summary, \usmax and \ussoftmax achieve similar results for many embedding model pairs and datasets.
 Additionally, it can be seen that both sampling methods are very dependent on the chosen embedding models for the generator and discriminator.
-However, \ussoftmax's training appears to be more stable and consistent than \usmax's, since \usmax has high fluctuations of the results depending on the chosen models and performs badly especially on some model pairs.
+However, \ussoftmax's training appears to be more stable and consistent than \usmax's, since \usmax has high fluctuations of the results depending on the chosen models and performs badly, especially on some model pairs.
 Furthermore, a strong dependence of the training on the dataset can be seen.
-In many cases, loss is reduced over time and reward is increased, just as learning behavior is expected.
-And from the learning curves can be seen, that even if the reward is not increased over time, an increase of evaluation metrics can occur.
+In many cases, the loss is reduced over time, and reward is increased, just as learning behavior is expected.
+And from the learning curves can be seen, that even if the reward is not increased over time, an increase in evaluation metrics can occur.
 
 % conclusion
-In conclusion, adversarial training seem to work with both sampling methods.
+In conclusion, adversarial training seems to work with both sampling methods.
 Since training is very dependent on datasets and model pairs, hyperparameters need to be tuned for each dataset and model pair independently.
 Since the development of the approach was mainly done on the \umls dataset, \ussoftmax performs particularly well on it.
 No additional hyperparameter tuning was done for the other and large datasets.
-This could be the reason why the training works in general, but does not outperform any results.
-Since the training with \ussoftmax is more stable and not so dependent on the models and their hyperparameter optimization, the further evaluation will be performed with this sampling method.
+This could be the reason why the training works in general but does not outperform any results.
+Since the training with \ussoftmax is more stable and not so dependent on the models and their hyperparameter optimization, further evaluation will be performed with this sampling method.
 \clearpage

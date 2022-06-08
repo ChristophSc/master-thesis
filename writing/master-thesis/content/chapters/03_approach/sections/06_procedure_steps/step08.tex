@@ -2,26 +2,26 @@
 %
 The reward defined by $r = - f_D(h',r,t')$ of the current negative triple is calculated and returned to the generator G.
 Therefore, it is the negative value of the negative triple distance.
-The negative triple distance calculated is high, if it was easy for the discriminator to recognize the triple as a negative one.
+The calculated negative triple distance is high if it was easy for the discriminator to distinguish the positive from the negative triple.
 Since our approach is based on a \ac{GAN}, the generator tries to trick the discriminator to pass negative triples that are recognized as positive ones.
-Therefore, the lower the distance of the sampled negative triple calculated by the discriminator, the more likely it is that this was mistaken for a positive triple.
-Therefore, this results in maximizing the reward passed to the generator.
-The objective of the generator is to maximize the following expectation of negative distances \cite{cai2017kbgan}:
+Therefore, the lower the distance of the sampled negative triple is, the more likely it is that this was mistaken for a positive triple.
+Therefore, the objective of the generator is to maximize the following expectation of negative distances \cite{cai2017kbgan}:
 \begin{multline}
     R_G = \sum_{(h,r,t) \mathcal{T}}{\mathbb{E}[-f_D(h',r,t'|h,r,t)]}\\
     (h',r,t') \sim p_G(h,r,t|h,r,t) 
 \end{multline}
 while $p_G(h', r, t'\text{ }|\text{ }h, r, t)$ is the probability distribution on negative triples.
+\clearpage 
 
-With simple differentiation the gradient of $R_G$ cannot be found, therefore a special case of Policy Gradient Theorem has to be used \cite{cai2017kbgan}.
+To find the gradient of $R_G$, a special case of Policy Gradient Theorem (\cite{NIPS1999_464d828b}) has to be used as in original approach \cite{cai2017kbgan}.
 \begin{multline}
     \nabla_G R_G=\sum_{(h,r,t)\in\mathcal{T}}\mathbb{E}_{(h',r,t')\sim p_G(h',r,t'|h,r,t)}
     [-f_D(h',r,t')\nabla_G \log p_G(h',r,t'|h,r,t)] \\
     \simeq \sum_{(h,r,t)\in\mathcal{T}}\frac{1}{N}\sum_{(h_i',r,t_i')\sim p_G(h',r,t'|h,r,t), i=1\dots N} \\
     [-f_D(h',r,t')\nabla_G \log p_G(h',r,t'|h,r,t)]
 \end{multline}
-With this Theorem, a gradient with respect to the parameters of the discriminator can be used.
-It is from \ac{RL}.
+With this Theorem which originates from \ac{RL}, a gradient with respect to the parameters of the discriminator can be used.
+The concepts of \ac{RL} can also be explained in our learning process.
 Therefore, the \textit{agent} is the generator which performs \textit{actions} in form of sampling negative triples to interact with the \textit{environment} which is the discriminator in our case.
 The objective is to improve by maximizing the \textit{reward} $-f_D(h',r,t')$ returned by the environment.
 The actions are determined by the \textit{state}, which are represented as our given positive triple $(h,r,t)$.

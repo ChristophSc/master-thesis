@@ -1,6 +1,5 @@
 \section{Related Work} 
 \label{sec:relatedwork}
-
 % EMBEDDING MODELS
 In recent years there has been much research on \acp{KGE} and negative sampling techniques.  
 Dai et. al created an overview of several different and most commonly used embedding models, their approaches, and application possibilities \cite{electronics9050750}.
@@ -15,12 +14,13 @@ A more complex approach for generating negative samples is, for example, domain 
 It samples only entities from a subset of entities of a \ac{KG}.
 Pioneers of dynamic negative sampling are \kbgan \cite{cai2017kbgan} and \igan \cite{IGAN}.
 They attempt to estimate the distribution of negative triples by constructing a \ac{GAN}.
-Inspired by \acp{GAN}, which were proposed for generating samples in a continuous space such as images, they are adjusted to improve \ac{KGE} models through an adversarial learning process \cite{cai2017kbgan}.
+Originally, \acp{GAN} have been proposed for generating samples in a continuous space such as images \cite{cai2017kbgan}.
+However, they have been adapted for negative sampling to improve \ac{KGE} models through an adversarial learning process.
 An overview of all the different negative sampling techniques is given for example from Qian et. al \cite{qiannegative} and Yang et. al \cite{MCNS}.
 
 % ACTIVE LEARNING + UNCERTAINTY SAMPLING
-Besides this, our approach includes research on uncertainty sampling in active learning which supports supervised learning systems where unlabeled data is abundant, but it is difficult, time-consuming, or expensive to obtain labeled instances \cite{Settles2009ActiveLL}.
+Besides this, our approach includes research on uncertainty sampling in active learning which supports supervised learning systems where unlabeled data is sufficient, but it is difficult, time-consuming, or expensive to obtain labeled instances \cite{Settles2009ActiveLL}.
 In active learning, there are several different approaches available to select the instances to be labeled.
-One of them is uncertainty sampling which uses a classifier to identify unlabeled examples with the least confidence \cite{5272205}.
-Therefore, the most informative unlabeled examples are selected for human annotation.
+One of them is uncertainty sampling where unlabeled examples with the least confidence are identified by a classifier \cite{5272205}.
+Therefore, for human annotation of unlabeled instances, the most informative unlabeled examples are selected \cite{5272205}.
 In turn, in uncertainty sampling, several measures are available on how to obtain the uncertain cases of a classifier \cite{nguyen2021howtomeasure}.

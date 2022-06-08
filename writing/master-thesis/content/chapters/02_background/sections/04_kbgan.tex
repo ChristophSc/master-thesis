@@ -10,7 +10,7 @@
 In the course of this work, uncertainty information is included in an existing negative sampling process.
 For this purpose, the pioneering work of dynamic distribution-based negative sampling methods \kbgan is selected.
 The embedding is learned with an adversarial training process which consists of two components: a generator and a discriminator.
-This process of \kbgan is depicted in \autoref{fig:overview} and described as follows:
+This process of \kbgan is depicted in \autoref{fig:overview} and described as follows \cite{cai2017kbgan}:
 \begin{enumerate}
     \item 
     At first, a set of sampled corrupted triples $Neg(h,r,t)\subset\{(h',r,t) \text{ } | \text{ } h' \in \mathcal{E}\} \cup \{(h,r,t') \text{ } | \text{ } t'\in\mathcal{E}\}$ is created.
@@ -35,7 +35,7 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
     \item 
     The generator G receives all negative triples from the negative triple set $Neg$ and scores them with the scoring function $f_G$ of G.
     Since G is a tensor factorization-based \ac{KGE} model such as \distmult and \textsc{ComplEx}, negative triples with higher scores indicate a higher plausibility to be true.
-    The scores are passed to the softmax function, which assigns a sampling probability $p_i$ for each negative triple $l_i = (h_i, r_i, t_i)$:
+    The scores are passed to the softmax function, which assigns a sampling probability $p_i$ for each negative triple $l_i = (h_i, r_i, t_i)$ \cite{cai2017kbgan}:
     \begin{equation} \label{eq:origsampling}
         p_i = \frac{\exp{f_G(l_i)}}{\sum_{j=1}^{N_s}{\exp{f_G(l_j)}}} \in [0,1]
     \end{equation}
@@ -59,7 +59,7 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
      
     \item 
     The training objective of D is a marginal loss function.
-    Therefore, the marginal loss is calculated from positive and negative triple distances:
+    Therefore, the marginal loss is calculated from positive and negative triple distances \cite{cai2017kbgan}:
      \begin{equation}
         L_{marginal}
         =\sum_{(h,r,t)\in\kg}[f(h,r,t)-f(h',r,t')+\gamma]_+ 
@@ -69,12 +69,12 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
     Therefore, the better the sampled negative triple is, the lower is its distance and consequently a lower marginal loss is achieved.
     
     \item 
-    To give generator G a feedback for the sampled negative triple \triple{h’}{r}{t'} a reward $r$ is send back to G, which is defined as
+    To give generator G a feedback for the sampled negative triple \triple{h’}{r}{t'} a reward $r$ is send back to G, which is defined as \cite{cai2017kbgan}:
     \begin{equation}
         r = -f_D(h',r,t') \in \mathbb{R}^-.
     \end{equation}
     Therefore, the lower the distance of a negative triple is, the higher the reward. 
-    Consequently, the objective of G can be formulated as maximizing the following expectation of negative distances:
+    Consequently, maximizing the following expectation of negative distances defines the objective of G \cite{cai2017kbgan}:
     \begin{equation}
         R_G=\sum_{(h,r,t)\in\kg}\mathbb{E}[-f_D(h',r,t')]
     \end{equation}
@@ -82,3 +82,4 @@ This process of \kbgan is depicted in \autoref{fig:overview} and described as fo
     \item
     This process ends until the defined number of epochs has been reached.
 \end{enumerate}
+\clearpage

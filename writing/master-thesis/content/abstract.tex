@@ -26,18 +26,19 @@ To ensure reproducibility, we provide scripts, datasets, and results of this wor
 {\usekomafont{chapter}Abstract (Deutsch)}
 \label{sec:abstract-german}\\
 
-Wissensgraphen stellen einen unvollständigen Wissensspeicher dar, in dem Fakten über die reale Welt abgespeichert sind.  
-Diese Fakten werden in einer Netzstruktur dargestellt, in der Entitäten als Knoten und Relationen als Kanten gespeichert werden. 
-Diese Wissensdatenbanken werden für zahlreiche nachfolgende Aufgaben wie die strukturierte Suche und die Vorhersage von Verbindungen verwendet.
-Da das Volumen der Netze in den letzten Jahren erheblich zugenommen hat, sind die Berechnung und die Verwaltung von großen Wissensgraphen immer wichtiger geworden. 
-Aus diesem Grund sind Modelle zur Einbettung von Wissensgraphen vorgestellt worden, um die Entitäten und Relationen in einen kontinuierlichen niedrigdimensionalen Vektorraum einzubetten. Das Lernen dieser Einbettungen erfordert eine Unterscheidung zwischen positiven und negativen Tripeln. 
-Da nur positive Informationen in Wissensgraphen gespeichert sind, gibt es mehrere Trainingsarten, um negative Beispiele zu finden. 
+Wissensgraphen stellen einen unvollständigen Wissensspeicher dar, der Fakten über die reale Welt speichert.
+Diese Fakten werden in einer Netzstruktur dargestellt, in der Entitäten als Knoten und Beziehungen als Kanten gespeichert sind.
+Diese Wissensgraphen werden für eine Vielzahl nachgelagerter Aufgaben wie strukturierte Suche und Linkvorhersage verwendet.
+Da das Volumen der Wissensgraphen in den letzten Jahren erheblich zugenommen hat, ist die Verwaltung großer Wissensgraphen-Systeme immer wichtiger geworden.
+Aus diesem Grund wurden Modelle zur Einbettung von Wissensgraphen vorgestellt, die Entitäten und Beziehungen in einen kontinuierlichen niedrigdimensionalen Vektorraum einbetten.
+Das Lernen dieser Einbettungen erfordert eine Unterscheidung zwischen positiven und negativen Tripeln.
+Da in Wissensgraphen nur positive Informationen gespeichert sind, gibt es mehrere Trainingsarten, um negative Beispiele zu finden.
 Eine davon ist das negative Sampling. 
-Allerdings liefern die gängigen verwendeten negativ Sampling Ansätze Negativbeispiele von geringer Qualität. 
-Diese kann den Trainingsprozess erschweren, zu einer schlechteren Einbettung führen und sich somit direkt auf die nachgelagerten Aufgaben auswirken. 
-Beim aktiven Lernen und in vielen Bereichen des maschinellen Lernens, bietet das Sampling durch Ungewissheit die Möglichkeit, besonders informative Instanzen für ein Modell zu samplen und damit den Lernprozess effizienter zu gestalten.
-In dieser Arbeit wird daher der Einbezug von Unsicherheitsinformationen in ein negatives Sampling-Verfahren untersucht. 
-Aus diesem Grund werden zunächst verschiedene Methoden des Samplings durch Unsicherheit analysiert. 
-Anschließend ersetzen diese die Samplingmethoden das ursprüngliche Sampling des generativen adversen netzbasierten Ansatzes namens KBGAN. 
-Schließlich wird der neue Ansatz auf insgesamt sieben verschiedenen Datensätzen detailliert evaluiert und die experimentellen Ergebnisse verglichen. 
-Um die Reproduzierbarkeit zu gewährleisten, stellen wir Skripte, Datensätze und Ergebnisse dieser Arbeit auf unserer Projekt Seite \url{https://github.com/ChristophSc/master-thesis} vor.
+Die üblicherweise verwendeten Negativ-Sampling-Ansätze liefern jedoch Negativbeispiele von geringer Qualität.
+Dies kann den Trainingsprozess behindern, zu einer schlechteren Einbettung führen und sich somit direkt auf nachgelagerte Aufgaben auswirken.
+Beim aktiven Lernen und in vielen Bereichen des maschinellen Lernens bietet das Sampling durch Unsicherheit die Möglichkeit, besonders informative Instanzen für ein Modell zu sampeln und damit den Lernprozess effizienter zu gestalten.
+In dieser Arbeit sind wir daran interessiert, Unsicherheitsmittel im Prozess des negativen Samplings zu nutzen.
+Aus diesem Grund werden zunächst verschiedene Methoden des Unsicherheitssamplings analysiert.
+Anschließend ersetzen diese Sampling-Methoden die ursprüngliche Sampling-Methode des generativen adversen netzbasierten Ansatzes KBGAN. 
+Schließlich wird der neue Ansatz an insgesamt sieben verschiedenen Datensätzen detailliert evaluiert und die experimentellen Ergebnisse werden verglichen.
+Um die Reproduzierbarkeit zu gewährleisten, stellen wir Skripte, Datensätze und Ergebnisse dieser Arbeit auf unserer Projektseite \url{https://github.com/ChristophSc/master-thesis} zur Verfügung.

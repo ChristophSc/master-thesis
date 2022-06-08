@@ -2,7 +2,7 @@
 \label{sec:selection_of_an_uncertainty_sampling_type}
 %
 According to the literature, three different frameworks of uncertainty sampling are at our disposal:
-\ac{EBU}, \ac{EAU} and \ac{CU} (\Autoref{sec:uncertaintysampling}).
+\ac{EBU}, \ac{EAU} (\Autoref{sec:uncertaintysampling}) and \ac{CU} (\Autoref{subsec:credal_uncertainty}).
 These frameworks of uncertainty sampling have different viewpoints on uncertainty and how to measure it, but all of them are based on a classification problem of two or more classes.
 In \ac{EBU} we consider uncertainty within a model by looking at the individual features of a model and if they provide evidence for classes.
 This can be either very many (\textit{conflicting-evidence}) or only a few features (\textit{insufficient-evidence}) which are indicative for respective classes.
@@ -22,23 +22,3 @@ The original sampling method according to scores is replaced by sampling with un
 For this reason, the framework of epistemic uncertainty from \ac{EAU} is selected.
 The other frameworks can be considered as well, but additional models, model predictions, or additional features are needed.
 %
-%for epistemic uncertainty the literature focuses
-%on improve accuracy on probability distributions within a single model \cite{human-in-the-loop}
-%
-%epistemic
-%-> philosophy: 
-%due to limited data and knowledge. 
-%Given enough training samples, epistemic uncertainty will decrease.
-%historically: meant lack of knowledge
-%model uncertainty
-%-> machine learning:
-%-> literature on epistemic uncertainty tends to focus
-%on getting more accurate probability distributions from within a single model
-%
-%aleatoric:
-%-> philosophy:
-%arising from the natural stochasticity of observations
-%cannot be reduced even when more data is provided
-%historically meant inherent randomness
-%data uncertainty
-%-> machine learning:

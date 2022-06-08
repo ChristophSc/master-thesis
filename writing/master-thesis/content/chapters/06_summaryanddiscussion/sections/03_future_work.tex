@@ -5,7 +5,7 @@ Possible future work includes improving the \usgan approach itself and testing d
 First of all, the classification of \usgan can be improved.
 Currently, uncertainty scores are based on a classification of positives and negatives which is motivated by uncertainty sampling in active learning.
 However, the classification is only based on generator model scores which might not be accurate enough.
-Therefore, improving classification with information about \ac{KG} structure, entities, and relations of a \ac{KG} might improve classification of positive and negative examples and consequently, uncertainty sampling.
+Therefore, improving classification with information about \ac{KG} structure, entities, and relations of a \ac{KG} might improve classification of positive and negative triples and consequently, uncertainty sampling.
 Secondly, the definition of Uncertainty can be edited.
 Currently, motivated by uncertainty sampling from active learning, uncertainty is based on the classification of triples as positive or negative ones.
 Since there are several types of uncertainty available, an alternative definition of uncertainty might lead to further improvements and more effective negative sampling.
@@ -27,5 +27,3 @@ Furthermore, it can also be applied to static distribution-based and custom clus
 \kbgan is one of the pioneering works in dynamic distribution-based sampling.
 Many other approaches based on \kbgan were already presented which extend the approach e.g. with a cache like in \textsc{NSCaching} \cite{zhang2019nscaching}.
 Consequently, their improvements as well as the expansion of uncertainty information could be exploited.
-
-% Hyperparameter optimization for each dataset

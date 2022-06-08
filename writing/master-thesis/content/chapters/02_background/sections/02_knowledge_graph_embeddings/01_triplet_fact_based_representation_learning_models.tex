@@ -28,7 +28,7 @@ Triplet Fact-Based Representation Learning Models are separated into three group
     It is illustrated in \Autoref{fig:translationbasedmodels} (b).
     
     \item 
-    \textbf{Tensor Factorization-Based Models} transform triple facts into a 3D binary tensor $\mathcal{X} \in \mathbb{R}^{n \times n \times m}$ where $n$ and $m$ denote the number of entities and relations \cite{electronics9050750}.
+    \textbf{Tensor Factorization-Based Models} transform triple facts into a 3D binary tensor $\mathcal{X} \in \mathbb{R}^{n \times n \times m}$ where $n$ and $m$ are the number of entities and relations \cite{electronics9050750}.
     Examples of this group are \textsc{RESCAL} \cite{RESCAL}, \textsc{DistMult} \cite{DistMult}, \textsc{ComplEx} \cite{ComplEx}, and \textsc{HolE} \cite{HolE}.
     \distmult simplifies the computational complexity of \rescal and restricts matrix $M_r \in \mathbb{R}^{d \times d}$, which is a matrix associated with the relation, to be a diagonal matrix, i.e. $M_r = diag(r), r \in \mathbb{R}^d$ \cite{electronics9050750}. 
     Therefore, its scoring function is transformed to
