@@ -1,35 +1,41 @@
-# Master Thesis
+# USGAN 
+- Description: Incorporation of uncertainty information in an existing negative sampling approach 
+- Master Thesis Topic: Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty
+- Name: Christoph Schäfer
 
-### Topic: Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty
+In USGAN, uncertainty is used in the process of negative sampling.  
+It replaces the original sampling method of the generative adversarial network-based approach [KBGAN](https://arxiv.org/abs/1711.04071).
 
-## Structure
 
-- `./research/...`: all PDF files and with comments and edits
+## Installation
 
-- `./writing/proposal`: contains all necessary LaTeX files for the proposal
-- `./writing/master-thesis`: contains all necessary LaTeX files for the master thesis
+```
+git clone https://github.com/ChristophSc/master-thesis.git
+python --version
+Python 3.6.8
+pip install -r requirements.txt
+```
 
-- `./implementation/...`: contains all source code of my approach and original approaches
-- `./implementation/my_approach`: contains source code of my implementation
-- `./implementation/original_models`: original source code of some other approaches like `KBGAN`, `NSCaching`, ...
-- `./implementation/KBGAN`: adjusted KBGAN that works with my Python and Pytorch version (no cuda, adjustments to newer PyTorch and Python version)
+## Configuration
+All settings for pre-training and adversarial training can be made in the file `config/config.yaml`.  
+The listed parameters can be edited before starting the training or overwritten with command line parameters.
 
-- `./results.xlsx`: Excel file with all documented results from my approach, including MRR, Hit10 and other statistics
+## Execution
 
-## Structure of the implementation
+```
+# start pre-training
+python pretrain.py 
 
-- `./implementation/my_approach/pretrain.py`: pretrains the model
-- `./implementation/my_approach/gan_train.py`: adversarial training which requires pretrained models for generator and discriminator
-- `./implementation/my_approach/batch_files`: contains batch files to run pretraining/adverarial training with different parameters
-- `./implementation/my_approach/data`: contains datasets. Train, valid and test tests are in separated files
-- `./implementation/my_approach/config`: contains configuration files for each dataset, default one is `config.yaml`
-- `./implementation/my_approach/models`: output folder for pretrained models
-- `./implementation/my_approach/logs`: log files for pretraining and adverarial training processes
-- `./implementation/my_approach/graphs`: evaluation figures for discriminator losses, rewards, MRR and Hit@10 over time for each training
-- `./implementation/my_approach/plant_uml`: PlantUML and images of different UML diagrams
+# start adversarial training
+python gan_train.py
+```
 
-## Usage
+## Creation of Evaluation Graphs
+If logging is enabled via the `config.yaml` file, graphs are created and results are logged during training in the directory `logs/`.
 
-- Pretrain: python3 pretrain.py --config=config_<dataset_name>.yaml --pretrain_config=<model_name> (this will generate a pretrained model file)
-- Adversarial train: python3 gan_train.py --config=config_<dataset_name>.yaml --g_config=<G_model_name> --d_config=<D_model_name> (make sure that G model and D model are both pretrained)
 
+If combined graphs of the results and the different model pairs are to be created, the logs can be placed in the `logs/backup/` directory.
+By executing the following command, the combined graphs will then be placed under `combined_figures/`.
+```
+python CombinedGraphCreator.py
+```
