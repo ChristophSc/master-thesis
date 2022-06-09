@@ -1,8 +1,9 @@
 # USGAN 
-- Description: Incorporation of uncertainty information in an existing negative sampling approach 
+- Uncertainty Sampling Generative Adversarial Network (USGAN).
 - Master Thesis Topic: Sampling of Negative Triples for Knowledge Graph Embeddings by Uncertainty
 - Name: Christoph Schäfer
 
+Description:  
 In USGAN, uncertainty is used in the process of negative sampling.  
 It replaces the original sampling method of the generative adversarial network-based approach [KBGAN](https://arxiv.org/abs/1711.04071).
 
